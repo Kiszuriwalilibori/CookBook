@@ -18,7 +18,8 @@ import {
   Book as RecipeIcon, 
   Article as BlogIcon, 
   Home as HomeIcon, 
-  Favorite as FavoriteIcon 
+  Favorite as FavoriteIcon, 
+  Info as InfoIcon
 } from '@mui/icons-material';
 
 const Header = () => {
@@ -45,9 +46,10 @@ const Header = () => {
 
   const navItems = [
     { label: 'Home', href: '/', icon: <HomeIcon /> },
-    { label: 'Recipes', href: '/recipes', icon: <RecipeIcon /> },
-    { label: 'Blog', href: '/blog', icon: <BlogIcon /> },
-    { label: 'Favorites', href: '/favorites', icon: <FavoriteIcon /> },
+    { label: 'Przepisy', href: '/recipes', icon: <RecipeIcon /> },
+    { label: 'Artykuły', href: '/blog', icon: <BlogIcon /> },
+    { label: 'Ulubione', href: '/favorites', icon: <FavoriteIcon /> },
+    { label: 'O mnie', href: '/about', icon: <InfoIcon /> },
   ];
 
   return (
