@@ -21,6 +21,7 @@ import {
   Favorite as FavoriteIcon, 
   Info as InfoIcon
 } from '@mui/icons-material';
+import Menu from '../Menu';
 
 const Header = () => {
   const theme = useTheme();
@@ -53,73 +54,82 @@ const Header = () => {
   ];
 
   return (
-    <AppBar 
-      position="sticky" 
-      elevation={0} 
-      sx={{ 
-        backgroundColor: 'background.paper', 
-        color: 'text.primary', 
-        borderBottom: '1px solid',
-        borderColor: 'divider',
-      }}
-    >
-      <Container maxWidth="lg">
-        <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          {/* Logo / Brand */}
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography
-              variant="h6"
-              component={Link}
-              href="/"
-              sx={{
-                fontWeight: 700,
-                color: 'primary.main',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-              }}
-            >
-              <RecipeIcon />
-              CookBook
-            </Typography>
-          </Box>
-
-          {/* Desktop Navigation */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-            {navItems.map((item) => (
-              <Button
-                key={item.href}
-                component={Link}
-                href={item.href}
-                startIcon={item.icon}
-                sx={{
-                  color: 'text.primary',
-                  '&:hover': {
-                    backgroundColor: 'action.hover',
-                  },
-                }}
-              >
-                {item.label}
-              </Button>
-            ))}
-          </Box>
-
-          {/* Mobile menu button */}
-          <Box sx={{ display: { xs: 'block', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="menu"
-              color="inherit"
-              // onClick={handleMobileMenuOpen}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+    <div>
+      <Menu navItems={navItems} />
+      <main>
+        <h1>Welcome to my site</h1>
+      </main>
+    </div>
   );
+
+  // return (
+  //   <AppBar 
+  //     position="sticky" 
+  //     elevation={0} 
+  //     sx={{ 
+  //       backgroundColor: 'background.paper', 
+  //       color: 'text.primary', 
+  //       borderBottom: '1px solid',
+  //       borderColor: 'divider',
+  //     }}
+  //   >
+  //     <Container maxWidth="lg">
+  //       <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+  //         {/* Logo / Brand */}
+  //         <Box sx={{ display: 'flex', alignItems: 'center' }}>
+  //           <Typography
+  //             variant="h6"
+  //             component={Link}
+  //             href="/"
+  //             sx={{
+  //               fontWeight: 700,
+  //               color: 'primary.main',
+  //               textDecoration: 'none',
+  //               display: 'flex',
+  //               alignItems: 'center',
+  //               gap: 1,
+  //             }}
+  //           >
+  //             <RecipeIcon />
+  //             CookBook
+  //           </Typography>
+  //         </Box>
+
+  //         {/* Desktop Navigation */}
+  //         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
+  //           {navItems.map((item) => (
+  //             <Button
+  //               key={item.href}
+  //               component={Link}
+  //               href={item.href}
+  //               startIcon={item.icon}
+  //               sx={{
+  //                 color: 'text.primary',
+  //                 '&:hover': {
+  //                   backgroundColor: 'action.hover',
+  //                 },
+  //               }}
+  //             >
+  //               {item.label}
+  //             </Button>
+  //           ))}
+  //         </Box>
+
+  //         {/* Mobile menu button */}
+  //         <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+  //           <IconButton
+  //             size="large"
+  //             aria-label="menu"
+  //             color="inherit"
+  //             // onClick={handleMobileMenuOpen}
+  //           >
+  //             <MenuIcon />
+  //           </IconButton>
+  //         </Box>
+  //       </Toolbar>
+  //     </Container>
+  //   </AppBar>
+  // );
 };
 
 export default Header;

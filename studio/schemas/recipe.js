@@ -1,3 +1,6 @@
+import ProductsInput from '../components/ProductsInput';
+
+
 export default {
   name: 'recipe',
   title: 'Recipe',
@@ -32,10 +35,20 @@ export default {
           fields: [
             { name: 'name', title: 'Ingredient Name', type: 'string' },
             { name: 'quantity', title: 'Quantity', type: 'number' },
-            { name: 'unit', title: 'Unit of Measure', type: 'string' },
           ],
         },
       ],
+    },
+    {
+      name: 'Products',
+      title: 'Products',
+      type: 'array',
+      of: [{ type: 'string' }],
+      components: {
+        input: ProductsInput, // Custom component for dynamic updates
+      },
+      description: 'List of product names derived from the last word of each ingredient name',
+      validation: Rule => Rule.unique(), // Optional: Ensure unique strings
     },
     {
       name: 'preparationSteps',
@@ -43,19 +56,34 @@ export default {
       type: 'array',
       of: [
         {
-          type: 'object',
-          fields: [
-            { name: 'text', title: 'Text', type: 'string' },
-            {
-              name: 'link',
-              title: 'Link',
-              type: 'url',
-              validation: Rule => Rule.uri({ scheme: ['http', 'https'] }),
-            },
-            { name: 'superscript', title: 'Superscript', type: 'string' },
+          type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'Bold', value: 'strong' }, // Enable bold text
           ],
+          marks: {
+            decorators: [
+              { title: 'Strong', value: 'strong' }, // Bold text
+              { title: 'Emphasis', value: 'em' }, // Optional: italics
+            ],
+            annotations: [
+              {
+                name: 'link',
+                type: 'object',
+                title: 'Link',
+                fields: [
+                  {
+                    name: 'href',
+                    type: 'url',
+                    title: 'URL',
+                    validation: Rule => Rule.uri({ scheme: ['http', 'https'] }),
+                  },
+                ],
+              },
+            ],
+          },
         },
-      ],
+      ]
     },
     {
       name: 'calories',
