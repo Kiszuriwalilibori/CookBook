@@ -28,7 +28,7 @@ const boxStyles = {
 export default function About(): JSX.Element {
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-4xl font-bold mb-4">O autorze</h1>
+            <h1 className="text-4xl font-bold mb-4">O mnie</h1>
             <Box sx={boxStyles}>
                 <Image src="/images/author.webp" alt="Author" width={MAX_SIZE} height={MAX_SIZE} style={{ objectFit: "cover" }} sizes={`(max-width: 600px) ${MIN_SIZE}px, (min-width: 1536px) ${MAX_SIZE}px, 16vw`} quality={75} />
             </Box>
