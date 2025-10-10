@@ -56,9 +56,7 @@ const Header = () => {
   return (
     <div>
       <Menu navItems={navItems} />
-      <main>
-        <h1>Welcome to my site</h1>
-      </main>
+      
     </div>
   );
 

@@ -1,9 +1,11 @@
 import { Inter } from 'next/font/google';
 import { Box } from '@mui/material';
-import MuiProvider from '@/providers/MuiProvider';
+import theme from "@/themes/theme";
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import './globals.css';
+import { ThemeProvider } from "@mui/material";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,9 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+     <html lang="pl">
+    <AppRouterCacheProvider>
+      <ThemeProvider theme={theme}>
       <body className={inter.className}>
-        <MuiProvider>
+        
           <Box
             sx={{
               display: 'flex',
@@ -40,8 +44,10 @@ export default function RootLayout({
             </Box>
             <Footer />
           </Box>
-        </MuiProvider>
+       
       </body>
+      </ThemeProvider>
+    </AppRouterCacheProvider>
     </html>
   );
 }
