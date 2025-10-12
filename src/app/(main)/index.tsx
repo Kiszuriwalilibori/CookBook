@@ -1,10 +1,15 @@
 import { Box } from "@mui/material";
 import HomeContent from "@/components/HomeContent";
+import PageTitle from "@/components/PageTitle";
 
-export default function Home() {
+export function Home() {
     return (
-        <Box>
-            <HomeContent />
-        </Box>
+        <>
+            <PageTitle title={"Witamy"} />
+            <Box>
+                <HomeContent />
+            </Box>
+        </>
     );
 }
+export default Home;

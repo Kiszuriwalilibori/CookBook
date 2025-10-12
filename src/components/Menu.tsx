@@ -1,13 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { AppBar, Toolbar, IconButton, List, ListItem, ListItemText, ListItemIcon, Box, Drawer, Button } from "@mui/material";
+import { AppBar, Toolbar, IconButton, List, ListItem, ListItemText, ListItemIcon, Box, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
-import HomeIcon from "@mui/icons-material/Home";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
-import ArticleIcon from "@mui/icons-material/Article";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 
 // Define the type for navItems
 interface NavItem {
