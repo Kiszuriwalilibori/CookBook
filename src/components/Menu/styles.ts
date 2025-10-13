@@ -29,7 +29,7 @@ export const desktopMenuLabelStyle: SxProps<Theme> = {
     fontWeight: 500,
     textTransform: "uppercase",
     letterSpacing: "0.05em",
-    color: "var(--menu-color)", // Already set
+    color: "var(--menu-color)",
     "&::after": {
         content: "none",
     },
@@ -38,18 +38,21 @@ export const desktopMenuLabelStyle: SxProps<Theme> = {
 export const desktopMenuSeparatorStyle: SxProps<Theme> = {
     height: "1.5rem",
     width: "1px",
-    backgroundColor: "var(--menu-color)", // Already set
+    backgroundColor: "var(--menu-color)",
 };
 
 export const desktopMenuContainerStyle: SxProps<Theme> = {
     display: { xs: "none", md: "flex" },
     alignItems: "center",
     height: "100%",
-    animation: "slideInFromLeft 0.5s ease-out forwards",
+    animation: "slideInFromLeft 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards",
     "@keyframes slideInFromLeft": {
         from: {
             transform: "translateX(-100%)",
             opacity: 0,
+        },
+        "50%": {
+            opacity: 0.5,
         },
         to: {
             transform: "translateX(0)",
