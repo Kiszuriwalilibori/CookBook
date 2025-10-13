@@ -1,13 +1,15 @@
 "use client";
 
 import React from "react";
-
-import Menu from "@/components/Menu";
+import Menu from "@/components/Menu/Menu";
 
 import { Book as RecipeIcon, Article as BlogIcon, Home as HomeIcon, Favorite as FavoriteIcon, Info as InfoIcon } from "@mui/icons-material";
+import { usePathname } from "next/navigation";
 // import theme from "@/themes/theme";
 
 const Header = () => {
+    const pathname: string = usePathname(); // Ensure pathname is typed as string
+
     // const [isMobile, setIsMobile] = useState(false);
 
     // useEffect(() => {
@@ -36,11 +38,7 @@ const Header = () => {
         { label: "O mnie", href: "/about", icon: <InfoIcon /> },
     ];
 
-    return (
-        <div>
-            <Menu navItems={navItems} />
-        </div>
-    );
+    return <Menu navItems={navItems} pathname={pathname} />;
 
     // return (
     //   <AppBar
