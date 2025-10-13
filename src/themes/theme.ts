@@ -40,7 +40,12 @@ const roboto = Roboto({
 
 const baseTheme = createTheme({
     palette: {
-        // primary: omitted to use MUI default (main: '#1976d2', light: '#42a5f5', dark: '#1565c0', contrastText: '#fff')
+        primary: {
+            main: "#1976d2",
+            light: "#42a5f5",
+            dark: "#1565c0",
+            contrastText: "#fff",
+        },
         secondary: {
             main: "#9c27b0",
             light: "#ba68c8",
@@ -51,9 +56,9 @@ const baseTheme = createTheme({
             paper: "#ffffff",
         },
         surface: {
-            main: "#FFF0A0", // Menu background (yellow)
-            light: "#FFFAE0", // Lighter variant
-            dark: "#D6C200", // Darker variant
+            main: "#F6723D",
+            light: "#FF9F41",
+            dark: "#F44F0C",
         },
     },
     typography: {

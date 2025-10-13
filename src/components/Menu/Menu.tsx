@@ -5,7 +5,7 @@ import { AppBar, Toolbar, IconButton, List, ListItem, ListItemText, ListItemIcon
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { desktopItemStyles, desktopMenuContainerStyle, desktopMenuIconStyle, desktopMenuLabelStyle, desktopMenuSeparatorStyle, drawerButtonStyle, drawerStyle, menuAppBarStyle, menuToolbarStyle, mobileMenuIconStyle } from "./styles";
+import { desktopItemStyles, desktopMenuContainerStyle, desktopMenuIconStyle, desktopMenuLabelStyle, desktopMenuSeparatorStyle, drawerButtonStyle, drawerBoxStyle, menuAppBarStyle, menuToolbarStyle, mobileMenuIconStyle, mobileMenuItemStyle, drawerStyle } from "./styles";
 
 interface NavItem {
     label: string;
@@ -26,17 +26,11 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
     };
 
     const drawer = (
-        <Box sx={drawerStyle}>
+        <Box sx={drawerBoxStyle}>
             <List>
                 {navItems.map(item => (
                     <Link href={item.href} key={item.label} passHref>
-                        <ListItem
-                            aria-label={`Navigate to ${item.label}`}
-                            sx={{
-                                backgroundColor: currentPathname === item.href ? "#FFFAE0" : "transparent",
-                                color: "var(--menu-color)",
-                            }}
-                        >
+                        <ListItem aria-label={`Navigate to ${item.label}`} sx={mobileMenuItemStyle(currentPathname, item.href)}>
                             <ListItemIcon sx={mobileMenuIconStyle}>{item.icon}</ListItemIcon>
                             <ListItemText
                                 primary={item.label.trim()}
@@ -83,21 +77,13 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
                 </Toolbar>
             </AppBar>
             <Drawer
-                anchor="right"
+                anchor="top"
                 open={mobileOpen}
                 onClose={handleDrawerToggle}
                 ModalProps={{ keepMounted: true }}
                 aria-labelledby="menu-drawer"
-                sx={{
-                    display: { md: "none" },
-                    "& .MuiDrawer-paper": {
-                        backgroundColor: theme => theme.palette.surface.main,
-                        color: "var(--menu-color)",
-                        width: "100%",
-                        height: "auto",
-                        overflowY: "auto",
-                    },
-                }}
+                sx={drawerStyle}
+                
             >
                 {drawer}
             </Drawer>

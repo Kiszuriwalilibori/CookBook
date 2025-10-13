@@ -14,7 +14,7 @@ export const desktopItemStyles = (currentPathname: string, href: string): SxProp
         color: "gray",
     },
     height: MENU_HEIGHT,
-    backgroundColor: currentPathname === href ? "#FFFAE0" : "transparent",
+    backgroundColor: currentPathname === href ? theme => theme.palette.surface.light : "transparent",
 });
 
 export const desktopMenuIconStyle: SxProps<Theme> = {
@@ -75,7 +75,6 @@ export const menuAppBarStyle: SxProps<Theme> = {
     backgroundColor: theme => theme.palette.surface.main,
     color: "var(--menu-color)",
     boxShadow: "none",
-    borderBottom: "1px solid #e5e7eb",
     "& .MuiToolbar-root": {
         color: "var(--menu-color)",
     },
@@ -84,10 +83,21 @@ export const menuAppBarStyle: SxProps<Theme> = {
     },
 };
 
-export const drawerStyle: SxProps<Theme> = {
+export const drawerBoxStyle: SxProps<Theme> = {
     width: "100%",
     color: "var(--menu-color)",
     backgroundColor: theme => theme.palette.surface.main,
+};
+
+export const drawerStyle: SxProps<Theme> = {
+    display: { md: "none" },
+    "& .MuiDrawer-paper": {
+        backgroundColor: theme => theme.palette.surface.main,
+        color: "var(--menu-color)",
+        width: "100%",
+        height: "auto",
+        overflowY: "auto",
+    },
 };
 
 export const menuToolbarStyle: SxProps<Theme> = {
@@ -95,3 +105,8 @@ export const menuToolbarStyle: SxProps<Theme> = {
     paddingY: 0,
     height: "100%",
 };
+
+export const mobileMenuItemStyle = (currentPathname: string, href: string): SxProps<Theme> => ({
+    color: "var(--menu-color)",
+    backgroundColor: currentPathname === href ? theme => theme.palette.surface.light : "transparent",
+});
