@@ -5,7 +5,7 @@ import { AppBar, Toolbar, IconButton, List, ListItem, ListItemText, ListItemIcon
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { desktopItemStyles, desktopMenuContainerStyle, desktopMenuIconStyle, desktopMenuLabelStyle, desktopMenuSeparatorStyle, drawerButtonStyle, drawerStyle, mobileMenuIconStyle } from "./styles";
+import { desktopItemStyles, desktopMenuContainerStyle, desktopMenuIconStyle, desktopMenuLabelStyle, desktopMenuSeparatorStyle, drawerButtonStyle, drawerStyle, menuToolbarStyle, mobileMenuIconStyle } from "./styles";
 
 interface NavItem {
     label: string;
@@ -31,6 +31,7 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
                 {navItems.map(item => (
                     <Link href={item.href} key={item.label} passHref>
                         <ListItem
+                            aria-label={`Navigate to ${item.label}`}
                             sx={{
                                 backgroundColor: currentPathname === item.href ? "lightblue" : "transparent",
                                 color: "var(--menu-color)",
@@ -39,10 +40,12 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
                             <ListItemIcon sx={mobileMenuIconStyle}>{item.icon}</ListItemIcon>
                             <ListItemText
                                 primary={item.label.trim()}
-                                primaryTypographyProps={{
-                                    sx: {
-                                        ...desktopMenuLabelStyle,
-                                        fontWeight: currentPathname === item.href ? 700 : 500,
+                                slotProps={{
+                                    primary: {
+                                        sx: {
+                                            ...desktopMenuLabelStyle,
+                                            fontWeight: currentPathname === item.href ? 700 : 500,
+                                        },
                                     },
                                 }}
                             />
@@ -54,7 +57,7 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
     );
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box role="navigation" sx={{ flexGrow: 1 }}>
             <AppBar
                 position="static"
                 sx={{
@@ -65,7 +68,7 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
                 }}
                 elevation={0}
             >
-                <Toolbar sx={{ justifyContent: "center", paddingY: 0, height: "100%" }}>
+                <Toolbar sx={menuToolbarStyle}>
                     <Box sx={desktopMenuContainerStyle}>
                         {navItems.map((item, index) => (
                             <React.Fragment key={item.label}>
@@ -93,6 +96,7 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
                 open={mobileOpen}
                 onClose={handleDrawerToggle}
                 ModalProps={{ keepMounted: true }}
+                aria-labelledby="menu-drawer"
                 sx={{
                     display: { md: "none" },
                     "& .MuiDrawer-paper": {

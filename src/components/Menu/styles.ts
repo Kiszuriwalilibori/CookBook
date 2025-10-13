@@ -86,3 +86,9 @@ export const drawerStyle: SxProps<Theme> = {
     color: "var(--menu-color)",
     backgroundColor: theme => theme.palette.surface.main,
 };
+
+export const menuToolbarStyle: SxProps<Theme> = {
+    justifyContent: { xs: "flex-start", md: "center" },
+    paddingY: 0,
+    height: "100%",
+};
