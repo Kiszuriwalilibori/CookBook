@@ -71,7 +71,7 @@ export const drawerButtonStyle: SxProps<Theme> = {
     color: "var(--menu-color)",
 };
 
-export const menunuAppBarStyle: SxProps<Theme> = {
+export const menuAppBarStyle: SxProps<Theme> = {
     backgroundColor: theme => theme.palette.surface.main,
     color: "var(--menu-color)",
     boxShadow: "none",
@@ -85,7 +85,7 @@ export const menunuAppBarStyle: SxProps<Theme> = {
 };
 
 export const drawerStyle: SxProps<Theme> = {
-    width: 250,
+    width: "100%",
     color: "var(--menu-color)",
     backgroundColor: theme => theme.palette.surface.main,
 };

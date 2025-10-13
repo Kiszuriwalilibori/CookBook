@@ -5,7 +5,7 @@ import { AppBar, Toolbar, IconButton, List, ListItem, ListItemText, ListItemIcon
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { desktopItemStyles, desktopMenuContainerStyle, desktopMenuIconStyle, desktopMenuLabelStyle, desktopMenuSeparatorStyle, drawerButtonStyle, drawerStyle, menuToolbarStyle, mobileMenuIconStyle } from "./styles";
+import { desktopItemStyles, desktopMenuContainerStyle, desktopMenuIconStyle, desktopMenuLabelStyle, desktopMenuSeparatorStyle, drawerButtonStyle, drawerStyle, menuAppBarStyle, menuToolbarStyle, mobileMenuIconStyle } from "./styles";
 
 interface NavItem {
     label: string;
@@ -33,7 +33,7 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
                         <ListItem
                             aria-label={`Navigate to ${item.label}`}
                             sx={{
-                                backgroundColor: currentPathname === item.href ? "lightblue" : "transparent",
+                                backgroundColor: currentPathname === item.href ? "#FFFAE0" : "transparent",
                                 color: "var(--menu-color)",
                             }}
                         >
@@ -58,16 +58,7 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
 
     return (
         <Box role="navigation" sx={{ flexGrow: 1 }}>
-            <AppBar
-                position="static"
-                sx={{
-                    backgroundColor: theme => theme.palette.surface.main,
-                    color: "var(--menu-color)",
-                    boxShadow: "none",
-                    borderBottom: "1px solid #e5e7eb",
-                }}
-                elevation={0}
-            >
+            <AppBar position="static" sx={menuAppBarStyle} elevation={0}>
                 <Toolbar sx={menuToolbarStyle}>
                     <Box sx={desktopMenuContainerStyle}>
                         {navItems.map((item, index) => (
@@ -102,6 +93,9 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
                     "& .MuiDrawer-paper": {
                         backgroundColor: theme => theme.palette.surface.main,
                         color: "var(--menu-color)",
+                        width: "100%",
+                        height: "auto",
+                        overflowY: "auto",
                     },
                 }}
             >
