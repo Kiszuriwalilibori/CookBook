@@ -70,3 +70,27 @@ export async function getRecipes(): Promise<Recipe[]> {
 //     { slug }
 //   );
 // }
+
+export async function getRecipesForCards(): Promise<Recipe[]> {
+    return client.fetch(
+        groq`*[_type == "recipe"]{
+      _id,
+      title,
+      slug { current },
+      description {
+        content[0] {
+          children[0] { text } // Simple first-text extraction for description preview
+        },
+        image {
+          asset-> {
+            url
+          },
+          alt
+        }
+      },
+      preparationTime,
+      servings,
+      difficulty
+    }`
+    );
+}

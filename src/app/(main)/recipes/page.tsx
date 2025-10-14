@@ -1,8 +1,13 @@
+// app/recipes/page.tsx (or pages/recipes.tsx—adjust based on your router)
 "use client";
 
 import { useState, useEffect } from "react";
-import { getRecipes } from "@/lib/sanity";
+import { Grid, Box } from "@mui/material";
+import { getRecipesForCards } from "@/lib/sanity";
 import { Recipe } from "@/lib/types";
+import { PageTitle } from "@/components";
+import RecipeCard from "@/components/RecipeCard"; // Adjust path to your RecipeCard
+import { gridSize, pageContainerStyle } from "./styles";
 
 export default function RecipesPage() {
     const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -13,7 +18,7 @@ export default function RecipesPage() {
         async function fetchRecipes() {
             try {
                 setLoading(true);
-                const data: Recipe[] = await getRecipes();
+                const data: Recipe[] = await getRecipesForCards();
                 setRecipes(data);
             } catch (err: unknown) {
                 const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
@@ -31,16 +36,17 @@ export default function RecipesPage() {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
-            <h1>Recipes</h1>
-            <ul>
+        <Box sx={pageContainerStyle}>
+            {/* Padding responsywny */}
+            <PageTitle title="Przepisy" />
+            <Grid container spacing={3}>
+                {/* Spacing dla gap między kartami */}
                 {recipes.map(recipe => (
-                    <li key={recipe._id}>
-                        <h2>{recipe.title}</h2>
-                        {/* e.g., Use PortableText component for recipe.description?.content */}
-                    </li>
+                    <Grid size={gridSize} key={recipe._id}>
+                        <RecipeCard recipe={recipe} />
+                    </Grid>
                 ))}
-            </ul>
-        </div>
+            </Grid>
+        </Box>
     );
 }

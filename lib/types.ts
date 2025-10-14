@@ -59,6 +59,7 @@ export interface Recipe {
     cookingTime?: number;
     servings?: number;
     cuisine?: string;
+    difficulty?: "łatwe" | "trudne"; // Updated: Union type for the two allowed values
     dietaryRestrictions?: string[];
     tags?: string[];
     notes?: string;
