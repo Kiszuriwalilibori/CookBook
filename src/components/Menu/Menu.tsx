@@ -5,7 +5,7 @@ import { AppBar, Toolbar, IconButton, List, ListItem, ListItemText, ListItemIcon
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { desktopItemStyles, desktopMenuContainerStyle, desktopMenuIconStyle, desktopMenuLabelStyle, desktopMenuSeparatorStyle, drawerButtonStyle, drawerBoxStyle, menuAppBarStyle, menuToolbarStyle, mobileMenuIconStyle, mobileMenuItemStyle, drawerStyle } from "./styles";
+import { desktopItemStyles, desktopMenuContainerStyle, desktopMenuIconStyle, desktopMenuLabelStyle, desktopMenuSeparatorStyle, drawerButtonStyle, drawerBoxStyle, menuAppBarStyle, menuToolbarStyle, mobileMenuIconStyle, mobileMenuItemStyle, drawerStyle, navigationStyle } from "./styles";
 
 interface NavItem {
     label: string;
@@ -51,7 +51,7 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
     );
 
     return (
-        <Box role="navigation" sx={{ flexGrow: 1 }}>
+        <Box role="navigation" sx={navigationStyle}>
             <AppBar position="static" sx={menuAppBarStyle} elevation={0}>
                 <Toolbar sx={menuToolbarStyle}>
                     <Box sx={desktopMenuContainerStyle}>
@@ -76,15 +76,7 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
                     </IconButton>
                 </Toolbar>
             </AppBar>
-            <Drawer
-                anchor="top"
-                open={mobileOpen}
-                onClose={handleDrawerToggle}
-                ModalProps={{ keepMounted: true }}
-                aria-labelledby="menu-drawer"
-                sx={drawerStyle}
-                
-            >
+            <Drawer anchor="top" open={mobileOpen} onClose={handleDrawerToggle} ModalProps={{ keepMounted: true }} aria-labelledby="menu-drawer" sx={drawerStyle}>
                 {drawer}
             </Drawer>
         </Box>

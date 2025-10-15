@@ -155,13 +155,6 @@ export default {
           title: 'Step',
           fields: [
             {
-              name: 'title',
-              title: 'Step Title',
-              type: 'string',
-              validation: (Rule) => Rule.required(),
-              description: 'A short title for this step (e.g., "Preheat Oven")',
-            },
-            {
               name: 'content',
               title: 'Step Content',
               type: 'array',
@@ -238,22 +231,23 @@ export default {
           ],
           preview: {
             select: {
-              title: 'title',
               media: 'image',
             },
             prepare(selection) {
-              const {title, media} = selection
+              const {media} = selection
               return {
-                title,
+                title: 'Preparation Step', // Fallback preview title
                 media,
               }
             },
           },
           orderings: [
             {
-              title: 'Step Number',
-              name: 'stepNumber',
-              by: [{field: 'title', direction: 'asc'}],
+              title: 'Step Order',
+              name: 'stepOrder',
+              by: [
+                {fields: ['_createdAt'], direction: 'asc'}, // Order by creation time as fallback
+              ],
             },
           ],
         },

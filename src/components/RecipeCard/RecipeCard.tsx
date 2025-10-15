@@ -9,13 +9,14 @@ import type { Recipe } from "@/lib/types"; // Import full Recipe type for 1:1 ma
 interface RecipeCardProps {
     recipe: Recipe;
 }
-
-const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
+// components/RecipeCard.tsx (updated extraction to handle firstBlockText object)
+export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
     const { title, description, preparationTime, servings, difficulty, slug } = recipe;
-    const descriptionText = description?.content?.[0]?.children?.[0]?.text || "No description available.";
-    const imageUrl = description?.image?.asset?.url || "/placeholder-image.jpg"; // Fallback if no image
+    const contentText = description?.firstBlockText?.children?.map(child => child.text).join(" ") || ""; // Join texts from children array
+    const descTitle = description?.title || contentText || "No description available."; // Prioritize title, then joined content text
+    const imageUrl = description?.image?.asset?.url || "/placeholder-image.jpg";
     const prepTime = `${preparationTime || 0} min`;
-
+    console.log(recipe);
     return (
         <NextLink href={`/recipes/${slug?.current}`} passHref style={{ textDecoration: "none", color: "inherit" }}>
             <Card sx={styles.card}>
@@ -25,7 +26,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
                         {title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" sx={styles.description}>
-                        {descriptionText}
+                        {descTitle}
                     </Typography>
                     <Box sx={styles.details}>
                         <Chip label={prepTime} size="small" sx={styles.chip} />

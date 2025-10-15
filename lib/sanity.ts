@@ -78,6 +78,7 @@ export async function getRecipesForCards(): Promise<Recipe[]> {
       title,
       slug { current },
       description {
+      title,
         content[0] {
           children[0] { text } // Simple first-text extraction for description preview
         },

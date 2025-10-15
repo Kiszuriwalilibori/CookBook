@@ -1,6 +1,4 @@
-// lib/types.ts
-// Shared TypeScript interfaces for Sanity data—import in pages/components as needed
-
+// lib/types.ts (updated to match query's firstBlockText structure)
 export interface PortableTextBlock {
     _key: string;
     _type: "block";
@@ -27,6 +25,11 @@ export interface Recipe {
     };
     description?: {
         title?: string;
+        firstBlockText?: {
+            children?: Array<{
+                text: string;
+            }>;
+        };
         content?: PortableTextBlock[];
         image?: {
             asset?: {
@@ -43,8 +46,7 @@ export interface Recipe {
     }>;
     Products?: string[];
     preparationSteps?: Array<{
-        title: string;
-        content?: PortableTextBlock[];
+        content?: PortableTextBlock[]; // Removed 'title'
         image?: {
             asset?: {
                 _id: string;
@@ -59,7 +61,7 @@ export interface Recipe {
     cookingTime?: number;
     servings?: number;
     cuisine?: string;
-    difficulty?: "łatwe" | "trudne"; // Updated: Union type for the two allowed values
+    difficulty?: "łatwe" | "trudne";
     dietaryRestrictions?: string[];
     tags?: string[];
     notes?: string;
