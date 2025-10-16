@@ -11,7 +11,7 @@ interface RecipeCardProps {
 }
 // components/RecipeCard.tsx (updated extraction to handle firstBlockText object)
 export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
-    const { title, description, preparationTime, servings, difficulty, slug } = recipe;
+    const { title, description, preparationTime, difficulty, slug } = recipe;
     const contentText = description?.firstBlockText?.children?.map(child => child.text).join(" ") || ""; // Join texts from children array
     const descTitle = description?.title || contentText || "No description available."; // Prioritize title, then joined content text
     const imageUrl = description?.image?.asset?.url || "/placeholder-image.jpg";
@@ -25,12 +25,16 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
                     <Typography variant="h6" gutterBottom sx={styles.title}>
                         {title}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={styles.description}>
+                    <Box sx={styles.separator}>
+                        <Box sx={styles.upperLine} />
+                        <Box sx={styles.lowerLine} />
+                    </Box>
+                    <Typography variant="body2" sx={styles.description}>
                         {descTitle}
                     </Typography>
                     <Box sx={styles.details}>
                         <Chip label={prepTime} size="small" sx={styles.chip} />
-                        <Chip label={`${servings || 1} servings`} size="small" sx={styles.chip} />
+
                         {difficulty && <Chip label={difficulty} size="small" color="primary" sx={styles.chip} />}
                     </Box>
                 </CardContent>
