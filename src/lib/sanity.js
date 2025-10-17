@@ -1,14 +1,14 @@
-import { createClient } from '@sanity/client';
+import { createClient } from "@sanity/client";
 
 const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
-  apiVersion: '2025-10-09',
-  useCdn: true, // Use CDN for faster reads
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+    apiVersion: "2025-10-09",
+    useCdn: true,
 });
 
 export async function getRecipes() {
-  const recipes = await client.fetch(`
+    const recipes = await client.fetch(`
     *[_type == "recipe"]{
       _id,
       title,
@@ -29,11 +29,12 @@ export async function getRecipes() {
       source
     }
   `);
-  return recipes;
+    return recipes;
 }
 
 export async function getRecipeBySlug(slug) {
-  const recipe = await client.fetch(`
+    const recipe = await client.fetch(
+        `
     *[_type == "recipe" && slug.current == $slug][0]{
       _id,
       title,
@@ -53,8 +54,10 @@ export async function getRecipeBySlug(slug) {
       Kizia,
       source
     }
-  `, { slug });
-  return recipe;
+  `,
+        { slug }
+    );
+    return recipe;
 }
 
 export default client;

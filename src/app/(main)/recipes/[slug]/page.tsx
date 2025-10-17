@@ -1,5 +1,3 @@
-//
-
 // app/recipes/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import { PortableText } from "@portabletext/react"; // For rich text rendering
@@ -7,35 +5,37 @@ import type { PortableTextComponents } from "@portabletext/react"; // Import for
 import { getRecipeBySlug } from "@/lib/sanity";
 import { Recipe } from "@/lib/types";
 import Image from "next/image"; // For optimized images
-import { Box, Typography, List, ListItem, ListItemText, Grid } from "@mui/material";
-import { styles } from "./styles";
+import { Box, Typography, List, ListItem, ListItemText, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { styles, FONT_SIZE, portableTextSx } from "./styles";
+import { fieldTranslations } from "@/lib/types";
 
 // Custom PortableText components (typed correctly for compatibility)
 const PortableTextComponents: Partial<PortableTextComponents> = {
     block: ({ children }) => (
-        <Typography variant="body1" sx={{ mb: 2 }}>
+        <Typography variant="body1" sx={portableTextSx.block}>
             {children}
         </Typography>
     ),
-    list: ({ children }) => <List sx={{ ml: 3, mb: 2, listStyleType: "disc" }}>{children}</List>,
+    list: ({ children }) => <List sx={portableTextSx.list}>{children}</List>,
     listItem: ({ children }) => (
-        <ListItem sx={{ px: 0, py: 0.5 }}>
+        <ListItem sx={portableTextSx.listItem}>
             <ListItemText primary={children} />
         </ListItem>
     ),
     marks: {
         strong: ({ children }) => (
-            <Typography component="strong" sx={{ fontWeight: "bold" }}>
+            <Typography component="strong" sx={portableTextSx.strong}>
                 {children}
             </Typography>
         ),
         em: ({ children }) => (
-            <Typography component="em" sx={{ fontStyle: "italic" }}>
+            <Typography component="em" sx={portableTextSx.em}>
                 {children}
             </Typography>
         ),
         link: ({ children, value }) => (
-            <Typography component="a" href={value?.href || "#"} target="_blank" rel="noopener noreferrer" sx={{ color: "primary.main", textDecoration: "underline", "&:hover": { textDecoration: "none" } }}>
+            <Typography component="a" href={value?.href || "#"} target="_blank" rel="noopener noreferrer" sx={portableTextSx.link}>
                 {children}
             </Typography>
         ),
@@ -45,6 +45,9 @@ const PortableTextComponents: Partial<PortableTextComponents> = {
 interface Params {
     slug: string;
 }
+
+// Funkcja do pobierania tłumaczenia etykiety
+const getLabel = (field: string): string => fieldTranslations[field] || field;
 
 export default async function RecipePage({ params }: { params: Promise<Params> }) {
     const { slug } = await params;
@@ -73,6 +76,34 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 {recipe.title}
             </Typography>
 
+            {/* Combined Metadata */}
+            <Box sx={styles.metadata}>
+                <Typography component="span">⏱️ {recipe.preparationTime} min przygotowanie</Typography>
+                <Typography component="span">🍽️ {recipe.servings} porcji</Typography>
+                <Typography component="span">⭐ {recipe.difficulty}</Typography>
+                {recipe.cuisine && <Typography component="span">🌍 {recipe.cuisine}</Typography>}
+                {recipe.calories && (
+                    <Typography component="span">
+                        {getLabel("calories")}: {recipe.calories}
+                    </Typography>
+                )}
+                {recipe.cookingTime && (
+                    <Typography component="span">
+                        {getLabel("cookingTime")}: {recipe.cookingTime} min
+                    </Typography>
+                )}
+                {recipe.dietaryRestrictions && recipe.dietaryRestrictions.length > 0 && (
+                    <Typography component="span">
+                        {getLabel("dietaryRestrictions")}: {recipe.dietaryRestrictions.join(", ")}
+                    </Typography>
+                )}
+                {recipe.tags && recipe.tags.length > 0 && (
+                    <Typography component="span">
+                        {getLabel("tags")}: {recipe.tags.join(", ")}
+                    </Typography>
+                )}
+            </Box>
+
             {/* Description */}
             {recipe.description && (
                 <Box sx={styles.descriptionContainer}>
@@ -90,14 +121,6 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 </Box>
             )}
 
-            {/* Metadata: Time, Servings, Difficulty */}
-            <Box sx={styles.metadata}>
-                <Typography component="span">⏱️ {recipe.preparationTime} min prep</Typography>
-                <Typography component="span">🍽️ {recipe.servings} servings</Typography>
-                <Typography component="span">⭐ {recipe.difficulty}</Typography>
-                {recipe.cuisine && <Typography component="span">🌍 {recipe.cuisine}</Typography>}
-            </Box>
-
             {/* Ingredients */}
             {recipe.ingredients && recipe.ingredients.length > 0 && (
                 <Box sx={styles.ingredientsContainer}>
@@ -107,7 +130,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                     <List sx={styles.ingredientsList}>
                         {recipe.ingredients.map((ing, i) => (
                             <ListItem key={i} sx={styles.ingredientsListItem}>
-                                <Typography variant="body2">
+                                <Typography variant="body2" sx={{ fontSize: FONT_SIZE }}>
                                     {ing.quantity} {ing.name}
                                 </Typography>
                             </ListItem>
@@ -116,63 +139,53 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 </Box>
             )}
 
-            {/* Preparation Steps */}
+            {/* Preparation Steps - Each step in its own Accordion, initially expanded, icon on left */}
             {recipe.preparationSteps && recipe.preparationSteps.length > 0 && (
                 <Box sx={styles.preparationContainer}>
                     <Typography variant="h2" sx={styles.preparationTitle}>
                         Przygotowanie
                     </Typography>
                     {recipe.preparationSteps.map((step, i) => (
-                        <Box key={step._key || i} sx={styles.stepContainer}>
-                            <Typography variant="h3" sx={styles.stepTitle}>
-                                Krok {i + 1}
-                            </Typography>
-                            {step.image?.asset?.url && (
-                                <Box sx={styles.stepImageContainer}>
-                                    <Image src={step.image.asset.url!} alt={step.image.alt || `Step ${i + 1}`} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" />
-                                </Box>
-                            )}
-                            {step.content && <PortableText value={step.content} components={PortableTextComponents} />}
-                            {step.notes && (
-                                <Typography variant="body2" sx={styles.stepNotes}>
-                                    {step.notes}
+                        <Accordion
+                            key={step._key || i}
+                            defaultExpanded={true} // Initially expanded
+                            sx={{
+                                boxShadow: 0, // No shadow/borders to blend with surface
+                                border: "none", // No border
+                                "&:before": { display: "none" }, // Remove default divider
+                                "& .MuiAccordionSummary-root": { px: 0, minHeight: "auto" }, // Custom summary
+                            }}
+                        >
+                            <AccordionSummary
+                                expandIcon={null} // Hide default icon
+                                sx={{
+                                    justifyContent: "flex-start", // Start from left for alignment
+                                    alignItems: "center", // Vertical alignment with number
+                                    px: 0,
+                                    minHeight: "auto",
+                                    "& .MuiAccordionSummary-content": { ml: 0 }, // No margin for tight alignment
+                                }}
+                            >
+                                <Typography variant="h3" sx={{ ...styles.stepTitle, fontSize: "22px" }}>
+                                    {i + 1}
                                 </Typography>
-                            )}
-                        </Box>
+                                <ExpandMoreIcon sx={{ color: "grey.800", ml: 1, transform: "translateY(2px)" }} /> {/* Icon on right, after number, slightly lowered */}
+                            </AccordionSummary>
+                            <AccordionDetails sx={{ p: 0 }}>
+                                {step.image?.asset?.url && (
+                                    <Box sx={styles.stepImageContainer}>
+                                        <Image src={step.image.asset.url!} alt={step.image.alt || `Step ${i + 1}`} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" />
+                                    </Box>
+                                )}
+                                {step.content && <PortableText value={step.content} components={PortableTextComponents} />}
+                                {step.notes && (
+                                    <Typography variant="body2" sx={styles.stepNotes}>
+                                        {step.notes}
+                                    </Typography>
+                                )}
+                            </AccordionDetails>
+                        </Accordion>
                     ))}
-                </Box>
-            )}
-
-            {/* Additional Info */}
-            <Grid container spacing={2} sx={styles.additionalInfoGrid}>
-                {recipe.calories && (
-                    <Grid size={{ xs: 12, sm: 6 }} sx={styles.additionalInfoItem}>
-                        <Typography>Calories: {recipe.calories}</Typography>
-                    </Grid>
-                )}
-                {recipe.cookingTime && (
-                    <Grid size={{ xs: 12, sm: 6 }} sx={styles.additionalInfoItem}>
-                        <Typography>Cooking Time: {recipe.cookingTime} min</Typography>
-                    </Grid>
-                )}
-                {recipe.dietaryRestrictions && recipe.dietaryRestrictions.length > 0 && (
-                    <Grid size={{ xs: 12, sm: 6 }} sx={styles.additionalInfoItem}>
-                        <Typography>Dietary: {recipe.dietaryRestrictions.join(", ")}</Typography>
-                    </Grid>
-                )}
-                {recipe.tags && recipe.tags.length > 0 && (
-                    <Grid size={{ xs: 12, sm: 6 }} sx={styles.additionalInfoItem}>
-                        <Typography>Tags: {recipe.tags.join(", ")}</Typography>
-                    </Grid>
-                )}
-            </Grid>
-
-            {/* Source */}
-            {recipe.source && (
-                <Box sx={styles.sourceContainer}>
-                    <Typography variant="body2" sx={styles.sourceText}>
-                        Source: {recipe.source.title || (recipe.source.isInternet ? recipe.source.http : recipe.source.book)}
-                    </Typography>
                 </Box>
             )}
         </Box>

@@ -1,6 +1,8 @@
 // app/recipes/[slug]/styles.ts
 import { SxProps, Theme } from "@mui/material";
 
+export const FONT_SIZE = "18px";
+
 export const styles: { [key: string]: SxProps<Theme> } = {
     root: {
         maxWidth: 1024,
@@ -98,5 +100,48 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     },
     sourceText: {
         color: "text.secondary",
+    },
+    accordion: {
+        boxShadow: 0,
+        border: "none",
+        "&:before": { display: "none" },
+        "& .MuiAccordionSummary-root": { px: 0, minHeight: "auto" },
+    },
+    accordionSummary: {
+        justifyContent: "flex-start",
+        alignItems: "center",
+        px: 0,
+        minHeight: "auto",
+        "& .MuiAccordionSummary-content": { ml: 0 },
+    },
+    accordionDetails: {
+        p: 0,
+    },
+};
+
+export const portableTextSx: { [key: string]: SxProps<Theme> } = {
+    block: {
+        mb: 2,
+        fontSize: FONT_SIZE,
+    },
+    list: {
+        ml: 3,
+        mb: 2,
+        listStyleType: "disc",
+    },
+    listItem: {
+        px: 0,
+        py: 0.5,
+    },
+    strong: {
+        fontWeight: "bold",
+    },
+    em: {
+        fontStyle: "italic",
+    },
+    link: {
+        color: "primary.main",
+        textDecoration: "underline",
+        "&:hover": { textDecoration: "none" },
     },
 };

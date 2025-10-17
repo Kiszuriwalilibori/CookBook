@@ -18,59 +18,71 @@ export interface PortableTextBlock {
 }
 
 export interface Recipe {
-  _id: string;
-  title: string;
-  slug?: {
-    current: string;
-  };
-  description?: {
-    title?: string;
-    firstBlockText?: {
-      children?: Array<{
-        text: string;
-      }>;
+    _id: string;
+    title: string;
+    slug?: {
+        current: string;
     };
-    content?: PortableTextBlock[];
-    image?: {
-      asset?: {
-        _id: string;
-        url?: string;
-      };
-      alt?: string;
+    description?: {
+        title?: string;
+        firstBlockText?: {
+            children?: Array<{
+                text: string;
+            }>;
+        };
+        content?: PortableTextBlock[];
+        image?: {
+            asset?: {
+                _id: string;
+                url?: string;
+            };
+            alt?: string;
+        };
+        notes?: string;
     };
+    ingredients?: Array<{
+        name: string;
+        quantity: number;
+    }>;
+    Products?: string[];
+    preparationSteps?: Array<{
+        _key?: string; //
+        content?: PortableTextBlock[];
+        image?: {
+            asset?: {
+                _id: string;
+                url?: string;
+            };
+            alt?: string;
+        };
+        notes?: string;
+    }>;
+    calories?: number;
+    preparationTime?: number;
+    cookingTime?: number;
+    servings?: number;
+    cuisine?: string;
+    difficulty?: "łatwe" | "trudne";
+    dietaryRestrictions?: string[];
+    tags?: string[];
     notes?: string;
-  };
-  ingredients?: Array<{
-    name: string;
-    quantity: number;
-  }>;
-  Products?: string[];
-  preparationSteps?: Array<{
-    _key?: string; // 
-    content?: PortableTextBlock[];
-    image?: {
-      asset?: {
-        _id: string;
-        url?: string;
-      };
-      alt?: string;
+    Kizia?: boolean;
+    source?: {
+        isInternet?: boolean;
+        http?: string;
+        book?: string;
+        title?: string;
     };
-    notes?: string;
-  }>;
-  calories?: number;
-  preparationTime?: number;
-  cookingTime?: number;
-  servings?: number;
-  cuisine?: string;
-  difficulty?: 'łatwe' | 'trudne';
-  dietaryRestrictions?: string[];
-  tags?: string[];
-  notes?: string;
-  Kizia?: boolean;
-  source?: {
-    isInternet?: boolean;
-    http?: string;
-    book?: string;
-    title?: string;
-  };
 }
+
+export const fieldTranslations: Record<string, string> = {
+    calories: "Kalorie",
+    cookingTime: "Czas gotowania",
+    dietaryRestrictions: "Rodzaj diety",
+    tags: "Etykiety",
+    cuisine: "Kuchnia",
+    difficulty: "Trudność",
+    preparationTime: "Czas przygotowania",
+    servings: "Porcje",
+    notes: "Notatki",
+};
