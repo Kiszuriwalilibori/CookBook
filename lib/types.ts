@@ -77,12 +77,12 @@ export interface Recipe {
 
 export const fieldTranslations: Record<string, string> = {
     calories: "Kalorie",
-    cookingTime: "Czas gotowania",
+    cookingTime: "Czas aktywnej pracy",
     dietaryRestrictions: "Rodzaj diety",
     tags: "Etykiety",
     cuisine: "Kuchnia",
     difficulty: "Trudność",
-    preparationTime: "Czas przygotowania",
-    servings: "Porcje",
+    preparationTime: "Całkowity czas przygotowania",
+    servings: "Porcje", // Not used directly; handled dynamically below
     notes: "Notatki",
 };
