@@ -29,13 +29,19 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
     return (
         <Box sx={styles.root}>
             <RecipeHero recipe={recipe} />
-            <Separator /> {/* 1st: After hero/title, matching original */}
+            <Separator />
             <RecipeMetadata recipe={recipe} />
             <RecipeDescription recipe={recipe} />
-            <Separator /> {/* 2nd: After description, matching original post-description */}
-            <RecipeIngredients recipe={recipe} />
-            <Separator /> {/* 3rd: After ingredients, matching original flow to preparation */}
-            <RecipePreparationSteps recipe={recipe} />
+            <Separator />
+            <Box sx={styles.ingredientsPrepWrapper}>
+                <Box sx={styles.ingredientsWrapper}>
+                    <RecipeIngredients recipe={recipe} />
+                </Box>
+                <Box sx={styles.prepWrapper}>
+                    <RecipePreparationSteps recipe={recipe} />
+                </Box>
+            </Box>
+            <Separator />
             {isAdmin && <RecipeSource recipe={recipe} />}
         </Box>
     );

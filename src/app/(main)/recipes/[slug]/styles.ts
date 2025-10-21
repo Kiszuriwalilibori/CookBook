@@ -30,15 +30,14 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         fontStyle: "italic",
         fontFamily: "Playfair Display, Georgia, serif",
         fontWeight: 500,
-        mt: 5,
         mb: 5,
+        mt: 5,
     },
     descriptionNotes: {
         color: "text.secondary",
         mb: 2,
         fontStyle: "italic",
     },
-
     metadata: {
         display: "grid",
         gridTemplateColumns: { xs: "1fr", md: "repeat(2, 1fr)" },
@@ -50,17 +49,10 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     ingredientsContainer: {
         mb: 4,
     },
-
     ingredientsTitle: {
-        fontSize: "1.25rem", // Matched to descriptionTitle
+        fontSize: "1.25rem",
         fontFamily: "Playfair Display, Georgia, serif",
-        fontWeight: 500, // Matched to descriptionTitle
-        mb: 2,
-    },
-    preparationTitle: {
-        fontSize: "1.25rem", // Matched to descriptionTitle
-        fontFamily: "Playfair Display, Georgia, serif",
-        fontWeight: 500, // Matched to descriptionTitle
+        fontWeight: 500,
         mb: 2,
     },
     ingredientsList: {
@@ -73,7 +65,12 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     preparationContainer: {
         mb: 4,
     },
-
+    preparationTitle: {
+        fontSize: "1.25rem",
+        fontFamily: "Playfair Display, Georgia, serif",
+        fontWeight: 500,
+        mb: 2,
+    },
     stepContainer: {
         mb: 4,
     },
@@ -126,13 +123,30 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     accordionDetails: {
         p: 0,
     },
+    // New styles for side-by-side layout
+    ingredientsPrepWrapper: {
+        display: { xs: "block", md: "flex" },
+        alignItems: "stretch",
+        mb: 4,
+        mt: 6, // Adjusted to 1.5x (from base ~4 to 6)
+    },
+    ingredientsWrapper: {
+        width: { md: "25%" },
+        pr: { md: 2 },
+        borderRight: { md: 1 },
+        borderColor: "divider",
+    },
+    prepWrapper: {
+        flex: 1,
+        pl: { md: 2 },
+    },
 };
 
 export const portableTextSx: { [key: string]: SxProps<Theme> } = {
     block: {
-        mb: 0.125,
+        mb: 0.125, // Reduced from 0.25 to half for tighter inter-line spacing
         fontSize: FONT_SIZE,
-        lineHeight: 1.3,
+        lineHeight: 1.3, // Added reduced line-height for more compact text lines (default ~1.5)
     },
     list: {
         ml: 3,
