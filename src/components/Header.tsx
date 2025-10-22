@@ -40,6 +40,7 @@ const Header = () => {
 
     return <Menu navItems={navItems} /*pathname={pathname}*/ />;
 
+    
     // return (
     //   <AppBar
     //     position="sticky"
