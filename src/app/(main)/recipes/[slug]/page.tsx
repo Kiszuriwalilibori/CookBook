@@ -43,7 +43,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
             {isAdmin && <RecipeSource recipe={recipe} />}
             <Separator />
             <Box sx={styles.copyButtonContainer}>
-                <RecipeCopyButton recipe={recipe} />
+                <RecipeCopyButton recipe={recipe} slug={slug} />
             </Box>
         </Box>
     );
