@@ -140,6 +140,33 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         flex: 1,
         pl: { md: 2 },
     },
+    // New styles for copy button
+    copyButtonContainer: {
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        mb: 2,
+    },
+    copyButton: {
+        fontSize: { xs: "0.875rem", sm: "1rem" }, // Responsive font sizing for readability
+        padding: { xs: "8px 16px", sm: "12px 24px" }, // Responsive padding for touch targets (min ~44px height)
+        minHeight: "44px", // WCAG touch target minimum
+        color: theme => theme.palette.surface.main, // Menu background color for text
+        borderColor: theme => theme.palette.surface.main, // Menu background color for border
+        transition: "all 0.2s ease-in-out", // Smooth hover transition
+        "&:hover": {
+            borderColor: theme => theme.palette.surface.light,
+            color: theme => theme.palette.surface.light,
+            backgroundColor: theme => theme.palette.action.hover, // Light hover background
+        },
+        "&:focus-visible": {
+            // WCAG focus indicator
+            outline: "2px solid",
+            outlineColor: theme => theme.palette.primary.main,
+            outlineOffset: 2,
+            borderRadius: theme => `${theme.shape.borderRadius}px`,
+        },
+    },
 };
 
 export const portableTextSx: { [key: string]: SxProps<Theme> } = {
