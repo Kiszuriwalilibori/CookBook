@@ -4,11 +4,11 @@ import React from "react";
 import Menu from "@/components/Menu/Menu";
 
 import { Book as RecipeIcon, Article as BlogIcon, Home as HomeIcon, Favorite as FavoriteIcon, Info as InfoIcon } from "@mui/icons-material";
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 // import theme from "@/themes/theme";
 
 const Header = () => {
-    const pathname: string = usePathname(); // Ensure pathname is typed as string
+    // const pathname: string = usePathname(); // Ensure pathname is typed as string
 
     // const [isMobile, setIsMobile] = useState(false);
 
@@ -38,7 +38,7 @@ const Header = () => {
         { label: "O mnie", href: "/about", icon: <InfoIcon /> },
     ];
 
-    return <Menu navItems={navItems} pathname={pathname} />;
+    return <Menu navItems={navItems} /*pathname={pathname}*/ />;
 
     // return (
     //   <AppBar
