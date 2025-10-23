@@ -3,7 +3,7 @@ import { getRecipeBySlug } from "@/lib/sanity";
 import { Recipe } from "@/lib/types";
 import { Box } from "@mui/material";
 import { Separator } from "@/components";
-import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton } from "./parts";
+import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton } from "./parts";
 import { styles } from "./styles";
 
 interface Params {
@@ -40,7 +40,12 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 <RecipeCopyButton recipe={recipe} slug={slug} />
                 <RecipePrintButton />
                 <RecipePdfButton recipe={recipe} slug={slug} />
+                <RecipeKeepAwakeButton />
             </Box>
         </Box>
     );
 }
+
+// Add fallback audio Loop
+// server side generating
+// screen orientation lock
