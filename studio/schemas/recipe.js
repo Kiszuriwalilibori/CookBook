@@ -1,4 +1,3 @@
-// schemas/recipe.js (updated Sanity schema)
 import ProductsInput from '../components/ProductsInput'
 
 export default {
