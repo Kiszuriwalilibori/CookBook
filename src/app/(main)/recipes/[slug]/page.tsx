@@ -3,14 +3,9 @@ import { getRecipeBySlug } from "@/lib/sanity";
 import { Recipe } from "@/lib/types";
 import { Box } from "@mui/material";
 import { Separator } from "@/components";
-import { RecipeHero } from "./parts/RecipeHero";
-import { RecipeMetadata } from "./parts/RecipeMetadata";
-import { RecipeDescription } from "./parts/RecipeDescription";
-import { RecipeIngredients } from "./parts/RecipeIngredients";
-import { RecipePreparationSteps } from "./parts/RecipePreparationSteps";
-import { RecipeSource } from "./parts/RecipeSource";
-import { RecipeCopyButton } from "./parts/RecipeCopyButton";
+import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton } from "./parts";
 import { styles } from "./styles";
+
 
 interface Params {
     slug: string;
@@ -44,6 +39,8 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
             <Separator />
             <Box sx={styles.copyButtonContainer}>
                 <RecipeCopyButton recipe={recipe} slug={slug} />
+                <RecipePrintButton />
+                <RecipePdfButton recipe={recipe} slug={slug} />
             </Box>
         </Box>
     );
