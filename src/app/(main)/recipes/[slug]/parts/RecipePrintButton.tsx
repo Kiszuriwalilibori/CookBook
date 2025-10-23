@@ -11,6 +11,7 @@ export function RecipePrintButton() {
 
     return (
         <Button
+            id="RecipePrintButton"
             variant="outlined"
             onClick={handlePrint}
             sx={{

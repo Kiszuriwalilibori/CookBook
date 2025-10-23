@@ -59,6 +59,7 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
             </Typography>
             {recipe.preparationSteps.map((step, i) => (
                 <Accordion
+                    id={`RecipePreparationStep-${i + 1}`}
                     key={step._key || i}
                     defaultExpanded={true} // Initially expanded
                     sx={{

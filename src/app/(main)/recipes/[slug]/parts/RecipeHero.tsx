@@ -12,7 +12,7 @@ export function RecipeHero({ recipe }: RecipeHeroProps) {
     return (
         <>
             {recipe.description?.image?.asset?.url && (
-                <Box sx={styles.heroImageContainer}>
+                <Box id="RecipeHero" sx={styles.heroImageContainer}>
                     <Image
                         src={recipe.description.image.asset.url!}
                         alt={recipe.description.image.alt || recipe.title}

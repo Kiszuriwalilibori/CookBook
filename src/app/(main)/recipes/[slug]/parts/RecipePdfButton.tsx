@@ -134,6 +134,7 @@ export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
 
     return (
         <Button
+            id="RecipePdfButton"
             variant="outlined"
             onClick={handlePdfExport}
             sx={{

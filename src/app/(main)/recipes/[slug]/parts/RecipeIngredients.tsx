@@ -11,7 +11,7 @@ export function RecipeIngredients({ recipe }: RecipeIngredientsProps) {
     return (
         recipe.ingredients &&
         recipe.ingredients.length > 0 && (
-            <Box sx={styles.ingredientsContainer}>
+            <Box id="RecipeIngredients" sx={styles.ingredientsContainer}>
                 <Typography variant="h2" sx={styles.ingredientsTitle}>
                     Składniki
                 </Typography>

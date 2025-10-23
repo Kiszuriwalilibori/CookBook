@@ -13,7 +13,7 @@ interface RecipeMetadataProps {
 
 export function RecipeMetadata({ recipe }: RecipeMetadataProps) {
     return (
-        <Box sx={styles.metadata}>
+        <Box id="RecipeMetadata" sx={styles.metadata}>
             <Typography component="div">
                 ⏱️ {getLabel("preparationTime")}: {recipe.preparationTime} min
             </Typography>

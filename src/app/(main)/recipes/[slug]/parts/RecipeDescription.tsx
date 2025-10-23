@@ -48,7 +48,7 @@ interface RecipeDescriptionProps {
 
 export function RecipeDescription({ recipe }: RecipeDescriptionProps) {
     return (
-        <Box sx={styles.descriptionContainer}>
+        <Box sx={styles.descriptionContainer} id="RecipeDescription">
             <Separator />
             {recipe.description && (
                 <>

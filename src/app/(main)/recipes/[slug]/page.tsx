@@ -6,7 +6,6 @@ import { Separator } from "@/components";
 import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton } from "./parts";
 import { styles } from "./styles";
 
-
 interface Params {
     slug: string;
 }
@@ -22,7 +21,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
     const isAdmin = false;
 
     return (
-        <Box sx={styles.root}>
+        <Box id="RecipePage" sx={styles.root}>
             <RecipeHero recipe={recipe} />
             <RecipeMetadata recipe={recipe} />
             <RecipeDescription recipe={recipe} />

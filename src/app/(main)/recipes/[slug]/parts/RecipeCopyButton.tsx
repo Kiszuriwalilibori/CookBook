@@ -187,7 +187,7 @@ export function RecipeCopyButton({ recipe, slug }: RecipeCopyButtonProps) {
 
     return (
         <>
-            <Button variant="outlined" onClick={handleCopy} sx={styles.copyButton}>
+            <Button variant="outlined" id="RecipeCopyButton" onClick={handleCopy} sx={styles.copyButton}>
                 Kopiuj składniki i przygotowanie do dokumentu
             </Button>
             <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
