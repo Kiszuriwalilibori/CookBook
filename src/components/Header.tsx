@@ -1,34 +1,59 @@
+// "use client";
+
+// import React, { useState } from "react";
+// import Menu from "@/components/Menu/Menu";
+// import RecipeFilters from "./RecipeFilters";
+
+// import { Book as RecipeIcon, Article as BlogIcon, Home as HomeIcon, Favorite as FavoriteIcon, Info as InfoIcon, Search as SearchIcon } from "@mui/icons-material";
+
+// const Header = () => {
+//     const [showFilter, setShowFilter] = useState(false); // State to toggle filter display
+
+//     const navItems = [
+//         { label: "Home", href: "/", icon: <HomeIcon /> },
+//         { label: "Przepisy", href: "/recipes", icon: <RecipeIcon /> },
+//         { label: "Artykuły", href: "/blog", icon: <BlogIcon /> },
+//         { label: "Ulubione", href: "/favorites", icon: <FavoriteIcon /> },
+//         { label: "O mnie", href: "/about", icon: <InfoIcon /> },
+//         {
+//             label: "Szukaj",
+//             icon: <SearchIcon />,
+//             onClick: () => setShowFilter(!showFilter), // Toggle filter on click (pass to Menu if needed)
+//         },
+//     ];
+
+//     return (
+//         <>
+//             <Menu navItems={navItems} />
+//             {showFilter && (
+//                 <div className="filter-panel">
+//                     <button onClick={() => setShowFilter(false)}>Close</button>
+//                     <RecipeFilters
+//                         onFiltersChange={filters => {
+//                             // Handle filters: e.g., update URL params, re-fetch recipes, or pass to context
+//                             console.log("Applied filters:", filters);
+//                             setShowFilter(false); // Optional: Close after apply
+//                         }}
+//                     />
+//                 </div>
+//             )}
+//         </>
+//     );
+// };
+
+// export default Header;
+
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Menu from "@/components/Menu/Menu";
+import RecipeFilters from "@/components/RecipeFilters"; // Adjust path
 
-import { Book as RecipeIcon, Article as BlogIcon, Home as HomeIcon, Favorite as FavoriteIcon, Info as InfoIcon } from "@mui/icons-material";
-// import { usePathname } from "next/navigation";
-// import theme from "@/themes/theme";
+import { Book as RecipeIcon, Article as BlogIcon, Home as HomeIcon, Favorite as FavoriteIcon, Info as InfoIcon, Search as SearchIcon } from "@mui/icons-material";
+import { Box} from "@mui/material";
 
 const Header = () => {
-    // const pathname: string = usePathname(); // Ensure pathname is typed as string
-
-    // const [isMobile, setIsMobile] = useState(false);
-
-    // useEffect(() => {
-    //     // Check if window is defined (client-side)
-    //     if (typeof window !== "undefined") {
-    //         const checkIfMobile = () => {
-    //             setIsMobile(window.innerWidth < theme.breakpoints.values.md);
-    //         };
-
-    //         // Initial check
-    //         checkIfMobile();
-
-    //         // Add event listener for window resize
-    //         window.addEventListener("resize", checkIfMobile);
-
-    //         // Cleanup
-    //         return () => window.removeEventListener("resize", checkIfMobile);
-    //     }
-    // }, []);
+    const [showFilter, setShowFilter] = useState(false);
 
     const navItems = [
         { label: "Home", href: "/", icon: <HomeIcon /> },
@@ -36,79 +61,72 @@ const Header = () => {
         { label: "Artykuły", href: "/blog", icon: <BlogIcon /> },
         { label: "Ulubione", href: "/favorites", icon: <FavoriteIcon /> },
         { label: "O mnie", href: "/about", icon: <InfoIcon /> },
+        {
+            label: "Szukaj",
+            icon: <SearchIcon />,
+            onClick: () => setShowFilter(!showFilter),
+        },
     ];
 
-    return <Menu navItems={navItems} /*pathname={pathname}*/ />;
+    const handleClose = () => setShowFilter(false);
 
-    
-    // return (
-    //   <AppBar
-    //     position="sticky"
-    //     elevation={0}
-    //     sx={{
-    //       backgroundColor: 'background.paper',
-    //       color: 'text.primary',
-    //       borderBottom: '1px solid',
-    //       borderColor: 'divider',
-    //     }}
-    //   >
-    //     <Container maxWidth="lg">
-    //       <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-    //         {/* Logo / Brand */}
-    //         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-    //           <Typography
-    //             variant="h6"
-    //             component={Link}
-    //             href="/"
-    //             sx={{
-    //               fontWeight: 700,
-    //               color: 'primary.main',
-    //               textDecoration: 'none',
-    //               display: 'flex',
-    //               alignItems: 'center',
-    //               gap: 1,
-    //             }}
-    //           >
-    //             <RecipeIcon />
-    //             CookBook
-    //           </Typography>
-    //         </Box>
+    // ESC key to close
+    useEffect(() => {
+        if (showFilter) {
+            const handleEsc = (e: KeyboardEvent) => {
+                if (e.key === "Escape") handleClose();
+            };
+            document.addEventListener("keydown", handleEsc);
+            return () => document.removeEventListener("keydown", handleEsc);
+        }
+    }, [showFilter]);
 
-    //         {/* Desktop Navigation */}
-    //         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-    //           {navItems.map((item) => (
-    //             <Button
-    //               key={item.href}
-    //               component={Link}
-    //               href={item.href}
-    //               startIcon={item.icon}
-    //               sx={{
-    //                 color: 'text.primary',
-    //                 '&:hover': {
-    //                   backgroundColor: 'action.hover',
-    //                 },
-    //               }}
-    //             >
-    //               {item.label}
-    //             </Button>
-    //           ))}
-    //         </Box>
-
-    //         {/* Mobile menu button */}
-    //         <Box sx={{ display: { xs: 'block', md: 'none' } }}>
-    //           <IconButton
-    //             size="large"
-    //             aria-label="menu"
-    //             color="inherit"
-    //             // onClick={handleMobileMenuOpen}
-    //           >
-    //             <MenuIcon />
-    //           </IconButton>
-    //         </Box>
-    //       </Toolbar>
-    //     </Container>
-    //   </AppBar>
-    // );
+    return (
+        <React.Fragment>
+            <Menu navItems={navItems} />
+            {showFilter && (
+                <React.Fragment>
+                    <Box
+                        sx={{
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            bgcolor: "rgba(0, 0, 0, 0.5)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 1300,
+                        }}
+                        onClick={handleClose} // Close on outside click
+                    >
+                        <Box
+                            sx={{
+                                bgcolor: "background.paper",
+                                p: 3,
+                                borderRadius: 1,
+                                maxWidth: 400,
+                                width: "90%",
+                                maxHeight: "80%",
+                                overflowY: "auto",
+                                boxShadow: 24,
+                            }}
+                            onClick={e => e.stopPropagation()} // Prevent bubbling
+                        >
+                            <RecipeFilters
+                                onFiltersChange={filters => {
+                                    console.log("Applied filters:", filters); // Replace with logic (e.g., URL/context)
+                                    // Optional: handleClose(); // Auto-close on apply if wanted
+                                }}
+                                onClose={handleClose} // Pass close handler
+                            />
+                        </Box>
+                    </Box>
+                </React.Fragment>
+            )}
+        </React.Fragment>
+    );
 };
 
 export default Header;
