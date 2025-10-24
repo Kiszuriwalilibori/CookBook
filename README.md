@@ -39,5 +39,10 @@ https://getimg.ai/image-editor
 
 https://magiceraser.org/remove-watermark-from-image/
 
-removed typography import from header as unused -fyiAs Składnik, use the Products, and not ingredients.
-The situation with tags is a little clumsy. I can add multiple tags for recipe, as different entieties, but also list of tags being array seprated with comas. I see that you display it as separate entieties. Please make it like this: all tags should be summarised to array or set, and be one entity
+
+dodaj walidację filtrów
+stwórz wyszukiwarkę przepisów
+uprość style sx props
+jak zaimplementować debounce w filtrach
+najlepsze praktyki walidacji formularzy react
+dodaj animacje do Autocomplete

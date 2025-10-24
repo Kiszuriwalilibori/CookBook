@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Box, Autocomplete, TextField, Button, Typography, Divider } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 interface FilterState {
     cuisine: string;
@@ -23,6 +24,7 @@ interface RecipeFiltersProps {
 }
 
 export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFiltersProps) {
+    const theme = useTheme();
     const [options, setOptions] = useState<OptionsState>({
         cuisines: [],
         tags: [],
@@ -43,20 +45,20 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
             fetch("/api/uniques/dietaryRestrictions").then(r => r.json()) as Promise<string[]>,
             fetch("/api/uniques/products").then(r => r.json()) as Promise<string[]>,
         ]).then(([cuisines, tags, dietary, products]) => {
-            const sortedCuisines = cuisines.sort((a, b) => a.localeCompare(b, "pl"));
+            const normalizedCuisines = [...new Set(cuisines.map(c => c.toLowerCase()))].sort((a, b) => a.localeCompare(b, "pl"));
             const processedTags = Array.from(
                 new Set(
                     tags.flatMap(tag =>
                         tag
                             .split(",")
-                            .map(t => t.trim())
+                            .map(t => t.trim().toLowerCase())
                             .filter(Boolean)
                     )
                 )
             ).sort((a, b) => a.localeCompare(b, "pl"));
-            const sortedDietary = dietary.sort((a, b) => a.localeCompare(b, "pl"));
-            const sortedProducts = products.sort((a, b) => a.localeCompare(b, "pl"));
-            setOptions({ cuisines: sortedCuisines, tags: processedTags, dietaryRestrictions: sortedDietary, products: sortedProducts });
+            const normalizedDietary = [...new Set(dietary.map(d => d.toLowerCase()))].sort((a, b) => a.localeCompare(b, "pl"));
+            const normalizedProducts = [...new Set(products.map(p => p.toLowerCase()))].sort((a, b) => a.localeCompare(b, "pl"));
+            setOptions({ cuisines: normalizedCuisines, tags: processedTags, dietaryRestrictions: normalizedDietary, products: normalizedProducts });
         });
     }, []);
 
@@ -75,13 +77,15 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         onFiltersChange(cleared);
     };
 
+    const surfaceMain = theme.palette.surface.main;
+
     return (
         <React.Fragment>
             <Box sx={{ maxWidth: 400, width: "100%" }}>
                 <Typography variant="h6" gutterBottom align="center">
                     Filtruj Przepisy
                 </Typography>
-                <Divider sx={{ mb: 2 }} />
+                <Divider sx={{ mb: 2, borderColor: surfaceMain }} />
 
                 {/* Cuisine */}
                 <Autocomplete
@@ -91,11 +95,75 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     value={selected.cuisine}
                     onChange={(_, newValue) => handleChange("cuisine", newValue || "")}
                     getOptionLabel={option => (option === "" ? "Wszystkie" : option)}
-                    renderInput={params => <TextField {...params} label="Kuchnia" placeholder="Wpisz lub wybierz kuchnię..." />}
+                    renderInput={params => (
+                        <TextField
+                            {...params}
+                            label="Kuchnia"
+                            placeholder="Wpisz lub wybierz kuchnię..."
+                            sx={{
+                                "& .MuiInputLabel-root": {
+                                    color: surfaceMain,
+                                },
+                                "& .MuiOutlinedInput-root": {
+                                    "& fieldset": {
+                                        borderColor: surfaceMain,
+                                    },
+                                    "&:hover fieldset": {
+                                        borderColor: surfaceMain,
+                                    },
+                                    "&.Mui-focused fieldset": {
+                                        borderColor: surfaceMain,
+                                        borderWidth: 2,
+                                    },
+                                },
+                                "& .MuiAutocomplete-endAdornment": {
+                                    "& svg": {
+                                        color: surfaceMain,
+                                    },
+                                },
+                            }}
+                        />
+                    )}
                 />
 
                 {/* Tags */}
-                <Autocomplete fullWidth sx={{ mb: 2 }} multiple options={options.tags} value={selected.tag} onChange={(_, newValue) => handleChange("tag", newValue || [])} renderInput={params => <TextField {...params} label="Tagi" placeholder="Wpisz aby wyszukać tagi..." />} />
+                <Autocomplete
+                    fullWidth
+                    sx={{ mb: 2 }}
+                    multiple
+                    options={options.tags}
+                    value={selected.tag}
+                    onChange={(_, newValue) => handleChange("tag", newValue || [])}
+                    renderInput={params => (
+                        <TextField
+                            {...params}
+                            label="Tagi"
+                            placeholder="Wpisz aby wyszukać tagi..."
+                            sx={{
+                                "& .MuiInputLabel-root": {
+                                    color: surfaceMain,
+                                },
+                                "& .MuiOutlinedInput-root": {
+                                    "& fieldset": {
+                                        borderColor: surfaceMain,
+                                    },
+                                    "&:hover fieldset": {
+                                        borderColor: surfaceMain,
+                                    },
+                                    "&.Mui-focused fieldset": {
+                                        borderColor: surfaceMain,
+                                        borderWidth: 2,
+                                    },
+                                },
+                                "& .MuiAutocomplete-endAdornment": {
+                                    "& svg": {
+                                        color: surfaceMain,
+                                    },
+                                },
+                            }}
+                        />
+                    )}
+                />
 
                 {/* Dietary */}
                 <Autocomplete
@@ -105,7 +173,35 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     options={options.dietaryRestrictions}
                     value={selected.dietary}
                     onChange={(_, newValue) => handleChange("dietary", newValue || [])}
-                    renderInput={params => <TextField {...params} label="Ograniczenia dietetyczne" placeholder="Wpisz aby wyszukać ograniczenia..." />}
+                    renderInput={params => (
+                        <TextField
+                            {...params}
+                            label="Dieta"
+                            placeholder="Wpisz aby wyszukać ograniczenia..."
+                            sx={{
+                                "& .MuiInputLabel-root": {
+                                    color: surfaceMain,
+                                },
+                                "& .MuiOutlinedInput-root": {
+                                    "& fieldset": {
+                                        borderColor: surfaceMain,
+                                    },
+                                    "&:hover fieldset": {
+                                        borderColor: surfaceMain,
+                                    },
+                                    "&.Mui-focused fieldset": {
+                                        borderColor: surfaceMain,
+                                        borderWidth: 2,
+                                    },
+                                },
+                                "& .MuiAutocomplete-endAdornment": {
+                                    "& svg": {
+                                        color: surfaceMain,
+                                    },
+                                },
+                            }}
+                        />
+                    )}
                 />
 
                 {/* Product */}
@@ -116,21 +212,84 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     options={options.products.slice(0, 50)}
                     value={selected.product}
                     onChange={(_, newValue) => handleChange("product", newValue || "")}
-                    renderInput={params => <TextField {...params} label="Produkt" placeholder="Wpisz lub wybierz produkt..." />}
+                    renderInput={params => (
+                        <TextField
+                            {...params}
+                            label="Produkt"
+                            placeholder="Wpisz lub wybierz produkt..."
+                            sx={{
+                                "& .MuiInputLabel-root": {
+                                    color: surfaceMain,
+                                },
+                                "& .MuiOutlinedInput-root": {
+                                    "& fieldset": {
+                                        borderColor: surfaceMain,
+                                    },
+                                    "&:hover fieldset": {
+                                        borderColor: surfaceMain,
+                                    },
+                                    "&.Mui-focused fieldset": {
+                                        borderColor: surfaceMain,
+                                        borderWidth: 2,
+                                    },
+                                },
+                                "& .MuiAutocomplete-endAdornment": {
+                                    "& svg": {
+                                        color: surfaceMain,
+                                    },
+                                },
+                            }}
+                        />
+                    )}
                 />
 
                 {/* Buttons */}
-                <Box sx={{ display: "flex", gap: 1, justifyContent: "space-between" }}>
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                        <Button variant="outlined" onClick={clearFilters} size="small" aria-label="Clear filters">
-                            Wyczyść
-                        </Button>
-                        <Button variant="contained" onClick={applyFilters} size="small" aria-label="Apply filters">
-                            Zastosuj
-                        </Button>
-                    </Box>
+                <Box sx={{ display: "flex", gap: 1, justifyContent: "center", flexWrap: "wrap" }}>
+                    <Button
+                        variant="outlined"
+                        onClick={clearFilters}
+                        size="small"
+                        aria-label="Clear filters"
+                        sx={{
+                            borderColor: surfaceMain,
+                            color: surfaceMain,
+                            "&:hover": {
+                                borderColor: surfaceMain,
+                                backgroundColor: `${surfaceMain}10`,
+                            },
+                        }}
+                    >
+                        Wyczyść
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={applyFilters}
+                        size="small"
+                        aria-label="Apply filters"
+                        sx={{
+                            backgroundColor: surfaceMain,
+                            "&:hover": {
+                                backgroundColor: theme.palette.surface.dark,
+                            },
+                        }}
+                    >
+                        Zastosuj
+                    </Button>
                     {onClose && (
-                        <Button variant="outlined" onClick={onClose} size="small" aria-label="Close">
+                        <Button
+                            variant="outlined"
+                            onClick={onClose}
+                            size="small"
+                            aria-label="Close"
+                            sx={{
+                                borderColor: surfaceMain,
+                                color: surfaceMain,
+                                "&:hover": {
+                                    borderColor: surfaceMain,
+                                    backgroundColor: `${surfaceMain}10`,
+                                },
+                            }}
+                        >
                             Zamknij
                         </Button>
                     )}
