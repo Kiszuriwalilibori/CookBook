@@ -32,13 +32,6 @@ export default function RecipesPage() {
         fetchRecipes();
     }, [fetchRecipes]);
 
-    // Dynamically compute grid size based on recipe count
-    const getGridSize = (count: number) => {
-        if (count === 1) return { xs: 12 }; // Full width, single column
-        if (count === 2) return { xs: 12, sm: 6 }; // Stack on xs, two cols on sm+
-        return gridSize; // Default for 3+ (e.g., 3 cols)
-    };
-
     if (loading)
         return (
             <Box sx={pageContainerStyle} display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
@@ -65,23 +58,13 @@ export default function RecipesPage() {
         <Box sx={pageContainerStyle}>
             <PageTitle title="Przepisy" />
             {recipes.length > 0 ? (
-                recipes.length === 1 ? (
-                    // Special case: Single recipe, explicitly centered
-                    <Grid container spacing={3} justifyContent="center">
-                        <Grid size={12} sx={{ display: "flex", justifyContent: "center" }}>
-                            <RecipeCard recipe={recipes[0]} />
+                <Grid container spacing={3} justifyContent="center">
+                    {recipes.map(recipe => (
+                        <Grid size={gridSize} key={recipe._id}>
+                            <RecipeCard recipe={recipe} />
                         </Grid>
-                    </Grid>
-                ) : (
-                    // Multi-recipe: Dynamic grid with centering
-                    <Grid container spacing={3} justifyContent="center">
-                        {recipes.map(recipe => (
-                            <Grid size={getGridSize(recipes.length)} key={recipe._id}>
-                                <RecipeCard recipe={recipe} />
-                            </Grid>
-                        ))}
-                    </Grid>
-                )
+                    ))}
+                </Grid>
             ) : (
                 <Typography variant="h6" textAlign="center" mt={4}>
                     Brak przepisów do wyświetlenia.
