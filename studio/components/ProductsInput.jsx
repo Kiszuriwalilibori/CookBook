@@ -1,5 +1,3 @@
-//
-
 import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import {useFormValue, PatchEvent, set} from 'sanity'
@@ -25,21 +23,23 @@ const ProductsInput = (props) => {
       })
       .filter(Boolean)
 
-    return products
+    // Dedupe to avoid repeats
+    return [...new Set(products)]
   }
 
-  // Initialize Products when empty
+  // Auto-derive Products from ingredients on changes
   useEffect(() => {
-    if (!value.length && ingredients) {
+    if (ingredients) {
       const newProducts = computeProducts(ingredients)
-      if (newProducts.length > 0) {
-        // Only patch if there's content to add
+      const currentSerialized = JSON.stringify(value || [])
+      const newSerialized = JSON.stringify(newProducts)
+      if (currentSerialized !== newSerialized) {
         Promise.resolve().then(() => {
           onChange(PatchEvent.from(set(newProducts)))
         })
       }
     }
-  }, [ingredients, onChange, value.length])
+  }, [ingredients, onChange, value]) // Note: value in deps for comparison
 
   // Handle adding a new product
   const addProduct = () => {
@@ -47,7 +47,6 @@ const ProductsInput = (props) => {
       const updatedProducts = [...value, newProduct]
       onChange(PatchEvent.from(set(updatedProducts)))
       setNewProduct('')
-    } else {
     }
   }
 
