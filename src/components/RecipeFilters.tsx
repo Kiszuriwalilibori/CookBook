@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Box, FormControl, InputLabel, Select, MenuItem, Chip, Autocomplete, TextField, FormHelperText, Button, Typography, Divider } from "@mui/material";
+import { Box, Autocomplete, TextField, Button, Typography, Divider } from "@mui/material";
 
 interface FilterState {
     cuisine: string;
@@ -43,6 +43,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
             fetch("/api/uniques/dietaryRestrictions").then(r => r.json()) as Promise<string[]>,
             fetch("/api/uniques/products").then(r => r.json()) as Promise<string[]>,
         ]).then(([cuisines, tags, dietary, products]) => {
+            const sortedCuisines = cuisines.sort((a, b) => a.localeCompare(b, "pl"));
             const processedTags = Array.from(
                 new Set(
                     tags.flatMap(tag =>
@@ -53,7 +54,9 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     )
                 )
             ).sort((a, b) => a.localeCompare(b, "pl"));
-            setOptions({ cuisines, tags: processedTags, dietaryRestrictions: dietary, products });
+            const sortedDietary = dietary.sort((a, b) => a.localeCompare(b, "pl"));
+            const sortedProducts = products.sort((a, b) => a.localeCompare(b, "pl"));
+            setOptions({ cuisines: sortedCuisines, tags: processedTags, dietaryRestrictions: sortedDietary, products: sortedProducts });
         });
     }, []);
 
@@ -81,68 +84,29 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                 <Divider sx={{ mb: 2 }} />
 
                 {/* Cuisine */}
-                <FormControl fullWidth sx={{ mb: 2 }}>
-                    <InputLabel>Kuchnia</InputLabel>
-                    <Select value={selected.cuisine} label="Kuchnia" onChange={e => handleChange("cuisine", e.target.value as string)}>
-                        <MenuItem value="">
-                            <em>Wszystkie</em>
-                        </MenuItem>
-                        {options.cuisines.map(opt => (
-                            <MenuItem key={opt} value={opt}>
-                                {opt}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                <Autocomplete
+                    fullWidth
+                    sx={{ mb: 2 }}
+                    options={["", ...options.cuisines]}
+                    value={selected.cuisine}
+                    onChange={(_, newValue) => handleChange("cuisine", newValue || "")}
+                    getOptionLabel={option => (option === "" ? "Wszystkie" : option)}
+                    renderInput={params => <TextField {...params} label="Kuchnia" placeholder="Wpisz lub wybierz kuchnię..." />}
+                />
 
                 {/* Tags */}
-                <FormControl fullWidth sx={{ mb: 2 }}>
-                    <InputLabel>Tagi</InputLabel>
-                    <Select
-                        multiple
-                        value={selected.tag}
-                        label="Tagi"
-                        renderValue={selected => (
-                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                                {(selected as string[]).map(value => (
-                                    <Chip key={value} label={value} size="small" color="primary" />
-                                ))}
-                            </Box>
-                        )}
-                        onChange={e => handleChange("tag", e.target.value as string[])}
-                    >
-                        {options.tags.slice(0, 15).map(opt => (
-                            <MenuItem key={opt} value={opt}>
-                                {opt}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                    <FormHelperText>{options.tags.length > 15 ? "Pierwsze 15" : ""}</FormHelperText>
-                </FormControl>
+                <Autocomplete fullWidth sx={{ mb: 2 }} multiple options={options.tags} value={selected.tag} onChange={(_, newValue) => handleChange("tag", newValue || [])} renderInput={params => <TextField {...params} label="Tagi" placeholder="Wpisz aby wyszukać tagi..." />} />
 
                 {/* Dietary */}
-                <FormControl fullWidth sx={{ mb: 2 }}>
-                    <InputLabel>Ograniczenia dietetyczne</InputLabel>
-                    <Select
-                        multiple
-                        value={selected.dietary}
-                        label="Ograniczenia dietetyczne"
-                        renderValue={selected => (
-                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                                {(selected as string[]).map(value => (
-                                    <Chip key={value} label={value} size="small" color="primary" />
-                                ))}
-                            </Box>
-                        )}
-                        onChange={e => handleChange("dietary", e.target.value as string[])}
-                    >
-                        {options.dietaryRestrictions.map(opt => (
-                            <MenuItem key={opt} value={opt}>
-                                {opt}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                <Autocomplete
+                    fullWidth
+                    sx={{ mb: 2 }}
+                    multiple
+                    options={options.dietaryRestrictions}
+                    value={selected.dietary}
+                    onChange={(_, newValue) => handleChange("dietary", newValue || [])}
+                    renderInput={params => <TextField {...params} label="Ograniczenia dietetyczne" placeholder="Wpisz aby wyszukać ograniczenia..." />}
+                />
 
                 {/* Product */}
                 <Autocomplete
@@ -152,7 +116,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     options={options.products.slice(0, 50)}
                     value={selected.product}
                     onChange={(_, newValue) => handleChange("product", newValue || "")}
-                    renderInput={params => <TextField {...params} label="Produkt" placeholder="Wpisz lub wybierz produkt..." onKeyDown={e => e.stopPropagation()} />}
+                    renderInput={params => <TextField {...params} label="Produkt" placeholder="Wpisz lub wybierz produkt..." />}
                 />
 
                 {/* Buttons */}
