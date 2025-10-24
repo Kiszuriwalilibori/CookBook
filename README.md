@@ -38,3 +38,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 https://getimg.ai/image-editor
 
 https://magiceraser.org/remove-watermark-from-image/
+
+Before we go any further I will briefly describe what is this for. In CookBook app I want to have ability to filter recipes by certain fields, and this index will give me a list of options. Nearly the same would be with studio editing - would rather have list of available options. Is that good idea or are there simplier ways to achiever the same result
