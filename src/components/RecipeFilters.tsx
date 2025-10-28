@@ -79,6 +79,15 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
 
     const surfaceMain = theme.palette.surface.main;
 
+    const dietaryOptions = React.useMemo(() => {
+        const opts = ["Bez ograniczeń", ...options.dietaryRestrictions];
+        return opts.sort((a, b) => {
+            if (a === "Bez ograniczeń") return -1;
+            if (b === "Bez ograniczeń") return 1;
+            return a.localeCompare(b, "pl");
+        });
+    }, [options.dietaryRestrictions]);
+
     return (
         <React.Fragment>
             <Box sx={{ maxWidth: 400, width: "100%" }}>
@@ -169,15 +178,18 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                 <Autocomplete
                     fullWidth
                     sx={{ mb: 2 }}
-                    multiple
-                    options={options.dietaryRestrictions}
-                    value={selected.dietary}
-                    onChange={(_, newValue) => handleChange("dietary", newValue || [])}
+                    options={dietaryOptions}
+                    value={selected.dietary.length === 0 ? "Bez ograniczeń" : selected.dietary[0] || "Bez ograniczeń"}
+                    onChange={(_, newValue) => {
+                        const val = newValue === "Bez ograniczeń" ? [] : newValue ? [newValue] : [];
+                        handleChange("dietary", val);
+                    }}
+                    getOptionLabel={option => option}
                     renderInput={params => (
                         <TextField
                             {...params}
                             label="Dieta"
-                            placeholder="Wpisz aby wyszukać ograniczenia..."
+                            placeholder="Wpisz lub wybierz ograniczenia..."
                             sx={{
                                 "& .MuiInputLabel-root": {
                                     color: surfaceMain,
@@ -207,16 +219,17 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                 {/* Product */}
                 <Autocomplete
                     fullWidth
-                    sx={{ mb: 3 }}
-                    freeSolo
-                    options={options.products.slice(0, 50)}
+                    disableClearable
+                    sx={{ mb: 2 }}
+                    options={["", ...options.products.slice(0, 50)]}
                     value={selected.product}
                     onChange={(_, newValue) => handleChange("product", newValue || "")}
+                    getOptionLabel={option => (option === "" ? "Wszystkie" : option)}
                     renderInput={params => (
                         <TextField
                             {...params}
                             label="Produkt"
-                            placeholder="Wpisz lub wybierz produkt..."
+                            placeholder="Wpisz aby wyszukać produkt..."
                             sx={{
                                 "& .MuiInputLabel-root": {
                                     color: surfaceMain,
