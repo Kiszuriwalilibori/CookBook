@@ -76,6 +76,7 @@ export interface Recipe {
 }
 
 export const fieldTranslations: Record<string, string> = {
+    title: "Nazwa",
     calories: "Kalorie",
     cookingTime: "Czas aktywnej pracy",
     dietaryRestrictions: "Rodzaj diety",

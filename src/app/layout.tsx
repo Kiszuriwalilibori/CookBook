@@ -1,8 +1,7 @@
 import { Inter } from "next/font/google";
 import { Box } from "@mui/material";
 import theme from "@/themes/theme";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import { Footer, Header } from "@/components";
 
 import "./globals.css";
 import { ThemeProvider } from "@mui/material";

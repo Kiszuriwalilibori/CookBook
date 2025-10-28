@@ -39,10 +39,25 @@ https://getimg.ai/image-editor
 
 https://magiceraser.org/remove-watermark-from-image/
 
-
 dodaj walidację filtrów
 stwórz wyszukiwarkę przepisów
 uprość style sx props
 jak zaimplementować debounce w filtrach
 najlepsze praktyki walidacji formularzy react
 dodaj animacje do Autocomplete
+Ensure MUI Autocomplete slot props
+Apply similar styling to dietetary
+Ensure consistent chip styling
+
+Apply shrink to all labels
+add search funtionality
+Make chips more rounded
+Autocomplete chip customization
+Add Accesaibility improvements
+Uprość kod filtrów
+implement filter persistance
+Add search functionality to title filter
+Implement debounced API calls
+Ensure consistent case display
+
+MENU: MUI Navigation best practices

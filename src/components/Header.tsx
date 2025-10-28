@@ -1,56 +1,11 @@
-// "use client";
-
-// import React, { useState } from "react";
-// import Menu from "@/components/Menu/Menu";
-// import RecipeFilters from "./RecipeFilters";
-
-// import { Book as RecipeIcon, Article as BlogIcon, Home as HomeIcon, Favorite as FavoriteIcon, Info as InfoIcon, Search as SearchIcon } from "@mui/icons-material";
-
-// const Header = () => {
-//     const [showFilter, setShowFilter] = useState(false); // State to toggle filter display
-
-//     const navItems = [
-//         { label: "Home", href: "/", icon: <HomeIcon /> },
-//         { label: "Przepisy", href: "/recipes", icon: <RecipeIcon /> },
-//         { label: "Artykuły", href: "/blog", icon: <BlogIcon /> },
-//         { label: "Ulubione", href: "/favorites", icon: <FavoriteIcon /> },
-//         { label: "O mnie", href: "/about", icon: <InfoIcon /> },
-//         {
-//             label: "Szukaj",
-//             icon: <SearchIcon />,
-//             onClick: () => setShowFilter(!showFilter), // Toggle filter on click (pass to Menu if needed)
-//         },
-//     ];
-
-//     return (
-//         <>
-//             <Menu navItems={navItems} />
-//             {showFilter && (
-//                 <div className="filter-panel">
-//                     <button onClick={() => setShowFilter(false)}>Close</button>
-//                     <RecipeFilters
-//                         onFiltersChange={filters => {
-//                             // Handle filters: e.g., update URL params, re-fetch recipes, or pass to context
-//                             console.log("Applied filters:", filters);
-//                             setShowFilter(false); // Optional: Close after apply
-//                         }}
-//                     />
-//                 </div>
-//             )}
-//         </>
-//     );
-// };
-
-// export default Header;
-
 "use client";
 
 import React, { useState, useEffect } from "react";
 import Menu from "@/components/Menu/Menu";
-import RecipeFilters from "@/components/RecipeFilters"; // Adjust path
+import RecipeFilters from "@/components/RecipeFilters";
 
 import { Book as RecipeIcon, Article as BlogIcon, Home as HomeIcon, Favorite as FavoriteIcon, Info as InfoIcon, Search as SearchIcon } from "@mui/icons-material";
-import { Box} from "@mui/material";
+import { Box } from "@mui/material";
 
 const Header = () => {
     const [showFilter, setShowFilter] = useState(false);

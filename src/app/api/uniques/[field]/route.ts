@@ -11,7 +11,7 @@ const client = createClient({
 });
 
 // Type for supported fields
-type SupportedField = "cuisine" | "tags" | "dietaryRestrictions" | "ingredients" | "products" | "titles";
+type SupportedField = "title" | "cuisine" | "tags" | "dietaryRestrictions" | "ingredients" | "products";
 
 export async function GET(
     request: NextRequest,
@@ -25,6 +25,9 @@ export async function GET(
 
     let query: string;
     switch (field) {
+        case "title":
+            query = groq`array::unique(*[_type == "recipe"].title) | order(title asc)`;
+            break;
         case "cuisine":
             query = groq`array::unique(*[_type == "recipe"].cuisine) | order(cuisine asc)`;
             break;
@@ -39,9 +42,6 @@ export async function GET(
             break;
         case "products":
             query = groq`array::unique(*[_type == "recipe"].Products[]) | order(string asc)`;
-            break;
-        case "titles":
-            query = groq`array::unique(*[_type == "recipe"].title) | order(title asc)`;
             break;
         default:
             return NextResponse.json({ error: `Unsupported field: ${field}` }, { status: 400 });

@@ -3,15 +3,18 @@
 import React, { useState, useEffect } from "react";
 import { Box, Autocomplete, TextField, Button, Typography, Divider } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { fieldTranslations } from "@/lib/types";
 
 interface FilterState {
+    title: string;
     cuisine: string;
     tag: string[];
     dietary: string[];
-    product: string;
+    product: string[];
 }
 
 interface OptionsState {
+    titles: string[];
     cuisines: string[];
     tags: string[];
     dietaryRestrictions: string[];
@@ -26,25 +29,29 @@ interface RecipeFiltersProps {
 export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFiltersProps) {
     const theme = useTheme();
     const [options, setOptions] = useState<OptionsState>({
+        titles: [],
         cuisines: [],
         tags: [],
         dietaryRestrictions: [],
         products: [],
     });
     const [selected, setSelected] = useState<FilterState>({
+        title: "",
         cuisine: "",
         tag: [],
         dietary: [],
-        product: "",
+        product: [],
     });
 
     useEffect(() => {
         Promise.all([
+            fetch("/api/uniques/title").then(r => r.json()) as Promise<string[]>,
             fetch("/api/uniques/cuisine").then(r => r.json()) as Promise<string[]>,
             fetch("/api/uniques/tags").then(r => r.json()) as Promise<string[]>,
             fetch("/api/uniques/dietaryRestrictions").then(r => r.json()) as Promise<string[]>,
             fetch("/api/uniques/products").then(r => r.json()) as Promise<string[]>,
-        ]).then(([cuisines, tags, dietary, products]) => {
+        ]).then(([titles, cuisines, tags, dietary, products]) => {
+            const normalizedTitles = [...new Set(titles.map(t => t.toLowerCase()))].sort((a, b) => a.localeCompare(b, "pl"));
             const normalizedCuisines = [...new Set(cuisines.map(c => c.toLowerCase()))].sort((a, b) => a.localeCompare(b, "pl"));
             const processedTags = Array.from(
                 new Set(
@@ -58,7 +65,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
             ).sort((a, b) => a.localeCompare(b, "pl"));
             const normalizedDietary = [...new Set(dietary.map(d => d.toLowerCase()))].sort((a, b) => a.localeCompare(b, "pl"));
             const normalizedProducts = [...new Set(products.map(p => p.toLowerCase()))].sort((a, b) => a.localeCompare(b, "pl"));
-            setOptions({ cuisines: normalizedCuisines, tags: processedTags, dietaryRestrictions: normalizedDietary, products: normalizedProducts });
+            setOptions({ titles: normalizedTitles, cuisines: normalizedCuisines, tags: processedTags, dietaryRestrictions: normalizedDietary, products: normalizedProducts });
         });
     }, []);
 
@@ -72,7 +79,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
     };
 
     const clearFilters = () => {
-        const cleared = { cuisine: "", tag: [], dietary: [], product: "" };
+        const cleared = { title: "", cuisine: "", tag: [], dietary: [], product: [] };
         setSelected(cleared);
         onFiltersChange(cleared);
     };
@@ -88,6 +95,41 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         });
     }, [options.dietaryRestrictions]);
 
+    const labelSx = {
+        "& .MuiInputLabel-root": {
+            color: surfaceMain,
+        },
+        "& .MuiInputLabel-root.MuiInputLabel-shrink": {
+            color: surfaceMain,
+        },
+        "& .MuiInputLabel-root.Mui-focused": {
+            color: surfaceMain,
+        },
+        "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+                borderColor: surfaceMain,
+            },
+            "&:hover fieldset": {
+                borderColor: surfaceMain,
+            },
+            "&.Mui-focused fieldset": {
+                borderColor: surfaceMain,
+                borderWidth: 2,
+            },
+        },
+        "& .MuiAutocomplete-endAdornment": {
+            "& svg": {
+                color: surfaceMain,
+            },
+        },
+        "& .MuiInputBase-input": {
+            "&::placeholder": {
+                color: theme.palette.text.disabled,
+                opacity: 1,
+            },
+        },
+    };
+
     return (
         <React.Fragment>
             <Box sx={{ maxWidth: 400, width: "100%" }}>
@@ -96,43 +138,25 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                 </Typography>
                 <Divider sx={{ mb: 2, borderColor: surfaceMain }} />
 
+                {/* Title */}
+                <Autocomplete
+                    fullWidth
+                    sx={{ mb: 2 }}
+                    options={["", ...options.titles]}
+                    value={selected.title}
+                    onChange={(_, newValue) => handleChange("title", newValue || "")}
+                    getOptionLabel={option => (option === "" ? "Wszystkie" : option)}
+                    renderInput={params => <TextField {...params} label={fieldTranslations.title} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
+                />
+
                 {/* Cuisine */}
                 <Autocomplete
                     fullWidth
                     sx={{ mb: 2 }}
-                    options={["", ...options.cuisines]}
-                    value={selected.cuisine}
+                    options={options.cuisines}
+                    value={selected.cuisine || null}
                     onChange={(_, newValue) => handleChange("cuisine", newValue || "")}
-                    getOptionLabel={option => (option === "" ? "Wszystkie" : option)}
-                    renderInput={params => (
-                        <TextField
-                            {...params}
-                            label="Kuchnia"
-                            placeholder="Wpisz lub wybierz kuchnię..."
-                            sx={{
-                                "& .MuiInputLabel-root": {
-                                    color: surfaceMain,
-                                },
-                                "& .MuiOutlinedInput-root": {
-                                    "& fieldset": {
-                                        borderColor: surfaceMain,
-                                    },
-                                    "&:hover fieldset": {
-                                        borderColor: surfaceMain,
-                                    },
-                                    "&.Mui-focused fieldset": {
-                                        borderColor: surfaceMain,
-                                        borderWidth: 2,
-                                    },
-                                },
-                                "& .MuiAutocomplete-endAdornment": {
-                                    "& svg": {
-                                        color: surfaceMain,
-                                    },
-                                },
-                            }}
-                        />
-                    )}
+                    renderInput={params => <TextField {...params} label={fieldTranslations.cuisine} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
                 />
 
                 {/* Tags */}
@@ -143,35 +167,21 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     options={options.tags}
                     value={selected.tag}
                     onChange={(_, newValue) => handleChange("tag", newValue || [])}
-                    renderInput={params => (
-                        <TextField
-                            {...params}
-                            label="Tagi"
-                            placeholder="Wpisz aby wyszukać tagi..."
-                            sx={{
-                                "& .MuiInputLabel-root": {
-                                    color: surfaceMain,
-                                },
-                                "& .MuiOutlinedInput-root": {
-                                    "& fieldset": {
-                                        borderColor: surfaceMain,
-                                    },
-                                    "&:hover fieldset": {
-                                        borderColor: surfaceMain,
-                                    },
-                                    "&.Mui-focused fieldset": {
-                                        borderColor: surfaceMain,
-                                        borderWidth: 2,
+                    slotProps={{
+                        chip: {
+                            sx: {
+                                backgroundColor: theme.palette.surface.light,
+                                color: "white",
+                                "& .MuiChip-deleteIcon": {
+                                    color: "white",
+                                    "&:hover": {
+                                        backgroundColor: "rgba(255, 255, 255, 0.2)",
                                     },
                                 },
-                                "& .MuiAutocomplete-endAdornment": {
-                                    "& svg": {
-                                        color: surfaceMain,
-                                    },
-                                },
-                            }}
-                        />
-                    )}
+                            },
+                        },
+                    }}
+                    renderInput={params => <TextField {...params} label={fieldTranslations.tags} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
                 />
 
                 {/* Dietary */}
@@ -179,81 +189,38 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     fullWidth
                     sx={{ mb: 2 }}
                     options={dietaryOptions}
-                    value={selected.dietary.length === 0 ? "Bez ograniczeń" : selected.dietary[0] || "Bez ograniczeń"}
+                    value={selected.dietary.length === 0 ? null : selected.dietary[0]}
                     onChange={(_, newValue) => {
                         const val = newValue === "Bez ograniczeń" ? [] : newValue ? [newValue] : [];
                         handleChange("dietary", val);
                     }}
                     getOptionLabel={option => option}
-                    renderInput={params => (
-                        <TextField
-                            {...params}
-                            label="Dieta"
-                            placeholder="Wpisz lub wybierz ograniczenia..."
-                            sx={{
-                                "& .MuiInputLabel-root": {
-                                    color: surfaceMain,
-                                },
-                                "& .MuiOutlinedInput-root": {
-                                    "& fieldset": {
-                                        borderColor: surfaceMain,
-                                    },
-                                    "&:hover fieldset": {
-                                        borderColor: surfaceMain,
-                                    },
-                                    "&.Mui-focused fieldset": {
-                                        borderColor: surfaceMain,
-                                        borderWidth: 2,
-                                    },
-                                },
-                                "& .MuiAutocomplete-endAdornment": {
-                                    "& svg": {
-                                        color: surfaceMain,
-                                    },
-                                },
-                            }}
-                        />
-                    )}
+                    renderInput={params => <TextField {...params} label={fieldTranslations.dietaryRestrictions} placeholder="Bez ograniczeń" InputLabelProps={{ shrink: true }} sx={labelSx} />}
                 />
 
                 {/* Product */}
                 <Autocomplete
                     fullWidth
-                    disableClearable
+                    multiple
                     sx={{ mb: 2 }}
-                    options={["", ...options.products.slice(0, 50)]}
+                    options={options.products.slice(0, 50)}
                     value={selected.product}
-                    onChange={(_, newValue) => handleChange("product", newValue || "")}
-                    getOptionLabel={option => (option === "" ? "Wszystkie" : option)}
-                    renderInput={params => (
-                        <TextField
-                            {...params}
-                            label="Produkt"
-                            placeholder="Wpisz aby wyszukać produkt..."
-                            sx={{
-                                "& .MuiInputLabel-root": {
-                                    color: surfaceMain,
-                                },
-                                "& .MuiOutlinedInput-root": {
-                                    "& fieldset": {
-                                        borderColor: surfaceMain,
-                                    },
-                                    "&:hover fieldset": {
-                                        borderColor: surfaceMain,
-                                    },
-                                    "&.Mui-focused fieldset": {
-                                        borderColor: surfaceMain,
-                                        borderWidth: 2,
+                    onChange={(_, newValue) => handleChange("product", newValue || [])}
+                    slotProps={{
+                        chip: {
+                            sx: {
+                                backgroundColor: theme.palette.surface.light,
+                                color: "white",
+                                "& .MuiChip-deleteIcon": {
+                                    color: "white",
+                                    "&:hover": {
+                                        backgroundColor: "rgba(255, 255, 255, 0.2)",
                                     },
                                 },
-                                "& .MuiAutocomplete-endAdornment": {
-                                    "& svg": {
-                                        color: surfaceMain,
-                                    },
-                                },
-                            }}
-                        />
-                    )}
+                            },
+                        },
+                    }}
+                    renderInput={params => <TextField {...params} label="Produkt" placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
                 />
 
                 {/* Buttons */}
