@@ -48,6 +48,7 @@ dodaj animacje do Autocomplete
 Ensure MUI Autocomplete slot props
 Apply similar styling to dietetary
 Ensure consistent chip styling
+Persist filters between sessions
 
 Apply shrink to all labels
 add search funtionality
@@ -59,5 +60,7 @@ implement filter persistance
 Add search functionality to title filter
 Implement debounced API calls
 Ensure consistent case display
+Add analytics or logging hook
+
 
 MENU: MUI Navigation best practices
