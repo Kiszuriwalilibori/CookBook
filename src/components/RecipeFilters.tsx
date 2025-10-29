@@ -38,6 +38,7 @@ const FilterSchema = z.object({
 
 export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFiltersProps) {
     const theme = useTheme();
+
     const [options, setOptions] = useState<OptionsState>({
         titles: [],
         cuisines: [],
@@ -45,6 +46,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         dietaryRestrictions: [],
         products: [],
     });
+
     const [selected, setSelected] = useState<FilterState>({
         title: "",
         cuisine: "",
@@ -98,11 +100,8 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                 }
             } else {
                 const normalized = value.trim().toLowerCase();
-                if (key === "title") {
-                    updated.title = normalized;
-                } else if (key === "cuisine") {
-                    updated.cuisine = normalized;
-                }
+                if (key === "title") updated.title = normalized;
+                if (key === "cuisine") updated.cuisine = normalized;
             }
 
             debouncedApplyFilters(updated);
@@ -122,14 +121,16 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
 
             const processedTags = Array.from(
                 new Set(
-                    tags.flatMap(tag =>
-                        tag
-                            .split(",")
-                            .map(t => t.trim().toLowerCase())
-                            .filter(Boolean)
-                    )
+                    tags
+                        .flatMap(tag =>
+                            tag
+                                .split(",")
+                                .map(t => t.trim().toLowerCase())
+                                .filter(Boolean)
+                        )
+                        .sort((a, b) => a.localeCompare(b, "pl"))
                 )
-            ).sort((a, b) => a.localeCompare(b, "pl"));
+            );
 
             setOptions({
                 titles: normalizeList(titles),
@@ -158,14 +159,11 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
 
     const applyFilters = () => {
         const result = FilterSchema.safeParse(selected);
-
         if (!result.success) {
             const newErrors: Record<string, string> = {};
             result.error.errors.forEach(err => {
                 const key = err.path[0];
-                if (typeof key === "string") {
-                    newErrors[key] = err.message;
-                }
+                if (typeof key === "string") newErrors[key] = err.message;
             });
             setErrors(newErrors);
             return;
@@ -177,13 +175,17 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
     };
 
     const clearFilters = () => {
-        const cleared = { title: "", cuisine: "", tag: [], dietary: [], product: [] };
+        const cleared = {
+            title: "",
+            cuisine: "",
+            tag: [],
+            dietary: [],
+            product: [],
+        };
         setSelected(cleared);
         setErrors({});
         onFiltersChange(cleared);
     };
-
-    const surfaceMain = theme.palette.surface.main;
 
     const dietaryOptions = React.useMemo(() => {
         const opts = ["Bez ograniczeń", ...options.dietaryRestrictions];
@@ -194,21 +196,59 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         });
     }, [options.dietaryRestrictions]);
 
+    // simplified focus styling, subtle orange glow instead of blue
     const labelSx = {
-        "& .MuiInputLabel-root": { color: surfaceMain },
-        "& .MuiInputLabel-root.MuiInputLabel-shrink": { color: surfaceMain },
-        "& .MuiInputLabel-root.Mui-focused": { color: surfaceMain },
         "& .MuiOutlinedInput-root": {
-            "& fieldset": { borderColor: surfaceMain },
-            "&:hover fieldset": { borderColor: surfaceMain },
             "&.Mui-focused fieldset": {
                 borderColor: theme.palette.primary.main,
                 borderWidth: 2,
                 boxShadow: `0 0 0 3px ${theme.palette.primary.main}30`,
             },
         },
-        "& .MuiAutocomplete-endAdornment svg": { color: surfaceMain },
-        "& .MuiInputBase-input::placeholder": { color: theme.palette.text.disabled, opacity: 1 },
+    };
+
+    const renderLimitedChips = (value: string[], key: "tag" | "product") => {
+        const maxVisible = 3;
+        const visibleChips = value.slice(0, maxVisible);
+        const hiddenCount = value.length - maxVisible;
+
+        return (
+            <Box
+                sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 0.5,
+                    maxHeight: 100,
+                    overflowY: value.length > maxVisible ? "auto" : "visible",
+                }}
+            >
+                {visibleChips.map(option => (
+                    <Chip
+                        key={option}
+                        label={option}
+                        onDelete={() =>
+                            handleChange(
+                                key,
+                                value.filter(v => v !== option)
+                            )
+                        }
+                        sx={{
+                            backgroundColor: theme.palette.primary.light,
+                            color: "white",
+                        }}
+                    />
+                ))}
+                {hiddenCount > 0 && (
+                    <Chip
+                        label={`+${hiddenCount} więcej`}
+                        sx={{
+                            backgroundColor: theme.palette.primary.light,
+                            color: "white",
+                        }}
+                    />
+                )}
+            </Box>
+        );
     };
 
     const getFilterSummary = () => {
@@ -228,124 +268,99 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         return `${count} ${filtrWord} ${aktywnyWord}: ${activeValues.join(", ")}`;
     };
 
-    const renderLimitedChips = (value: string[], key: "tag" | "product") => {
-        const maxVisible = 3;
-        const visibleChips = value.slice(0, maxVisible);
-        const hiddenCount = value.length - maxVisible;
-
-        return (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, maxHeight: 100, overflowY: value.length > maxVisible ? "auto" : "visible" }}>
-                {visibleChips.map(option => (
-                    <Chip
-                        key={option}
-                        label={option}
-                        onDelete={() =>
-                            handleChange(
-                                key,
-                                value.filter(v => v !== option)
-                            )
-                        }
-                        sx={{ backgroundColor: theme.palette.surface.light, color: "white" }}
-                    />
-                ))}
-                {hiddenCount > 0 && <Chip label={`+${hiddenCount} więcej`} sx={{ backgroundColor: theme.palette.surface.light, color: "white" }} />}
-            </Box>
-        );
-    };
-
     return (
-        <React.Fragment>
-            <Box sx={{ maxWidth: 400, width: "100%", position: "relative" }}>
-                <Typography variant="h6" gutterBottom align="center">
-                    Filtruj Przepisy
-                </Typography>
-                <Divider sx={{ mb: 2, borderColor: surfaceMain }} />
+        <Box sx={{ maxWidth: 400, width: "100%", position: "relative" }}>
+            <Typography variant="h6" gutterBottom align="center">
+                Filtruj Przepisy
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
 
-                {/* --- Title --- */}
-                <Box sx={{ mb: 2 }}>
-                    <Autocomplete
-                        fullWidth
-                        options={options.titles}
-                        value={selected.title || null}
-                        onChange={(_, newValue) => handleChange("title", newValue || "")}
-                        aria-label="Filtruj po tytule przepisu"
-                        renderInput={params => <TextField {...params} label={fieldTranslations.title} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
-                    />
-                </Box>
-
-                {/* --- Cuisine --- */}
-                <Box sx={{ mb: 2 }}>
-                    <Autocomplete
-                        fullWidth
-                        options={options.cuisines}
-                        value={selected.cuisine || null}
-                        onChange={(_, newValue) => handleChange("cuisine", newValue || "")}
-                        aria-label="Wybierz kuchnię"
-                        renderInput={params => <TextField {...params} label={fieldTranslations.cuisine} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
-                    />
-                </Box>
-
-                {/* --- Tags --- */}
-                <Box sx={{ mb: 2 }}>
-                    <Autocomplete
-                        fullWidth
-                        multiple
-                        options={options.tags}
-                        value={selected.tag}
-                        onChange={(_, newValue) => handleChange("tag", newValue || [])}
-                        aria-label="Wybierz tagi"
-                        renderTags={(value, getTagProps) => renderLimitedChips(value, "tag")}
-                        renderInput={params => <TextField {...params} label={fieldTranslations.tags} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} error={!!errors.tag} helperText={errors.tag} aria-invalid={!!errors.tag} />}
-                    />
-                </Box>
-
-                {/* --- Dietary --- */}
-                <Box sx={{ mb: 2 }}>
-                    <Autocomplete
-                        fullWidth
-                        multiple
-                        options={dietaryOptions.filter(opt => opt !== "Bez ograniczeń")}
-                        value={selected.dietary}
-                        onChange={(_, newValue) => handleChange("dietary", newValue || [])}
-                        aria-label="Wybierz ograniczenia dietetyczne"
-                        renderTags={(value, getTagProps) => renderLimitedChips(value, "product")}
-                        renderInput={params => <TextField {...params} label={fieldTranslations.dietaryRestrictions} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
-                    />
-                </Box>
-
-                {/* --- Products --- */}
-                <Box sx={{ mb: 2 }}>
-                    <Autocomplete
-                        fullWidth
-                        multiple
-                        options={options.products.slice(0, 50)}
-                        value={selected.product}
-                        onChange={(_, newValue) => handleChange("product", newValue || [])}
-                        aria-label="Wybierz produkty"
-                        renderTags={(value, getTagProps) => renderLimitedChips(value, "product")}
-                        renderInput={params => <TextField {...params} label="Produkt" placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
-                    />
-                </Box>
-
-                {/* --- Buttons --- */}
-                <Box sx={{ display: "flex", gap: 1, justifyContent: "center", flexWrap: "wrap" }}>
-                    <Button variant="outlined" onClick={clearFilters} size="small" aria-label="Wyczyść wszystkie filtry i pokaż wszystkie przepisy" sx={{ borderColor: surfaceMain, color: surfaceMain, "&:hover": { borderColor: surfaceMain, backgroundColor: `${surfaceMain}10` } }}>
-                        Wyczyść
-                    </Button>
-                    <Button variant="contained" onClick={applyFilters} size="small" aria-label="Zastosuj wybrane filtry do listy przepisów" sx={{ backgroundColor: surfaceMain, "&:hover": { backgroundColor: theme.palette.surface.dark } }}>
-                        Zastosuj
-                    </Button>
-                    {onClose && (
-                        <Button variant="outlined" onClick={onClose} size="small" aria-label="Zamknij panel filtrów" sx={{ borderColor: surfaceMain, color: surfaceMain, "&:hover": { borderColor: surfaceMain, backgroundColor: `${surfaceMain}10` } }}>
-                            Zamknij
-                        </Button>
-                    )}
-                </Box>
-
-                <Typography variant="body2" align="center" sx={{ mt: 2, color: theme.palette.text.secondary }}>
-                    {getFilterSummary()}
-                </Typography>
+            {/* Title */}
+            <Box sx={{ mb: 2 }}>
+                <Autocomplete
+                    fullWidth
+                    options={options.titles}
+                    value={selected.title || null}
+                    onChange={(_, newValue) => handleChange("title", newValue || "")}
+                    renderInput={params => <TextField {...params} label={fieldTranslations.title} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
+                />
             </Box>
-        </React.Fragment>
+
+            {/* Cuisine */}
+            <Box sx={{ mb: 2 }}>
+                <Autocomplete
+                    fullWidth
+                    options={options.cuisines}
+                    value={selected.cuisine || null}
+                    onChange={(_, newValue) => handleChange("cuisine", newValue || "")}
+                    renderInput={params => <TextField {...params} label={fieldTranslations.cuisine} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
+                />
+            </Box>
+
+            {/* Tags */}
+            <Box sx={{ mb: 2 }}>
+                <Autocomplete
+                    fullWidth
+                    multiple
+                    options={options.tags}
+                    value={selected.tag}
+                    onChange={(_, newValue) => handleChange("tag", newValue || [])}
+                    renderTags={value => renderLimitedChips(value, "tag")}
+                    renderInput={params => <TextField {...params} label={fieldTranslations.tags} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} error={!!errors.tag} helperText={errors.tag} />}
+                />
+            </Box>
+
+            {/* Dietary */}
+            <Box sx={{ mb: 2 }}>
+                <Autocomplete
+                    fullWidth
+                    multiple
+                    options={dietaryOptions.filter(opt => opt !== "Bez ograniczeń")}
+                    value={selected.dietary}
+                    onChange={(_, newValue) => handleChange("dietary", newValue || [])}
+                    renderTags={value => renderLimitedChips(value, "product")}
+                    renderInput={params => <TextField {...params} label={fieldTranslations.dietaryRestrictions} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
+                />
+            </Box>
+
+            {/* Products */}
+            <Box sx={{ mb: 2 }}>
+                <Autocomplete
+                    fullWidth
+                    multiple
+                    options={options.products.slice(0, 50)}
+                    value={selected.product}
+                    onChange={(_, newValue) => handleChange("product", newValue || [])}
+                    renderTags={value => renderLimitedChips(value, "product")}
+                    renderInput={params => <TextField {...params} label="Produkt" placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
+                />
+            </Box>
+
+            {/* Buttons */}
+            <Box
+                sx={{
+                    display: "flex",
+                    gap: 1,
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                }}
+            >
+                <Button variant="outlined" color="primary" onClick={clearFilters} size="small">
+                    Wyczyść
+                </Button>
+                <Button variant="contained" color="primary" onClick={applyFilters} size="small">
+                    Zastosuj
+                </Button>
+                {onClose && (
+                    <Button variant="outlined" color="primary" onClick={onClose} size="small">
+                        Zamknij
+                    </Button>
+                )}
+            </Box>
+
+            <Typography variant="body2" align="center" sx={{ mt: 2, color: theme.palette.text.secondary }}>
+                {getFilterSummary()}
+            </Typography>
+        </Box>
     );
 }

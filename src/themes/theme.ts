@@ -41,9 +41,9 @@ const roboto = Roboto({
 const baseTheme = createTheme({
     palette: {
         primary: {
-            main: "#1976d2",
-            light: "#42a5f5",
-            dark: "#1565c0",
+            main: "#F6723D", // brand orange
+            light: "#FF9F41",
+            dark: "#F44F0C",
             contrastText: "#fff",
         },
         secondary: {
@@ -55,12 +55,14 @@ const baseTheme = createTheme({
             default: "#f5f5f5",
             paper: "#ffffff",
         },
+        // ⬇️ Surface retained (do not remove)
         surface: {
             main: "#F6723D",
             light: "#FF9F41",
             dark: "#F44F0C",
         },
     },
+
     typography: {
         fontFamily: roboto.style.fontFamily,
         h1: {
@@ -76,7 +78,9 @@ const baseTheme = createTheme({
             fontWeight: 500,
         },
     },
+
     components: {
+        // ---- Existing styles ----
         MuiButton: {
             styleOverrides: {
                 root: {
@@ -105,7 +109,50 @@ const baseTheme = createTheme({
                 },
             },
         },
+
+        // ---- NEW global overrides for orange form elements ----
+        MuiTextField: {
+            defaultProps: {
+                color: "primary",
+                variant: "outlined",
+            },
+        },
+        MuiInputLabel: {
+            styleOverrides: {
+                root: {
+                    color: "#F6723D",
+                    "&.Mui-focused": {
+                        color: "#F44F0C",
+                    },
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                notchedOutline: {
+                    borderColor: "#F6723D",
+                },
+                root: {
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#FF9F41",
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#F44F0C",
+                        boxShadow: "0 0 0 3px #F6723D30", // subtle orange focus halo
+                    },
+                },
+            },
+        },
+        MuiDivider: {
+            styleOverrides: {
+                root: {
+                    borderColor: "#F6723D",
+                    opacity: 0.6,
+                },
+            },
+        },
     },
+
     custom: {
         menuColor: "#000000",
     },
