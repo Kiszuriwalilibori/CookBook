@@ -5,6 +5,7 @@ import { Box, Autocomplete, TextField, Button, Typography, Divider, Chip } from 
 import { useTheme } from "@mui/material/styles";
 import { fieldTranslations } from "@/lib/types";
 import debounce from "lodash.debounce";
+import { z } from "zod";
 
 interface FilterState {
     title: string;
@@ -27,6 +28,14 @@ interface RecipeFiltersProps {
     onClose?: () => void;
 }
 
+const FilterSchema = z.object({
+    title: z.string().default(""),
+    cuisine: z.string().default(""),
+    tag: z.array(z.string()).max(10, "Maksymalnie 10 tagów"),
+    dietary: z.array(z.string()),
+    product: z.array(z.string()),
+});
+
 export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFiltersProps) {
     const theme = useTheme();
     const [options, setOptions] = useState<OptionsState>({
@@ -44,6 +53,8 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         product: [],
     });
 
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
     const debouncedApplyFilters = useMemo(
         () =>
             debounce((newFilters: FilterState) => {
@@ -58,13 +69,46 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         };
     }, [debouncedApplyFilters]);
 
-    const handleChange = (key: keyof FilterState, value: string | string[]) => {
+    const normalizeMultiple = (value: string[], optionsList: string[]): string[] => {
+        if (!value || value.length === 0) return [];
+        const normalized = value
+            .map(v => v.trim().toLowerCase())
+            .filter(v => v && optionsList.includes(v.toLowerCase()))
+            .filter((v, i, self) => self.indexOf(v) === i);
+        return normalized.sort((a, b) => a.localeCompare(b, "pl"));
+    };
+
+    function handleChange(key: "title" | "cuisine", value: string): void;
+    function handleChange(key: "tag" | "dietary" | "product", value: string[]): void;
+    function handleChange(key: keyof FilterState, value: string | string[]): void {
         setSelected(prev => {
-            const updated = { ...prev, [key]: value };
+            const updated = { ...prev };
+
+            if (Array.isArray(value)) {
+                let normalized: string[];
+                if (key === "tag") {
+                    normalized = normalizeMultiple(value, options.tags);
+                    updated.tag = normalized;
+                } else if (key === "dietary") {
+                    normalized = normalizeMultiple(value, options.dietaryRestrictions);
+                    updated.dietary = normalized;
+                } else if (key === "product") {
+                    normalized = normalizeMultiple(value, options.products);
+                    updated.product = normalized;
+                }
+            } else {
+                const normalized = value.trim().toLowerCase();
+                if (key === "title") {
+                    updated.title = normalized;
+                } else if (key === "cuisine") {
+                    updated.cuisine = normalized;
+                }
+            }
+
             debouncedApplyFilters(updated);
             return updated;
         });
-    };
+    }
 
     useEffect(() => {
         Promise.all([
@@ -97,14 +141,45 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         });
     }, []);
 
+    useEffect(() => {
+        const normalizedSelected = { ...selected };
+        const multipleKeys: ("tag" | "dietary" | "product")[] = ["tag", "dietary", "product"];
+        multipleKeys.forEach(key => {
+            const optionsKey = key === "tag" ? "tags" : key === "dietary" ? "dietaryRestrictions" : "products";
+            const currentValue = selected[key];
+            normalizedSelected[key] = normalizeMultiple(currentValue, options[optionsKey as keyof OptionsState] as string[]);
+        });
+
+        if (JSON.stringify(normalizedSelected) !== JSON.stringify(selected)) {
+            setSelected(normalizedSelected);
+            debouncedApplyFilters(normalizedSelected);
+        }
+    }, [options]); // eslint-disable-line react-hooks/exhaustive-deps
+
     const applyFilters = () => {
-        onFiltersChange(selected);
+        const result = FilterSchema.safeParse(selected);
+
+        if (!result.success) {
+            const newErrors: Record<string, string> = {};
+            result.error.errors.forEach(err => {
+                const key = err.path[0];
+                if (typeof key === "string") {
+                    newErrors[key] = err.message;
+                }
+            });
+            setErrors(newErrors);
+            return;
+        }
+
+        setErrors({});
+        onFiltersChange(result.data);
         onClose?.();
     };
 
     const clearFilters = () => {
         const cleared = { title: "", cuisine: "", tag: [], dietary: [], product: [] };
         setSelected(cleared);
+        setErrors({});
         onFiltersChange(cleared);
     };
 
@@ -127,10 +202,9 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
             "& fieldset": { borderColor: surfaceMain },
             "&:hover fieldset": { borderColor: surfaceMain },
             "&.Mui-focused fieldset": {
-                borderColor: surfaceMain,
+                borderColor: theme.palette.primary.main,
                 borderWidth: 2,
-                outline: `2px solid ${theme.palette.primary.light}`,
-                outlineOffset: "2px",
+                boxShadow: `0 0 0 3px ${theme.palette.primary.main}30`,
             },
         },
         "& .MuiAutocomplete-endAdornment svg": { color: surfaceMain },
@@ -154,7 +228,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         return `${count} ${filtrWord} ${aktywnyWord}: ${activeValues.join(", ")}`;
     };
 
-    const renderLimitedChips = (value: string[], key: keyof FilterState) => {
+    const renderLimitedChips = (value: string[], key: "tag" | "product") => {
         const maxVisible = 3;
         const visibleChips = value.slice(0, maxVisible);
         const hiddenCount = value.length - maxVisible;
@@ -168,7 +242,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                         onDelete={() =>
                             handleChange(
                                 key,
-                                (value as string[]).filter(v => v !== option)
+                                value.filter(v => v !== option)
                             )
                         }
                         sx={{ backgroundColor: theme.palette.surface.light, color: "white" }}
@@ -187,6 +261,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                 </Typography>
                 <Divider sx={{ mb: 2, borderColor: surfaceMain }} />
 
+                {/* --- Title --- */}
                 <Box sx={{ mb: 2 }}>
                     <Autocomplete
                         fullWidth
@@ -194,28 +269,11 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                         value={selected.title || null}
                         onChange={(_, newValue) => handleChange("title", newValue || "")}
                         aria-label="Filtruj po tytule przepisu"
-                        aria-describedby="filter-title-description"
                         renderInput={params => <TextField {...params} label={fieldTranslations.title} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
                     />
                 </Box>
 
-                <Typography
-                    id="filter-title-description"
-                    sx={{
-                        position: "absolute",
-                        width: 1,
-                        height: 1,
-                        padding: 0,
-                        margin: -1,
-                        overflow: "hidden",
-                        clip: "rect(0, 0, 0, 0)",
-                        whiteSpace: "nowrap",
-                        border: 0,
-                    }}
-                >
-                    Wybierz tytuł przepisu, aby przefiltrować wyniki.
-                </Typography>
-
+                {/* --- Cuisine --- */}
                 <Box sx={{ mb: 2 }}>
                     <Autocomplete
                         fullWidth
@@ -227,6 +285,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     />
                 </Box>
 
+                {/* --- Tags --- */}
                 <Box sx={{ mb: 2 }}>
                     <Autocomplete
                         fullWidth
@@ -236,10 +295,11 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                         onChange={(_, newValue) => handleChange("tag", newValue || [])}
                         aria-label="Wybierz tagi"
                         renderTags={(value, getTagProps) => renderLimitedChips(value, "tag")}
-                        renderInput={params => <TextField {...params} label={fieldTranslations.tags} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
+                        renderInput={params => <TextField {...params} label={fieldTranslations.tags} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} error={!!errors.tag} helperText={errors.tag} aria-invalid={!!errors.tag} />}
                     />
                 </Box>
 
+                {/* --- Dietary --- */}
                 <Box sx={{ mb: 2 }}>
                     <Autocomplete
                         fullWidth
@@ -248,11 +308,12 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                         value={selected.dietary}
                         onChange={(_, newValue) => handleChange("dietary", newValue || [])}
                         aria-label="Wybierz ograniczenia dietetyczne"
-                        getOptionLabel={option => option}
+                        renderTags={(value, getTagProps) => renderLimitedChips(value, "product")}
                         renderInput={params => <TextField {...params} label={fieldTranslations.dietaryRestrictions} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
                     />
                 </Box>
 
+                {/* --- Products --- */}
                 <Box sx={{ mb: 2 }}>
                     <Autocomplete
                         fullWidth
@@ -266,6 +327,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     />
                 </Box>
 
+                {/* --- Buttons --- */}
                 <Box sx={{ display: "flex", gap: 1, justifyContent: "center", flexWrap: "wrap" }}>
                     <Button variant="outlined" onClick={clearFilters} size="small" aria-label="Wyczyść wszystkie filtry i pokaż wszystkie przepisy" sx={{ borderColor: surfaceMain, color: surfaceMain, "&:hover": { borderColor: surfaceMain, backgroundColor: `${surfaceMain}10` } }}>
                         Wyczyść

@@ -39,11 +39,13 @@ https://getimg.ai/image-editor
 
 https://magiceraser.org/remove-watermark-from-image/
 
-dodaj walidację filtrów
+szare pole w diecie po wyborze
+za szerokie suwaki scrolla
+okropny niebieski focus
+
 stwórz wyszukiwarkę przepisów
 uprość style sx props
-jak zaimplementować debounce w filtrach
-najlepsze praktyki walidacji formularzy react
+
 dodaj animacje do Autocomplete
 Ensure MUI Autocomplete slot props
 Apply similar styling to dietetary
@@ -59,8 +61,7 @@ Uprość kod filtrów
 implement filter persistance
 Add search functionality to title filter
 Implement debounced API calls
-Ensure consistent case display
-Add analytics or logging hook
 
+Add analytics or logging hook
 
 MENU: MUI Navigation best practices
