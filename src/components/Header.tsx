@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Menu from "@/components/Menu/Menu";
-import RecipeFilters from "@/components/RecipeFilters";
+import RecipeFilters from "@/components/RecipeFilters/RecipeFilters";
 
 import { Book as RecipeIcon, Article as BlogIcon, Home as HomeIcon, Favorite as FavoriteIcon, Info as InfoIcon, Search as SearchIcon } from "@mui/icons-material";
 import { Box } from "@mui/material";

@@ -7,6 +7,8 @@ import { fieldTranslations } from "@/lib/types";
 import debounce from "lodash.debounce";
 import { z } from "zod";
 
+import { containerSx, fieldBoxSx, buttonGroupSx, chipContainerSx, chipSx, hiddenChipSx, summaryTextSx, labelSx } from "./styles";
+
 interface FilterState {
     title: string;
     cuisine: string;
@@ -196,17 +198,6 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         });
     }, [options.dietaryRestrictions]);
 
-    // simplified focus styling, subtle orange glow instead of blue
-    const labelSx = {
-        "& .MuiOutlinedInput-root": {
-            "&.Mui-focused fieldset": {
-                borderColor: theme.palette.primary.main,
-                borderWidth: 2,
-                boxShadow: `0 0 0 3px ${theme.palette.primary.main}30`,
-            },
-        },
-    };
-
     const renderLimitedChips = (value: string[], key: "tag" | "product") => {
         const maxVisible = 3;
         const visibleChips = value.slice(0, maxVisible);
@@ -215,10 +206,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         return (
             <Box
                 sx={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 0.5,
-                    maxHeight: 100,
+                    ...chipContainerSx,
                     overflowY: value.length > maxVisible ? "auto" : "visible",
                 }}
             >
@@ -232,21 +220,10 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                                 value.filter(v => v !== option)
                             )
                         }
-                        sx={{
-                            backgroundColor: theme.palette.primary.light,
-                            color: "white",
-                        }}
+                        sx={chipSx(theme)}
                     />
                 ))}
-                {hiddenCount > 0 && (
-                    <Chip
-                        label={`+${hiddenCount} więcej`}
-                        sx={{
-                            backgroundColor: theme.palette.primary.light,
-                            color: "white",
-                        }}
-                    />
-                )}
+                {hiddenCount > 0 && <Chip label={`+${hiddenCount} więcej`} sx={hiddenChipSx(theme)} />}
             </Box>
         );
     };
@@ -269,36 +246,36 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
     };
 
     return (
-        <Box sx={{ maxWidth: 400, width: "100%", position: "relative" }}>
+        <Box sx={containerSx}>
             <Typography variant="h6" gutterBottom align="center">
                 Filtruj Przepisy
             </Typography>
             <Divider sx={{ mb: 2 }} />
 
             {/* Title */}
-            <Box sx={{ mb: 2 }}>
+            <Box sx={fieldBoxSx}>
                 <Autocomplete
                     fullWidth
                     options={options.titles}
                     value={selected.title || null}
                     onChange={(_, newValue) => handleChange("title", newValue || "")}
-                    renderInput={params => <TextField {...params} label={fieldTranslations.title} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
+                    renderInput={params => <TextField {...params} label={fieldTranslations.title} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx(theme)} />}
                 />
             </Box>
 
             {/* Cuisine */}
-            <Box sx={{ mb: 2 }}>
+            <Box sx={fieldBoxSx}>
                 <Autocomplete
                     fullWidth
                     options={options.cuisines}
                     value={selected.cuisine || null}
                     onChange={(_, newValue) => handleChange("cuisine", newValue || "")}
-                    renderInput={params => <TextField {...params} label={fieldTranslations.cuisine} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
+                    renderInput={params => <TextField {...params} label={fieldTranslations.cuisine} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx(theme)} />}
                 />
             </Box>
 
             {/* Tags */}
-            <Box sx={{ mb: 2 }}>
+            <Box sx={fieldBoxSx}>
                 <Autocomplete
                     fullWidth
                     multiple
@@ -306,12 +283,12 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     value={selected.tag}
                     onChange={(_, newValue) => handleChange("tag", newValue || [])}
                     renderTags={value => renderLimitedChips(value, "tag")}
-                    renderInput={params => <TextField {...params} label={fieldTranslations.tags} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} error={!!errors.tag} helperText={errors.tag} />}
+                    renderInput={params => <TextField {...params} label={fieldTranslations.tags} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx(theme)} error={!!errors.tag} helperText={errors.tag} />}
                 />
             </Box>
 
             {/* Dietary */}
-            <Box sx={{ mb: 2 }}>
+            <Box sx={fieldBoxSx}>
                 <Autocomplete
                     fullWidth
                     multiple
@@ -319,12 +296,12 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     value={selected.dietary}
                     onChange={(_, newValue) => handleChange("dietary", newValue || [])}
                     renderTags={value => renderLimitedChips(value, "product")}
-                    renderInput={params => <TextField {...params} label={fieldTranslations.dietaryRestrictions} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
+                    renderInput={params => <TextField {...params} label={fieldTranslations.dietaryRestrictions} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx(theme)} />}
                 />
             </Box>
 
             {/* Products */}
-            <Box sx={{ mb: 2 }}>
+            <Box sx={fieldBoxSx}>
                 <Autocomplete
                     fullWidth
                     multiple
@@ -332,19 +309,12 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     value={selected.product}
                     onChange={(_, newValue) => handleChange("product", newValue || [])}
                     renderTags={value => renderLimitedChips(value, "product")}
-                    renderInput={params => <TextField {...params} label="Produkt" placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx} />}
+                    renderInput={params => <TextField {...params} label="Produkt" placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx(theme)} />}
                 />
             </Box>
 
             {/* Buttons */}
-            <Box
-                sx={{
-                    display: "flex",
-                    gap: 1,
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                }}
-            >
+            <Box sx={buttonGroupSx}>
                 <Button variant="outlined" color="primary" onClick={clearFilters} size="small">
                     Wyczyść
                 </Button>
@@ -358,7 +328,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                 )}
             </Box>
 
-            <Typography variant="body2" align="center" sx={{ mt: 2, color: theme.palette.text.secondary }}>
+            <Typography variant="body2" align="center" sx={summaryTextSx(theme)}>
                 {getFilterSummary()}
             </Typography>
         </Box>
