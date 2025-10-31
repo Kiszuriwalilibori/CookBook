@@ -7,9 +7,8 @@ import { fieldTranslations } from "@/lib/types";
 import debounce from "lodash.debounce";
 import { z } from "zod";
 
-import FilterAutocomplete from "./parts/FilterAutocomplete";
-
-import { containerSx, fieldBoxSx, buttonGroupSx, chipContainerSx, chipSx, hiddenChipSx, summaryTextSx } from "./styles";
+import { containerSx, fieldBoxSx, buttonGroupSx, chipContainerSx, chipSx, hiddenChipSx } from "./styles";
+import { FilterSummary, FilterAutocomplete } from "./parts";
 
 interface FilterState {
     title: string;
@@ -232,22 +231,22 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         );
     };
 
-    const getFilterSummary = () => {
-        const activeValues: string[] = [];
-        if (selected.cuisine) activeValues.push(selected.cuisine);
-        if (selected.title) activeValues.push(selected.title);
-        if (selected.tag.length) activeValues.push(...selected.tag);
-        if (selected.dietary.length) activeValues.push(...selected.dietary);
-        if (selected.product.length) activeValues.push(...selected.product);
+    // const getFilterSummary = () => {
+    //     const activeValues: string[] = [];
+    //     if (selected.cuisine) activeValues.push(selected.cuisine);
+    //     if (selected.title) activeValues.push(selected.title);
+    //     if (selected.tag.length) activeValues.push(...selected.tag);
+    //     if (selected.dietary.length) activeValues.push(...selected.dietary);
+    //     if (selected.product.length) activeValues.push(...selected.product);
 
-        const count = activeValues.length;
-        if (count === 0) return "Brak aktywnych filtrów.";
+    //     const count = activeValues.length;
+    //     if (count === 0) return "Brak aktywnych filtrów.";
 
-        const filtrWord = count === 1 ? "filtr" : count % 10 >= 2 && count % 10 <= 4 && (count < 10 || count > 20) ? "filtry" : "filtrów";
-        const aktywnyWord = count === 1 ? "aktywny" : count % 10 >= 2 && count % 10 <= 4 && (count < 10 || count > 20) ? "aktywne" : "aktywnych";
+    //     const filtrWord = count === 1 ? "filtr" : count % 10 >= 2 && count % 10 <= 4 && (count < 10 || count > 20) ? "filtry" : "filtrów";
+    //     const aktywnyWord = count === 1 ? "aktywny" : count % 10 >= 2 && count % 10 <= 4 && (count < 10 || count > 20) ? "aktywne" : "aktywnych";
 
-        return `${count} ${filtrWord} ${aktywnyWord}: ${activeValues.join(", ")}`;
-    };
+    //     return `${count} ${filtrWord} ${aktywnyWord}: ${activeValues.join(", ")}`;
+    // };
 
     return (
         <Box sx={containerSx}>
@@ -302,10 +301,10 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     </Button>
                 )}
             </Box>
-
-            <Typography variant="body2" align="center" sx={summaryTextSx(theme)}>
+            <FilterSummary filters={selected} />
+            {/* <Typography variant="body2" align="center" sx={summaryTextSx(theme)}>
                 {getFilterSummary()}
-            </Typography>
+            </Typography> */}
         </Box>
     );
 }
