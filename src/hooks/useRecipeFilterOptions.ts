@@ -1,5 +1,6 @@
-// hooks/useRecipeFilterOptions.ts
+
 import { useState, useEffect } from "react";
+import { normalizeList, normalizeTags } from "@/components/RecipeFilters/utils/normalize";
 
 interface OptionsState {
     titles: string[];
@@ -25,30 +26,19 @@ export const useRecipeFilterOptions = (): OptionsState => {
             fetch("/api/uniques/tags").then(r => r.json()) as Promise<string[]>,
             fetch("/api/uniques/dietaryRestrictions").then(r => r.json()) as Promise<string[]>,
             fetch("/api/uniques/products").then(r => r.json()) as Promise<string[]>,
-        ]).then(([titles, cuisines, tags, dietary, products]) => {
-            const normalizeList = (arr: string[]) => [...new Set(arr.map(i => i.toLowerCase()))].sort((a, b) => a.localeCompare(b, "pl"));
-
-            const processedTags = Array.from(
-                new Set(
-                    tags
-                        .flatMap(tag =>
-                            tag
-                                .split(",")
-                                .map(t => t.trim().toLowerCase())
-                                .filter(Boolean)
-                        )
-                        .sort((a, b) => a.localeCompare(b, "pl"))
-                )
-            );
-
-            setOptions({
-                titles: normalizeList(titles),
-                cuisines: normalizeList(cuisines),
-                tags: processedTags,
-                dietaryRestrictions: normalizeList(dietary),
-                products: normalizeList(products),
+        ])
+            .then(([titles, cuisines, tags, dietary, products]) => {
+                setOptions({
+                    titles: normalizeList(titles),
+                    cuisines: normalizeList(cuisines),
+                    tags: normalizeTags(tags),
+                    dietaryRestrictions: normalizeList(dietary),
+                    products: normalizeList(products),
+                });
+            })
+            .catch(error => {
+                console.error("Failed to fetch filter options:", error);
             });
-        });
     }, []);
 
     return options;
