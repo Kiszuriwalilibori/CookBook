@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { Box, Autocomplete, TextField, Button, Typography, Divider, Chip } from "@mui/material";
+import { Box, Button, Typography, Divider, Chip } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { fieldTranslations } from "@/lib/types";
 import debounce from "lodash.debounce";
 import { z } from "zod";
 
-import { containerSx, fieldBoxSx, buttonGroupSx, chipContainerSx, chipSx, hiddenChipSx, summaryTextSx, labelSx } from "./styles";
+import FilterAutocomplete from "./parts/FilterAutocomplete";
+
+import { containerSx, fieldBoxSx, buttonGroupSx, chipContainerSx, chipSx, hiddenChipSx, summaryTextSx } from "./styles";
 
 interface FilterState {
     title: string;
@@ -82,13 +84,12 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         return normalized.sort((a, b) => a.localeCompare(b, "pl"));
     };
 
-    function handleChange(key: "title" | "cuisine", value: string): void;
-    function handleChange(key: "tag" | "dietary" | "product", value: string[]): void;
-    function handleChange(key: keyof FilterState, value: string | string[]): void {
+    function handleChange<K extends keyof FilterState>(key: K, value: FilterState[K]): void {
         setSelected(prev => {
             const updated = { ...prev };
 
             if (Array.isArray(value)) {
+                // multi-value case
                 let normalized: string[];
                 if (key === "tag") {
                     normalized = normalizeMultiple(value, options.tags);
@@ -101,6 +102,7 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                     updated.product = normalized;
                 }
             } else {
+                // single-value case
                 const normalized = value.trim().toLowerCase();
                 if (key === "title") updated.title = normalized;
                 if (key === "cuisine") updated.cuisine = normalized;
@@ -198,16 +200,17 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
         });
     }, [options.dietaryRestrictions]);
 
-    const renderLimitedChips = (value: string[], key: "tag" | "product") => {
+    const renderLimitedChips = (value: readonly string[], key: "tag" | "product") => {
+        const items = [...value];
         const maxVisible = 3;
-        const visibleChips = value.slice(0, maxVisible);
-        const hiddenCount = value.length - maxVisible;
+        const visibleChips = items.slice(0, maxVisible);
+        const hiddenCount = items.length - maxVisible;
 
         return (
             <Box
                 sx={{
                     ...chipContainerSx,
-                    overflowY: value.length > maxVisible ? "auto" : "visible",
+                    overflowY: items.length > maxVisible ? "auto" : "visible",
                 }}
             >
                 {visibleChips.map(option => (
@@ -215,9 +218,10 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
                         key={option}
                         label={option}
                         onDelete={() =>
+                            // Explicitly cast `key` so TS knows we're in the multi-value case
                             handleChange(
-                                key,
-                                value.filter(v => v !== option)
+                                key as "tag" | "dietary" | "product",
+                                items.filter(v => v !== option)
                             )
                         }
                         sx={chipSx(theme)}
@@ -254,63 +258,34 @@ export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFilter
 
             {/* Title */}
             <Box sx={fieldBoxSx}>
-                <Autocomplete
-                    fullWidth
-                    options={options.titles}
-                    value={selected.title || null}
-                    onChange={(_, newValue) => handleChange("title", newValue || "")}
-                    renderInput={params => <TextField {...params} label={fieldTranslations.title} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx(theme)} />}
-                />
+                <FilterAutocomplete label={fieldTranslations.title} options={options.titles} value={selected.title} onChange={v => handleChange("title", (v ?? "") as string)} />
             </Box>
 
             {/* Cuisine */}
             <Box sx={fieldBoxSx}>
-                <Autocomplete
-                    fullWidth
-                    options={options.cuisines}
-                    value={selected.cuisine || null}
-                    onChange={(_, newValue) => handleChange("cuisine", newValue || "")}
-                    renderInput={params => <TextField {...params} label={fieldTranslations.cuisine} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx(theme)} />}
-                />
+                <FilterAutocomplete label={fieldTranslations.cuisine} options={options.cuisines} value={selected.cuisine} onChange={v => handleChange("cuisine", (v ?? "") as string)} />
             </Box>
 
             {/* Tags */}
             <Box sx={fieldBoxSx}>
-                <Autocomplete
-                    fullWidth
-                    multiple
-                    options={options.tags}
-                    value={selected.tag}
-                    onChange={(_, newValue) => handleChange("tag", newValue || [])}
-                    renderTags={value => renderLimitedChips(value, "tag")}
-                    renderInput={params => <TextField {...params} label={fieldTranslations.tags} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx(theme)} error={!!errors.tag} helperText={errors.tag} />}
-                />
+                <FilterAutocomplete label={fieldTranslations.tags} options={options.tags} value={selected.tag} multiple onChange={v => handleChange("tag", (v ?? []) as string[])} renderTags={value => renderLimitedChips(value, "tag")} error={!!errors.tag} helperText={errors.tag} />
             </Box>
 
             {/* Dietary */}
             <Box sx={fieldBoxSx}>
-                <Autocomplete
-                    fullWidth
-                    multiple
+                <FilterAutocomplete
+                    label={fieldTranslations.dietaryRestrictions}
                     options={dietaryOptions.filter(opt => opt !== "Bez ograniczeń")}
                     value={selected.dietary}
-                    onChange={(_, newValue) => handleChange("dietary", newValue || [])}
+                    multiple
+                    onChange={v => handleChange("dietary", (v ?? []) as string[])}
                     renderTags={value => renderLimitedChips(value, "product")}
-                    renderInput={params => <TextField {...params} label={fieldTranslations.dietaryRestrictions} placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx(theme)} />}
                 />
             </Box>
 
             {/* Products */}
             <Box sx={fieldBoxSx}>
-                <Autocomplete
-                    fullWidth
-                    multiple
-                    options={options.products.slice(0, 50)}
-                    value={selected.product}
-                    onChange={(_, newValue) => handleChange("product", newValue || [])}
-                    renderTags={value => renderLimitedChips(value, "product")}
-                    renderInput={params => <TextField {...params} label="Produkt" placeholder="Wszystkie" InputLabelProps={{ shrink: true }} sx={labelSx(theme)} />}
-                />
+                <FilterAutocomplete label="Produkt" options={options.products.slice(0, 50)} value={selected.product} multiple onChange={v => handleChange("product", (v ?? []) as string[])} renderTags={value => renderLimitedChips(value, "product")} />
             </Box>
 
             {/* Buttons */}
