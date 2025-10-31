@@ -37,7 +37,7 @@ export const hiddenChipSx = (theme: Theme): SxProps => ({
 
 export const summaryTextSx = (theme: Theme): SxProps => ({
     mt: 2,
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.primary,
 });
 
 export const labelSx = (theme: Theme): SxProps => ({

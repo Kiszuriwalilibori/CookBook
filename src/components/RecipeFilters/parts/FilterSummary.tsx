@@ -1,4 +1,3 @@
-
 import React, { useMemo } from "react";
 import { Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -26,7 +25,7 @@ export default function FilterSummary({ filters }: FilterSummaryProps) {
         if (filters.cuisine) parts.push(`🍽️ ${filters.cuisine}`);
         if (filters.tag.length) parts.push(...filters.tag.map(t => `🏷️ ${t}`));
         if (filters.dietary.length) parts.push(...filters.dietary.map(d => `🌱 ${d}`));
-        if (filters.product.length) parts.push(...filters.product.map(p => `🛒 ${p}`));
+        if (filters.product.length) parts.push(...filters.product.map(p => `🛍️ ${p}`));
 
         const count = parts.length;
         if (count === 0) return "Brak aktywnych filtrów.";
