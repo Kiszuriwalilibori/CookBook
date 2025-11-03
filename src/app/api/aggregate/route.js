@@ -52,42 +52,67 @@
 //         );
 //     }
 // }
+// export async function POST(req) {
+//     try {
+//         const data = await req.json();
+
+//         // Log entire Sanity document for debugging (optional)
+//         console.log("Sanity webhook payload:", data);
+
+//         // Demo aggregation: extract title, slug, and description content count
+//         const title = data.title || null;
+//         const slug = data.slug?.current || null;
+//         const descriptionTitle = data.description?.title || null;
+//         const contentCount = Array.isArray(data.description?.content) ? data.description.content.length : 0;
+
+//         const result = {
+//             received: "sanity_document",
+//             id: data._id,
+//             type: data._type,
+//             createdAt: data._createdAt,
+//             updatedAt: data._updatedAt,
+//             title,
+//             slug,
+//             descriptionTitle,
+//             contentCount,
+//         };
+
+//         return new Response(JSON.stringify(result), {
+//             status: 200,
+//             headers: { "Content-Type": "application/json" },
+//         });
+//     } catch (err) {
+//         return new Response(
+//             JSON.stringify({
+//                 error: "Aggregation failed",
+//                 details: err.message,
+//             }),
+//             { status: 500, headers: { "Content-Type": "application/json" } }
+//         );
+//     }
+// }
+
 export async function POST(req) {
     try {
         const data = await req.json();
 
-        // Log entire Sanity document for debugging (optional)
-        console.log("Sanity webhook payload:", data);
+        // Check if the payload is an array (assuming array of recipes)
+        if (!Array.isArray(data)) {
+            return new Response(JSON.stringify({ error: "Expected an array of recipe objects" }), { status: 400, headers: { "Content-Type": "application/json" } });
+        }
 
-        // Demo aggregation: extract title, slug, and description content count
-        const title = data.title || null;
-        const slug = data.slug?.current || null;
-        const descriptionTitle = data.description?.title || null;
-        const contentCount = Array.isArray(data.description?.content) ? data.description.content.length : 0;
+        // Extract and process Products from all recipes
+        const allProducts = data
+            .flatMap(recipe => (Array.isArray(recipe.Products) ? recipe.Products : [])) // get each product-list safely
+            .map(str => (typeof str === "string" ? str.toLowerCase() : null))
+            .filter(Boolean); // remove null/undefined
 
-        const result = {
-            received: "sanity_document",
-            id: data._id,
-            type: data._type,
-            createdAt: data._createdAt,
-            updatedAt: data._updatedAt,
-            title,
-            slug,
-            descriptionTitle,
-            contentCount,
-        };
+        // Create an array of unique, lowercased product names
+        const uniqueProducts = Array.from(new Set(allProducts));
 
-        return new Response(JSON.stringify(result), {
-            status: 200,
-            headers: { "Content-Type": "application/json" },
-        });
+        // Return the result
+        return new Response(JSON.stringify({ uniqueProducts }), { status: 200, headers: { "Content-Type": "application/json" } });
     } catch (err) {
-        return new Response(
-            JSON.stringify({
-                error: "Aggregation failed",
-                details: err.message,
-            }),
-            { status: 500, headers: { "Content-Type": "application/json" } }
-        );
+        return new Response(JSON.stringify({ error: "Aggregation failed", details: err.message }), { status: 500, headers: { "Content-Type": "application/json" } });
     }
 }
