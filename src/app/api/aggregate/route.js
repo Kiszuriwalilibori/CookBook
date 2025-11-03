@@ -117,30 +117,160 @@
 //     }
 // }
 
-const SANITY_PROJECT_ID = "mextu0pu"; // <-- CHANGE THIS
-const SANITY_DATASET = "production"; // Or your dataset name
+// const SANITY_PROJECT_ID = "mextu0pu"; // <-- CHANGE THIS
+// const SANITY_DATASET = "production"; // Or your dataset name
+
+// export async function POST(req) {
+//     try {
+//         // Fetch all recipes from Sanity, asking just for Products
+//         const query = encodeURIComponent(`*[_type == "recipe"]{Products}`);
+//         const sanityUrl = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${query}`;
+
+//         const res = await fetch(sanityUrl);
+//         if (!res.ok) throw new Error(`Sanity fetch failed: ${res.status}`);
+//         const sanityResult = await res.json();
+
+//         // Collect all Products arrays
+//         const allProducts = (sanityResult.result ?? [])
+//             .flatMap(recipe => (Array.isArray(recipe.Products) ? recipe.Products : []))
+//             .map(str => (typeof str === "string" ? str.toLowerCase() : null))
+//             .filter(Boolean);
+
+//         // Unique and sorted
+//         const uniqueProducts = Array.from(new Set(allProducts)).sort();
+//         console.log(uniqueProducts);
+//         return new Response(JSON.stringify({ uniqueProducts }), { status: 200, headers: { "Content-Type": "application/json" } });
+//     } catch (err) {
+//         return new Response(JSON.stringify({ error: "Aggregation failed", details: err.message }), { status: 500, headers: { "Content-Type": "application/json" } });
+//     }
+// }
+
+// Fetches all recipes from Sanity, aggregates Products, dietaryRestrictions, cuisines, tags and titles.
+// - Products, dietaryRestrictions, cuisines and tags are lowercased and deduplicated.
+// - Titles are normalized to start with a capital letter and deduplicated.
+// Configure SANITY_PROJECT_ID and SANITY_DATASET (and optional SANITY_TOKEN) via environment variables.
+
+const SANITY_PROJECT_ID = process.env.SANITY_PROJECT_ID || "mextu0pu";
+const SANITY_DATASET = process.env.SANITY_DATASET || "production";
+const SANITY_TOKEN = process.env.SANITY_TOKEN || ""; // optional, required for private datasets
+
+function normalizeLower(s) {
+    if (typeof s !== "string") return null;
+    const t = s.trim();
+    if (t === "") return null;
+    return t.toLowerCase();
+}
+
+function capitalizeFirst(s) {
+    if (typeof s !== "string") return null;
+    const t = s.trim();
+    if (t.length === 0) return null;
+    return t.charAt(0).toUpperCase() + t.slice(1);
+}
 
 export async function POST(req) {
     try {
-        // Fetch all recipes from Sanity, asking just for Products
-        const query = encodeURIComponent(`*[_type == "recipe"]{Products}`);
-        const sanityUrl = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${query}`;
+        // GROQ: request just the fields we need
+        const groq = `*[_type == "recipe"]{Products, dietaryRestrictions, cuisine, tags, title}`;
+        const query = encodeURIComponent(groq);
+        const url = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${query}`;
 
-        const res = await fetch(sanityUrl);
-        if (!res.ok) throw new Error(`Sanity fetch failed: ${res.status}`);
-        const sanityResult = await res.json();
+        const fetchOpts = {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        if (SANITY_TOKEN) {
+            fetchOpts.headers.Authorization = `Bearer ${SANITY_TOKEN}`;
+        }
 
-        // Collect all Products arrays
-        const allProducts = (sanityResult.result ?? [])
-            .flatMap(recipe => (Array.isArray(recipe.Products) ? recipe.Products : []))
-            .map(str => (typeof str === "string" ? str.toLowerCase() : null))
-            .filter(Boolean);
+        const resp = await fetch(url, fetchOpts);
+        if (!resp.ok) {
+            throw new Error(`Sanity fetch failed: ${resp.status} ${resp.statusText}`);
+        }
+        const payload = await resp.json();
+        const recipes = Array.isArray(payload.result) ? payload.result : [];
 
-        // Unique and sorted
-        const uniqueProducts = Array.from(new Set(allProducts)).sort();
-        console.log(uniqueProducts);
-        return new Response(JSON.stringify({ uniqueProducts }), { status: 200, headers: { "Content-Type": "application/json" } });
+        // Use sets for uniqueness
+        const productsSet = new Set();
+        const dietarySet = new Set();
+        const cuisineSet = new Set();
+        const tagsSet = new Set();
+        const titlesSet = new Set();
+
+        for (const r of recipes) {
+            // Products (array of strings, per schema 'Products')
+            if (Array.isArray(r.Products)) {
+                for (const p of r.Products) {
+                    const v = normalizeLower(p);
+                    if (v) productsSet.add(v);
+                }
+            }
+
+            // dietaryRestrictions (array of strings)
+            if (Array.isArray(r.dietaryRestrictions)) {
+                for (const d of r.dietaryRestrictions) {
+                    const v = normalizeLower(d);
+                    if (v) dietarySet.add(v);
+                }
+            }
+
+            // cuisine - schema has 'cuisine' as a string; but handle array/string
+            if (Array.isArray(r.cuisine)) {
+                for (const c of r.cuisine) {
+                    const v = normalizeLower(c);
+                    if (v) cuisineSet.add(v);
+                }
+            } else if (typeof r.cuisine === "string") {
+                const v = normalizeLower(r.cuisine);
+                if (v) cuisineSet.add(v);
+            }
+
+            // tags (array of strings)
+            if (Array.isArray(r.tags)) {
+                for (const t of r.tags) {
+                    const v = normalizeLower(t);
+                    if (v) tagsSet.add(v);
+                }
+            }
+
+            // title - capitalize first letter (keep rest as-is)
+            if (typeof r.title === "string" && r.title.trim() !== "") {
+                const t = capitalizeFirst(r.title);
+                if (t) titlesSet.add(t);
+            }
+        }
+
+        // Convert sets to sorted arrays
+        const uniqueProducts = Array.from(productsSet).sort((a, b) => a.localeCompare(b));
+        const uniqueDietary = Array.from(dietarySet).sort((a, b) => a.localeCompare(b));
+        const uniqueCuisines = Array.from(cuisineSet).sort((a, b) => a.localeCompare(b));
+        const uniqueTags = Array.from(tagsSet).sort((a, b) => a.localeCompare(b));
+        const uniqueTitles = Array.from(titlesSet).sort((a, b) => a.localeCompare(b));
+
+        // Optional debug log
+        console.log("Aggregated counts:", {
+            recipes: recipes.length,
+            products: uniqueProducts,
+            dietary: uniqueDietary,
+            cuisines: uniqueCuisines,
+            tags: uniqueTags,
+            titles: uniqueTitles,
+        });
+
+        return new Response(
+            JSON.stringify({
+                products: uniqueProducts,
+                dietaryRestrictions: uniqueDietary,
+                cuisines: uniqueCuisines,
+                tags: uniqueTags,
+                titles: uniqueTitles,
+            }),
+            { status: 200, headers: { "Content-Type": "application/json" } }
+        );
     } catch (err) {
+        console.error("Aggregation error:", err);
         return new Response(JSON.stringify({ error: "Aggregation failed", details: err.message }), { status: 500, headers: { "Content-Type": "application/json" } });
     }
 }
