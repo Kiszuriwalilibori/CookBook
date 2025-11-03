@@ -48,11 +48,7 @@ export const labelSx = (theme: Theme): SxProps => ({
             borderWidth: 2,
         },
         "&.Mui-focused": {
-            // Elegant, minimal glow: soft shadow with primary color tint
             boxShadow: `0 0 0 3px ${alpha(theme.palette.primary.main, 0.12)}`, // Use alpha for safe opacity
-            // Alternative: Underline-style focus for a cleaner look
-            // borderBottom: `2px solid ${theme.palette.primary.main}`,
-            // boxShadow: "none", // Remove any outer glow if preferring underline
         },
     },
     // Subtle label color shift on focus
