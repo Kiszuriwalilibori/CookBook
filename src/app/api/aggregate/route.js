@@ -17,6 +17,7 @@
 export async function POST(req) {
     try {
         const data = await req.json();
+        console.log("Sanity webhook payload:", data);
 
         // Case 1: If data is an array, aggregate "count" fields (manual/test requests)
         if (Array.isArray(data)) {
