@@ -138,7 +138,7 @@ export async function POST(req) {
 
         // Unique and sorted
         const uniqueProducts = Array.from(new Set(allProducts)).sort();
-
+        console.log(uniqueProducts);
         return new Response(JSON.stringify({ uniqueProducts }), { status: 200, headers: { "Content-Type": "application/json" } });
     } catch (err) {
         return new Response(JSON.stringify({ error: "Aggregation failed", details: err.message }), { status: 500, headers: { "Content-Type": "application/json" } });
