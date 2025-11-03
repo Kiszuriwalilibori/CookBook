@@ -1,3 +1,3 @@
 import recipe from '../schemas/recipe'
-
-export const schemaTypes = [recipe]
+import recipesSummary from '../schemas/recipesSummary'
+export const schemaTypes = [recipe, recipesSummary]
