@@ -363,43 +363,179 @@
 // }
 
 // export default ProductsInput
-import React, {useEffect, useState} from 'react'
+// import React, {useEffect, useState} from 'react'
+// import PropTypes from 'prop-types'
+// import {useFormValue, PatchEvent, set} from 'sanity'
+// import {Box, Button, Flex, TextInput, Label, Card} from '@sanity/ui'
+
+// const ProductsInput = (props) => {
+//   const {value = [], onChange} = props // Current Products array
+//   const ingredients = useFormValue(['ingredients']) // Access ingredients
+//   const [newProduct, setNewProduct] = useState('') // State for new product input
+
+//   // Helper to lowercase, trim, and dedupe array case-insensitively
+//   const normalizeProducts = (products) => {
+//     const normalized = products.map((p) => (p || '').toLowerCase().trim()).filter(Boolean)
+//     return [...new Set(normalized)]
+//   }
+
+//   // Extract last word from ingredient names and lowercase
+//   const computeProducts = (ingredients) => {
+//     if (!ingredients || !Array.isArray(ingredients)) {
+//       return []
+//     }
+//     const products = ingredients
+//       .map((ingredient) => {
+//         const name = ingredient.name || ''
+//         const words = name.trim().split(/\s+/)
+//         const lastWord = words[words.length - 1]
+
+//         return lastWord ? lastWord.toLowerCase().trim() : null
+//       })
+//       .filter(Boolean)
+
+//     return normalizeProducts(products)
+//   }
+
+//   // Auto-add derived Products from ingredients (only when ingredients change)
+//   useEffect(() => {
+//     if (!ingredients) return
+//     const newDerived = computeProducts(ingredients)
+//     const normalizedValue = normalizeProducts(value)
+//     const added = newDerived.filter((p) => !normalizedValue.includes(p))
+
+//     if (added.length > 0) {
+//       const updatedProducts = normalizeProducts([...value, ...added])
+//       onChange(PatchEvent.from(set(updatedProducts)))
+//     }
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [ingredients]) // <— Only run when ingredients change
+
+//   // Normalize current value for case-insensitive checks
+//   const normalizedValue = normalizeProducts(value)
+
+//   // Handle adding a new product (lowercased, deduped)
+//   const addProduct = () => {
+//     const lowercasedProduct = newProduct.toLowerCase().trim()
+//     if (lowercasedProduct && !normalizedValue.includes(lowercasedProduct)) {
+//       const updatedProducts = normalizeProducts([...value, lowercasedProduct])
+//       onChange(PatchEvent.from(set(updatedProducts)))
+//       setNewProduct('')
+//     }
+//   }
+
+//   // Handle editing a product (lowercased)
+//   const editProduct = (index, newValue) => {
+//     const lowercasedValue = newValue.toLowerCase().trim()
+//     const updatedProducts = value.map((p, i) => (i === index ? lowercasedValue : p))
+//     onChange(PatchEvent.from(set(normalizeProducts(updatedProducts))))
+//   }
+
+//   // Handle removing a product
+//   const removeProduct = (index) => {
+//     const updatedProducts = value.filter((_, i) => i !== index)
+//     onChange(PatchEvent.from(set(normalizeProducts(updatedProducts))))
+//   }
+
+//   return (
+//     <Card padding={3} tone="default">
+//       <Label>Products</Label>
+//       <Box marginTop={2}>
+//         {/* Display and edit existing products */}
+//         {value.length > 0 ? (
+//           value.map((product, index) => (
+//             <Flex key={index} align="center" marginBottom={2} gap={2}>
+//               <TextInput
+//                 value={product || ''}
+//                 onChange={(e) => editProduct(index, e.target.value)}
+//                 placeholder="Product name"
+//               />
+//               <Button
+//                 text="Remove"
+//                 mode="ghost"
+//                 tone="critical"
+//                 onClick={() => removeProduct(index)}
+//               />
+//             </Flex>
+//           ))
+//         ) : (
+//           <Box>No products yet</Box>
+//         )}
+//         {/* Input for adding new products */}
+//         <Flex align="center" gap={2} marginTop={3}>
+//           <TextInput
+//             value={newProduct}
+//             onChange={(e) => setNewProduct(e.target.value)}
+//             placeholder="Add a new product"
+//             onKeyDown={(e) => {
+//               if (e.key === 'Enter') addProduct()
+//             }}
+//           />
+//           <Button text="Add" tone="primary" onClick={addProduct} />
+//         </Flex>
+//       </Box>
+//     </Card>
+//   )
+// }
+
+// ProductsInput.propTypes = {
+//   value: PropTypes.arrayOf(PropTypes.string),
+//   onChange: PropTypes.func.isRequired,
+// }
+
+// export default ProductsInput
+
+import React, {useEffect, useState, useRef, useCallback} from 'react'
 import PropTypes from 'prop-types'
 import {useFormValue, PatchEvent, set} from 'sanity'
 import {Box, Button, Flex, TextInput, Label, Card} from '@sanity/ui'
 
 const ProductsInput = (props) => {
-  const {value = [], onChange} = props // Current Products array
-  const ingredients = useFormValue(['ingredients']) // Access ingredients
-  const [newProduct, setNewProduct] = useState('') // State for new product input
+  const {value = [], onChange} = props
+  const ingredients = useFormValue(['ingredients'])
+  const [newProduct, setNewProduct] = useState('')
+  const prevIngredientNames = useRef([])
 
-  // Helper to lowercase, trim, and dedupe array case-insensitively
-  const normalizeProducts = (products) => {
+  // ✅ Normalize: lowercase, trim, and dedupe (case-insensitive)
+  const normalizeProducts = useCallback((products) => {
     const normalized = products.map((p) => (p || '').toLowerCase().trim()).filter(Boolean)
     return [...new Set(normalized)]
-  }
+  }, [])
 
-  // Extract last word from ingredient names and lowercase
-  const computeProducts = (ingredients) => {
-    if (!ingredients || !Array.isArray(ingredients)) {
-      return []
-    }
-    const products = ingredients
-      .map((ingredient) => {
-        const name = ingredient.name || ''
-        const words = name.trim().split(/\s+/)
-        const lastWord = words[words.length - 1]
+  // ✅ Compute derived products from ingredients
+  const computeProducts = useCallback(
+    (ingredients) => {
+      if (!ingredients || !Array.isArray(ingredients)) return []
+      const products = ingredients
+        .map((ingredient) => {
+          const name = ingredient.name || ''
+          const words = name.trim().split(/\s+/)
+          const lastWord = words[words.length - 1]
+          return lastWord ? lastWord.toLowerCase().trim() : null
+        })
+        .filter(Boolean)
+      return normalizeProducts(products)
+    },
+    [normalizeProducts],
+  )
 
-        return lastWord ? lastWord.toLowerCase().trim() : null
-      })
-      .filter(Boolean)
-
-    return normalizeProducts(products)
-  }
-
-  // Auto-add derived Products from ingredients (only when ingredients change)
+  // ✅ Update only when ingredient *names* truly change (not on every keystroke)
   useEffect(() => {
     if (!ingredients) return
+
+    const currentNames = (ingredients || [])
+      .map((i) => (i.name || '').trim().toLowerCase())
+      .filter(Boolean)
+
+    const prevNames = prevIngredientNames.current
+    const changed =
+      currentNames.length !== prevNames.length ||
+      currentNames.some((name, i) => name !== prevNames[i])
+
+    if (!changed) return // Skip updates while typing within same ingredient
+
+    prevIngredientNames.current = currentNames
+
     const newDerived = computeProducts(ingredients)
     const normalizedValue = normalizeProducts(value)
     const added = newDerived.filter((p) => !normalizedValue.includes(p))
@@ -408,30 +544,26 @@ const ProductsInput = (props) => {
       const updatedProducts = normalizeProducts([...value, ...added])
       onChange(PatchEvent.from(set(updatedProducts)))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ingredients]) // <— Only run when ingredients change
+  }, [ingredients, computeProducts, normalizeProducts, onChange, value])
 
-  // Normalize current value for case-insensitive checks
-  const normalizedValue = normalizeProducts(value)
-
-  // Handle adding a new product (lowercased, deduped)
+  // ✅ Add a new product manually
   const addProduct = () => {
     const lowercasedProduct = newProduct.toLowerCase().trim()
-    if (lowercasedProduct && !normalizedValue.includes(lowercasedProduct)) {
+    if (lowercasedProduct && !value.includes(lowercasedProduct)) {
       const updatedProducts = normalizeProducts([...value, lowercasedProduct])
       onChange(PatchEvent.from(set(updatedProducts)))
       setNewProduct('')
     }
   }
 
-  // Handle editing a product (lowercased)
+  // ✅ Edit a product inline
   const editProduct = (index, newValue) => {
     const lowercasedValue = newValue.toLowerCase().trim()
     const updatedProducts = value.map((p, i) => (i === index ? lowercasedValue : p))
     onChange(PatchEvent.from(set(normalizeProducts(updatedProducts))))
   }
 
-  // Handle removing a product
+  // ✅ Remove a product
   const removeProduct = (index) => {
     const updatedProducts = value.filter((_, i) => i !== index)
     onChange(PatchEvent.from(set(normalizeProducts(updatedProducts))))
@@ -441,7 +573,7 @@ const ProductsInput = (props) => {
     <Card padding={3} tone="default">
       <Label>Products</Label>
       <Box marginTop={2}>
-        {/* Display and edit existing products */}
+        {/* Existing products list */}
         {value.length > 0 ? (
           value.map((product, index) => (
             <Flex key={index} align="center" marginBottom={2} gap={2}>
@@ -461,7 +593,8 @@ const ProductsInput = (props) => {
         ) : (
           <Box>No products yet</Box>
         )}
-        {/* Input for adding new products */}
+
+        {/* Add new product field */}
         <Flex align="center" gap={2} marginTop={3}>
           <TextInput
             value={newProduct}
