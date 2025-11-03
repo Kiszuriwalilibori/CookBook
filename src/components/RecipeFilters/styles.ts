@@ -49,3 +49,4 @@ export const labelSx = (theme: Theme): SxProps => ({
         },
     },
 });
+export const dividerSx = { mb: 2 };

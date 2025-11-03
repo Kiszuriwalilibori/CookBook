@@ -1,16 +1,29 @@
-// hooks/useFilters.ts
 import { useState, useEffect, useCallback } from "react";
 import { z } from "zod";
-import { useDebounceCallback } from "@/hooks/useDebouncedCallback";
+import { useDebouncedCallback } from "./useDebouncedCallback";
 import { normalizeMultiple } from "@/components/RecipeFilters/utils/normalize";
 
-export interface FilterState {
-    title: string;
-    cuisine: string;
-    tag: string[];
-    dietary: string[];
-    product: string[];
-}
+// Constants (extracted for magic numbers)
+const MAX_TAGS = 10;
+
+// Define empty errors object with all keys
+const EMPTY_ERRORS: Record<keyof FilterState, string> = {
+    title: "",
+    cuisine: "",
+    tag: "",
+    dietary: "",
+    product: "",
+};
+
+const FilterSchema = z.object({
+    title: z.string().default(""),
+    cuisine: z.string().default(""),
+    tag: z.array(z.string()).max(MAX_TAGS, `Maksymalnie ${MAX_TAGS} tagów`),
+    dietary: z.array(z.string()),
+    product: z.array(z.string()),
+});
+
+export type FilterState = z.infer<typeof FilterSchema>;
 
 export interface OptionsState {
     titles: string[];
@@ -19,14 +32,6 @@ export interface OptionsState {
     dietaryRestrictions: string[];
     products: string[];
 }
-
-const FilterSchema = z.object({
-    title: z.string().default(""),
-    cuisine: z.string().default(""),
-    tag: z.array(z.string()).max(10, "Maksymalnie 10 tagów"),
-    dietary: z.array(z.string()),
-    product: z.array(z.string()),
-});
 
 export const useFilters = (options: OptionsState, onFiltersChange: (filters: FilterState) => void) => {
     const [filters, setFilters] = useState<FilterState>({
@@ -37,7 +42,7 @@ export const useFilters = (options: OptionsState, onFiltersChange: (filters: Fil
         product: [],
     });
 
-    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [errors, setErrors] = useState<Record<keyof FilterState, string>>(EMPTY_ERRORS);
 
     const applyFiltersInternal = useCallback(
         (newFilters: FilterState) => {
@@ -46,7 +51,7 @@ export const useFilters = (options: OptionsState, onFiltersChange: (filters: Fil
         [onFiltersChange]
     );
 
-    const { debounced: debouncedApplyFilters, flush: flushApplyFilters } = useDebounceCallback(applyFiltersInternal, 500);
+    const { debounced: debouncedApplyFilters, flush: flushApplyFilters } = useDebouncedCallback(applyFiltersInternal, 500);
 
     const handleChange = useCallback(
         <K extends keyof FilterState>(key: K, value: FilterState[K]): void => {
@@ -112,16 +117,16 @@ export const useFilters = (options: OptionsState, onFiltersChange: (filters: Fil
         flushApplyFilters(); // Immediately flush any pending debounced call
         const result = FilterSchema.safeParse(filters);
         if (!result.success) {
-            const newErrors: Record<string, string> = {};
+            const newErrors: Record<keyof FilterState, string> = { ...EMPTY_ERRORS };
             result.error.errors.forEach(err => {
                 const key = err.path[0];
-                if (typeof key === "string") newErrors[key] = err.message;
+                if (typeof key === "string") newErrors[key as keyof FilterState] = err.message;
             });
             setErrors(newErrors);
             return false;
         }
 
-        setErrors({});
+        setErrors(EMPTY_ERRORS);
         onFiltersChange(result.data);
         return true;
     }, [filters, flushApplyFilters, onFiltersChange]);
@@ -135,7 +140,7 @@ export const useFilters = (options: OptionsState, onFiltersChange: (filters: Fil
             product: [],
         };
         setFilters(cleared);
-        setErrors({});
+        setErrors(EMPTY_ERRORS);
         onFiltersChange(cleared);
     }, [onFiltersChange]);
 
