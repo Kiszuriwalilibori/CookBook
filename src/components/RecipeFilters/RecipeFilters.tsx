@@ -8,7 +8,7 @@ import { fieldTranslations } from "@/lib/types";
 import { containerSx, fieldBoxSx, buttonGroupSx, chipContainerSx, chipSx, hiddenChipSx, dividerSx } from "./styles";
 import { FilterSummary, FilterAutocomplete } from "./parts";
 import { type FilterState, type OptionsState } from "@/hooks/useFilters";
-import { useDietaryOptions, useFilters, useRecipeFilterOptions } from "@/hooks";
+import { useDietaryOptions, useFilters /*, useRecipeFilterOptions*/ } from "@/hooks";
 
 const MAX_VISIBLE_CHIPS = 3;
 const MAX_PRODUCTS_DISPLAYED = 50;
@@ -17,12 +17,13 @@ const NO_DIETARY_RESTRICTIONS_LABEL = "Bez ograniczeń";
 interface RecipeFiltersProps {
     onFiltersChange: (filters: FilterState) => void;
     onClose?: () => void;
+    options: OptionsState;
 }
 
-export default function RecipeFilters({ onFiltersChange, onClose }: RecipeFiltersProps) {
+export default function RecipeFilters({ onFiltersChange, onClose, options }: RecipeFiltersProps) {
     const theme = useTheme();
 
-    const options: OptionsState = useRecipeFilterOptions();
+
 
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
 

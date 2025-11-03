@@ -24,7 +24,7 @@ const Header = () => {
         label: "Szukaj",
         icon: <SearchIcon />,
         onClick: () => setShowFilter(true),
-        hidden: !isFiltersLoaded, // 👈 this controls animation visibility
+        hidden: !isFiltersLoaded,
     };
 
     const navItems = [...commonNavItems, searchNavItem];
@@ -47,7 +47,7 @@ const Header = () => {
                 <>
                     <Box sx={overlayStyles} onClick={handleClose}>
                         <Box sx={modalStyles} onClick={e => e.stopPropagation()}>
-                            <RecipeFilters onFiltersChange={filters => console.log("Applied filters:", filters)} onClose={handleClose} />
+                            <RecipeFilters onFiltersChange={filters => console.log("Applied filters:", filters)} onClose={handleClose} options={options} />
                         </Box>
                     </Box>
                 </>
