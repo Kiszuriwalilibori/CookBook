@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Menu from "@/components/Menu/Menu";
-import RecipeFilters from "@/components/RecipeFilters/RecipeFilters";
+import { Menu, RecipeFilters } from "@/components";
 
 import { Book as RecipeIcon, Article as BlogIcon, Home as HomeIcon, Favorite as FavoriteIcon, Info as InfoIcon, Search as SearchIcon } from "@mui/icons-material";
 import { Box } from "@mui/material";
+
+import { overlayStyles, modalStyles } from "./Header.styles";
 
 const Header = () => {
     const [showFilter, setShowFilter] = useState(false);
@@ -42,31 +43,11 @@ const Header = () => {
             {showFilter && (
                 <React.Fragment>
                     <Box
-                        sx={{
-                            position: "fixed",
-                            top: 0,
-                            left: 0,
-                            width: "100%",
-                            height: "100%",
-                            bgcolor: "rgba(0, 0, 0, 0.5)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            zIndex: 1300,
-                        }}
+                        sx={overlayStyles}
                         onClick={handleClose} // Close on outside click
                     >
                         <Box
-                            sx={{
-                                bgcolor: "background.paper",
-                                p: 3,
-                                borderRadius: 1,
-                                maxWidth: 400,
-                                width: "90%",
-                                maxHeight: "80%",
-                                overflowY: "auto",
-                                boxShadow: 24,
-                            }}
+                            sx={modalStyles}
                             onClick={e => e.stopPropagation()} // Prevent bubbling
                         >
                             <RecipeFilters
