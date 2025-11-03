@@ -92,25 +92,53 @@
 //     }
 // }
 
+// export async function POST(req) {
+//     try {
+//         const data = await req.json();
+
+//         // Check if the payload is an array (assuming array of recipes)
+//         if (!Array.isArray(data)) {
+//             return new Response(JSON.stringify({ error: "Expected an array of recipe objects" }), { status: 400, headers: { "Content-Type": "application/json" } });
+//         }
+
+//         // Extract and process Products from all recipes
+//         const allProducts = data
+//             .flatMap(recipe => (Array.isArray(recipe.Products) ? recipe.Products : [])) // get each product-list safely
+//             .map(str => (typeof str === "string" ? str.toLowerCase() : null))
+//             .filter(Boolean); // remove null/undefined
+
+//         // Create an array of unique, lowercased product names
+//         const uniqueProducts = Array.from(new Set(allProducts));
+
+//         // Return the result
+//         return new Response(JSON.stringify({ uniqueProducts }), { status: 200, headers: { "Content-Type": "application/json" } });
+//     } catch (err) {
+//         return new Response(JSON.stringify({ error: "Aggregation failed", details: err.message }), { status: 500, headers: { "Content-Type": "application/json" } });
+//     }
+// }
+
+const SANITY_PROJECT_ID = "mextu0pu"; // <-- CHANGE THIS
+const SANITY_DATASET = "production"; // Or your dataset name
+
 export async function POST(req) {
     try {
-        const data = await req.json();
+        // Fetch all recipes from Sanity, asking just for Products
+        const query = encodeURIComponent(`*[_type == "recipe"]{Products}`);
+        const sanityUrl = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${query}`;
 
-        // Check if the payload is an array (assuming array of recipes)
-        if (!Array.isArray(data)) {
-            return new Response(JSON.stringify({ error: "Expected an array of recipe objects" }), { status: 400, headers: { "Content-Type": "application/json" } });
-        }
+        const res = await fetch(sanityUrl);
+        if (!res.ok) throw new Error(`Sanity fetch failed: ${res.status}`);
+        const sanityResult = await res.json();
 
-        // Extract and process Products from all recipes
-        const allProducts = data
-            .flatMap(recipe => (Array.isArray(recipe.Products) ? recipe.Products : [])) // get each product-list safely
+        // Collect all Products arrays
+        const allProducts = (sanityResult.result ?? [])
+            .flatMap(recipe => (Array.isArray(recipe.Products) ? recipe.Products : []))
             .map(str => (typeof str === "string" ? str.toLowerCase() : null))
-            .filter(Boolean); // remove null/undefined
+            .filter(Boolean);
 
-        // Create an array of unique, lowercased product names
-        const uniqueProducts = Array.from(new Set(allProducts));
+        // Unique and sorted
+        const uniqueProducts = Array.from(new Set(allProducts)).sort();
 
-        // Return the result
         return new Response(JSON.stringify({ uniqueProducts }), { status: 200, headers: { "Content-Type": "application/json" } });
     } catch (err) {
         return new Response(JSON.stringify({ error: "Aggregation failed", details: err.message }), { status: 500, headers: { "Content-Type": "application/json" } });
