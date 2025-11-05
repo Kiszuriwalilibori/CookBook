@@ -5,11 +5,14 @@ import { Menu, RecipeFilters } from "@/components";
 import { Book as RecipeIcon, Article as BlogIcon, Home as HomeIcon, Favorite as FavoriteIcon, Info as InfoIcon, Search as SearchIcon } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { overlayStyles, modalStyles } from "./Header.styles";
-import { useRecipeFilterOptions } from "@/hooks";
+import { useRecipeFilterOptions, useRecipesSummary } from "@/hooks";
 
 const Header = () => {
     const [showFilter, setShowFilter] = useState(false);
     const options = useRecipeFilterOptions();
+    const { summary, isLoading, error } = useRecipesSummary();
+    console.log(summary, isLoading, error);
+
     const isFiltersLoaded = options.titles.length > 0;
 
     const commonNavItems = [
