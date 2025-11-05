@@ -46,6 +46,8 @@ okropny niebieski focus
 stwórz wyszukiwarkę przepisów
 uprość style sx props
 
+FILTRY:
+
 dodaj animacje do Autocomplete
 Ensure MUI Autocomplete slot props
 Apply similar styling to dietetary
@@ -67,4 +69,8 @@ Add analytics or logging hook
 MENU: MUI Navigation best practices
 
 
-Ważne: jakaś dziwna dwoistość danych w tags
+USERECIPESSUMMARY:
+optimize hook with SWR Librrary
+
+
+
