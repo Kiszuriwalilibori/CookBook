@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { z } from "zod";
 import { useDebouncedCallback } from "./useDebouncedCallback";
 import { normalizeMultiple } from "@/components/RecipeFilters/utils/normalize";
+import { Options } from "@/types";
 
 // Constants (extracted for magic numbers)
 const MAX_TAGS = 10;
@@ -25,15 +26,7 @@ const FilterSchema = z.object({
 
 export type FilterState = z.infer<typeof FilterSchema>;
 
-export interface OptionsState {
-    titles: string[];
-    cuisines: string[];
-    tags: string[];
-    dietaryRestrictions: string[];
-    products: string[];
-}
-
-export const useFilters = (options: OptionsState, onFiltersChange: (filters: FilterState) => void) => {
+export const useFilters = (options: Options, onFiltersChange: (filters: FilterState) => void) => {
     const [filters, setFilters] = useState<FilterState>({
         title: "",
         cuisine: "",

@@ -5,13 +5,18 @@ import { Menu, RecipeFilters } from "@/components";
 import { Book as RecipeIcon, Article as BlogIcon, Home as HomeIcon, Favorite as FavoriteIcon, Info as InfoIcon, Search as SearchIcon } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { overlayStyles, modalStyles } from "./Header.styles";
-import { useRecipeFilterOptions, useRecipesSummary } from "@/hooks";
+import { useRecipesSummary } from "@/hooks";
+import { Options } from "@/types";
 
-const Header = () => {
+interface HeaderProps {
+    initialSummary?: Options | null;
+    fetchError?: string | null;
+}
+
+const Header = ({ initialSummary, fetchError }: HeaderProps) => {
     const [showFilter, setShowFilter] = useState(false);
-    const options = useRecipeFilterOptions();
-    const { summary, isLoading, error } = useRecipesSummary();
-    console.log(summary, isLoading, error);
+    const { summary: options, isLoading, error } = useRecipesSummary(initialSummary || undefined);
+    console.log(options, isLoading, error);
 
     const isFiltersLoaded = options.titles.length > 0;
 

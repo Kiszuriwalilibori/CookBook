@@ -1,62 +1,15 @@
-// import { useState, useEffect } from "react";
-
-// interface OptionsState {
-//     titles: string[];
-//     cuisines: string[];
-//     tags: string[];
-//     dietaryRestrictions: string[];
-//     products: string[];
-// }
-
-// export const useRecipesSummary = (): OptionsState => {
-//     const [options, setOptions] = useState<OptionsState>({
-//         titles: [],
-//         cuisines: [],
-//         tags: [],
-//         dietaryRestrictions: [],
-//         products: [],
-//     });
-
-//     useEffect(() => {
-//         fetch("/api/recipes-summary")
-//             .then(r => r.json())
-//             .then(data => {
-//                 setOptions({
-//                     titles: data.titles || [],
-//                     cuisines: data.cuisines || [],
-//                     tags: data.tags || [],
-//                     dietaryRestrictions: data.dietaryRestrictions || [],
-//                     products: data.products || [],
-//                 });
-//             })
-//             .catch(error => {
-//                 console.error("Failed to fetch recipes summary:", error);
-//             });
-//     }, []);
-
-//     return options;
-// };
-// hooks/useRecipesSummary.ts (updated)
+// hooks/useRecipesSummary.ts
+import { Options } from "@/types";
 import { useState, useEffect } from "react";
 
-interface OptionsState {
-    titles: string[];
-    cuisines: string[];
-    tags: string[];
-    dietaryRestrictions: string[];
-    products: string[];
-}
-
 interface HookReturn {
-    summary: OptionsState;
+    summary: Options;
     isLoading: boolean;
     error: string | null;
 }
 
-export const useRecipesSummary = (initialSummary?: OptionsState): HookReturn => {
-    const [summary, setSummary] = useState<OptionsState>(
-        initialSummary || { titles: [], cuisines: [], tags: [], dietaryRestrictions: [], products: [] }
-    );
+export const useRecipesSummary = (initialSummary?: Options): HookReturn => {
+    const [summary, setSummary] = useState<Options>(initialSummary || { titles: [], cuisines: [], tags: [], dietaryRestrictions: [], products: [] });
     const [isLoading, setIsLoading] = useState(!initialSummary); // Skip loading if hydrated
     const [error, setError] = useState<string | null>(null);
 
@@ -65,9 +18,9 @@ export const useRecipesSummary = (initialSummary?: OptionsState): HookReturn => 
 
         setIsLoading(true);
         setError(null);
-        fetch("/api/recipes-summary", { cache: 'force-cache' }) // Cache for performance
+        fetch("/api/recipes-summary", { cache: "force-cache" })
             .then(r => r.json())
-            .then((data) => {
+            .then(data => {
                 setSummary({
                     titles: data.titles || [],
                     cuisines: data.cuisines || [],
