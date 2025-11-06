@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
-import { getRecipeBySlug } from "@/lib/sanity";
+// import { getRecipeBySlug } from "@/lib/sanity";
+import { getRecipeBySlug } from "@/lib/getRecipeBySlug";
 import { Recipe } from "@/lib/types";
 import { Box } from "@mui/material";
 import { Separator } from "@/components";

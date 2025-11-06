@@ -1,16 +1,6 @@
-// lib/sanity.ts
-// Sanity client and queries—imports env and types for modularity
-
-import { createClient, groq } from "next-sanity";
-import { apiVersion, dataset, projectId, useCdn } from "./env";
-import type { Recipe } from "./types"; // Import types for return safety
-
-export const client = createClient({
-    projectId,
-    dataset,
-    apiVersion,
-    useCdn,
-});
+import { groq } from "next-sanity";
+import type { Recipe } from "./types";
+import { client } from "./createClient";
 
 export async function getRecipes(): Promise<Recipe[]> {
     return client.fetch(
@@ -96,52 +86,52 @@ export async function getRecipesForCards(): Promise<Recipe[]> {
     );
 }
 
-export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
-    return client.fetch(
-        groq`*[_type == "recipe" && slug.current == $slug][0]{
-      _id,
-      title,
-      slug,
-      description {
-        title,
-        content[],
-        image {
-          asset-> {
-            _id,
-            url
-          },
-          alt
-        },
-        notes
-      },
-      ingredients[] {
-        name,
-        quantity
-      },
-      Products,
-      preparationSteps[] {
-        content[],
-        image {
-          asset-> {
-            _id,
-            url
-          },
-          alt
-        },
-        notes
-      },
-      calories,
-      preparationTime,
-      cookingTime,
-      servings,
-      cuisine,
-      difficulty,
-      dietaryRestrictions,
-      tags,
-      notes,
-      Kizia,
-      source
-    }`,
-        { slug } // Param for safe query
-    );
-}
+// export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
+//     return client.fetch(
+//         groq`*[_type == "recipe" && slug.current == $slug][0]{
+//       _id,
+//       title,
+//       slug,
+//       description {
+//         title,
+//         content[],
+//         image {
+//           asset-> {
+//             _id,
+//             url
+//           },
+//           alt
+//         },
+//         notes
+//       },
+//       ingredients[] {
+//         name,
+//         quantity
+//       },
+//       Products,
+//       preparationSteps[] {
+//         content[],
+//         image {
+//           asset-> {
+//             _id,
+//             url
+//           },
+//           alt
+//         },
+//         notes
+//       },
+//       calories,
+//       preparationTime,
+//       cookingTime,
+//       servings,
+//       cuisine,
+//       difficulty,
+//       dietaryRestrictions,
+//       tags,
+//       notes,
+//       Kizia,
+//       source
+//     }`,
+//         { slug } // Param for safe query
+//     );
+// }
