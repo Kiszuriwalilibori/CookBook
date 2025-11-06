@@ -14,7 +14,7 @@ export const useRecipesSummary = (initialSummary?: Options): HookReturn => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (initialSummary) return; // Already hydrated, no fetch needed
+        if (initialSummary) return; 
 
         setIsLoading(true);
         setError(null);
