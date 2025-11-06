@@ -26,7 +26,7 @@ interface FilterStoreActions {
 
 type FilterStore = FilterStoreState & FilterStoreActions;
 
-export const useFilterStore = create<FilterStore>((set, get) => ({
+export const useFiltersStore = create<FilterStore>((set, get) => ({
     filters: DEFAULT_FILTERS,
     errors: {},
     options: { titles: [], cuisines: [], tags: [], dietaryRestrictions: [], products: [] }, // Empty default
@@ -68,6 +68,7 @@ export const useFilterStore = create<FilterStore>((set, get) => ({
 
     setFilters: (newFilters: Partial<FilterState>) => {
         const current = get();
+        console.log("setFilters", newFilters);
         set({
             filters: { ...current.filters, ...newFilters },
             errors: {}, // Clear errors on set

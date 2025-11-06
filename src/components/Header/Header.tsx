@@ -55,7 +55,7 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
                 <>
                     <Box sx={overlayStyles} onClick={handleClose}>
                         <Box sx={modalStyles} onClick={e => e.stopPropagation()}>
-                            <RecipeFilters onFiltersChange={filters => console.log("Applied filters:", filters)} onClose={handleClose} options={options} />
+                            <RecipeFilters onFiltersChange={() => {} /*filters => console.log("Applied filters:", filters)*/} onClose={handleClose} options={options} />
                         </Box>
                     </Box>
                 </>
