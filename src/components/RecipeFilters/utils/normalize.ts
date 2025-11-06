@@ -1,22 +1,3 @@
-// utils/filters.ts
-export const normalizeList = (arr: string[]): string[] => {
-    return [...new Set(arr.map(i => i.toLowerCase()))].sort((a, b) => a.localeCompare(b, "pl"));
-};
-
-export const normalizeTags = (tags: string[]): string[] => {
-    return Array.from(
-        new Set(
-            tags
-                .flatMap(tag =>
-                    tag
-                        .split(",")
-                        .map(t => t.trim().toLowerCase())
-                        .filter(Boolean)
-                )
-                .sort((a, b) => a.localeCompare(b, "pl"))
-        )
-    );
-};
 
 export const normalizeMultiple = (value: string[], optionsList: string[]): string[] => {
     if (!value || value.length === 0) return [];

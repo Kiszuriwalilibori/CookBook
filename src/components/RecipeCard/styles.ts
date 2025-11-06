@@ -69,7 +69,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     },
     chip: {
         fontSize: { xs: "0.7rem", sm: "0.8rem" },
-        backgroundColor: theme => theme.palette.surface.main,
+        backgroundColor: "surface.main",
         color: "text.primary", // Ensure text is visible on yellow bg
         "& .MuiChip-label": {
             padding: "2px 8px", // Minimal padding inside chip
