@@ -1,5 +1,5 @@
 import { Grid, Box, Typography, Alert } from "@mui/material";
-import { getRecipesForCards } from "@/lib/sanity";
+import { getRecipesForCards } from "@/lib/getRecipesForCards";
 import { Recipe } from "@/lib/types";
 import { PageTitle } from "@/components";
 import RecipeCard from "@/components/RecipeCard";
