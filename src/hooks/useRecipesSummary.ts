@@ -38,15 +38,48 @@
 
 //     return { summary, isLoading, error };
 // };
+"use client";
 
+import { useEffect, useState } from "react";
 import { getRecipesSummary } from "@/lib/getRecipesSummary";
+import type { Options } from "@/types";
 
-export async function useRecipesSummary() {
-    try {
-        const summary = await getRecipesSummary();
-        return summary;
-    } catch (error) {
-        console.error("Failed to fetch recipes summary:", error);
-        return null;
-    }
+interface RecipesSummaryState {
+    summary: Options;
+    isLoading: boolean;
+    error: string | null;
+}
+
+export function useRecipesSummary(initialSummary?: Options) {
+    const [summary, setSummary] = useState<Options>(
+        initialSummary || {
+            titles: [],
+            cuisines: [],
+            tags: [],
+            dietaryRestrictions: [],
+            products: [],
+        }
+    );
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchSummary = async () => {
+            try {
+                setIsLoading(true);
+                const result = await getRecipesSummary();
+                setSummary(result);
+                setError(null);
+            } catch (err) {
+                console.error("Failed to load recipes summary:", err);
+                setError("Nie udało się pobrać podsumowania przepisów");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        if (!initialSummary) fetchSummary();
+    }, [initialSummary]);
+
+    return { summary, isLoading, error } as RecipesSummaryState;
 }
