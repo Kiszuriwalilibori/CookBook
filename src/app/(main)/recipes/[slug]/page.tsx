@@ -1,11 +1,10 @@
 import { notFound } from "next/navigation";
-// import { getRecipeBySlug } from "@/lib/sanity";
-import { getRecipeBySlug } from "@/lib/getRecipeBySlug";
 import { Recipe } from "@/lib/types";
 import { Box } from "@mui/material";
 import { Separator } from "@/components";
 import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton } from "./parts";
 import { styles } from "./styles";
+import { getRecipeBySlug } from "@/lib/getRecipeBySlug";
 
 interface Params {
     slug: string;
