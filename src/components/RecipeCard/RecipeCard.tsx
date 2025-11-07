@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardMedia, CardContent, Typography, Chip, Box } from "@mui/material";
 import NextLink from "next/link";
@@ -12,12 +11,12 @@ interface RecipeCardProps {
 }
 // components/RecipeCard.tsx (updated extraction to handle firstBlockText object)
 export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
-    const { title, description, preparationTime, slug } = recipe;
+    const { title, description, preparationTime, cookingTime, slug } = recipe;
     const contentText = description?.firstBlockText?.children?.map(child => child.text).join(" ") || ""; // Join texts from children array
     const descTitle = description?.title || contentText || "No description available."; // Prioritize title, then joined content text
     const imageUrl = description?.image?.asset?.url || "/placeholder-image.jpg";
     const prepTime = `${preparationTime || 0} min`;
-    
+    const cookTime = `${cookingTime || 0} min`;
     return (
         <NextLink href={`/recipes/${slug?.current}`} passHref style={{ textDecoration: "none", color: "inherit" }}>
             <Card sx={styles.card}>
@@ -32,8 +31,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
                     </Typography>
                     <Box sx={styles.details}>
                         <Chip label={prepTime} size="small" sx={styles.chip} />
-
-                        
+                        <Chip label={cookTime} size="small" sx={styles.chip} />
                     </Box>
                 </CardContent>
             </Card>

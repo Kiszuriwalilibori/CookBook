@@ -42,6 +42,7 @@ export async function getRecipesForCards(filters?: Partial<FilterState>): Promis
       }
     },
     preparationTime,
+    cookingTime,
     servings,
    
   } | order(_createdAt desc)`;
