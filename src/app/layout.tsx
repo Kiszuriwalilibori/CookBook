@@ -7,7 +7,7 @@ import "./globals.css";
 import { ThemeProvider } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { layoutContainerStyles, mainContentStyles } from "./layout.styles";
-import {getRecipesSummary} from "@/lib/getRecipesSummary";
+import { getRecipesSummary } from "@/lib/getRecipesSummary";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +18,7 @@ export const viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-    const { initialSummary, fetchError } = await getRecipesSummary();
+    const summary = await getRecipesSummary();
 
     return (
         <html lang="pl">
@@ -26,7 +26,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <ThemeProvider theme={theme}>
                     <body className={inter.className}>
                         <Box sx={layoutContainerStyles}>
-                            <Header initialSummary={initialSummary} fetchError={fetchError} />
+                            <Header initialSummary={summary} fetchError={null} />
                             <Box component="main" sx={mainContentStyles}>
                                 {children}
                             </Box>
