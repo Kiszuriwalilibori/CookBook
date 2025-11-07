@@ -1,29 +1,79 @@
+// import { groq } from "next-sanity";
+// import type { Recipe } from "./types";
+// import { client } from "./createClient";
+
+// export async function getRecipesForCards(): Promise<Recipe[]> {
+//     return client.fetch(
+//         groq`*[_type == "recipe"]{
+//       _id,
+//       title,
+//       slug { current },
+//       description {
+//       title,
+//         content[0] {
+//           children[0] { text } // Simple first-text extraction for description preview
+//         },
+//         image {
+//           asset-> {
+//             url
+//           },
+//           alt
+//         }
+//       },
+//       preparationTime,
+//       servings,
+//       difficulty
+//     }`
+//     );
+// }
+
+// lib/getRecipesForCards.ts
 import { groq } from "next-sanity";
 import type { Recipe } from "./types";
 import { client } from "./createClient";
+import type { FilterState } from "@/hooks/useFilters";
 
+/**
+ * Build a dynamic GROQ filter clause based on user filters.
+ */
+function buildFilterClause(filters?: Partial<FilterState>): string {
+    if (!filters) return "";
 
-export async function getRecipesForCards(): Promise<Recipe[]> {
-    return client.fetch(
-        groq`*[_type == "recipe"]{
-      _id,
+    const conditions: string[] = [];
+
+    if (filters.title) conditions.push(`title match "${filters.title}*"`);
+    if (filters.cuisine) conditions.push(`cuisine == "${filters.cuisine}"`);
+    if (filters.tag?.length) conditions.push(`count((tags[])[@ in ${JSON.stringify(filters.tag)}]) > 0`);
+    if (filters.dietary?.length) conditions.push(`count((dietaryRestrictions[])[@ in ${JSON.stringify(filters.dietary)}]) > 0`);
+    if (filters.product?.length) conditions.push(`count((ingredients[]->name)[@ in ${JSON.stringify(filters.product)}]) > 0`);
+
+    return conditions.length ? ` && ${conditions.join(" && ")}` : "";
+}
+
+/**
+ * Fetch recipes for cards — supports optional filters.
+ */
+export async function getRecipesForCards(filters?: Partial<FilterState>): Promise<Recipe[]> {
+    const where = buildFilterClause(filters);
+
+    const query = groq`*[_type == "recipe"${where}]{
+    _id,
+    title,
+    slug { current },
+    description {
       title,
-      slug { current },
-      description {
-      title,
-        content[0] {
-          children[0] { text } // Simple first-text extraction for description preview
-        },
-        image {
-          asset-> {
-            url
-          },
-          alt
-        }
+      content[0] {
+        children[0] { text }
       },
-      preparationTime,
-      servings,
-      difficulty
-    }`
-    );
+      image {
+        asset-> { url },
+        alt
+      }
+    },
+    preparationTime,
+    servings,
+    difficulty
+  } | order(_createdAt desc)`;
+
+    return client.fetch(query);
 }

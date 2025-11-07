@@ -10,7 +10,7 @@ import { FilterSummary, FilterAutocomplete } from "./parts";
 import { type FilterState } from "@/hooks/useFilters";
 import { useDietaryOptions, useFilters } from "@/hooks";
 import { Options } from "@/types";
-import { useFiltersStore } from "@/stores/useFiltersStore";
+import { useFiltersStore, useRecipesStore } from "@/stores";
 
 const MAX_VISIBLE_CHIPS = 3;
 const MAX_PRODUCTS_DISPLAYED = 50;
@@ -31,6 +31,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         dietaryRestrictions: options.dietaryRestrictions,
         noRestrictionsLabel: NO_DIETARY_RESTRICTIONS_LABEL,
     });
+    const { fetchFilteredRecipes } = useRecipesStore();
 
     const renderLimitedChips = useCallback(
         (value: readonly string[], key: "tag" | "product" | "dietary") => {
@@ -69,11 +70,11 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
     const handleApply = useCallback(() => {
         const success = apply();
         if (success) {
-            // Only update global store after user explicitly applies filters
+            fetchFilteredRecipes(filters); // Only update global store after user explicitly applies filters
             setFilters(filters);
             onClose?.();
         }
-    }, [apply, onClose, setFilters, filters]);
+    }, [apply, onClose, setFilters, fetchFilteredRecipes, filters]);
 
     const handleClear = useCallback(() => {
         clear();
