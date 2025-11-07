@@ -284,18 +284,7 @@ export default {
       title: 'Cuisine Type',
       type: 'string',
     },
-    {
-      name: 'difficulty',
-      title: 'Poziom trudności',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Łatwe', value: 'łatwe'},
-          {title: 'Trudne', value: 'trudne'},
-        ],
-      },
-      description: 'Wybierz poziom trudności przepisu.',
-    },
+
     {
       name: 'dietaryRestrictions',
       title: 'Dietary Restrictions',

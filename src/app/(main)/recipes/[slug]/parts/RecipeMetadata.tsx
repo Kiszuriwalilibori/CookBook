@@ -27,7 +27,7 @@ export function RecipeMetadata({ recipe }: RecipeMetadataProps) {
                     🍽️ {recipe.servings} {recipe.servings === 1 ? "porcja" : recipe.servings >= 2 && recipe.servings <= 4 ? "porcje" : "porcji"}
                 </Typography>
             )}
-            <Typography component="div">⭐ {recipe.difficulty}</Typography>
+
             {recipe.cuisine && <Typography component="div">🌍 {recipe.cuisine}</Typography>}
             {recipe.calories && (
                 <Typography component="div">

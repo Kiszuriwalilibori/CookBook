@@ -62,7 +62,6 @@ export interface Recipe {
     cookingTime?: number;
     servings?: number;
     cuisine?: string;
-    difficulty?: "łatwe" | "trudne";
     dietaryRestrictions?: string[];
     tags?: string[];
     notes?: string;
@@ -82,7 +81,6 @@ export const fieldTranslations: Record<string, string> = {
     dietaryRestrictions: "Rodzaj diety",
     tags: "Etykiety",
     cuisine: "Kuchnia",
-    difficulty: "Trudność",
     preparationTime: "Całkowity czas przygotowania",
     servings: "Porcje", // Not used directly; handled dynamically below
     notes: "Notatki",

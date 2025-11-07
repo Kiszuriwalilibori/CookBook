@@ -43,7 +43,7 @@ export async function getRecipesForCards(filters?: Partial<FilterState>): Promis
     },
     preparationTime,
     servings,
-    difficulty
+   
   } | order(_createdAt desc)`;
 
     return client.fetch(query);
