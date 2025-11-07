@@ -16,7 +16,7 @@ interface HeaderProps {
 const Header = ({ initialSummary, fetchError }: HeaderProps) => {
     const [showFilter, setShowFilter] = useState(false);
     const { summary: options, isLoading, error } = useRecipesSummary(initialSummary || undefined);
-    console.log(options, isLoading, error);
+    console.log("isLoading, error", isLoading, error);
 
     const isFiltersLoaded = options.titles.length > 0;
 

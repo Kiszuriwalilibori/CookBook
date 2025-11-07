@@ -65,3 +65,7 @@ export const labelSx = (theme: Theme): SxProps => ({
 });
 
 export const dividerSx = { mb: 2 };
+export const limitedChipBoxSx = (isScrollable: boolean): SxProps<Theme> => ({
+    ...chipContainerSx,
+    overflowY: isScrollable ? "auto" : "visible",
+});

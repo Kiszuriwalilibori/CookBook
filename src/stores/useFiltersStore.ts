@@ -68,7 +68,7 @@ export const useFiltersStore = create<FilterStore>((set, get) => ({
 
     setFilters: (newFilters: Partial<FilterState>) => {
         const current = get();
-        console.log("setFilters", newFilters);
+        
         set({
             filters: { ...current.filters, ...newFilters },
             errors: {}, // Clear errors on set

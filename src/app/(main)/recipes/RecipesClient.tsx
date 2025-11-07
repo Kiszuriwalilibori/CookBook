@@ -10,9 +10,7 @@ import { type Recipe } from "@/lib/types";
 
 export default function RecipesClient({ initialRecipes }: { initialRecipes: Recipe[] }) {
     const { recipes, setRecipes, loading, error } = useRecipesStore();
-    if (recipes) {
-        console.log(recipes, "recipes");
-    }
+    
     // hydrate store with SSR data
     useEffect(() => {
         setRecipes(initialRecipes);

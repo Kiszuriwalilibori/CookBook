@@ -17,7 +17,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
     const descTitle = description?.title || contentText || "No description available."; // Prioritize title, then joined content text
     const imageUrl = description?.image?.asset?.url || "/placeholder-image.jpg";
     const prepTime = `${preparationTime || 0} min`;
-    console.log(recipe);
+    
     return (
         <NextLink href={`/recipes/${slug?.current}`} passHref style={{ textDecoration: "none", color: "inherit" }}>
             <Card sx={styles.card}>
