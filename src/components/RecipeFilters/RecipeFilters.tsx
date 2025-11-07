@@ -7,7 +7,7 @@ import { fieldTranslations } from "@/lib/types";
 
 import { containerSx, fieldBoxSx, buttonGroupSx, chipContainerSx, chipSx, hiddenChipSx, dividerSx } from "./styles";
 import { FilterSummary, FilterAutocomplete } from "./parts";
-import { type FilterState } from "@/hooks/useFilters";
+import { FilterState } from "@/types";
 import { useDietaryOptions, useFilters } from "@/hooks";
 import { Options } from "@/types";
 import { useFiltersStore, useRecipesStore } from "@/stores";

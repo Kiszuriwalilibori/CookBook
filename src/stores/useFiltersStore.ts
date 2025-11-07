@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { type FilterState } from "@/hooks/useFilters";
+import { type FilterState } from "@/types";
 import { Options } from "@/types";
 
 const DEFAULT_FILTERS: FilterState = {
@@ -83,4 +83,3 @@ export const useFiltersStore = create<FilterStore>((set, get) => ({
         });
     },
 }));
-

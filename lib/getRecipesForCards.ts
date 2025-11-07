@@ -1,9 +1,8 @@
-
 // lib/getRecipesForCards.ts
 import { groq } from "next-sanity";
 import type { Recipe } from "./types";
 import { client } from "./createClient";
-import type { FilterState } from "@/hooks/useFilters";
+import type { FilterState } from "@/types";
 
 /**
  * Build a dynamic GROQ filter clause based on user filters.

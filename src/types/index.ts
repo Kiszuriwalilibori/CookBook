@@ -13,3 +13,5 @@ export interface Options {
     dietaryRestrictions: string[];
     products: string[];
 }
+export type { FilterState } from "@/hooks/useFilters";
+
