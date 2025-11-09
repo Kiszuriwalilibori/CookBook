@@ -56,6 +56,8 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         dietaryRestrictions: options.dietaryRestrictions,
         noRestrictionsLabel: NO_DIETARY_RESTRICTIONS_LABEL,
     });
+
+    console.log(options);
     const productOptions = useMemo(() => options.products.slice(0, MAX_PRODUCTS_DISPLAYED).sort((a, b) => a.localeCompare(b, "pl")), [options.products]);
 
     const handleApply = useCallback(() => {
