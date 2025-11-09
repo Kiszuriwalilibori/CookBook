@@ -134,7 +134,7 @@ export default {
       ],
     },
     {
-      name: 'Products',
+      name: 'products',
       title: 'Products',
       type: 'array',
       of: [{type: 'string'}],
