@@ -41,6 +41,11 @@ interface RecipeFiltersProps {
     options: Options;
 }
 
+const sanitizeOptions = (arr: unknown): string[] => {
+    if (!Array.isArray(arr)) return [];
+    return arr.filter((item): item is string => typeof item === "string" && item.trim() !== "");
+};
+
 export default function RecipeFilters({ onFiltersChange, onClose, options }: RecipeFiltersProps) {
     const theme = useTheme();
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
@@ -77,11 +82,15 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
 
     const filterFields: FilterField[] = useMemo(
         () =>
-            BASE_FILTER_FIELDS.map(base => ({
-                ...base,
-                options: base.key === "dietary" ? dietaryOptions.filter(o => o !== NO_DIETARY_RESTRICTIONS_LABEL) : base.key === "product" ? productOptions : options[`${base.key}s` as keyof Options],
-                placeholder: base.key === "dietary" ? NO_DIETARY_RESTRICTIONS_LABEL : undefined,
-            })),
+            BASE_FILTER_FIELDS.map(base => {
+                const rawOptions = base.key === "dietary" ? dietaryOptions.filter(o => o !== NO_DIETARY_RESTRICTIONS_LABEL) : base.key === "product" ? productOptions : options[`${base.key}s` as keyof Options];
+
+                return {
+                    ...base,
+                    options: sanitizeOptions(rawOptions),
+                    placeholder: base.key === "dietary" ? NO_DIETARY_RESTRICTIONS_LABEL : undefined,
+                };
+            }),
         [options, dietaryOptions, productOptions]
     );
 
