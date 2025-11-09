@@ -77,7 +77,7 @@ export async function POST(req) {
         }
 
         // fetch recipes
-        const groq = `*[_type == "recipe"]{Products, dietaryRestrictions, cuisine, tags, title}`;
+        const groq = `*[_type == "recipe"]{products, dietaryRestrictions, cuisine, tags, title}`;
         const query = encodeURIComponent(groq);
         const url = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${query}`;
         const fetchOpts = { method: "GET", headers: { "Content-Type": "application/json" } };
@@ -99,8 +99,8 @@ export async function POST(req) {
         const titlesSet = new Set();
 
         for (const r of recipes) {
-            if (Array.isArray(r.Products)) {
-                for (const p of r.Products) {
+            if (Array.isArray(r.products)) {
+                for (const p of r.products) {
                     const v = normalizeLower(p);
                     if (v) productsSet.add(v);
                 }

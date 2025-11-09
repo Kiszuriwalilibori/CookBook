@@ -24,7 +24,7 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
         name,
         quantity
       },
-      Products,
+      products,
       preparationSteps[] {
         content[],
         image {

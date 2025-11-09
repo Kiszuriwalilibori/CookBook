@@ -44,7 +44,7 @@ export interface Recipe {
         name: string;
         quantity: number;
     }>;
-    Products?: string[];
+    products?: string[];
     preparationSteps?: Array<{
         _key?: string; //
         content?: PortableTextBlock[];

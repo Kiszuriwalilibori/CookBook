@@ -41,7 +41,7 @@ export async function GET(
             query = groq`array::unique(*[_type == "recipe"].ingredients[].name) | order(string asc)`;
             break;
         case "products":
-            query = groq`array::unique(*[_type == "recipe"].Products[]) | order(string asc)`;
+            query = groq`array::unique(*[_type == "recipe"].products[]) | order(string asc)`;
             break;
         default:
             return NextResponse.json({ error: `Unsupported field: ${field}` }, { status: 400 });
