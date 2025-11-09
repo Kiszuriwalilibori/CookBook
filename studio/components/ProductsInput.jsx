@@ -284,6 +284,7 @@
 // }
 
 // export default ProductsInput
+
 import React, {useEffect, useState, useRef} from 'react'
 import PropTypes from 'prop-types'
 import {useFormValue, PatchEvent, set} from 'sanity'
@@ -294,6 +295,7 @@ const ProductsInput = (props) => {
   const ingredients = useFormValue(['ingredients'])
   const [newProduct, setNewProduct] = useState('')
   const prevIngredientsRef = useRef(ingredients)
+  const isUpdatingRef = useRef(false) // Flag to prevent recursion
 
   // Extract last word from ingredient names
   const computeProducts = (ingredients) => {
@@ -307,45 +309,52 @@ const ProductsInput = (props) => {
         return words[words.length - 1] || ''
       })
       .filter(Boolean)
-    return [...new Set(products)] // dedupe
+    return [...new Set(products)].sort() // Consistent sort for comparison
   }
 
   /**
    * Auto-derive products whenever ingredients change:
-   * Set if products are empty OR if current products match the previous derivation (no manual edits).
-   * This updates for new ingredients without overriding manual changes.
+   * Only update if products are empty or if ingredients actually changed (not self-update).
+   * Use ref for prev to avoid dep loop.
    */
   useEffect(() => {
+    if (isUpdatingRef.current) return // Skip if we're in the middle of an update
     if (!ingredients || ingredients.length === 0) return
 
     const derived = computeProducts(ingredients)
     const currentProducts = value || []
-    const prevIngredients = prevIngredientsRef.current
-    const prevDerived = computeProducts(prevIngredients)
 
-    // Compare sorted joined strings to detect if current is auto-derived (ignores order)
-    const currentStr = currentProducts.sort().join(',')
-    const prevDerivedStr = prevDerived.sort().join(',')
-
-    if (currentProducts.length === 0 || currentStr === prevDerivedStr) {
-      // Empty or no manual change: update to new derivation
+    // Only update if empty or if derivation differs (stable compare)
+    if (
+      currentProducts.length === 0 ||
+      JSON.stringify(derived) !== JSON.stringify(currentProducts)
+    ) {
+      isUpdatingRef.current = true
       onChange(PatchEvent.from(set(derived)))
+      // Reset flag after microtask to allow value update
+      Promise.resolve().then(() => {
+        isUpdatingRef.current = false
+      })
     }
 
     // Always update ref
     prevIngredientsRef.current = ingredients
-  }, [ingredients, onChange, value])
+  }, [ingredients, onChange, value]) // Keep value dep but flag protects
 
   // --- Manual edit handlers ---
 
   const updateProducts = (updaterFn) => {
+    isUpdatingRef.current = true
     const updated = updaterFn(value)
     onChange(PatchEvent.from(set(updated)))
+    Promise.resolve().then(() => {
+      isUpdatingRef.current = false
+    })
   }
 
   const addProduct = () => {
     if (newProduct && !value.includes(newProduct)) {
-      updateProducts((current) => [...current, newProduct])
+      updateProducts((current) => [...current, newProduct].sort()) // Sort for consistency
       setNewProduct('')
     }
   }
@@ -355,13 +364,13 @@ const ProductsInput = (props) => {
       updateProducts((current) => {
         const updated = [...current]
         updated[index] = newValue
-        return updated
+        return updated.sort() // Sort after edit
       })
     }
   }
 
   const removeProduct = (index) => {
-    updateProducts((current) => current.filter((_, i) => i !== index))
+    updateProducts((current) => current.filter((_, i) => i !== index).sort())
   }
 
   return (
