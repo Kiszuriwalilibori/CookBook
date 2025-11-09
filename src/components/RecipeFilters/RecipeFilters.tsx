@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { Box, Button, Typography, Divider } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { fieldTranslations } from "@/lib/types";
@@ -47,6 +48,7 @@ const sanitizeOptions = (arr: unknown): string[] => {
 };
 
 export default function RecipeFilters({ onFiltersChange, onClose, options }: RecipeFiltersProps) {
+    const router = useRouter();
     const theme = useTheme();
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
@@ -57,16 +59,30 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         noRestrictionsLabel: NO_DIETARY_RESTRICTIONS_LABEL,
     });
 
-    console.log(options);
     const productOptions = useMemo(() => options.products.slice(0, MAX_PRODUCTS_DISPLAYED).sort((a, b) => a.localeCompare(b, "pl")), [options.products]);
-
-    const handleApply = useCallback(() => {
+    const buildQueryString = useCallback((filters: FilterState): string => {
+        const params = new URLSearchParams();
+        Object.entries(filters).forEach(([key, value]) => {
+            if (value && value !== "") {
+                if (Array.isArray(value)) {
+                    value.forEach(v => params.append(key, v));
+                } else {
+                    params.set(key, value);
+                }
+            }
+        });
+        return params.toString();
+    }, []);
+    const handleApply = useCallback(async () => {
         if (apply()) {
-            fetchFilteredRecipes(filters);
             setFilters(filters);
+            await fetchFilteredRecipes(filters);
+            const queryString = buildQueryString(filters);
+            router.push(`/recipes${queryString ? `?${queryString}` : ""}`);
+
             onClose?.();
         }
-    }, [apply, filters, fetchFilteredRecipes, setFilters, onClose]);
+    }, [apply, filters, fetchFilteredRecipes, setFilters, onClose, router, buildQueryString]);
 
     const handleClear = useCallback(() => {
         clear();

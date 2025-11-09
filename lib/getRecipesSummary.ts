@@ -36,6 +36,6 @@ export async function getRecipesSummary(): Promise<Options> {
     "cuisines": array::unique(*[_type == "recipe"].cuisine),
     "tags": array::unique(*[_type == "recipe"].tags[]),
     "dietaryRestrictions": array::unique(*[_type == "recipe"].dietaryRestrictions[]),
-    "products": array::unique(*[_type == "recipe"].products[]),
+   "products": array::unique(*[_type == "recipe" && defined(products)][].products[defined(@) && @ != ""]),
   }`);
 }
