@@ -166,7 +166,125 @@
 
 // export default ProductsInput
 
-import React, {useEffect, useState} from 'react'
+// import React, {useEffect, useState} from 'react'
+// import PropTypes from 'prop-types'
+// import {useFormValue, PatchEvent, set} from 'sanity'
+// import {Box, Button, Flex, TextInput, Label, Card} from '@sanity/ui'
+
+// const ProductsInput = (props) => {
+//   const {value = [], onChange} = props
+//   const ingredients = useFormValue(['ingredients'])
+//   const [newProduct, setNewProduct] = useState('')
+
+//   // Extract last word from ingredient names
+//   const computeProducts = (ingredients) => {
+//     if (!ingredients || !Array.isArray(ingredients)) {
+//       return []
+//     }
+//     const products = ingredients
+//       .map((ingredient) => {
+//         const name = ingredient?.name || ''
+//         const words = name.trim().split(/\s+/)
+//         return words[words.length - 1] || ''
+//       })
+//       .filter(Boolean)
+//     return [...new Set(products)] // dedupe
+//   }
+
+//   /**
+//    * Auto-derive products only once:
+//    * If products are empty and ingredients exist, initialize them.
+//    * Otherwise, never auto-update again.
+//    */
+//   useEffect(() => {
+//     if (!ingredients || ingredients.length === 0) return
+//     if (value && value.length > 0) return // already initialized
+
+//     const derived = computeProducts(ingredients)
+//     if (derived.length > 0) {
+//       onChange(PatchEvent.from(set(derived)))
+//     }
+//   }, [ingredients, onChange, value])
+
+//   // --- Manual edit handlers ---
+
+//   const updateProducts = (updaterFn) => {
+//     const updated = updaterFn(value)
+//     onChange(PatchEvent.from(set(updated)))
+//   }
+
+//   const addProduct = () => {
+//     if (newProduct && !value.includes(newProduct)) {
+//       updateProducts((current) => [...current, newProduct])
+//       setNewProduct('')
+//     }
+//   }
+
+//   const editProduct = (index, newValue) => {
+//     if (newValue !== value[index]) {
+//       updateProducts((current) => {
+//         const updated = [...current]
+//         updated[index] = newValue
+//         return updated
+//       })
+//     }
+//   }
+
+//   const removeProduct = (index) => {
+//     updateProducts((current) => current.filter((_, i) => i !== index))
+//   }
+
+//   return (
+//     <Card padding={3} tone="default">
+//       <Label>Products</Label>
+//       <Box marginTop={2}>
+//         {/* Display existing products */}
+//         {value.length > 0 ? (
+//           value.map((product, index) => (
+//             <Flex key={index} align="center" marginBottom={2} gap={2}>
+//               <TextInput
+//                 value={product || ''}
+//                 onChange={(e) => editProduct(index, e.target.value)}
+//                 placeholder="Product name"
+//               />
+//               <Button
+//                 text="Remove"
+//                 mode="ghost"
+//                 tone="critical"
+//                 onClick={() => removeProduct(index)}
+//               />
+//             </Flex>
+//           ))
+//         ) : (
+//           <Box>No products yet</Box>
+//         )}
+
+//         {/* Input for adding new products */}
+//         <Flex align="center" gap={2} marginTop={3}>
+//           <TextInput
+//             value={newProduct}
+//             onChange={(e) => setNewProduct(e.target.value)}
+//             placeholder="Add a new product"
+//             onKeyPress={(e) => {
+//               if (e.key === 'Enter') {
+//                 addProduct()
+//               }
+//             }}
+//           />
+//           <Button text="Add" tone="primary" onClick={addProduct} />
+//         </Flex>
+//       </Box>
+//     </Card>
+//   )
+// }
+
+// ProductsInput.propTypes = {
+//   value: PropTypes.arrayOf(PropTypes.string),
+//   onChange: PropTypes.func.isRequired,
+// }
+
+// export default ProductsInput
+import React, {useEffect, useState, useRef} from 'react'
 import PropTypes from 'prop-types'
 import {useFormValue, PatchEvent, set} from 'sanity'
 import {Box, Button, Flex, TextInput, Label, Card} from '@sanity/ui'
@@ -175,6 +293,7 @@ const ProductsInput = (props) => {
   const {value = [], onChange} = props
   const ingredients = useFormValue(['ingredients'])
   const [newProduct, setNewProduct] = useState('')
+  const prevIngredientsRef = useRef(ingredients)
 
   // Extract last word from ingredient names
   const computeProducts = (ingredients) => {
@@ -192,18 +311,29 @@ const ProductsInput = (props) => {
   }
 
   /**
-   * Auto-derive products only once:
-   * If products are empty and ingredients exist, initialize them.
-   * Otherwise, never auto-update again.
+   * Auto-derive products whenever ingredients change:
+   * Set if products are empty OR if current products match the previous derivation (no manual edits).
+   * This updates for new ingredients without overriding manual changes.
    */
   useEffect(() => {
     if (!ingredients || ingredients.length === 0) return
-    if (value && value.length > 0) return // already initialized
 
     const derived = computeProducts(ingredients)
-    if (derived.length > 0) {
+    const currentProducts = value || []
+    const prevIngredients = prevIngredientsRef.current
+    const prevDerived = computeProducts(prevIngredients)
+
+    // Compare sorted joined strings to detect if current is auto-derived (ignores order)
+    const currentStr = currentProducts.sort().join(',')
+    const prevDerivedStr = prevDerived.sort().join(',')
+
+    if (currentProducts.length === 0 || currentStr === prevDerivedStr) {
+      // Empty or no manual change: update to new derivation
       onChange(PatchEvent.from(set(derived)))
     }
+
+    // Always update ref
+    prevIngredientsRef.current = ingredients
   }, [ingredients, onChange, value])
 
   // --- Manual edit handlers ---
