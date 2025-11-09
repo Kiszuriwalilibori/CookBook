@@ -21,7 +21,7 @@ export const useRecipesStore = create<RecipesStore>(set => ({
     fetchFilteredRecipes: async filters => {
         try {
             set({ loading: true, error: null });
-
+            console.log("filters", filters);
             const res = await fetch("/api/recipes", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -31,6 +31,7 @@ export const useRecipesStore = create<RecipesStore>(set => ({
             if (!res.ok) throw new Error("Błąd podczas pobierania przepisów");
 
             const data = await res.json();
+            console.log("data", data);
             set({ recipes: data, loading: false });
         } catch (err: unknown) {
             const msg = err instanceof Error ? err.message : "Nieznany błąd";

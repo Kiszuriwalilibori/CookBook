@@ -27,7 +27,7 @@ const BASE_FILTER_FIELDS = [
     { key: "cuisine", label: fieldTranslations.cuisine, multiple: false },
     { key: "tag", label: fieldTranslations.tags, multiple: true, chips: true },
     { key: "dietary", label: fieldTranslations.dietaryRestrictions, multiple: true, chips: true },
-    { key: "product", label: "Produkt", multiple: true, chips: true },
+    { key: "product", label: fieldTranslations.product, multiple: true, chips: true },
 ] as const;
 
 // 🔹 valid chip field keys
