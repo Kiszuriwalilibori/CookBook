@@ -14,4 +14,3 @@ export interface Options {
     products: string[];
 }
 export type { FilterState } from "@/hooks/useFilters";
-
