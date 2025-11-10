@@ -53,7 +53,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
     const { fetchFilteredRecipes } = useRecipesStore();
-
+    console.log("options", options);
     const dietaryOptions = useDietaryOptions({
         dietaryRestrictions: options.dietaryRestrictions,
         noRestrictionsLabel: NO_DIETARY_RESTRICTIONS_LABEL,
