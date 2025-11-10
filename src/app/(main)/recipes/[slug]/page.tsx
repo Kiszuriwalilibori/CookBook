@@ -9,6 +9,7 @@ import { getRecipeBySlug } from "@/lib/getRecipeBySlug";
 interface Params {
     slug: string;
 }
+export const revalidate = 3600;
 
 export default async function RecipePage({ params }: { params: Promise<Params> }) {
     const { slug } = await params;
