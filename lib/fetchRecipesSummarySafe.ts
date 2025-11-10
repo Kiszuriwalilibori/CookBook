@@ -35,6 +35,7 @@ export async function fetchRecipesSummarySafe(): Promise<{
         };
 
         const sanitized = clean(data) as Options;
+        console.log("sanitized", sanitized);
 
         if (faulty.length > 0) {
             console.warn("⚠️ Faulty values found in recipes summary:", faulty);

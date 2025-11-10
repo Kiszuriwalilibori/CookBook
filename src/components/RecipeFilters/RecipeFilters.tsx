@@ -52,6 +52,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
     const theme = useTheme();
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
+    console.log("filters", filters);
     const { fetchFilteredRecipes } = useRecipesStore();
     console.log("options", options);
     const dietaryOptions = useDietaryOptions({

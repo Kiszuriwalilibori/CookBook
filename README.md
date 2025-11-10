@@ -74,3 +74,14 @@ optimize hook with SWR Librrary
 
 
 
+
+
+
+getRecipeSSummay:
+
+Further Sanity Query OptimizationsBy "optimize further," I meant scaling beyond basic aggregation for performance/cost in larger datasets (e.g., 10k+ recipes). Sanity's GROQ is efficient, but here's a prioritized list:Projections (Reduce Payload): Only fetch needed fields—your current query is lean, but add explicit projection if expanding:ts
+
+
+
+
+
