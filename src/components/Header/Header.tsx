@@ -47,6 +47,12 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
         }
     }, [showFilter]);
 
+    useEffect(() => {
+        if (fetchError) {
+            console.error("⚠️ Server-side fetch error (from RootLayout):", fetchError);
+        }
+    }, [fetchError]);
+
     return (
         <>
             <Menu navItems={navItems} />
