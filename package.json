@@ -47,10 +47,12 @@
         "autoprefixer": "^10.4.21",
         "eslint": "^9",
         "eslint-config-next": "15.5.4",
+        "jest-environment-jsdom": "^29.7.0",
         "postcss-flexbugs-fixes": "^5.0.2",
         "postcss-preset-env": "^10.4.0",
         "tailwindcss": "^4",
         "ts-jest": "^29.4.5",
+        "ts-node": "^10.9.2",
         "typescript": "^5.9.3"
     }
 }

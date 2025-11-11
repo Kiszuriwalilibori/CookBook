@@ -2,30 +2,34 @@ import type { Config } from "jest";
 import nextJest from "next/jest.js";
 
 const createJestConfig = nextJest({
-    dir: "./",
+    dir: "./", // Root: CookBook/
 });
 
 const customJestConfig: Config = {
-    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"], // Zmień na .ts, jeśli setup jest w TS
-    testEnvironment: "jest-environment-jsdom", // Dla React/Next.js
+    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+    testEnvironment: "jest-environment-jsdom",
     moduleNameMapper: {
-        // Mapowanie dla aliasów Next.js (np. @/ -> src/)
+        // Opcjonalnie: Alias dla src/ (jeśli masz w tsconfig.json)
         "^@/(.*)$": "<rootDir>/src/$1",
     },
-    // KLUCZOWE: Szukaj testów obok plików źródłowych (jak prosiłeś)
+    // KLUCZOWE: Szukaj w lib/ I src/
     testMatch: [
-        "<rootDir>/src/**/*.test.{js,jsx,ts,tsx}", // np. src/components/MyComponent.test.tsx
+        "<rootDir>/lib/**/*.test.{js,jsx,ts,tsx}",
+        "<rootDir>/lib/**/*.spec.{js,jsx,ts,tsx}",
+        "<rootDir>/src/**/*.test.{js,jsx,ts,tsx}", // NOWOŚĆ: src/
         "<rootDir>/src/**/*.spec.{js,jsx,ts,tsx}",
     ],
-    // Ignoruj foldery
-    testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
-    // Pokrycie kodu
-    collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}", "!src/**/*.d.ts"],
-    // Dla TS: Użyj ts-jest jako transformer (jeśli potrzeba)
+    // Ignoruj node_modules, .next i studio
+    testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/", "<rootDir>/studio/node_modules/"],
+    collectCoverageFrom: [
+        "lib/**/*.{js,jsx,ts,tsx}",
+        "src/**/*.{js,jsx,ts,tsx}", // NOWOŚĆ: Pokrycie też z src/
+        "!lib/**/*.d.ts",
+        "!src/**/*.d.ts",
+    ],
     transform: {
         "^.+\\.(ts|tsx)$": "ts-jest",
     },
 };
 
-// Utwórz i wyeksportuj konfigurację
 export default createJestConfig(customJestConfig);

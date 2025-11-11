@@ -1,4 +1,6 @@
+// Updated fetchRecipesSummarySafe function
 import { getRecipesSummary } from "@/lib/getRecipesSummary";
+import { cleanSummary } from "@/lib/cleanSummary"; // Adjust path as needed
 import type { Options } from "@/types";
 
 /**
@@ -11,41 +13,20 @@ export async function fetchRecipesSummarySafe(): Promise<{
     error: string | null;
 }> {
     try {
-        const data = await getRecipesSummary();
+        const rawSummary = await getRecipesSummary();
 
-        // helper to define what counts as faulty
-        const isFaulty = (v: unknown): boolean => v === null || v === undefined || v === "";
-
-        // recursively clean and collect faulty values
-        const faulty: unknown[] = [];
-        const clean = (obj: unknown): unknown => {
-            if (Array.isArray(obj)) {
-                return obj
-                    .filter(v => {
-                        const bad = isFaulty(v);
-                        if (bad) faulty.push(v);
-                        return !bad;
-                    })
-                    .map(clean);
-            }
-            if (typeof obj === "object" && obj !== null) {
-                return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, clean(v)]));
-            }
-            return obj;
-        };
-
-        const sanitized = clean(data) as Options;
-        console.log("sanitized", sanitized);
+        const { sanitizedSummary, faulty } = cleanSummary(rawSummary);
+        console.log("sanitized", sanitizedSummary);
 
         if (faulty.length > 0) {
             console.warn("⚠️ Faulty values found in recipes summary:", faulty);
             return {
-                summary: sanitized,
+                summary: sanitizedSummary,
                 error: "Niektóre dane zawierały błędy i zostały oczyszczone.",
             };
         }
 
-        return { summary: sanitized, error: null };
+        return { summary: sanitizedSummary, error: null };
     } catch (err) {
         console.error("❌ Failed to fetch recipes summary:", err);
         return {
