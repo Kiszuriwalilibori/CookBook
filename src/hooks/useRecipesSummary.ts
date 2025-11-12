@@ -27,8 +27,12 @@ export function useRecipesSummary(initialSummary?: Options) {
         const fetchSummary = async () => {
             try {
                 setIsLoading(true);
-                const result = await getRecipesSummary();
-                setSummary(result);
+                const { sanitizedSummary, sanitizeIssues } = await getRecipesSummary();
+                setSummary(sanitizedSummary);
+                if (sanitizeIssues.length > 0) {
+                    console.warn("⚠️ Faulty values found in recipes summary:", sanitizeIssues);
+                    setError("Niektóre dane zawierały błędy i zostały oczyszczone.");
+                }
                 setError(null);
             } catch (err) {
                 console.error("Failed to load recipes summary:", err);
@@ -38,7 +42,7 @@ export function useRecipesSummary(initialSummary?: Options) {
             }
         };
 
-        if (!initialSummary) fetchSummary();
+        /*if (!initialSummary)*/ fetchSummary();
     }, [initialSummary]);
 
     return { summary, isLoading, error } as RecipesSummaryState;

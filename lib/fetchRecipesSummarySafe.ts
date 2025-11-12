@@ -1,7 +1,8 @@
 // Updated fetchRecipesSummarySafe function
 import { getRecipesSummary } from "@/lib/getRecipesSummary";
-import { cleanSummary, initialSummary } from "@/lib/cleanSummary/cleanSummary"; // Adjust path as needed
+// import { sanitizeSummary } from "@/lib/cleanSummary/sanitizeSummary"; // Adjust path as needed
 import type { Options } from "@/types";
+import { initialSummary } from "./cleanSummary/helpers";
 
 /**
  * Fetches recipes summary from Sanity safely.
@@ -13,12 +14,13 @@ export async function fetchRecipesSummarySafe(): Promise<{
     error: string | null;
 }> {
     try {
-        const rawSummary = await getRecipesSummary();
+        // const rawSummary = await getRecipesSummary();
 
-        const { sanitizedSummary, faulty } = cleanSummary(rawSummary);
+        const { sanitizedSummary, sanitizeIssues } = await getRecipesSummary();
+        // sanitizeSummary(rawSummary);
 
-        if (faulty.length > 0) {
-            console.warn("⚠️ Faulty values found in recipes summary:", faulty);
+        if (sanitizeIssues.length > 0) {
+            console.warn("⚠️ Faulty values found in recipes summary:", sanitizeIssues);
             return {
                 summary: sanitizedSummary,
                 error: "Niektóre dane zawierały błędy i zostały oczyszczone.",

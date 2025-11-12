@@ -1,5 +1,5 @@
 import type { Options } from "@/types";
-import { CLEAN_SUMMARY_MESSAGES, initialSummary } from "./helpers";
+import { CLEAN_SUMMARY_MESSAGES, INITIAL_SANITIZE_ISSUES, initialSummary } from "./helpers";
 
 // 🟩 Centralized diagnostic message templates
 
@@ -7,16 +7,16 @@ import { CLEAN_SUMMARY_MESSAGES, initialSummary } from "./helpers";
  * Cleans an object or array by removing faulty values
  * (null, undefined, or empty string) and collects issues for reporting.
  */
-export function cleanSummary(summary: unknown): { sanitizedSummary: Options; faulty: string[] } {
+export function sanitizeSummary(summary: unknown): { sanitizedSummary: Options; sanitizeIssues: string[] } {
     const faulties = new Set<unknown>([null, "", undefined]);
     const isFaulty = (value: unknown): boolean => faulties.has(value);
 
-    const faulty: string[] = [];
+    const sanitizeIssues: string[] = INITIAL_SANITIZE_ISSUES;
 
     // 🧩 Handle null / non-object / array
     if (typeof summary !== "object" || summary === null || Array.isArray(summary)) {
-        faulty.push(CLEAN_SUMMARY_MESSAGES.NOT_AN_OBJECT(typeof summary));
-        return { sanitizedSummary: { ...initialSummary }, faulty };
+        sanitizeIssues.push(CLEAN_SUMMARY_MESSAGES.NOT_AN_OBJECT(typeof summary));
+        return { sanitizedSummary: { ...initialSummary }, sanitizeIssues };
     }
 
     const clean = (obj: unknown): unknown => {
@@ -25,7 +25,7 @@ export function cleanSummary(summary: unknown): { sanitizedSummary: Options; fau
 
             for (const value of obj) {
                 if (isFaulty(value)) {
-                    faulty.push(CLEAN_SUMMARY_MESSAGES.REMOVED_FAULTY_VALUE(value));
+                    sanitizeIssues.push(CLEAN_SUMMARY_MESSAGES.REMOVED_FAULTY_VALUE(value));
                     continue;
                 }
                 cleanedArray.push(clean(value));
@@ -43,14 +43,14 @@ export function cleanSummary(summary: unknown): { sanitizedSummary: Options; fau
             // Detect unexpected keys
             for (const key of inputKeys) {
                 if (!allowedKeys.includes(key)) {
-                    faulty.push(CLEAN_SUMMARY_MESSAGES.UNEXPECTED_FIELD(key));
+                    sanitizeIssues.push(CLEAN_SUMMARY_MESSAGES.UNEXPECTED_FIELD(key));
                 }
             }
 
             // Detect missing keys
             for (const key of allowedKeys) {
                 if (!(key in obj)) {
-                    faulty.push(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD(key));
+                    sanitizeIssues.push(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD(key));
                 }
             }
 
@@ -60,7 +60,7 @@ export function cleanSummary(summary: unknown): { sanitizedSummary: Options; fau
 
                     if (Array.isArray(expected)) {
                         if (!Array.isArray(value)) {
-                            faulty.push(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD(key, typeof value));
+                            sanitizeIssues.push(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD(key, typeof value));
                             result[key as keyof Options] = [] as Options[keyof Options];
                             continue;
                         }
@@ -76,7 +76,5 @@ export function cleanSummary(summary: unknown): { sanitizedSummary: Options; fau
     };
 
     const sanitizedSummary = clean(summary) as Options;
-    return { sanitizedSummary, faulty };
+    return { sanitizedSummary, sanitizeIssues };
 }
-export { initialSummary };
-

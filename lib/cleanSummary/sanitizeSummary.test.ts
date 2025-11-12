@@ -1,4 +1,5 @@
-import { cleanSummary, CLEAN_SUMMARY_MESSAGES } from "../cleanSummary";
+import { sanitizeSummary } from "./sanitizeSummary";
+import { CLEAN_SUMMARY_MESSAGES } from "./helpers";
 import type { Options } from "@/types";
 
 describe("cleanSummary", () => {
@@ -11,7 +12,7 @@ describe("cleanSummary", () => {
     };
 
     test("1️⃣ detects when a non-object is passed", () => {
-        const result = cleanSummary(null);
+        const result = sanitizeSummary(null);
         expect(result.sanitizedSummary).toEqual({
             titles: [],
             cuisines: [],
@@ -19,7 +20,7 @@ describe("cleanSummary", () => {
             dietaryRestrictions: [],
             products: [],
         });
-        expect(result.faulty).toContain(CLEAN_SUMMARY_MESSAGES.NOT_AN_OBJECT("object"));
+        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_AN_OBJECT("object"));
     });
 
     test("2️⃣ detects extra fields beyond Options", () => {
@@ -28,9 +29,9 @@ describe("cleanSummary", () => {
             extraField: ["oops"],
         } as unknown as Options;
 
-        const result = cleanSummary(input);
+        const result = sanitizeSummary(input);
 
-        expect(result.faulty).toContain(CLEAN_SUMMARY_MESSAGES.UNEXPECTED_FIELD("extraField"));
+        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.UNEXPECTED_FIELD("extraField"));
     });
 
     test("3️⃣ detects missing fields", () => {
@@ -38,10 +39,10 @@ describe("cleanSummary", () => {
             titles: ["Only titles"],
         } as Partial<Options>;
 
-        const result = cleanSummary(input);
+        const result = sanitizeSummary(input);
 
-        expect(result.faulty).toContain(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD("cuisines"));
-        expect(result.faulty).toContain(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD("tags"));
+        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD("cuisines"));
+        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD("tags"));
     });
 
     test("4️⃣ ensures all key values are arrays and records faults", () => {
@@ -53,13 +54,13 @@ describe("cleanSummary", () => {
             products: ["Fine"],
         } as unknown as Options;
 
-        const result = cleanSummary(input);
+        const result = sanitizeSummary(input);
 
         expect(result.sanitizedSummary.cuisines).toEqual([]);
         expect(result.sanitizedSummary.dietaryRestrictions).toEqual([]);
 
-        expect(result.faulty).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("cuisines", "string"));
-        expect(result.faulty).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("dietaryRestrictions", "object"));
+        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("cuisines", "string"));
+        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("dietaryRestrictions", "object"));
     });
 
     test("5️⃣ removes faulty array values", () => {
@@ -68,10 +69,10 @@ describe("cleanSummary", () => {
             titles: ["Good", "", null as unknown as string],
         };
 
-        const result = cleanSummary(input);
+        const result = sanitizeSummary(input);
 
         expect(result.sanitizedSummary.titles).toEqual(["Good"]);
-        expect(result.faulty).toContain(CLEAN_SUMMARY_MESSAGES.REMOVED_FAULTY_VALUE(""));
-        expect(result.faulty).toContain(CLEAN_SUMMARY_MESSAGES.REMOVED_FAULTY_VALUE(null));
+        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.REMOVED_FAULTY_VALUE(""));
+        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.REMOVED_FAULTY_VALUE(null));
     });
 });

@@ -16,3 +16,5 @@ export const initialSummary: Options = {
     dietaryRestrictions: [],
     products: [],
 };
+
+export const INITIAL_SANITIZE_ISSUES: string[] = [];
