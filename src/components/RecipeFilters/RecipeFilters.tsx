@@ -4,31 +4,12 @@ import React, { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Typography, Divider } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { fieldTranslations } from "@/lib/types";
 import { containerSx, fieldBoxSx, buttonGroupSx, dividerSx } from "./styles";
 import { FilterSummary, FilterAutocomplete } from "./parts";
 import { FilterState, Options } from "@/types";
-import { useDietaryOptions, useFilters } from "@/hooks";
+import { useDietaryOptions, useFilters, useCreateRecipeFilterFields } from "@/hooks";
 import { useFiltersStore } from "@/stores";
 import { renderLimitedChips } from "./parts/renderLimitedChips";
-
-interface FilterField {
-    key: keyof FilterState;
-    label: string;
-    multiple: boolean;
-    chips?: boolean;
-    options: string[];
-    placeholder?: string;
-}
-
-// 🔹 build dynamic filter fields
-const BASE_FILTER_FIELDS = [
-    { key: "title", label: fieldTranslations.title, multiple: false },
-    { key: "cuisine", label: fieldTranslations.cuisine, multiple: false },
-    { key: "tag", label: fieldTranslations.tags, multiple: true, chips: true },
-    { key: "dietary", label: fieldTranslations.dietaryRestrictions, multiple: true, chips: true },
-    { key: "product", label: fieldTranslations.product, multiple: true, chips: true },
-] as const;
 
 // 🔹 valid chip field keys
 export type ChipFieldKey = "tag" | "product" | "dietary";
@@ -41,11 +22,6 @@ interface RecipeFiltersProps {
     onClose?: () => void;
     options: Options;
 }
-
-const sanitizeOptions = (arr: unknown): string[] => {
-    if (!Array.isArray(arr)) return [];
-    return arr.filter((item): item is string => typeof item === "string" && item.trim() !== "");
-};
 
 export default function RecipeFilters({ onFiltersChange, onClose, options }: RecipeFiltersProps) {
     const router = useRouter();
@@ -92,20 +68,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         }),
         [errors]
     );
-
-    const filterFields: FilterField[] = useMemo(
-        () =>
-            BASE_FILTER_FIELDS.map(base => {
-                const rawOptions = base.key === "dietary" ? dietaryOptions.filter(o => o !== NO_DIETARY_RESTRICTIONS_LABEL) : base.key === "product" ? productOptions : options[`${base.key}s` as keyof Options];
-
-                return {
-                    ...base,
-                    options: sanitizeOptions(rawOptions),
-                    placeholder: base.key === "dietary" ? NO_DIETARY_RESTRICTIONS_LABEL : undefined,
-                };
-            }),
-        [options, dietaryOptions, productOptions]
-    );
+    const filterFields = useCreateRecipeFilterFields(options, dietaryOptions, productOptions);
 
     return (
         <Box sx={containerSx}>
@@ -150,3 +113,5 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         </Box>
     );
 }
+
+// todo : dietary restrictions vs dietary options, czy potrzebna zmiana?

@@ -1,23 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
-
 import { Grid, Box, Typography, Alert } from "@mui/material";
-import { PageTitle } from "@/components";
-import RecipeCard from "@/components/RecipeCard";
+import { PageTitle, RecipeCard } from "@/components";
 import { gridSize, pageContainerStyle } from "./styles";
 import { useRecipesStore } from "@/stores/useRecipesStore";
 import { type Recipe } from "@/lib/types";
+import { useSyncRecipesStore } from "@/hooks";
 
 export default function RecipesClient({ initialRecipes }: { initialRecipes: Recipe[] }) {
-    const { recipes, setRecipes, loading, error } = useRecipesStore(); 
+    const { recipes, loading, error } = useRecipesStore();
 
-    // Sync store with SSR props whenever they change (e.g., on navigation)
-    useEffect(() => {
-        if (initialRecipes.length > 0) {
-            setRecipes(initialRecipes);
-        }
-    }, [initialRecipes, setRecipes]);
+    useSyncRecipesStore(initialRecipes);
 
     const displayRecipes = recipes.length > 0 ? recipes : initialRecipes;
 
