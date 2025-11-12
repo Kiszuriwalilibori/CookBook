@@ -10,7 +10,7 @@ interface RecipesPageProps {
 export const revalidate = 3600;
 
 export default async function RecipesPage({ searchParams }: RecipesPageProps) {
-    
+
     const awaitedSearchParams = await searchParams;
 
     const filters: Partial<FilterState> = {

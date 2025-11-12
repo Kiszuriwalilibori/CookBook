@@ -9,7 +9,7 @@ import { containerSx, fieldBoxSx, buttonGroupSx, dividerSx } from "./styles";
 import { FilterSummary, FilterAutocomplete } from "./parts";
 import { FilterState, Options } from "@/types";
 import { useDietaryOptions, useFilters } from "@/hooks";
-import { useFiltersStore, useRecipesStore } from "@/stores";
+import { useFiltersStore } from "@/stores";
 import { renderLimitedChips } from "./parts/renderLimitedChips";
 
 interface FilterField {
@@ -52,9 +52,6 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
     const theme = useTheme();
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
-    console.log("filters", filters);
-    const { fetchFilteredRecipes } = useRecipesStore();
-    console.log("options", options);
     const dietaryOptions = useDietaryOptions({
         dietaryRestrictions: options.dietaryRestrictions,
         noRestrictionsLabel: NO_DIETARY_RESTRICTIONS_LABEL,
@@ -77,13 +74,11 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
     const handleApply = useCallback(async () => {
         if (apply()) {
             setFilters(filters);
-            await fetchFilteredRecipes(filters);
             const queryString = buildQueryString(filters);
             router.push(`/recipes${queryString ? `?${queryString}` : ""}`);
-
             onClose?.();
         }
-    }, [apply, filters, fetchFilteredRecipes, setFilters, onClose, router, buildQueryString]);
+    }, [apply, filters, setFilters, onClose, router, buildQueryString]);
 
     const handleClear = useCallback(() => {
         clear();
