@@ -17,7 +17,7 @@ export async function getRecipesSummary(): Promise<Options> {
             .map(item => item.toLowerCase()) // Normalize to lowercase
             .filter((value, index, self) => self.indexOf(value) === index); // Deduplicate
     };
-
+    console.log(rawData);
     const normalizedDietary = normalizeItems(rawData._dietaryRestrictionsRaw);
     const normalizedTitles = normalizeItems(rawData.titles);
     const normalizedCuisines = normalizeItems(rawData.cuisines);

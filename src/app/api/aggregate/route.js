@@ -28,6 +28,9 @@ function capitalizeFirst(s) {
     return t.charAt(0).toUpperCase() + t.slice(1);
 }
 
+function getUniqueSorted(set) {
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+}
 // stable stringify that sorts object keys recursively for deterministic comparison
 function stableStringify(obj) {
     if (obj === null || typeof obj !== "object") return JSON.stringify(obj);
@@ -131,12 +134,12 @@ export async function POST(req) {
                 if (t) titlesSet.add(t);
             }
         }
+        const uniqueProducts = getUniqueSorted(productsSet);
+        const uniqueDietary = getUniqueSorted(dietarySet);
+        const uniqueCuisines = getUniqueSorted(cuisineSet);
+        const uniqueTags = getUniqueSorted(tagsSet);
+        const uniqueTitles = getUniqueSorted(titlesSet);
 
-        const uniqueProducts = Array.from(productsSet).sort((a, b) => a.localeCompare(b));
-        const uniqueDietary = Array.from(dietarySet).sort((a, b) => a.localeCompare(b));
-        const uniqueCuisines = Array.from(cuisineSet).sort((a, b) => a.localeCompare(b));
-        const uniqueTags = Array.from(tagsSet).sort((a, b) => a.localeCompare(b));
-        const uniqueTitles = Array.from(titlesSet).sort((a, b) => a.localeCompare(b));
         const totalCount = recipes.length;
 
         const summaryDoc = {
