@@ -1,40 +1,36 @@
-import { client } from "./createClient";
-import { groq } from "next-sanity";
 import type { Options } from "@/types";
+import { client } from "./createClient";
+import { initialSummary } from "./cleanSummary/helpers";
 
+/**
+ * Fetches the preprocessed recipes summary document from Sanity.
+ * The summary document is created and normalized by your API route,
+ * so all arrays (titles, cuisines, tags, dietaryRestrictions, products)
+ * are already lowercase, deduplicated, and sanitized.
+ */
 export async function getRecipesSummary(): Promise<Options> {
-    const rawData = await client.fetch(groq`{
-    "titles": array::unique(*[_type == "recipe"].title),
-    "cuisines": array::unique(*[_type == "recipe"].cuisine),
-    "tags": array::unique(*[_type == "recipe" && defined(tags)] .tags[]),
-    "_dietaryRestrictionsRaw": array::unique(*[_type == "recipe" && defined(dietaryRestrictions)] .dietaryRestrictions[]),
-    "products": array::unique(*[_type == "recipe" && defined(products)] .products[]),
-  }`);
+    try {
+        // Fetch the single aggregated "recipesSummary" document
+        const query = `*[_type == "recipesSummary"][0]{
+			titles,
+			cuisines,
+			tags,
+			dietaryRestrictions,
+			products
+		}`;
 
-    // Function to normalize and deduplicate items
-    const normalizeItems = (items: string[]): string[] => {
-        return items
-            .map(item => item.toLowerCase()) // Normalize to lowercase
-            .filter((value, index, self) => self.indexOf(value) === index); // Deduplicate
-    };
-    console.log(rawData);
-    const normalizedDietary = normalizeItems(rawData._dietaryRestrictionsRaw);
-    const normalizedTitles = normalizeItems(rawData.titles);
-    const normalizedCuisines = normalizeItems(rawData.cuisines);
-    const normalizedTags = normalizeItems(rawData.tags);
-    const normalizedProducts = normalizeItems(rawData.products);
+        const summary = await client.fetch(query);
 
-    // Clean up and return the final result
-    const { _dietaryRestrictionsRaw, ...cleanData } = rawData;
+        const safeSummary = Object.keys(initialSummary).reduce((acc, key) => {
+            const typedKey = key as keyof Options;
+            acc[typedKey] = Array.isArray(summary?.[typedKey]) ? summary[typedKey] : initialSummary[typedKey];
+            return acc;
+        }, {} as Options);
 
-    return {
-        ...cleanData,
-        dietaryRestrictions: normalizedDietary,
-        titles: normalizedTitles,
-        cuisines: normalizedCuisines,
-        tags: normalizedTags,
-        products: normalizedProducts,
-    };
+        return safeSummary;
+    } catch (error) {
+        console.error("Error fetching recipes summary:", error);
+        // Fallback: return an empty summary structure
+        return initialSummary;
+    }
 }
-
-// todo sprawdzić czy nadal gdzieś w recipes jest Wegetariańska z dużej litery, i czy to przechodzi do sanity Summary. Jeżeli tak to zmodyfikować agregację

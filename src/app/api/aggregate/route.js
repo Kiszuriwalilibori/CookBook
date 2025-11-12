@@ -134,6 +134,8 @@ export async function POST(req) {
                 if (t) titlesSet.add(t);
             }
         }
+        console.log("DIETARY SUMMARY →", Array.from(dietarySet));
+
         const uniqueProducts = getUniqueSorted(productsSet);
         const uniqueDietary = getUniqueSorted(dietarySet);
         const uniqueCuisines = getUniqueSorted(cuisineSet);
