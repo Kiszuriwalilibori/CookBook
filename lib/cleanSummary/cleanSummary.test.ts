@@ -1,4 +1,4 @@
-import { cleanSummary, CLEAN_SUMMARY_MESSAGES } from "./cleanSummary";
+import { cleanSummary, CLEAN_SUMMARY_MESSAGES } from "../cleanSummary";
 import type { Options } from "@/types";
 
 describe("cleanSummary", () => {

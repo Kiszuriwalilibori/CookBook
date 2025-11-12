@@ -1,22 +1,7 @@
 import type { Options } from "@/types";
+import { CLEAN_SUMMARY_MESSAGES, initialSummary } from "./helpers";
 
 // 🟩 Centralized diagnostic message templates
-export const CLEAN_SUMMARY_MESSAGES = {
-    NOT_AN_OBJECT: (type: string) => `Expected an object of type Options but got ${type}`,
-    UNEXPECTED_FIELD: (key: string) => `Unexpected field: ${key}`,
-    MISSING_FIELD: (key: string) => `Missing field: ${key}`,
-    NOT_ARRAY_FIELD: (key: string, type: string) => `Field "${key}" should be an array but got ${type}`,
-    REMOVED_FAULTY_VALUE: (value: unknown) => `Removed faulty array value: ${String(value)}`,
-};
-
-// 🟩 Base empty structure
-const initialSummary: Options = {
-    titles: [],
-    cuisines: [],
-    tags: [],
-    dietaryRestrictions: [],
-    products: [],
-};
 
 /**
  * Cleans an object or array by removing faulty values
@@ -36,13 +21,17 @@ export function cleanSummary(summary: unknown): { sanitizedSummary: Options; fau
 
     const clean = (obj: unknown): unknown => {
         if (Array.isArray(obj)) {
-            return obj
-                .filter(value => {
-                    const bad = isFaulty(value);
-                    if (bad) faulty.push(CLEAN_SUMMARY_MESSAGES.REMOVED_FAULTY_VALUE(value));
-                    return !bad;
-                })
-                .map(clean);
+            const cleanedArray: unknown[] = [];
+
+            for (const value of obj) {
+                if (isFaulty(value)) {
+                    faulty.push(CLEAN_SUMMARY_MESSAGES.REMOVED_FAULTY_VALUE(value));
+                    continue;
+                }
+                cleanedArray.push(clean(value));
+            }
+
+            return cleanedArray;
         }
 
         if (typeof obj === "object" && obj !== null) {
@@ -89,3 +78,5 @@ export function cleanSummary(summary: unknown): { sanitizedSummary: Options; fau
     const sanitizedSummary = clean(summary) as Options;
     return { sanitizedSummary, faulty };
 }
+export { initialSummary };
+

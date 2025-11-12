@@ -1,6 +1,6 @@
 // Updated fetchRecipesSummarySafe function
 import { getRecipesSummary } from "@/lib/getRecipesSummary";
-import { cleanSummary } from "@/lib/cleanSummary"; // Adjust path as needed
+import { cleanSummary, initialSummary } from "@/lib/cleanSummary/cleanSummary"; // Adjust path as needed
 import type { Options } from "@/types";
 
 /**
@@ -16,7 +16,6 @@ export async function fetchRecipesSummarySafe(): Promise<{
         const rawSummary = await getRecipesSummary();
 
         const { sanitizedSummary, faulty } = cleanSummary(rawSummary);
-        console.log("sanitized", sanitizedSummary);
 
         if (faulty.length > 0) {
             console.warn("⚠️ Faulty values found in recipes summary:", faulty);
@@ -30,13 +29,7 @@ export async function fetchRecipesSummarySafe(): Promise<{
     } catch (err) {
         console.error("❌ Failed to fetch recipes summary:", err);
         return {
-            summary: {
-                titles: [],
-                cuisines: [],
-                tags: [],
-                dietaryRestrictions: [],
-                products: [],
-            },
+            summary: initialSummary,
             error: "Nie udało się pobrać podsumowania przepisów",
         };
     }

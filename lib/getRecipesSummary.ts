@@ -36,3 +36,5 @@ export async function getRecipesSummary(): Promise<Options> {
         products: normalizedProducts,
     };
 }
+
+// todo sprawdzić czy nadal gdzieś w recipes jest Wegetariańska z dużej litery, i czy to przechodzi do sanity Summary. Jeżeli tak to zmodyfikować agregację

@@ -9,7 +9,7 @@
         "lint": "eslint",
         "test": "jest",
         "test:watch": "jest --watch",
-        "test:coverage": "jest --coverage"
+        "studio-dev": "npx sanity dev"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
@@ -29,8 +29,7 @@
         "next-sanity": "^11.4.2",
         "react": "19.1.0",
         "react-dom": "19.1.0",
-        "styled-components": "^6.1.19",
-        "zustand": "^5.0.8"
+        "styled-components": "^6.1.19"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3",
