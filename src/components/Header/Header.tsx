@@ -7,6 +7,7 @@ import { Box } from "@mui/material";
 import { overlayStyles, modalStyles } from "./Header.styles";
 import { useRecipesSummary } from "@/hooks";
 import { Options } from "@/types";
+import UserChecker from "../UserChecker";
 
 interface HeaderProps {
     initialSummary?: Options | null;
@@ -56,6 +57,7 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
     return (
         <>
             <Menu navItems={navItems} />
+            <UserChecker />
 
             {showFilter && (
                 <>
