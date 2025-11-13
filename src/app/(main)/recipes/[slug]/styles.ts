@@ -56,11 +56,16 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         mb: 2,
     },
     ingredientsList: {
-        ml: 3,
+        ml: 0,
+        pl: 0,
     },
     ingredientsListItem: {
-        px: 0,
+        display: "flex",
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+        padding: 0,
         py: 0.5,
+        listStyle: "none",
     },
     preparationContainer: {
         mb: 4,
@@ -167,6 +172,18 @@ export const styles: { [key: string]: SxProps<Theme> } = {
             outlineOffset: 2,
             borderRadius: theme => `${theme.shape.borderRadius}px`,
         },
+    },
+    ingredientsQuantity: {
+        fontSize: FONT_SIZE,
+        width: "30px", // Stała szerokość kolumny ilości (zwiększ do np. 120px dla dłuższych wartości)
+        textAlign: "left",
+        minWidth: "30px", // Zapewnia wyrównanie nawet dla pustych ilości
+    },
+    ingredientsName: {
+        fontSize: FONT_SIZE,
+        flex: 1, // Elastyczna szerokość
+        marginLeft: "16px", // Odstęp między kolumnami (dostosuj jeśli potrzeba)
+        textAlign: "left",
     },
 };
 

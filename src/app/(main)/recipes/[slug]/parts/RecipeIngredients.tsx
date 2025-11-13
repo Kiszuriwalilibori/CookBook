@@ -1,7 +1,7 @@
 // app/recipes/[slug]/parts/RecipeIngredients.tsx
-import { Box, Typography, List, ListItem } from "@mui/material";
+import { Box, Typography, List } from "@mui/material";
 import { Recipe } from "@/lib/types";
-import { styles, FONT_SIZE } from "../styles";
+import { styles } from "../styles";
 
 interface RecipeIngredientsProps {
     recipe: Recipe;
@@ -17,11 +17,24 @@ export function RecipeIngredients({ recipe }: RecipeIngredientsProps) {
                 </Typography>
                 <List sx={styles.ingredientsList}>
                     {recipe.ingredients.map((ing, i) => (
-                        <ListItem key={i} sx={styles.ingredientsListItem}>
-                            <Typography variant="body2" sx={{ fontSize: FONT_SIZE }}>
-                                {ing.quantity} {ing.name}
+                        <Box
+                            key={i}
+                            component="li"
+                            role="listitem"
+                            sx={{
+                                ...styles.ingredientsListItem,
+                                display: "flex",
+                                justifyContent: "flex-start",
+                                alignItems: "flex-start",
+                                padding: 0,
+                                listStyle: "none",
+                            }}
+                        >
+                            <Typography sx={styles.ingredientsQuantity}>
+                                {ing.quantity || "\u00A0"} {/* Rezerwuje miejsce w kolumnie */}
                             </Typography>
-                        </ListItem>
+                            <Typography sx={styles.ingredientsName}>{ing.name}</Typography>
+                        </Box>
                     ))}
                 </List>
             </Box>
