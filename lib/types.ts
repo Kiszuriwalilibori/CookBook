@@ -17,6 +17,63 @@ export interface PortableTextBlock {
     }>; // Expand for other annotations as needed
 }
 
+// export interface Recipe {
+//     _id: string;
+//     title: string;
+//     slug?: {
+//         current: string;
+//     };
+//     description?: {
+//         title?: string;
+//         firstBlockText?: {
+//             children?: Array<{
+//                 text: string;
+//             }>;
+//         };
+//         content?: PortableTextBlock[];
+//         image?: {
+//             asset?: {
+//                 _id: string;
+//                 url?: string;
+//             };
+//             alt?: string;
+//         };
+//         notes?: string;
+//     };
+//     ingredients?: Array<{
+//         name: string;
+//         quantity: number;
+//     }>;
+//     products?: string[];
+//     preparationSteps?: Array<{
+//         _key?: string; //
+//         content?: PortableTextBlock[];
+//         image?: {
+//             asset?: {
+//                 _id: string;
+//                 url?: string;
+//             };
+//             alt?: string;
+//         };
+//         notes?: string;
+//     }>;
+//     calories?: number;
+//     preparationTime?: number;
+//     cookingTime?: number;
+//     servings?: number;
+//     cuisine?: string;
+//     dietaryRestrictions?: string[];
+//     tags?: string[];
+//     notes?: string;
+//     Kizia?: boolean;
+//     source?: {
+//         isInternet?: boolean;
+//         http?: string;
+//         book?: string;
+//         title?: string;
+//     };
+// }
+
 export interface Recipe {
     _id: string;
     title: string;
@@ -67,10 +124,11 @@ export interface Recipe {
     notes?: string;
     Kizia?: boolean;
     source?: {
-        isInternet?: boolean;
         http?: string;
         book?: string;
         title?: string;
+        author: string;
+        where?: string;
     };
 }
 
