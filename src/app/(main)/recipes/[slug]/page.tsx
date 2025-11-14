@@ -19,8 +19,6 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
         notFound(); // 404 if no recipe
     }
 
-    const isAdmin = false;
-
     return (
         <Box id="RecipePage" sx={styles.root}>
             <RecipeHero recipe={recipe} />
@@ -35,7 +33,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                     <RecipePreparationSteps recipe={recipe} />
                 </Box>
             </Box>
-            {isAdmin && <RecipeSource recipe={recipe} />}
+            <RecipeSource recipe={recipe} />
             <Separator />
             <Box sx={styles.copyButtonContainer}>
                 <RecipeCopyButton recipe={recipe} slug={slug} />

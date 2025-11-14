@@ -12,8 +12,10 @@ export const desktopItemStyles = (currentPathname: string, href: string): SxProp
     transition: "background-color 200ms ease",
     cursor: "pointer",
     minWidth: "64px",
+    textDecoration: "none", // DODANE: usuwa podkreślenie dla Link
     "&:hover": {
         color: "gray",
+        textDecoration: "none", // DODANE: zapobiega podkreśleniu po hover
     },
     height: MENU_HEIGHT,
     backgroundColor: currentPathname === href ? theme => theme.palette.surface.light : "transparent",
@@ -68,7 +70,14 @@ export const mobileMenuIconStyle: SxProps<Theme> = {
     minWidth: "40px",
 };
 
-
+export const mobileMenuItemStyle = (currentPathname: string, href: string): SxProps<Theme> => ({
+    color: "var(--menu-color)",
+    backgroundColor: currentPathname === href ? theme => theme.palette.surface.light : "transparent",
+    textDecoration: "none", // DODANE: usuwa podkreślenie dla ListItem z Link
+    "&:hover": {
+        textDecoration: "none", // DODANE: zapobiega podkreśleniu po hover
+    },
+});
 
 export const drawerButtonStyle: SxProps<Theme> = {
     display: { md: "none" },
@@ -109,8 +118,3 @@ export const menuToolbarStyle: SxProps<Theme> = {
     paddingY: 0,
     height: "100%",
 };
-
-export const mobileMenuItemStyle = (currentPathname: string, href: string): SxProps<Theme> => ({
-    color: "var(--menu-color)",
-    backgroundColor: currentPathname === href ? theme => theme.palette.surface.light : "transparent",
-});
