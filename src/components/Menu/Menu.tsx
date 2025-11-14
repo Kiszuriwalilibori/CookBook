@@ -12,7 +12,7 @@ export interface NavItem {
     href?: string;
     icon: React.ReactNode;
     onClick?: () => void;
-    hidden?: boolean; 
+    hidden?: boolean;
 }
 
 interface MenuProps {
@@ -35,13 +35,8 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
                                 component={Link}
                                 href={item.href}
                                 aria-label={`Navigate to ${item.label}`}
-                                sx={{
-                                    ...mobileMenuItemStyle(currentPathname, item.href),
-                                    opacity: item.hidden ? 0 : 1,
-                                    transform: item.hidden ? "translateX(20px)" : "translateX(0)",
-                                    transition: "opacity 0.4s ease, transform 0.4s ease",
-                                    pointerEvents: item.hidden ? "none" : "auto",
-                                }}
+                                
+                                sx={mobileMenuItemStyle(currentPathname, item.href, item.hidden)}
                             >
                                 <ListItemIcon sx={mobileMenuIconStyle}>{item.icon}</ListItemIcon>
                                 <ListItemText
@@ -98,13 +93,8 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
                                     <Box
                                         component={Link}
                                         href={item.href}
-                                        sx={{
-                                            ...desktopItemStyles(currentPathname, item.href),
-                                            opacity: item.hidden ? 0 : 1,
-                                            transform: item.hidden ? "translateX(20px)" : "translateX(0)",
-                                            transition: "opacity 0.4s ease, transform 0.4s ease",
-                                            pointerEvents: item.hidden ? "none" : "auto",
-                                        }}
+                                        sx={desktopItemStyles(currentPathname, "", item.hidden)}
+                                        
                                     >
                                         <Box component="span" sx={desktopMenuIconStyle}>
                                             {item.icon}

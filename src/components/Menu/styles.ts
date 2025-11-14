@@ -4,18 +4,23 @@ const MENU_HEIGHT = 64;
 
 export const navigationStyle: SxProps<Theme> = { flexGrow: 1, height: MENU_HEIGHT };
 
-export const desktopItemStyles = (currentPathname: string, href: string): SxProps<Theme> => ({
+export const desktopItemStyles = (currentPathname: string, href: string, hidden?: boolean): SxProps<Theme> => ({
     display: "flex",
     alignItems: "center",
     padding: "8px 16px",
-    color: "var(--menu-color)", // Explicitly set to prevent blue
-    transition: "background-color 200ms ease",
+    color: "var(--menu-color)",
     cursor: "pointer",
     minWidth: "64px",
-    textDecoration: "none", // DODANE: usuwa podkreślenie dla Link
+    textDecoration: "none",
+    opacity: hidden ? 0 : 1,
+    transform: hidden ? "translateX(20px)" : "translateX(0)",
+    transition: hidden
+        ? "opacity 0.4s ease, transform 0.4s ease, background-color 200ms ease" // Połączone: dla hidden + zawsze background
+        : "background-color 200ms ease",
+    pointerEvents: hidden ? "none" : "auto",
     "&:hover": {
         color: "gray",
-        textDecoration: "none", // DODANE: zapobiega podkreśleniu po hover
+        textDecoration: "none",
     },
     height: MENU_HEIGHT,
     backgroundColor: currentPathname === href ? theme => theme.palette.surface.light : "transparent",
@@ -70,12 +75,16 @@ export const mobileMenuIconStyle: SxProps<Theme> = {
     minWidth: "40px",
 };
 
-export const mobileMenuItemStyle = (currentPathname: string, href: string): SxProps<Theme> => ({
+export const mobileMenuItemStyle = (currentPathname: string, href: string, hidden?: boolean): SxProps<Theme> => ({
     color: "var(--menu-color)",
     backgroundColor: currentPathname === href ? theme => theme.palette.surface.light : "transparent",
-    textDecoration: "none", // DODANE: usuwa podkreślenie dla ListItem z Link
+    textDecoration: "none",
+    opacity: hidden ? 0 : 1,
+    transform: hidden ? "translateX(20px)" : "translateX(0)",
+    transition: "opacity 0.4s ease, transform 0.4s ease",
+    pointerEvents: hidden ? "none" : "auto",
     "&:hover": {
-        textDecoration: "none", // DODANE: zapobiega podkreśleniu po hover
+        textDecoration: "none",
     },
 });
 
