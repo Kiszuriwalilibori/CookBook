@@ -22,3 +22,13 @@ body {
     color: var(--foreground);
     font-family: Arial, Helvetica, sans-serif;
 }
+@layer base {
+    *,
+    ::after,
+    ::before {
+        box-sizing: border-box;
+        border: 0 solid;
+        margin: 0;
+        padding: 0;
+    }
+}
