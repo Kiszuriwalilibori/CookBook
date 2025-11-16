@@ -1,13 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react"; // DODANE: useCallback
 import { useAdminStore } from "@/stores/useAdminStore";
 
-// Global types (przenieś do dedykowanego pliku .d.ts jeśli chcesz, np. types/google.d.ts)
+// Global types (bez zmian)
 declare global {
     interface Window {
         google?: {
             accounts: {
                 id: {
-                    initialize: (config: { client_id: string; callback: (response: { credential: string }) => void; auto_select?: boolean; prompt?: "none" | "consent" | "select_account" }) => void;
+                    initialize: (config: { client_id: string; callback: (response: { credential: string }) => void; auto_select?: boolean; prompt?: "none" | "consent" | "select_account"; use_fedcm_for_prompt?: boolean }) => void;
                     prompt: (momentListener?: (notification: { isNotDisplayed: () => boolean; getNotDisplayedReason: () => string }) => void) => void;
                     getLastCredential: () => { credential: string } | null;
                 };
@@ -18,65 +18,13 @@ declare global {
 }
 
 export const useGoogleAuth = () => {
-    // Separate selectors to avoid SSR loop
     const isAdminLogged = useAdminStore(state => state.isAdminLogged);
     const setAdminLogged = useAdminStore(state => state.setAdminLogged);
 
-    useEffect(() => {
-        // Load Google script once
-        if (document.getElementById("google-script")) return;
-
-        const script = document.createElement("script");
-        script.id = "google-script";
-        script.src = "https://accounts.google.com/gsi/client";
-        script.async = true;
-        script.onload = initGoogle;
-        document.body.appendChild(script);
-
-        function initGoogle() {
-            if (!window.google) return;
-            if (window.googleInitialized) return;
-
-            window.google.accounts.id.initialize({
-                client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-                callback: handleCredentialResponse,
-                auto_select: true,
-                prompt: "none", // Silent only—no UI fallback
-            });
-
-            window.googleInitialized = true;
-
-            // Silent-first: If persisted admin, try cached credential
-            if (isAdminLogged) {
-                trySilentCredential();
-            } else {
-                console.log("[GoogleAuth] Persist false—skipping prompt on load");
-            }
-        }
-
-        const trySilentCredential = async () => {
-            try {
-                const cached = window.google?.accounts?.id?.getLastCredential();
-                if (cached?.credential) {
-                    console.log("[GoogleAuth] Silent cached verify");
-                    await handleCredentialResponse(cached);
-                    return; // Success—skip prompt
-                }
-            } catch (_err) {
-                console.log("[GoogleAuth] Cached failed—trying prompt", _err);
-            }
-            // Fallback: prompt silent
-            window.google?.accounts?.id?.prompt(notification => {
-                if (notification.isNotDisplayed()) {
-                    const reason = notification.getNotDisplayedReason();
-                    console.log(`[GoogleAuth] Prompt skipped: ${reason}`);
-                } else {
-                    console.log("[GoogleAuth] Prompt displayed—user interacted");
-                }
-            });
-        };
-
-        async function handleCredentialResponse(response: { credential: string }) {
+    // FIX ESLINT: Przenieś handleCredentialResponse poza effect i owiń w useCallback
+    // To stabilizuje closure, deps exhaustive, a effect nie re-runa niepotrzebnie
+    const handleCredentialResponse = useCallback(
+        async (response: { credential: string }) => {
             try {
                 const idToken = response.credential;
                 const res = await fetch("/api/check-session", {
@@ -88,17 +36,84 @@ export const useGoogleAuth = () => {
                 if (!res.ok) throw new Error("Verification failed");
 
                 const { isAdminLogged: verified } = await res.json();
-                setAdminLogged(verified, verified ? "Admin verified (cached or silent)" : "Token received but email mismatch—admin access denied");
-            } catch (_err) {
-                console.error("Auth error:", _err);
+                const logMsg = verified ? "Admin verified (FedCM silent/cached/prompt)" : "Token received but email mismatch—admin access denied";
+                setAdminLogged(verified, logMsg);
+                console.log(`[GoogleAuth] ${logMsg}`);
+            } catch (err) {
+                console.error("[GoogleAuth] Auth error:", err);
                 setAdminLogged(false, "Admin verification failed (e.g., invalid token or network error)—reset to false");
             }
+        },
+        [setAdminLogged]
+    ); // Dep: setAdminLogged – stabilne z Zustand, nie zmieni się
+
+    useEffect(() => {
+        if (document.getElementById("google-script")) return;
+
+        const script = document.createElement("script");
+        script.id = "google-script";
+        script.src = "https://accounts.google.com/gsi/client";
+        script.async = true;
+        script.onload = () => {
+            initGoogle();
+        };
+        document.body.appendChild(script);
+
+        function initGoogle() {
+            if (!window.google) {
+                console.error("[GoogleAuth] Google script loaded but window.google missing");
+                return;
+            }
+            if (window.googleInitialized) return;
+
+            window.google.accounts.id.initialize({
+                client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+                callback: handleCredentialResponse, // Teraz stabilne, bez re-init
+                auto_select: true,
+                prompt: "select_account",
+                use_fedcm_for_prompt: true,
+            });
+
+            window.googleInitialized = true;
+
+            setTimeout(() => trySilentAuth(), 500);
         }
 
-        // Cleanup on unmount
+        const trySilentAuth = async () => {
+            console.log("[GoogleAuth] Starting silent auth attempt (FedCM-enabled)");
+
+            const getLastCredential = window.google?.accounts?.id?.getLastCredential;
+            if (typeof getLastCredential !== "function") {
+                console.warn("[GoogleAuth] getLastCredential not available – skipping cache, prompting directly (FedCM handles silent)");
+            } else {
+                try {
+                    const cached = getLastCredential();
+                    if (cached?.credential) {
+                        console.log("[GoogleAuth] Using cached credential");
+                        await handleCredentialResponse(cached);
+                        return;
+                    }
+                } catch (err) {
+                    console.log("[GoogleAuth] Cached credential failed:", err);
+                }
+            }
+
+            console.log("[GoogleAuth] No cached/success – prompting (FedCM flow)");
+            window.google?.accounts?.id?.prompt();
+        };
+
         return () => {
             const scriptEl = document.getElementById("google-script");
             if (scriptEl) document.body.removeChild(scriptEl);
+            window.googleInitialized = false;
         };
-    }, [isAdminLogged, setAdminLogged]); // Deps zgodne z exhaustive-deps
+        // FIX ESLINT: Dodaj handleCredentialResponse do deps (stabilne dzięki useCallback)
+        // Ale skoro to callback z deps [setAdminLogged], i setAdminLogged stabilne – effect re-runa rzadko
+    }, [handleCredentialResponse]);
+
+    useEffect(() => {
+        if (!isAdminLogged) {
+            console.log("[GoogleAuth] isAdminLogged changed to false – consider re-prompt if needed");
+        }
+    }, [isAdminLogged]);
 };
