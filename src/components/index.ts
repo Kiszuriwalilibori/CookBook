@@ -5,4 +5,5 @@ import RecipeCard from "./RecipeCard";
 import Separator from "./Common/Separator/Separator";
 import RecipeFilters from "./RecipeFilters";
 import Footer from "./Footer";
-export { Menu, Header, Footer, PageTitle, RecipeCard, Separator, RecipeFilters };
+import AuthProvider from "./AuthProvider";
+export { Menu, Header, Footer, PageTitle, RecipeCard, Separator, RecipeFilters, AuthProvider };
