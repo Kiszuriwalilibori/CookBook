@@ -35,7 +35,6 @@ interface RecipeSourceProps {
 
 export function RecipeSource({ recipe }: RecipeSourceProps) {
     const isAdminLogged = useAdminStore(state => state.isAdminLogged);
-    console.log("isAdminLogged", isAdminLogged);
 
     if (!isAdminLogged || !recipe.source) {
         return null;
@@ -62,7 +61,7 @@ export function RecipeSource({ recipe }: RecipeSourceProps) {
         if (parts.length > 0) {
             sourceText = `Źródło: ${parts.join(" | ")}`;
         } else {
-            return null; // Jeśli nic nie ma, nie wyświetlaj
+            return null;
         }
     }
 
@@ -74,3 +73,5 @@ export function RecipeSource({ recipe }: RecipeSourceProps) {
         </Box>
     );
 }
+
+// sprawdzone

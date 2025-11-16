@@ -17,7 +17,7 @@ function buildFilterClause(filters?: Partial<FilterState>): string {
     if (filters.tag?.length) conditions.push(`count((tags[])[@ in ${JSON.stringify(filters.tag)}]) > 0`);
     if (filters.dietary?.length) conditions.push(`count((dietaryRestrictions[])[@ in ${JSON.stringify(filters.dietary)}]) > 0`);
     if (filters.product?.length) conditions.push(`count((products[])[@ in ${JSON.stringify(filters.product)}]) > 0`);
-    console.log("conditions", conditions);
+    
     return conditions.length ? ` && ${conditions.join(" && ")}` : "";
 }
 
