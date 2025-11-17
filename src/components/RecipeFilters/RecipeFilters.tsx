@@ -33,7 +33,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         noRestrictionsLabel: NO_DIETARY_RESTRICTIONS_LABEL,
     });
 
-    const productOptions = useMemo(() => options.products.slice(0, MAX_PRODUCTS_DISPLAYED).sort((a, b) => a.localeCompare(b, "pl")), [options.products]);
+    const productOptions = useMemo(() => options.products.slice(0, MAX_PRODUCTS_DISPLAYED), [options.products]);
     const buildQueryString = useCallback((filters: FilterState): string => {
         const params = new URLSearchParams();
         Object.entries(filters).forEach(([key, value]) => {
