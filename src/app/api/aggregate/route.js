@@ -81,6 +81,7 @@ export async function POST(req) {
 
         // fetch recipes
         const groq = `*[_type == "recipe"]{products, dietary, cuisine, tags, title}`;
+        console.log("groq fetched from Sanity in aggregate", groq);
         const query = encodeURIComponent(groq);
         const url = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${query}`;
         const fetchOpts = { method: "GET", headers: { "Content-Type": "application/json" } };
