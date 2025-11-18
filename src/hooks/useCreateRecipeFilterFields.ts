@@ -25,24 +25,20 @@ const sanitizeOptions = (arr: unknown): string[] => {
     return arr.filter((item): item is string => typeof item === "string" && item.trim() !== "");
 };
 
-export const useCreateRecipeFilterFields = (options: Options, dietaryOptions: Options["dietary"], productOptions: Options["products"]) => {
-    const NO_DIETARY_RESTRICTIONS_LABEL = "Bez ograniczeń";
-    console.log("options", options);
+export const useCreateRecipeFilterFields = (options: Options) => {
     const filterFields: FilterField[] = useMemo(
         () =>
             BASE_FILTER_FIELDS.map(base => {
-                const rawOptions = options[`${base.key}s` as keyof Options];
-console.log("rawOptions", rawOptions);
+                const rawOptions = base.key === "dietary" ? options[`${base.key}` as keyof Options] : options[`${base.key}s` as keyof Options];
+                console.log("rawOptions", rawOptions);
                 return {
                     ...base,
                     options: sanitizeOptions(rawOptions),
-                    placeholder: base.key === "dietary" ? NO_DIETARY_RESTRICTIONS_LABEL : undefined,
                 };
             }),
         [options]
     );
-    console.log("BaseFilterFields", BASE_FILTER_FIELDS);
-    console.log(filterFields, "FilterFields");
+
     return filterFields;
 };
 

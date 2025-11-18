@@ -8,7 +8,6 @@ import { overlayStyles, modalStyles } from "./Header.styles";
 import { useRecipesSummary } from "@/hooks";
 import { Options } from "@/types";
 
-
 interface HeaderProps {
     initialSummary?: Options | null;
     fetchError?: string | null;
@@ -56,12 +55,12 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
     return (
         <>
             <Menu navItems={navItems} />
-            
+
             {showFilter && (
                 <>
                     <Box sx={overlayStyles} onClick={handleClose}>
                         <Box sx={modalStyles} onClick={e => e.stopPropagation()}>
-                            <RecipeFilters onFiltersChange={() => {} /*filters => console.log("Applied filters:", filters)*/} onClose={handleClose} options={options} />
+                            <RecipeFilters onFiltersChange={() => {}} onClose={handleClose} options={options} />
                         </Box>
                     </Box>
                 </>
