@@ -31,7 +31,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         Object.entries(filters).forEach(([key, value]) => {
             if (value && value !== "") {
                 if (Array.isArray(value)) {
-                    value.forEach(v => params.append(key, v));
+                    value.forEach(item => params.append(key, item));
                 } else {
                     params.set(key, value);
                 }
