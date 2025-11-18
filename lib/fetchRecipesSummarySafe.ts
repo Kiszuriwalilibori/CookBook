@@ -1,8 +1,6 @@
-// Updated fetchRecipesSummarySafe function
 import { getRecipesSummary } from "@/lib/getRecipesSummary";
-// import { sanitizeSummary } from "@/lib/cleanSummary/sanitizeSummary"; // Adjust path as needed
 import type { Options } from "@/types";
-import { initialSummary } from "./cleanSummary/helpers";
+import { initialSummary } from "@/lib/getRecipesSummary/helpers";
 
 /**
  * Fetches recipes summary from Sanity safely.

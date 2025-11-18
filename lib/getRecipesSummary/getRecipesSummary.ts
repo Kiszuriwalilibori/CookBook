@@ -1,7 +1,7 @@
 import type { Options } from "@/types";
-import { client } from "./createClient";
-import { INITIAL_SANITIZE_ISSUES, initialSummary } from "./cleanSummary/helpers";
-import { sanitizeSummary } from "./cleanSummary/sanitizeSummary";
+import { client } from "../createClient";
+import { INITIAL_SANITIZE_ISSUES, initialSummary } from "./helpers";
+import { sanitizeSummary } from "./sanitizeSummary";
 
 /**
  * Ensures the summary has the full Options structure, filling missing keys
@@ -44,7 +44,7 @@ export async function getRecipesSummary(): Promise<SanitizedSummaryResult> {
         }`;
 
         const rawSummary = await client.fetch(query);
-        
+
         // Sanitize the fetched summary first (removes faulty values, collects issues)
         const { sanitizedSummary, sanitizeIssues } = sanitizeSummary(rawSummary);
 
@@ -74,3 +74,5 @@ export async function getRecipesSummary(): Promise<SanitizedSummaryResult> {
         return { sanitizedSummary: initialSummary, sanitizeIssues: INITIAL_SANITIZE_ISSUES };
     }
 }
+
+export default getRecipesSummary;
