@@ -80,7 +80,7 @@ export async function POST(req) {
         }
 
         // fetch recipes
-        const groq = `*[_type == "recipe"]{products, dietary, dietaryRestrictions, cuisine, tags, title}`;
+        const groq = `*[_type == "recipe"]{products, dietary, cuisine, tags, title}`;
         console.log("groq fetched from Sanity in aggregate", groq);
         const query = encodeURIComponent(groq);
         const url = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${query}`;
@@ -115,12 +115,7 @@ export async function POST(req) {
                     if (v) dietarySet.add(v);
                 }
             }
-            if ((!r.dietary || r.dietary.length === 0) && Array.isArray(r.dieteryRestrictions)) {
-                for (const d of r.dieteryRestrictions) {
-                    const v = normalizeLower(d);
-                    if (v) dietarySet.add(v);
-                }
-            }
+
             if (Array.isArray(r.cuisine)) {
                 for (const c of r.cuisine) {
                     const v = normalizeLower(c);
