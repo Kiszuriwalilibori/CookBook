@@ -16,7 +16,7 @@ export default {
       description: 'Unique lowercased product names aggregated from all recipes',
     },
     {
-      name: 'dietaryRestrictions',
+      name: 'dietary',
       title: 'Dietary Restrictions',
       type: 'array',
       of: [{type: 'string'}],

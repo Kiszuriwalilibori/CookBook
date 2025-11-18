@@ -69,7 +69,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         [errors]
     );
     const filterFields = useCreateRecipeFilterFields(options, dietaryOptions, productOptions);
-
+    console.log(filterFields, "filterFields from RecipeFilters");
     return (
         <Box sx={containerSx}>
             <Typography variant="h6" gutterBottom align="center">
@@ -84,7 +84,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
                         options={field.options}
                         value={filters[field.key]}
                         multiple={field.multiple}
-                        placeholder={field.placeholder}
+                        placeholder={field.key == "dietary" ? NO_DIETARY_RESTRICTIONS_LABEL : undefined}
                         onChange={(newValue: string | string[] | null) => {
                             const normalized = newValue ?? (field.multiple ? [] : "");
                             handleChange(field.key, normalized);
