@@ -21,21 +21,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
     return (
         <html lang="pl" suppressHydrationWarning={true}>
-            <AppRouterCacheProvider>
-                <ThemeProvider theme={theme}>
-                    <body className={inter.className}>
+            <body className={inter.className}>
+                <AppRouterCacheProvider>
+                    <ThemeProvider theme={theme}>
                         {/* <AuthProvider> */}
-                            <Box sx={layoutContainerStyles}>
-                                <Header initialSummary={summary} fetchError={fetchError} />
-                                <Box component="main" sx={mainContentStyles}>
-                                    {children}
-                                </Box>
-                                <Footer />
+                        <Box sx={layoutContainerStyles}>
+                            <Header initialSummary={summary} fetchError={fetchError} />
+                            <Box component="main" sx={mainContentStyles}>
+                                {children}
                             </Box>
+                            <Footer />
+                        </Box>
                         {/* </AuthProvider> */}
-                    </body>
-                </ThemeProvider>
-            </AppRouterCacheProvider>
+                    </ThemeProvider>
+                </AppRouterCacheProvider>
+            </body>
         </html>
     );
 }
