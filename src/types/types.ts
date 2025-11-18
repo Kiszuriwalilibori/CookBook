@@ -2,6 +2,6 @@ export type Options = {
     titles: string[];
     cuisines: string[];
     tags: string[];
-    dietaryRestrictions: string[];
+    dietary: string[];
     products: string[];
 };

@@ -10,7 +10,7 @@ export interface Options {
     titles: string[];
     cuisines: string[];
     tags: string[];
-    dietaryRestrictions: string[];
+    dietary: string[];
     products: string[];
 }
 export type { FilterState } from "@/hooks/useFilters";

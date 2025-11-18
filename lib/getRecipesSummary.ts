@@ -39,7 +39,7 @@ export async function getRecipesSummary(): Promise<SanitizedSummaryResult> {
             titles,
             cuisines,
             tags,
-            dietaryRestrictions,
+            dietary,
             products
         }`;
 
@@ -62,7 +62,7 @@ export async function getRecipesSummary(): Promise<SanitizedSummaryResult> {
             titles: [...summary.titles].sort(sortFn),
             cuisines: [...summary.cuisines].sort(sortFn),
             tags: [...summary.tags].sort(sortFn),
-            dietaryRestrictions: [...summary.dietaryRestrictions].sort(sortFn),
+            dietary: [...summary.dietary].sort(sortFn),
             products: [...summary.products].sort(sortFn),
         };
 

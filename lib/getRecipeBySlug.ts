@@ -41,7 +41,7 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
       cookingTime,
       servings,
       cuisine,
-      dietaryRestrictions,
+      dietary,
       tags,
       notes,
       Kizia,

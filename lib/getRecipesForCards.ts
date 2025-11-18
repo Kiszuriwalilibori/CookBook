@@ -15,7 +15,7 @@ function buildFilterClause(filters?: Partial<FilterState>): string {
     if (filters.title) conditions.push(`title match "${filters.title}*"`);
     if (filters.cuisine) conditions.push(`cuisine == "${filters.cuisine}"`);
     if (filters.tag?.length) conditions.push(`count((tags[])[@ in ${JSON.stringify(filters.tag)}]) > 0`);
-    if (filters.dietary?.length) conditions.push(`count((dietaryRestrictions[])[@ in ${JSON.stringify(filters.dietary)}]) > 0`);
+    if (filters.dietary?.length) conditions.push(`count((dietary[])[@ in ${JSON.stringify(filters.dietary)}]) > 0`);
     if (filters.product?.length) conditions.push(`count((products[])[@ in ${JSON.stringify(filters.product)}]) > 0`);
     
     return conditions.length ? ` && ${conditions.join(" && ")}` : "";

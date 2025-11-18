@@ -11,7 +11,7 @@ const client = createClient({
 });
 
 // Type for supported fields
-type SupportedField = "title" | "cuisine" | "tags" | "dietaryRestrictions" | "ingredients" | "products";
+type SupportedField = "title" | "cuisine" | "tags" | "dietary" | "ingredients" | "products";
 
 export async function GET(
     request: NextRequest,
@@ -34,8 +34,8 @@ export async function GET(
         case "tags":
             query = groq`array::unique(*[_type == "recipe"].tags[]) | order(string asc)`;
             break;
-        case "dietaryRestrictions":
-            query = groq`array::unique(*[_type == "recipe"].dietaryRestrictions[]) | order(string asc)`;
+        case "dietary":
+            query = groq`array::unique(*[_type == "recipe"].dietary[]) | order(string asc)`;
             break;
         case "ingredients":
             query = groq`array::unique(*[_type == "recipe"].ingredients[].name) | order(string asc)`;

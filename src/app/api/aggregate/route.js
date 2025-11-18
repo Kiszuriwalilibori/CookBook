@@ -80,7 +80,7 @@ export async function POST(req) {
         }
 
         // fetch recipes
-        const groq = `*[_type == "recipe"]{products, dietaryRestrictions, cuisine, tags, title}`;
+        const groq = `*[_type == "recipe"]{products, dietary, cuisine, tags, title}`;
         const query = encodeURIComponent(groq);
         const url = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${query}`;
         const fetchOpts = { method: "GET", headers: { "Content-Type": "application/json" } };
@@ -108,8 +108,8 @@ export async function POST(req) {
                     if (v) productsSet.add(v);
                 }
             }
-            if (Array.isArray(r.dietaryRestrictions)) {
-                for (const d of r.dietaryRestrictions) {
+            if (Array.isArray(r.dietary)) {
+                for (const d of r.dietary) {
                     const v = normalizeLower(d);
                     if (v) dietarySet.add(v);
                 }
@@ -149,7 +149,7 @@ export async function POST(req) {
             _type: "recipesSummary",
             totalCount,
             products: uniqueProducts,
-            dietaryRestrictions: uniqueDietary,
+            dietary: uniqueDietary,
             cuisines: uniqueCuisines,
             tags: uniqueTags,
             titles: uniqueTitles,
@@ -181,7 +181,7 @@ export async function POST(req) {
         const cleanDoc = obj => ({
             totalCount: obj?.totalCount ?? null,
             products: Array.isArray(obj?.products) ? obj.products : [],
-            dietaryRestrictions: Array.isArray(obj?.dietaryRestrictions) ? obj.dietaryRestrictions : [],
+            dietary: Array.isArray(obj?.dietary) ? obj.dietary : [],
             cuisines: Array.isArray(obj?.cuisines) ? obj.cuisines : [],
             tags: Array.isArray(obj?.tags) ? obj.tags : [],
             titles: Array.isArray(obj?.titles) ? obj.titles : [],

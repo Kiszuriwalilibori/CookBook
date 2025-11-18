@@ -29,7 +29,7 @@ type FilterStore = FilterStoreState & FilterStoreActions;
 export const useFiltersStore = create<FilterStore>((set, get) => ({
     filters: DEFAULT_FILTERS,
     errors: {},
-    options: { titles: [], cuisines: [], tags: [], dietaryRestrictions: [], products: [] }, // Empty default
+    options: { titles: [], cuisines: [], tags: [], dietary: [], products: [] }, // Empty default
 
     handleChange: (key, value) => {
         const current = get();

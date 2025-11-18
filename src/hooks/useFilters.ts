@@ -58,7 +58,7 @@ export const useFilters = (options: Options, onFiltersChange: (filters: FilterSt
                         normalized = normalizeMultiple(value, options.tags);
                         updated.tag = normalized;
                     } else if (key === "dietary") {
-                        normalized = normalizeMultiple(value, options.dietaryRestrictions);
+                        normalized = normalizeMultiple(value, options.dietary);
                         updated.dietary = normalized;
                     } else if (key === "product") {
                         normalized = normalizeMultiple(value, options.products);
@@ -85,7 +85,7 @@ export const useFilters = (options: Options, onFiltersChange: (filters: FilterSt
             const normalized = { ...prev };
             const multipleKeys: ("tag" | "dietary" | "product")[] = ["tag", "dietary", "product"];
             multipleKeys.forEach(key => {
-                const optionsKey = key === "tag" ? "tags" : key === "dietary" ? "dietaryRestrictions" : "products";
+                const optionsKey = key === "tag" ? "tags" : key === "dietary" ? "dietary" : "products";
                 const currentValue = prev[key];
                 normalized[key] = normalizeMultiple(currentValue as string[], options[optionsKey as keyof typeof options] as string[]);
             });

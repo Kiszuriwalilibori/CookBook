@@ -34,9 +34,9 @@ export function RecipeMetadata({ recipe }: RecipeMetadataProps) {
                     🔥 {getLabel("calories")}: {recipe.calories}
                 </Typography>
             )}
-            {recipe.dietaryRestrictions && recipe.dietaryRestrictions.length > 0 && (
+            {recipe.dietary && recipe.dietary.length > 0 && (
                 <Typography component="div">
-                    🚫 {getLabel("dietaryRestrictions")}: {recipe.dietaryRestrictions.join(", ")}
+                    🚫 {getLabel("dietary")}: {recipe.dietary.join(", ")}
                 </Typography>
             )}
             {recipe.tags && recipe.tags.length > 0 && (

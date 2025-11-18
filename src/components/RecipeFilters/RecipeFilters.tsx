@@ -29,7 +29,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
     const dietaryOptions = useDietaryOptions({
-        dietaryRestrictions: options.dietaryRestrictions,
+        dietary: options.dietary,
         noRestrictionsLabel: NO_DIETARY_RESTRICTIONS_LABEL,
     });
 

@@ -16,7 +16,7 @@ export function useRecipesSummary(initialSummary?: Options) {
             titles: [],
             cuisines: [],
             tags: [],
-            dietaryRestrictions: [],
+            dietary: [],
             products: [],
         }
     );

@@ -7,7 +7,7 @@ describe("cleanSummary", () => {
         titles: ["Recipe 1"],
         cuisines: ["Italian"],
         tags: ["Quick"],
-        dietaryRestrictions: ["Vegan"],
+        dietary: ["Vegan"],
         products: ["Tomato"],
     };
 
@@ -17,7 +17,7 @@ describe("cleanSummary", () => {
             titles: [],
             cuisines: [],
             tags: [],
-            dietaryRestrictions: [],
+            dietary: [],
             products: [],
         });
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_AN_OBJECT("object"));
@@ -50,17 +50,17 @@ describe("cleanSummary", () => {
             titles: ["Valid"],
             cuisines: "Not an array" as unknown as string[],
             tags: ["Okay"],
-            dietaryRestrictions: null as unknown as string[],
+            dietary: null as unknown as string[],
             products: ["Fine"],
         } as unknown as Options;
 
         const result = sanitizeSummary(input);
 
         expect(result.sanitizedSummary.cuisines).toEqual([]);
-        expect(result.sanitizedSummary.dietaryRestrictions).toEqual([]);
+        expect(result.sanitizedSummary.dietary).toEqual([]);
 
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("cuisines", "string"));
-        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("dietaryRestrictions", "object"));
+        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("dietary", "object"));
     });
 
     test("5️⃣ removes faulty array values", () => {

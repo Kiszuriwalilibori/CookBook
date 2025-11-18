@@ -13,7 +13,7 @@ export const initialSummary: Options = {
     titles: [],
     cuisines: [],
     tags: [],
-    dietaryRestrictions: [],
+    dietary: [],
     products: [],
 };
 

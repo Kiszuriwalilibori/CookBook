@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 
 interface DietaryOptionsParams {
-    dietaryRestrictions: string[];
+    dietary: string[];
     noRestrictionsLabel: string;
 }
 
-export const useDietaryOptions = ({ dietaryRestrictions, noRestrictionsLabel }: DietaryOptionsParams): string[] => {
+export const useDietaryOptions = ({ dietary, noRestrictionsLabel }: DietaryOptionsParams): string[] => {
     return useMemo(() => {
-        return [noRestrictionsLabel, ...dietaryRestrictions];
-    }, [dietaryRestrictions, noRestrictionsLabel]);
+        return [noRestrictionsLabel, ...dietary];
+    }, [dietary, noRestrictionsLabel]);
 };

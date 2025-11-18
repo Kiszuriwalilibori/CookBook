@@ -15,7 +15,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         titles,
         cuisines,
         tags,
-        dietaryRestrictions,
+        dietary,
         products
     }`;
 
