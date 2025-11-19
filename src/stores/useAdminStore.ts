@@ -1,14 +1,23 @@
+// src/stores/useAdminStore.ts
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface AdminStore {
     isAdminLogged: boolean;
-    setAdminLogged: (value: boolean, reason: string) => void;
+    setAdminLogged: (value: boolean, reason?: string) => void;
 }
 
-export const useAdminStore = create<AdminStore>((set, get) => ({
-    isAdminLogged: false,
-    setAdminLogged: (value: boolean, reason: string) => {
-        set({ isAdminLogged: value });
-        console.log(`[Admin Store Update] ${reason}. New state: isAdminLogged = ${value}`);
-    },
-}));
+export const useAdminStore = create<AdminStore>()(
+    persist(
+        set => ({
+            isAdminLogged: false,
+            setAdminLogged: (value, reason = "manual") => {
+                console.log(`[Admin Store] ${reason} → isAdminLogged = ${value}`);
+                set({ isAdminLogged: value });
+            },
+        }),
+        {
+            name: "admin-storage", // klucz w localStorage
+        }
+    )
+);

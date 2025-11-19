@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import { Box, ThemeProvider } from "@mui/material";
 import theme from "@/themes/theme";
-import { /*AuthProvider,*/ Footer, Header } from "@/components";
+import { Footer, Header } from "@/components";
 
 import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
@@ -24,7 +24,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <body className={inter.className}>
                 <AppRouterCacheProvider>
                     <ThemeProvider theme={theme}>
-                        {/* <AuthProvider> */}
                         <Box sx={layoutContainerStyles}>
                             <Header initialSummary={summary} fetchError={fetchError} />
                             <Box component="main" sx={mainContentStyles}>
@@ -32,7 +31,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                             </Box>
                             <Footer />
                         </Box>
-                        {/* </AuthProvider> */}
                     </ThemeProvider>
                 </AppRouterCacheProvider>
             </body>
