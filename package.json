@@ -9,6 +9,7 @@
         "lint": "eslint",
         "test": "jest",
         "test:watch": "jest --watch",
+        "tw": "jest --watch",
         "studio-dev": "npx sanity dev"
     },
     "dependencies": {

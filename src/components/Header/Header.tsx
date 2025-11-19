@@ -3,13 +3,12 @@
 
 import React, { useState, useEffect } from "react";
 import { Menu, RecipeFilters } from "@/components";
-import { Book as RecipeIcon, Article as BlogIcon, Home as HomeIcon, Favorite as FavoriteIcon, Info as InfoIcon, Search as SearchIcon, Logout as LogoutIcon } from "@mui/icons-material";
+import { Logout as LogoutIcon } from "@mui/icons-material";
 import { Box, Button } from "@mui/material";
-import { overlayStyles, modalStyles } from "./Header.styles";
-import { useRecipesSummary } from "@/hooks";
+import { overlayStyles, modalStyles, googleButtonOverlay, googleButtonWrapper, logoutButtonWrapper } from "./Header.styles";
+import { useEscapeKey, useRecipesSummary, useGoogleSignIn, useNavItems } from "@/hooks";
 import { Options } from "@/types";
 import { useAdminStore } from "@/stores/useAdminStore";
-import { useGoogleSignIn } from "@/hooks/useGoogleSignIn";
 
 interface HeaderProps {
     initialSummary?: Options | null;
@@ -19,41 +18,14 @@ interface HeaderProps {
 const Header = ({ initialSummary, fetchError }: HeaderProps) => {
     const [showFilter, setShowFilter] = useState(false);
     const { summary: options } = useRecipesSummary(initialSummary || undefined);
-    const isFiltersLoaded = options.titles.length > 0;
-
     const isAdminLogged = useAdminStore(s => s.isAdminLogged);
     const setAdminLogged = useAdminStore(s => s.setAdminLogged);
 
     useGoogleSignIn();
 
-    const navItems = [
-        { label: "Home", href: "/", icon: <HomeIcon /> },
-        { label: "Przepisy", href: "/recipes", icon: <RecipeIcon /> },
-        { label: "Artykuły", href: "/blog", icon: <BlogIcon /> },
-        { label: "Ulubione", href: "/favorites", icon: <FavoriteIcon /> },
-        { label: "O mnie", href: "/about", icon: <InfoIcon /> },
-        {
-            label: "Szukaj",
-            icon: <SearchIcon />,
-            onClick: () => setShowFilter(true),
-            hidden: !isFiltersLoaded,
-        },
-    ];
+    const navItems = useNavItems(initialSummary, () => setShowFilter(true));
+    useEscapeKey(showFilter, () => setShowFilter(false));
 
-    // Naprawiony useEffect – poprawna składnia
-    useEffect(() => {
-        if (showFilter) {
-            const handler = (e: KeyboardEvent) => {
-                if (e.key === "Escape") {
-                    setShowFilter(false);
-                }
-            };
-            document.addEventListener("keydown", handler);
-            return () => document.removeEventListener("keydown", handler);
-        }
-    }, [showFilter]);
-
-    // Naprawiony useEffect – nie ma już "unused expression"
     useEffect(() => {
         if (fetchError) {
             console.error("Błąd z layoutu:", fetchError);
@@ -66,23 +38,8 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
 
             {/* Przycisk Google – niewidoczny, ale klikalny, bez żadnego białego paska */}
             {!isAdminLogged && (
-                <Box
-                    sx={{
-                        position: "fixed",
-                        inset: 0,
-                        pointerEvents: "none",
-                        zIndex: 9999,
-                    }}
-                >
-                    <Box
-                        sx={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            pointerEvents: "auto",
-                        }}
-                    >
+                <Box sx={googleButtonOverlay}>
+                    <Box sx={googleButtonWrapper}>
                         <div id="google-signin-button" />
                     </Box>
                 </Box>
@@ -90,7 +47,7 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
 
             {/* Przycisk wylogowania – tylko gdy zalogowany */}
             {isAdminLogged && (
-                <Box sx={{ position: "fixed", top: 16, right: 16, zIndex: 1300 }}>
+                <Box sx={logoutButtonWrapper}>
                     <Button variant="contained" color="error" size="small" startIcon={<LogoutIcon />} onClick={() => setAdminLogged(false, "wylogowanie ręczne")}>
                         Wyloguj
                     </Button>
