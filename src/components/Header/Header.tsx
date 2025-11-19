@@ -3,12 +3,14 @@
 
 import React, { useState, useEffect } from "react";
 import { Menu, RecipeFilters } from "@/components";
-import { Logout as LogoutIcon } from "@mui/icons-material";
-import { Box, Button } from "@mui/material";
-import { overlayStyles, modalStyles, googleButtonOverlay, googleButtonWrapper, logoutButtonWrapper } from "./Header.styles";
+
+import { Box } from "@mui/material";
+import { overlayStyles, modalStyles } from "./Header.styles";
 import { useEscapeKey, useRecipesSummary, useGoogleSignIn, useNavItems } from "@/hooks";
 import { Options } from "@/types";
-import { useAdminStore } from "@/stores/useAdminStore";
+
+import GoogleLogoutButton from "./GoogleLogoutButton";
+import GoogleSignInButton from "./GoogleSignInButton";
 
 interface HeaderProps {
     initialSummary?: Options | null;
@@ -18,8 +20,6 @@ interface HeaderProps {
 const Header = ({ initialSummary, fetchError }: HeaderProps) => {
     const [showFilter, setShowFilter] = useState(false);
     const { summary: options } = useRecipesSummary(initialSummary || undefined);
-    const isAdminLogged = useAdminStore(s => s.isAdminLogged);
-    const setAdminLogged = useAdminStore(s => s.setAdminLogged);
 
     useGoogleSignIn();
 
@@ -36,25 +36,10 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
         <>
             <Menu navItems={navItems} />
 
-            {/* Przycisk Google – niewidoczny, ale klikalny, bez żadnego białego paska */}
-            {!isAdminLogged && (
-                <Box sx={googleButtonOverlay}>
-                    <Box sx={googleButtonWrapper}>
-                        <div id="google-signin-button" />
-                    </Box>
-                </Box>
-            )}
+            <GoogleSignInButton />
+        <GoogleLogoutButton />
 
-            {/* Przycisk wylogowania – tylko gdy zalogowany */}
-            {isAdminLogged && (
-                <Box sx={logoutButtonWrapper}>
-                    <Button variant="contained" color="error" size="small" startIcon={<LogoutIcon />} onClick={() => setAdminLogged(false, "wylogowanie ręczne")}>
-                        Wyloguj
-                    </Button>
-                </Box>
-            )}
-
-            {/* Filtry */}
+            
             {showFilter && (
                 <Box sx={overlayStyles} onClick={() => setShowFilter(false)}>
                     <Box sx={modalStyles} onClick={e => e.stopPropagation()}>
