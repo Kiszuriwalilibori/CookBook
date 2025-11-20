@@ -23,6 +23,6 @@
             "@/lib/*": ["./lib/*"]
         }
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/sanity.js", "src/components/RecipeCard"],
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/sanity.js", "src/components/RecipeCard", "src/app/api/aggregate/route.ts"],
     "exclude": ["node_modules"]
 }
