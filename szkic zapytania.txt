@@ -1,0 +1,1032 @@
+recipe.js (schema):
+
+import ProductsInput from '../components/ProductsInput'
+
+export default {
+  name: 'recipe',
+  title: 'Recipe',
+  type: 'document',
+  fields: [
+    {
+      name: 'title',
+      title: 'Recipe Title',
+      type: 'string',
+    },
+    {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+    },
+    {
+      name: 'description',
+      title: 'Description',
+      type: 'object',
+      fields: [
+        {
+          name: 'title',
+          title: 'Description Title',
+          type: 'string',
+          description: 'A short title for the description (e.g., "Recipe Overview")',
+        },
+        {
+          name: 'content',
+          title: 'Description Content',
+          type: 'array',
+          of: [
+            {
+              type: 'block',
+              styles: [
+                {title: 'Normal', value: 'normal'},
+                {title: 'Heading 1', value: 'h1'},
+                {title: 'Heading 2', value: 'h2'},
+                {title: 'Bold', value: 'strong'},
+                {title: 'List Item', value: 'bullet'},
+                {title: 'Numbered List Item', value: 'number'},
+              ],
+              marks: {
+                decorators: [
+                  {title: 'Strong', value: 'strong'},
+                  {title: 'Emphasis', value: 'em'},
+                  {title: 'Underline', value: 'underline'},
+                ],
+                annotations: [
+                  {
+                    name: 'link',
+                    type: 'object',
+                    title: 'Link',
+                    fields: [
+                      {
+                        name: 'href',
+                        type: 'url',
+                        title: 'URL',
+                        validation: (Rule) => Rule.uri({scheme: ['http', 'https']}),
+                      },
+                      {
+                        name: 'openInNewTab',
+                        title: 'Open in new tab?',
+                        type: 'boolean',
+                        initialValue: true,
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          ],
+          description: 'Detailed description of the recipe. Use lists for key features.',
+        },
+        {
+          name: 'image',
+          title: 'Description Image',
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative text',
+              description: 'Important for accessibility',
+              options: {
+                isHighlighted: true,
+              },
+              validation: (Rule) => Rule.required().error('Alt text is required for images'),
+            },
+          ],
+        },
+        {
+          name: 'notes',
+          title: 'Additional Notes',
+          type: 'text',
+          rows: 2,
+          description: 'Optional tips or additional info for the description.',
+        },
+      ],
+      preview: {
+        select: {
+          title: 'title',
+          media: 'image',
+        },
+        prepare(selection) {
+          const {title, media} = selection
+          return {
+            title,
+            media,
+          }
+        },
+      },
+    },
+    {
+      name: 'ingredients',
+      title: 'Ingredients',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {name: 'name', title: 'Ingredient Name', type: 'string'},
+            {name: 'quantity', title: 'Quantity', type: 'number'},
+          ],
+        },
+      ],
+    },
+    {
+      name: 'products',
+      title: 'Products',
+      type: 'array',
+      of: [{type: 'string'}],
+      components: {
+        input: ProductsInput, // Custom component for dynamic updates
+      },
+      description: 'List of product names derived from the last word of each ingredient name',
+      validation: (Rule) => Rule.unique(), // Optional: Ensure unique strings
+    },
+    {
+      name: 'preparationSteps',
+      title: 'Preparation Steps',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          title: 'Step',
+          fields: [
+            {
+              name: 'content',
+              title: 'Step Content',
+              type: 'array',
+              of: [
+                {
+                  type: 'block',
+                  styles: [
+                    {title: 'Normal', value: 'normal'},
+                    {title: 'Heading 1', value: 'h1'},
+                    {title: 'Heading 2', value: 'h2'},
+                    {title: 'Bold', value: 'strong'},
+                    {title: 'List Item', value: 'bullet'},
+                    {title: 'Numbered List Item', value: 'number'},
+                  ],
+                  marks: {
+                    decorators: [
+                      {title: 'Strong', value: 'strong'},
+                      {title: 'Emphasis', value: 'em'},
+                      {title: 'Underline', value: 'underline'},
+                    ],
+                    annotations: [
+                      {
+                        name: 'link',
+                        type: 'object',
+                        title: 'Link',
+                        fields: [
+                          {
+                            name: 'href',
+                            type: 'url',
+                            title: 'URL',
+                            validation: (Rule) => Rule.uri({scheme: ['http', 'https']}),
+                          },
+                          {
+                            name: 'openInNewTab',
+                            title: 'Open in new tab?',
+                            type: 'boolean',
+                            initialValue: true,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                },
+              ],
+              description: 'Detailed instructions for this step. Use lists for sub-steps.',
+            },
+            {
+              name: 'image',
+              title: 'Step Image',
+              type: 'image',
+              options: {
+                hotspot: true,
+              },
+              fields: [
+                {
+                  name: 'alt',
+                  type: 'string',
+                  title: 'Alternative text',
+                  description: 'Important for accessibility',
+                  options: {
+                    isHighlighted: true,
+                  },
+                  validation: (Rule) => Rule.required().error('Alt text is required for images'),
+                },
+              ],
+            },
+            {
+              name: 'notes',
+              title: 'Additional Notes',
+              type: 'text',
+              rows: 2,
+              description: 'Optional tips or warnings for this step.',
+            },
+          ],
+          preview: {
+            select: {
+              media: 'image',
+            },
+            prepare(selection) {
+              const {media} = selection
+              return {
+                title: 'Preparation Step', // Fallback preview title
+                media,
+              }
+            },
+          },
+          orderings: [
+            {
+              title: 'Step Order',
+              name: 'stepOrder',
+              by: [
+                {fields: ['_createdAt'], direction: 'asc'}, // Order by creation time as fallback
+              ],
+            },
+          ],
+        },
+      ],
+      options: {
+        reorder: {
+          title: 'Reorder Steps',
+        },
+      },
+    },
+    {
+      name: 'calories',
+      title: 'Calories',
+      type: 'number',
+    },
+    {
+      name: 'preparationTime',
+      title: 'Preparation Time',
+      type: 'number',
+      description: 'Time in minutes',
+    },
+    {
+      name: 'cookingTime',
+      title: 'Cooking Time',
+      type: 'number',
+      description: 'Time in minutes',
+    },
+    {
+      name: 'servings',
+      title: 'Servings',
+      type: 'number',
+    },
+    {
+      name: 'cuisine',
+      title: 'Cuisine Type',
+      type: 'string',
+    },
+
+    {
+      name: 'dietary',
+      title: 'Dietary Restrictions',
+      type: 'array',
+      of: [{type: 'string'}],
+    },
+    {
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{type: 'string'}],
+    },
+    {
+      name: 'notes',
+      title: 'Notes',
+      type: 'text',
+    },
+    {
+      name: 'Kizia',
+      title: 'Kizia',
+      type: 'boolean',
+    },
+    {
+      name: 'isReady',
+      title: 'Is Ready',
+      type: 'boolean',
+      initialValue: true,
+    },
+    {
+      name: 'source',
+      title: 'Source',
+      type: 'object',
+      fields: [
+        {name: 'http', title: 'HTTP', type: 'string'},
+        {name: 'book', title: 'Book', type: 'string'},
+        {name: 'title', title: 'Title', type: 'string'},
+        {name: 'author', title: 'Author', type: 'string'},
+        {name: 'where', title: 'Where', type: 'string'}, // Opcjonalne
+      ],
+    },
+  ],
+}
+
+RecipeFilters:
+
+import ProductsInput from '../components/ProductsInput'
+
+export default {
+  name: 'recipe',
+  title: 'Recipe',
+  type: 'document',
+  fields: [
+    {
+      name: 'title',
+      title: 'Recipe Title',
+      type: 'string',
+    },
+    {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+    },
+    {
+      name: 'description',
+      title: 'Description',
+      type: 'object',
+      fields: [
+        {
+          name: 'title',
+          title: 'Description Title',
+          type: 'string',
+          description: 'A short title for the description (e.g., "Recipe Overview")',
+        },
+        {
+          name: 'content',
+          title: 'Description Content',
+          type: 'array',
+          of: [
+            {
+              type: 'block',
+              styles: [
+                {title: 'Normal', value: 'normal'},
+                {title: 'Heading 1', value: 'h1'},
+                {title: 'Heading 2', value: 'h2'},
+                {title: 'Bold', value: 'strong'},
+                {title: 'List Item', value: 'bullet'},
+                {title: 'Numbered List Item', value: 'number'},
+              ],
+              marks: {
+                decorators: [
+                  {title: 'Strong', value: 'strong'},
+                  {title: 'Emphasis', value: 'em'},
+                  {title: 'Underline', value: 'underline'},
+                ],
+                annotations: [
+                  {
+                    name: 'link',
+                    type: 'object',
+                    title: 'Link',
+                    fields: [
+                      {
+                        name: 'href',
+                        type: 'url',
+                        title: 'URL',
+                        validation: (Rule) => Rule.uri({scheme: ['http', 'https']}),
+                      },
+                      {
+                        name: 'openInNewTab',
+                        title: 'Open in new tab?',
+                        type: 'boolean',
+                        initialValue: true,
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          ],
+          description: 'Detailed description of the recipe. Use lists for key features.',
+        },
+        {
+          name: 'image',
+          title: 'Description Image',
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative text',
+              description: 'Important for accessibility',
+              options: {
+                isHighlighted: true,
+              },
+              validation: (Rule) => Rule.required().error('Alt text is required for images'),
+            },
+          ],
+        },
+        {
+          name: 'notes',
+          title: 'Additional Notes',
+          type: 'text',
+          rows: 2,
+          description: 'Optional tips or additional info for the description.',
+        },
+      ],
+      preview: {
+        select: {
+          title: 'title',
+          media: 'image',
+        },
+        prepare(selection) {
+          const {title, media} = selection
+          return {
+            title,
+            media,
+          }
+        },
+      },
+    },
+    {
+      name: 'ingredients',
+      title: 'Ingredients',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {name: 'name', title: 'Ingredient Name', type: 'string'},
+            {name: 'quantity', title: 'Quantity', type: 'number'},
+          ],
+        },
+      ],
+    },
+    {
+      name: 'products',
+      title: 'Products',
+      type: 'array',
+      of: [{type: 'string'}],
+      components: {
+        input: ProductsInput, // Custom component for dynamic updates
+      },
+      description: 'List of product names derived from the last word of each ingredient name',
+      validation: (Rule) => Rule.unique(), // Optional: Ensure unique strings
+    },
+    {
+      name: 'preparationSteps',
+      title: 'Preparation Steps',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          title: 'Step',
+          fields: [
+            {
+              name: 'content',
+              title: 'Step Content',
+              type: 'array',
+              of: [
+                {
+                  type: 'block',
+                  styles: [
+                    {title: 'Normal', value: 'normal'},
+                    {title: 'Heading 1', value: 'h1'},
+                    {title: 'Heading 2', value: 'h2'},
+                    {title: 'Bold', value: 'strong'},
+                    {title: 'List Item', value: 'bullet'},
+                    {title: 'Numbered List Item', value: 'number'},
+                  ],
+                  marks: {
+                    decorators: [
+                      {title: 'Strong', value: 'strong'},
+                      {title: 'Emphasis', value: 'em'},
+                      {title: 'Underline', value: 'underline'},
+                    ],
+                    annotations: [
+                      {
+                        name: 'link',
+                        type: 'object',
+                        title: 'Link',
+                        fields: [
+                          {
+                            name: 'href',
+                            type: 'url',
+                            title: 'URL',
+                            validation: (Rule) => Rule.uri({scheme: ['http', 'https']}),
+                          },
+                          {
+                            name: 'openInNewTab',
+                            title: 'Open in new tab?',
+                            type: 'boolean',
+                            initialValue: true,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                },
+              ],
+              description: 'Detailed instructions for this step. Use lists for sub-steps.',
+            },
+            {
+              name: 'image',
+              title: 'Step Image',
+              type: 'image',
+              options: {
+                hotspot: true,
+              },
+              fields: [
+                {
+                  name: 'alt',
+                  type: 'string',
+                  title: 'Alternative text',
+                  description: 'Important for accessibility',
+                  options: {
+                    isHighlighted: true,
+                  },
+                  validation: (Rule) => Rule.required().error('Alt text is required for images'),
+                },
+              ],
+            },
+            {
+              name: 'notes',
+              title: 'Additional Notes',
+              type: 'text',
+              rows: 2,
+              description: 'Optional tips or warnings for this step.',
+            },
+          ],
+          preview: {
+            select: {
+              media: 'image',
+            },
+            prepare(selection) {
+              const {media} = selection
+              return {
+                title: 'Preparation Step', // Fallback preview title
+                media,
+              }
+            },
+          },
+          orderings: [
+            {
+              title: 'Step Order',
+              name: 'stepOrder',
+              by: [
+                {fields: ['_createdAt'], direction: 'asc'}, // Order by creation time as fallback
+              ],
+            },
+          ],
+        },
+      ],
+      options: {
+        reorder: {
+          title: 'Reorder Steps',
+        },
+      },
+    },
+    {
+      name: 'calories',
+      title: 'Calories',
+      type: 'number',
+    },
+    {
+      name: 'preparationTime',
+      title: 'Preparation Time',
+      type: 'number',
+      description: 'Time in minutes',
+    },
+    {
+      name: 'cookingTime',
+      title: 'Cooking Time',
+      type: 'number',
+      description: 'Time in minutes',
+    },
+    {
+      name: 'servings',
+      title: 'Servings',
+      type: 'number',
+    },
+    {
+      name: 'cuisine',
+      title: 'Cuisine Type',
+      type: 'string',
+    },
+
+    {
+      name: 'dietary',
+      title: 'Dietary Restrictions',
+      type: 'array',
+      of: [{type: 'string'}],
+    },
+    {
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{type: 'string'}],
+    },
+    {
+      name: 'notes',
+      title: 'Notes',
+      type: 'text',
+    },
+    {
+      name: 'Kizia',
+      title: 'Kizia',
+      type: 'boolean',
+    },
+    {
+      name: 'isReady',
+      title: 'Is Ready',
+      type: 'boolean',
+      initialValue: true,
+    },
+    {
+      name: 'source',
+      title: 'Source',
+      type: 'object',
+      fields: [
+        {name: 'http', title: 'HTTP', type: 'string'},
+        {name: 'book', title: 'Book', type: 'string'},
+        {name: 'title', title: 'Title', type: 'string'},
+        {name: 'author', title: 'Author', type: 'string'},
+        {name: 'where', title: 'Where', type: 'string'}, // Opcjonalne
+      ],
+    },
+  ],
+}
+
+useCreateRecipeFilterFields:
+
+import { fieldTranslations } from "@/lib/types";
+import { FilterState, Options } from "@/types";
+import { useMemo } from "react";
+
+const GENERAL_PLACEHOLDER = "Wszystkie";
+const DIETARY_PLACEHOLDER = "Bez ograniczeń";
+
+const BASE_FILTER_FIELDS = [
+    { key: "title", label: fieldTranslations.title, multiple: false, placeholder: GENERAL_PLACEHOLDER },
+    { key: "cuisine", label: fieldTranslations.cuisine, multiple: false, placeholder: GENERAL_PLACEHOLDER },
+    { key: "tag", label: fieldTranslations.tags, multiple: true, chips: true, placeholder: GENERAL_PLACEHOLDER },
+    { key: "dietary", label: fieldTranslations.dietary, multiple: true, chips: true, placeholder: DIETARY_PLACEHOLDER },
+    { key: "product", label: fieldTranslations.product, multiple: true, chips: true, placeholder: GENERAL_PLACEHOLDER },
+] as const;
+
+
+fieldTranslations:
+
+export const fieldTranslations: Record<string, string> = {
+    title: "Nazwa",
+    calories: "Kalorie",
+    cookingTime: "Czas aktywnej pracy",
+    dietary: "Rodzaj diety",
+    tags: "Etykiety",
+    cuisine: "Kuchnia",
+    preparationTime: "Całkowity czas przygotowania",
+    servings: "Porcje", // Not used directly; handled dynamically below
+    notes: "Notatki",
+    product: "Produkt",
+};
+
+
+useFilters:
+
+import { useState, useEffect, useCallback } from "react";
+import { z } from "zod";
+import { useDebouncedCallback } from "./useDebouncedCallback";
+import { normalizeMultiple } from "@/components/RecipeFilters/utils/normalize";
+import { Options } from "@/types";
+
+// Constants (extracted for magic numbers)
+const MAX_TAGS = 10;
+
+// Define empty errors object with all keys
+const EMPTY_ERRORS: Record<keyof FilterState, string> = {
+    title: "",
+    cuisine: "",
+    tag: "",
+    dietary: "",
+    product: "",
+};
+
+const FilterSchema = z.object({
+    title: z.string().default(""),
+    cuisine: z.string().default(""),
+    tag: z.array(z.string()).max(MAX_TAGS, `Maksymalnie ${MAX_TAGS} tagów`),
+    dietary: z.array(z.string()),
+    product: z.array(z.string()),
+});
+
+export type FilterState = z.infer<typeof FilterSchema>;
+
+export const useFilters = (options: Options, onFiltersChange: (filters: FilterState) => void) => {
+    const [filters, setFilters] = useState<FilterState>({
+        title: "",
+        cuisine: "",
+        tag: [],
+        dietary: [],
+        product: [],
+    });
+
+    const [errors, setErrors] = useState<Record<keyof FilterState, string>>(EMPTY_ERRORS);
+
+    const applyFiltersInternal = useCallback(
+        (newFilters: FilterState) => {
+            onFiltersChange(newFilters);
+        },
+        [onFiltersChange]
+    );
+
+    const { debounced: debouncedApplyFilters, flush: flushApplyFilters } = useDebouncedCallback(applyFiltersInternal, 500);
+
+    const handleChange = useCallback(
+        <K extends keyof FilterState>(key: K, value: FilterState[K]): void => {
+            setFilters(prev => {
+                const updated = { ...prev };
+
+                if (Array.isArray(value)) {
+                    // multi-value case
+                    let normalized: string[];
+                    if (key === "tag") {
+                        normalized = normalizeMultiple(value, options.tags);
+                        updated.tag = normalized;
+                    } else if (key === "dietary") {
+                        normalized = normalizeMultiple(value, options.dietary);
+                        updated.dietary = normalized;
+                    } else if (key === "product") {
+                        normalized = normalizeMultiple(value, options.products);
+                        updated.product = normalized;
+                    }
+                } else {
+                    // single-value case
+                    const normalized = (value as string).trim().toLowerCase();
+                    if (key === "title") updated.title = normalized;
+                    if (key === "cuisine") updated.cuisine = normalized;
+                }
+
+                debouncedApplyFilters(updated);
+                return updated;
+            });
+        },
+        [options, debouncedApplyFilters]
+    );
+
+    useEffect(() => {
+        if (options.tags.length === 0) return; // Skip if options not loaded yet
+
+        setFilters(prev => {
+            const normalized = { ...prev };
+            const multipleKeys: ("tag" | "dietary" | "product")[] = ["tag", "dietary", "product"];
+            multipleKeys.forEach(key => {
+                const optionsKey = key === "tag" ? "tags" : key === "dietary" ? "dietary" : "products";
+                const currentValue = prev[key];
+                normalized[key] = normalizeMultiple(currentValue as string[], options[optionsKey as keyof typeof options] as string[]);
+            });
+
+            // Avoid JSON.stringify for performance; compare arrays directly
+            let isDifferent = false;
+            multipleKeys.forEach(key => {
+                if (normalized[key].join(",") !== prev[key].join(",")) {
+                    isDifferent = true;
+                }
+            });
+
+            if (isDifferent) {
+                debouncedApplyFilters(normalized);
+                return normalized;
+            }
+            return prev;
+        });
+    }, [options, debouncedApplyFilters]);
+
+    const apply = useCallback(() => {
+        flushApplyFilters(); // Immediately flush any pending debounced call
+        const result = FilterSchema.safeParse(filters);
+        if (!result.success) {
+            const newErrors: Record<keyof FilterState, string> = { ...EMPTY_ERRORS };
+            result.error.errors.forEach(err => {
+                const key = err.path[0];
+                if (typeof key === "string") newErrors[key as keyof FilterState] = err.message;
+            });
+            setErrors(newErrors);
+            return false;
+        }
+
+        setErrors(EMPTY_ERRORS);
+        onFiltersChange(result.data);
+        return true;
+    }, [filters, flushApplyFilters, onFiltersChange]);
+
+    const clear = useCallback(() => {
+        const cleared: FilterState = {
+            title: "",
+            cuisine: "",
+            tag: [],
+            dietary: [],
+            product: [],
+        };
+        setFilters(cleared);
+        setErrors(EMPTY_ERRORS);
+        onFiltersChange(cleared);
+    }, [onFiltersChange]);
+
+    return { filters, errors, handleChange, clear, apply };
+};
+
+
+useFiltersStore:
+
+import { create } from "zustand";
+import { type FilterState } from "@/types";
+import { Options } from "@/types";
+
+const DEFAULT_FILTERS: FilterState = {
+    title: "",
+    cuisine: "",
+    tag: [],
+    dietary: [],
+    product: [],
+};
+
+interface FilterStoreState {
+    filters: FilterState;
+    errors: Partial<Record<keyof FilterState, string>>;
+    options: Options;
+}
+
+interface FilterStoreActions {
+    handleChange: (key: keyof FilterState, value: string | string[]) => void;
+    clear: () => void;
+    apply: () => boolean;
+    setFilters: (filters: Partial<FilterState>) => void;
+    initOptions: (options: Options) => void;
+}
+
+type FilterStore = FilterStoreState & FilterStoreActions;
+
+export const useFiltersStore = create<FilterStore>((set, get) => ({
+    filters: DEFAULT_FILTERS,
+    errors: {},
+    options: { titles: [], cuisines: [], tags: [], dietary: [], products: [] }, // Empty default
+
+    handleChange: (key, value) => {
+        const current = get();
+        const newErrors = { ...current.errors };
+        let error = "";
+
+        // Simple validation examples
+        if (typeof value === "string") {
+            if (value.length > 50) error = "Maks. 50 znaków";
+        } else if (Array.isArray(value) && value.length > 10) {
+            error = "Maks. 10 elementów";
+            value = value.slice(0, 10); // Truncate
+        }
+
+        if (error) {
+            newErrors[key] = error;
+        } else {
+            delete newErrors[key];
+        }
+
+        set({ filters: { ...current.filters, [key]: value }, errors: newErrors });
+    },
+
+    clear: () => {
+        set({ filters: DEFAULT_FILTERS, errors: {} });
+    },
+
+    apply: () => {
+        const { errors } = get();
+        // Check for any errors
+        const hasErrors = Object.values(errors).some(Boolean);
+        if (hasErrors) return false;
+        // Additional global validation if needed
+        return true;
+    },
+
+    setFilters: (newFilters: Partial<FilterState>) => {
+        const current = get();
+        
+        set({
+            filters: { ...current.filters, ...newFilters },
+            errors: {}, // Clear errors on set
+        });
+    },
+
+    initOptions: (options: Options) => {
+        const current = get();
+        set({
+            options,
+            filters: { ...current.filters }, // Preserve filters, but could reset if needed
+        });
+    },
+}));
+
+
+FilterSummary
+
+import React, { useMemo } from "react";
+import { Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { summaryTextSx } from "../styles";
+import { FilterState } from "@/types";
+
+interface FilterSummaryProps {
+    filters: FilterState;
+}
+
+export default function FilterSummary({ filters }: FilterSummaryProps) {
+    const theme = useTheme();
+
+    const summary = useMemo(() => {
+        const parts: string[] = [];
+        let count = 0;
+
+        if (filters.title) {
+            parts.push(`📖 ${filters.title}`);
+            count += 1;
+        }
+        if (filters.cuisine) {
+            parts.push(`🍽️ ${filters.cuisine}`);
+            count += 1;
+        }
+        if (filters.tag.length) {
+            parts.push(`🏷️ ${filters.tag.join(", ")}`);
+            count += filters.tag.length;
+        }
+        if (filters.dietary.length) {
+            parts.push(`🌱 ${filters.dietary.join(", ")}`);
+            count += filters.dietary.length;
+        }
+        if (filters.product.length) {
+            parts.push(`🛍️ ${filters.product.join(", ")}`);
+            count += filters.product.length;
+        }
+
+        if (count === 0) return "Brak aktywnych filtrów.";
+
+        const filtrWord = count === 1 ? "filtr" : count % 10 >= 2 && count % 10 <= 4 && (count < 10 || count > 20) ? "filtry" : "filtrów";
+        const aktywnyWord = count === 1 ? "aktywny" : count % 10 >= 2 && count % 10 <= 4 && (count < 10 || count > 20) ? "aktywne" : "aktywnych";
+
+        return `${count} ${filtrWord} ${aktywnyWord}: ${parts.join(", ")}`;
+    }, [filters]);
+
+    return (
+        <Typography variant="body2" align="center" sx={summaryTextSx(theme)}>
+            {summary}
+        </Typography>
+    );
+}
+
+FilterAutoComplete:
+
+
+import React from "react";
+import { Autocomplete, TextField } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { labelSx } from "../styles";
+
+interface FilterAutocompleteProps<T = string> {
+    label: string;
+    placeholder?: string;
+    options: T[];
+    value: T | T[] | null;
+    onChange: (newValue: T | T[] | null) => void;
+    multiple?: boolean;
+    error?: boolean;
+    helperText?: string;
+    renderTags?: (value: T[]) => React.ReactNode;
+}
+export default function FilterAutocomplete<T = string>({ label, placeholder = "Wszystkie", options, value, onChange, multiple = false, error, helperText, renderTags }: FilterAutocompleteProps<T>) {
+    const theme = useTheme();
+
+    return (
+        <Autocomplete<T, boolean, false, false>
+            fullWidth
+            multiple={multiple}
+            options={options}
+            value={value as T | T[] | null}
+            onChange={(_, newValue) => onChange(newValue)}
+            renderTags={multiple && renderTags ? (v: readonly T[]) => renderTags([...v]) : undefined}
+            renderInput={params => <TextField {...params} label={label} placeholder={placeholder} InputLabelProps={{ shrink: true }} sx={labelSx(theme)} error={error} helperText={helperText} />}
+        />
+    );
+}
+
+
+
+
+The task:
+
+Above you can see current files that participate in filtering recipes.
+
+Now I would like to add filtering also by source.
+However, this must be available only when admin is logged 
+Being logged as admin can now be easily detected, we worked on that not many days ago. However, if ypu need code -just tell. Avoid guessing the code
