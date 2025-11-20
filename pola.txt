@@ -8,12 +8,37 @@ tags
 
 source
 
-Kizia
-isReady
-preparationSteps
-orderings
-calories
-preparationTime
-cookingTime
-servings
-ingredients
+recipesSummary:
+
+
+
+getrecipeBySlug.js
+
+title
+products
+cuisine
+dietary
+tags
+
+getRecipesForCards.js
+title
+
+agregat:
+products, dietary, cuisine, tags, title
+
+recipesSummary>route
+titles,
+        cuisines,
+        tags,
+        dietary,
+        products
+uniques>route
+
+"title" | "cuisine" | "tags" | "dietary" | "ingredients" | "products";
+
+recipes-summary:
+titles,
+        cuisines,
+        tags,
+        dietary,
+        products

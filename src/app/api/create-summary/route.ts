@@ -1,13 +1,12 @@
 ///////////////////////////////////////////////////////////
 // Refactored TypeScript version, strict mode, no "any"
-// File: /app/api/create-summary/route.ts
-
+// File: /app/api/create-summary/route
 import type { NextRequest } from "next/server";
 
 const SANITY_PROJECT_ID: string = process.env.SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "your_project_id";
 const SANITY_DATASET: string = process.env.SANITY_DATASET || process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
 const SANITY_TOKEN: string = process.env.SANITY_TOKEN || "";
-const SANITY_WEBHOOK_SECRET: string = process.env.SANITY_WEBHOOK_SECRET || "";
+const SANITY_WEBHOOK_SECRET_CREATE_SUMMARY: string = process.env.SANITY_WEBHOOK_SECRET || "";
 
 interface RecipeDoc {
     products?: string[];
@@ -84,10 +83,10 @@ function cleanDoc(obj: CurrentDocResponse | SummaryDoc | null): CurrentDocRespon
 
 export async function POST(req: NextRequest) {
     try {
-        if (SANITY_WEBHOOK_SECRET) {
-            const incomingSecret = (req.headers.get("x-webhook-secret") || req.headers.get("x-sanity-webhook-secret") || "").trim();
+        if (SANITY_WEBHOOK_SECRET_CREATE_SUMMARY) {
+            const incomingSecret = (req.headers.get("create-summary-secret") || req.headers.get("create-summary-secret") || "").trim();
 
-            if (!incomingSecret || incomingSecret !== SANITY_WEBHOOK_SECRET) {
+            if (!incomingSecret || incomingSecret !== SANITY_WEBHOOK_SECRET_CREATE_SUMMARY) {
                 return new Response(JSON.stringify({ error: "Invalid webhook secret" }), {
                     status: 401,
                     headers: { "Content-Type": "application/json" },
