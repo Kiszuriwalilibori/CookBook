@@ -2,15 +2,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Menu, RecipeFilters } from "@/components";
+import { Menu } from "@/components";
 
-import { Box } from "@mui/material";
-import { overlayStyles, modalStyles } from "./Header.styles";
 import { useEscapeKey, useRecipesSummary, useGoogleSignIn, useNavItems } from "@/hooks";
 import { Options } from "@/types";
 
 import GoogleLogoutButton from "./GoogleLogoutButton";
 import GoogleSignInButton from "./GoogleSignInButton";
+import { RecipeFiltersModal } from "./RecipeFiltersModal";
 
 interface HeaderProps {
     initialSummary?: Options | null;
@@ -35,18 +34,9 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
     return (
         <>
             <Menu navItems={navItems} />
-
             <GoogleSignInButton />
-        <GoogleLogoutButton />
-
-            
-            {showFilter && (
-                <Box sx={overlayStyles} onClick={() => setShowFilter(false)}>
-                    <Box sx={modalStyles} onClick={e => e.stopPropagation()}>
-                        <RecipeFilters onFiltersChange={() => {}} onClose={() => setShowFilter(false)} options={options} />
-                    </Box>
-                </Box>
-            )}
+            <GoogleLogoutButton />
+            <RecipeFiltersModal open={showFilter} onClose={() => setShowFilter(false)} options={options} />
         </>
     );
 };
