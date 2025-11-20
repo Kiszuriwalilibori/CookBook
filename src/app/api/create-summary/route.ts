@@ -252,7 +252,6 @@
 
 // File: app/api/create-summary/route.ts
 // app/api/create-summary/route.ts
-// app/api/create-summary/route.ts
 import type { NextRequest } from "next/server";
 import { createHmac, timingSafeEqual } from "node:crypto";
 
@@ -295,14 +294,12 @@ interface CurrentDocResponse {
   title?: string[];
 }
 
-// ————————————————————————————————————————
-// Webhook signature verification (official Sanity way)
+/** Verify Sanity webhook signature (official HMAC SHA256) */
 function verifySignature(body: string, signatureHeader: string | null): boolean {
   if (!WEBHOOK_SECRET) {
-    console.warn("SANITY_WEBHOOK_SECRET_CREATE_SUMMARY not set – skipping verification (dev only)");
+    console.warn("Webhook secret missing – skipping verification (dev only)");
     return true;
   }
-
   if (!signatureHeader?.startsWith("v1=")) return false;
 
   const provided = signatureHeader.slice(3);
@@ -311,15 +308,14 @@ function verifySignature(body: string, signatureHeader: string | null): boolean 
   return timingSafeEqual(Buffer.from(provided), Buffer.from(expected));
 }
 
-// ————————————————————————————————————————
 function normalizeLower(s: unknown): string | null {
-  return typeof s === "string" ? s.trim().toLowerCase() || null : null;
+  return typeof s === "string" && s.trim() ? s.trim().toLowerCase() : null;
 }
 
 function capitalizeFirst(s: unknown): string | null {
   if (typeof s !== "string") return null;
-  const trimmed = s.trim();
-  return trimmed ? trimmed[0].toUpperCase() + trimmed.slice(1).toLowerCase() : null;
+  const t = s.trim();
+  return t ? t[0].toUpperCase() + t.slice(1).toLowerCase() : null;
 }
 
 function getUniqueSorted(set: Set<string>): string[] {
@@ -346,20 +342,18 @@ function cleanDoc(doc: CurrentDocResponse | SummaryDoc | null): Partial<SummaryD
   };
 }
 
-// ————————————————————————————————————————
 export async function POST(req: NextRequest) {
   try {
-    // 1. Read raw body first — needed for HMAC verification
     const rawBody = await req.text();
 
-    let incomingPayload: { _id?: string; _type?: string } = {};
+    let payload: { _id?: string; _type?: string } = {};
     try {
-      incomingPayload = JSON.parse(rawBody) as { _id?: string; _type?: string };
+      payload = JSON.parse(rawBody);
     } catch {
-      // JSON might be invalid — we still verify signature
+      // ignore parse errors – we still need to verify signature
     }
 
-    // 2. Verify Sanity webhook signature
+    // Verify webhook signature
     const signature = req.headers.get("sanity-webhook-signature");
     if (!verifySignature(rawBody, signature)) {
       return new Response(JSON.stringify({ error: "Invalid webhook signature" }), {
@@ -368,50 +362,61 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 3. Skip if this is the summary document updating itself
-    if (incomingPayload._id === "summary" || incomingPayload._type === "summary") {
+    // Skip self-updates & non-recipe changes
+    if (payload._id === "summary" || payload._type === "summary") {
       return new Response(JSON.stringify({ ok: "skipped_self_update" }), { status: 200 });
     }
-
-    // 4. Skip non-recipe changes
-    if (incomingPayload._type && incomingPayload._type !== "recipe") {
+    if (payload._type && payload._type !== "recipe") {
       return new Response(JSON.stringify({ ok: "skipped_non_recipe" }), { status: 200 });
     }
 
-    // 5. Fetch all recipes
+    // Fetch all recipes
     const groq = `*[_type == "recipe"]{products, dietary, cuisine, tags, title}`;
     const url = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${encodeURIComponent(groq)}`;
 
     const res = await fetch(url, {
       headers: SANITY_TOKEN ? { Authorization: `Bearer ${SANITY_TOKEN}` } : {},
     });
-
-    if (!res.ok) throw new Error(`Sanity query failed: ${res.status}`);
+    if (!res.ok) throw new Error(`Query failed: ${res.status}`);
 
     const { result: recipes = [] } = (await res.json()) as SanityQueryResponse;
 
-    // 6. Aggregate
-    const products = new Set<string>();
+    // Aggregate unique values
+    const productsSet = new Set<string>();
     const dietarySet = new Set<string>();
     const cuisineSet = new Set<string>();
     const tagsSet = new Set<string>();
     const titlesSet = new Set<string>();
 
     for (const r of recipes) {
-      r.products?.forEach((p) => normalizeLower(p) && productsSet.add(normalizeLower(p)!));
-      r.dietary?.forEach((d) => normalizeLower(d) && dietarySet.add(normalizeLower(d)!));
+      r.products?.forEach((p) => {
+        const v = normalizeLower(p);
+        if (v) productsSet.add(v);
+      });
+
+      r.dietary?.forEach((d) => {
+        const v = normalizeLower(d);
+        if (v) dietarySet.add(v);
+      });
 
       if (Array.isArray(r.cuisine)) {
-        r.cuisine.forEach((c) => normalizeLower(c) && cuisineSet.add(normalizeLower(c)!));
+        r.cuisine.forEach((c) => {
+          const v = normalizeLower(c);
+          if (v) cuisineSet.add(v);
+        });
       } else if (typeof r.cuisine === "string") {
-        normalizeLower(r.cuisine) && cuisineSet.add(normalizeLower(r.cuisine)!);
+        const v = normalizeLower(r.cuisine);
+        if (v) cuisineSet.add(v);
       }
 
-      r.tags?.forEach((t) => normalizeLower(t) && tagsSet.add(normalizeLower(t)!));
+      r.tags?.forEach((t) => {
+        const v = normalizeLower(t);
+        if (v) tagsSet.add(v);
+      });
 
       if (r.title) {
         const cap = capitalizeFirst(r.title);
-        cap && titlesSet.add(cap);
+        if (cap) titlesSet.add(cap);
       }
     }
 
@@ -426,14 +431,13 @@ export async function POST(req: NextRequest) {
       title: getUniqueSorted(titlesSet),
     };
 
-    // 7. No write token → just return the computed summary (great for testing)
     if (!SANITY_TOKEN) {
       return new Response(JSON.stringify({ summary: newSummary, upsert: "skipped_no_token" }), {
         status: 200,
       });
     }
 
-    // 8. Check if anything changed
+    // Check for changes
     const currentRes = await fetch(
       `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/doc/${SANITY_DATASET}/summary`,
       { headers: { Authorization: `Bearer ${SANITY_TOKEN}` } }
@@ -450,7 +454,7 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ ok: "skipped_no_changes" }), { status: 200 });
     }
 
-    // 9. Upsert
+    // Upsert
     const mutateRes = await fetch(
       `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/mutate/${SANITY_DATASET}`,
       {
@@ -476,7 +480,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
-    console.error("create-summary webhook error:", msg);
+    console.error("create-summary error:", msg);
     return new Response(JSON.stringify({ error: "Failed", details: msg }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
