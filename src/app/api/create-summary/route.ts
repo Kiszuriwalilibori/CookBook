@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////
 // Refactored TypeScript version, strict mode, no "any"
-// File: /app/api/sanity/webhook/route.ts
+// File: /app/api/create-summary/route.ts
 
 import type { NextRequest } from "next/server";
 
@@ -27,19 +27,18 @@ interface SummaryDoc {
     totalCount: number;
     products: string[];
     dietary: string[];
-    cuisines: string[];
+    cuisine: string[];
     tags: string[];
-    titles: string[];
-    categories: string[];
+    title: string[];
 }
 
 interface CurrentDocResponse {
     totalCount?: number;
     products?: string[];
     dietary?: string[];
-    cuisines?: string[];
+    cuisine?: string[];
     tags?: string[];
-    titles?: string[];
+    title?: string[];
     categories?: string[];
 }
 
@@ -77,10 +76,9 @@ function cleanDoc(obj: CurrentDocResponse | SummaryDoc | null): CurrentDocRespon
         totalCount: typeof obj?.totalCount === "number" ? obj.totalCount : undefined,
         products: Array.isArray(obj?.products) ? obj!.products : [],
         dietary: Array.isArray(obj?.dietary) ? obj!.dietary : [],
-        cuisines: Array.isArray(obj?.cuisines) ? obj!.cuisines : [],
+        cuisine: Array.isArray(obj?.cuisine) ? obj!.cuisine : [],
         tags: Array.isArray(obj?.tags) ? obj!.tags : [],
-        titles: Array.isArray(obj?.titles) ? obj!.titles : [],
-        categories: Array.isArray(obj?.categories) ? obj!.categories : [],
+        title: Array.isArray(obj?.title) ? obj!.title : [],
     };
 }
 
@@ -104,7 +102,7 @@ export async function POST(req: NextRequest) {
             incoming = null;
         }
 
-        if (incoming && (incoming["_id"] === "recipesSummary" || incoming["_type"] === "recipesSummary")) {
+        if (incoming && (incoming["_id"] === "summary" || incoming["_type"] === "summary")) {
             return new Response(JSON.stringify({ ok: "skipped_self_update" }), {
                 status: 200,
                 headers: { "Content-Type": "application/json" },
@@ -188,10 +186,9 @@ export async function POST(req: NextRequest) {
             totalCount: recipes.length,
             products: getUniqueSorted(productsSet),
             dietary: getUniqueSorted(dietarySet),
-            cuisines: getUniqueSorted(cuisineSet),
+            cuisine: getUniqueSorted(cuisineSet),
             tags: getUniqueSorted(tagsSet),
-            titles: getUniqueSorted(titlesSet),
-            categories: getUniqueSorted(cuisineSet),
+            title: getUniqueSorted(titlesSet),
         };
 
         if (!SANITY_TOKEN) {
@@ -201,7 +198,7 @@ export async function POST(req: NextRequest) {
             });
         }
 
-        const docUrl = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/doc/${SANITY_DATASET}/recipesSummary`;
+        const docUrl = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/doc/${SANITY_DATASET}/summary`;
         const currentResp = await fetch(docUrl, {
             headers: { Authorization: `Bearer ${SANITY_TOKEN}` },
         });
