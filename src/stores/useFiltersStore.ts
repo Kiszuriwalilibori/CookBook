@@ -1,19 +1,19 @@
 import { create } from "zustand";
 import { type FilterState } from "@/types";
-import { Options } from "@/types";
+import { RecipeFilter } from "@/types";
 
 const DEFAULT_FILTERS: FilterState = {
     title: "",
     cuisine: "",
-    tag: [],
+    tags: [],
     dietary: [],
-    product: [],
+    products: [],
 };
 
 interface FilterStoreState {
     filters: FilterState;
     errors: Partial<Record<keyof FilterState, string>>;
-    options: Options;
+    options: RecipeFilter;
 }
 
 interface FilterStoreActions {
@@ -21,7 +21,7 @@ interface FilterStoreActions {
     clear: () => void;
     apply: () => boolean;
     setFilters: (filters: Partial<FilterState>) => void;
-    initOptions: (options: Options) => void;
+    initOptions: (options: RecipeFilter) => void;
 }
 
 type FilterStore = FilterStoreState & FilterStoreActions;
@@ -29,7 +29,7 @@ type FilterStore = FilterStoreState & FilterStoreActions;
 export const useFiltersStore = create<FilterStore>((set, get) => ({
     filters: DEFAULT_FILTERS,
     errors: {},
-    options: { titles: [], cuisines: [], tags: [], dietary: [], products: [] }, // Empty default
+    options: { title: [], cuisine: [], tags: [], dietary: [], products: [] }, // Empty default
 
     handleChange: (key, value) => {
         const current = get();
@@ -75,7 +75,7 @@ export const useFiltersStore = create<FilterStore>((set, get) => ({
         });
     },
 
-    initOptions: (options: Options) => {
+    initOptions: (options: RecipeFilter) => {
         const current = get();
         set({
             options,

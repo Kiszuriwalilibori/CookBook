@@ -41,7 +41,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import SearchIcon from "@mui/icons-material/Search";
 
 import { useRecipesSummary } from "@/hooks";
-import { Options } from "@/types";
+import { RecipeFilter} from "@/types";
 
 // Typ dokładnie taki, jaki oczekuje Twój komponent <Menu />
 export type NavItem = {
@@ -53,11 +53,11 @@ export type NavItem = {
 };
 
 export const useNavItems = (
-  initialSummary?: Options | null,
+  initialSummary?: RecipeFilter | null,
   onSearchClick?: () => void
 ): NavItem[] => {
   const { summary: options } = useRecipesSummary(initialSummary || undefined);
-  const isFiltersLoaded = options.titles.length > 0;
+  const isFiltersLoaded = options.title.length > 0;
 
   return [
     { label: "Home", href: "/", icon: <HomeIcon /> },

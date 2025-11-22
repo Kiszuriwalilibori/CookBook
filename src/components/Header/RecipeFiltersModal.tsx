@@ -3,13 +3,13 @@
 import { Modal, Fade, Backdrop, Box } from "@mui/material";
 import { RecipeFilters } from "@/components";
 import useEscapeKey from "@/hooks/useEscapeKey";
-import { Options } from "@/types";
+import { RecipeFilter } from "@/types";
 import { modalStyles, visuallyHidden } from "./Header.styles";
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  options: Options;
+  options: RecipeFilter;
 }
 
 export const RecipeFiltersModal = ({ open, onClose, options }: Props) => {

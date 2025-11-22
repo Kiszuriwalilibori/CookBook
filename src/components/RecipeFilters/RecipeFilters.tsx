@@ -6,18 +6,18 @@ import { Box, Button, Typography, Divider, CircularProgress } from "@mui/materia
 import { useTheme } from "@mui/material/styles";
 import { containerSx, fieldBoxSx, buttonGroupSx, dividerSx } from "./styles";
 import { FilterSummary, FilterAutocomplete } from "./parts";
-import { FilterState, Options } from "@/types";
+import { FilterState, RecipeFilter } from "@/types";
 import { useFilters, useCreateRecipeFilterFields } from "@/hooks";
 import { useFiltersStore } from "@/stores";
 import { renderLimitedChips } from "./parts/renderLimitedChips";
 import { searchRecipeByTitle } from "@/lib/searchRecipeByTitle"; // ← new utility
 
-export type ChipFieldKey = "tag" | "product" | "dietary";
+export type ChipFieldKey = "tags" | "products" | "dietary";
 
 interface RecipeFiltersProps {
     onFiltersChange: (filters: FilterState) => void;
     onClose?: () => void;
-    options: Options;
+    options: RecipeFilter;
 }
 
 export default function RecipeFilters({ onFiltersChange, onClose, options }: RecipeFiltersProps) {
@@ -61,9 +61,9 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         if (hasOnlyTitle && currentFilters.title) {
             const title = (currentFilters.title as string).trim();
             const slug = await searchRecipeByTitle(title);
-
+            console.log("slug", slug);
             if (slug) {
-                router.push(`/recipe/${slug}`);
+                router.push(`/recipes/${slug}`);
                 onClose?.();
                 return;
             }
@@ -103,7 +103,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
                 if (k === "title") return true;
                 return Array.isArray(v) ? v.length === 0 : !v;
             });
-
+        console.log("hasOnlyTitle", hasOnlyTitle);
         if (hasOnlyTitle) setCheckingDirect(true);
         await handleApply();
         setCheckingDirect(false);
@@ -128,7 +128,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
                             const normalized = newValue ?? (field.multiple ? [] : "");
                             handleChange(field.key, normalized);
                         }}
-                        renderTags={field.chips && ["tag", "product", "dietary"].includes(field.key) ? value => renderLimitedChips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
+                        renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => renderLimitedChips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
                         {...getErrorProps(field.key)}
                     />
                 </Box>

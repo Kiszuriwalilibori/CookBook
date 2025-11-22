@@ -1,20 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getRecipesSummary } from "@/lib/getRecipesSummary";
-import type { Options } from "@/types";
+import { getSummary } from "@/lib/getSummary";
+import type { RecipeFilter } from "@/types";
 
 interface RecipesSummaryState {
-    summary: Options;
+    summary: RecipeFilter;
     isLoading: boolean;
     error: string | null;
 }
 
-export function useRecipesSummary(initialSummary?: Options) {
-    const [summary, setSummary] = useState<Options>(
+export function useRecipesSummary(initialSummary?: RecipeFilter) {
+    const [summary, setSummary] = useState<RecipeFilter>(
         initialSummary || {
-            titles: [],
-            cuisines: [],
+            title: [],
+            cuisine: [],
             tags: [],
             dietary: [],
             products: [],
@@ -27,7 +27,7 @@ export function useRecipesSummary(initialSummary?: Options) {
         const fetchSummary = async () => {
             try {
                 setIsLoading(true);
-                const { sanitizedSummary, sanitizeIssues } = await getRecipesSummary();
+                const { sanitizedSummary, sanitizeIssues } = await getSummary();
                 setSummary(sanitizedSummary);
                 if (sanitizeIssues.length > 0) {
                     console.warn("⚠️ Faulty values found in recipes summary:", sanitizeIssues);

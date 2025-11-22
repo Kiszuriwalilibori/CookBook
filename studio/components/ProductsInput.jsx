@@ -103,10 +103,10 @@ const ProductsInput = (props) => {
 
         {/* Display existing products */}
         {value.length > 0 ? (
-          value.map((product, index) => (
+          value.map((products, index) => (
             <Flex key={index} align="center" marginBottom={2} gap={2}>
               <TextInput
-                value={product || ''}
+                value={products || ''}
                 onChange={(e) => editProduct(index, e.target.value)}
                 placeholder="Product name"
               />

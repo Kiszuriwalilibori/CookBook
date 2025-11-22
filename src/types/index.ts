@@ -1,3 +1,4 @@
+import { Recipe } from "@/lib/types";
 import { ReactNode } from "react";
 
 export interface MenuItem {
@@ -6,11 +7,8 @@ export interface MenuItem {
     icon?: ReactNode; // For MUI icons
 }
 
-export interface Options {
-    titles: string[];
-    cuisines: string[];
-    tags: string[];
-    dietary: string[];
-    products: string[];
-}
 export type { FilterState } from "@/hooks/useFilters";
+
+export type FilterableRecipeKeys = keyof Pick<Recipe, "title" | "products" | "tags" | "dietary" | "cuisine">;
+
+export type RecipeFilter = Record<FilterableRecipeKeys, string[]>;

@@ -16,9 +16,9 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     const filters: Partial<FilterState> = {
         title: typeof awaitedSearchParams.title === "string" ? awaitedSearchParams.title : undefined,
         cuisine: typeof awaitedSearchParams.cuisine === "string" ? awaitedSearchParams.cuisine : undefined,
-        tag: Array.isArray(awaitedSearchParams.tag) ? awaitedSearchParams.tag : awaitedSearchParams.tag ? [awaitedSearchParams.tag] : [],
+        tags: Array.isArray(awaitedSearchParams.tags) ? awaitedSearchParams.tags : awaitedSearchParams.tags ? [awaitedSearchParams.tags] : [],
         dietary: Array.isArray(awaitedSearchParams.dietary) ? awaitedSearchParams.dietary : awaitedSearchParams.dietary ? [awaitedSearchParams.dietary] : [],
-        product: Array.isArray(awaitedSearchParams.product) ? awaitedSearchParams.product : awaitedSearchParams.product ? [awaitedSearchParams.product] : [],
+        products: Array.isArray(awaitedSearchParams.products) ? awaitedSearchParams.products : awaitedSearchParams.products ? [awaitedSearchParams.products] : [],
     };
 
     // Fetch filtered recipes on server with params

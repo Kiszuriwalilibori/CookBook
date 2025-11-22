@@ -23,17 +23,17 @@ export default function FilterSummary({ filters }: FilterSummaryProps) {
             parts.push(`🍽️ ${filters.cuisine}`);
             count += 1;
         }
-        if (filters.tag.length) {
-            parts.push(`🏷️ ${filters.tag.join(", ")}`);
-            count += filters.tag.length;
+        if (filters.tags.length) {
+            parts.push(`🏷️ ${filters.tags.join(", ")}`);
+            count += filters.tags.length;
         }
         if (filters.dietary.length) {
             parts.push(`🌱 ${filters.dietary.join(", ")}`);
             count += filters.dietary.length;
         }
-        if (filters.product.length) {
-            parts.push(`🛍️ ${filters.product.join(", ")}`);
-            count += filters.product.length;
+        if (filters.products.length) {
+            parts.push(`🛍️ ${filters.products.join(", ")}`);
+            count += filters.products.length;
         }
 
         if (count === 0) return "Brak aktywnych filtrów.";

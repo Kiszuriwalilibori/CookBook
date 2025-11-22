@@ -85,5 +85,5 @@ export const fieldTranslations: Record<string, string> = {
     preparationTime: "Całkowity czas przygotowania",
     servings: "Porcje", // Not used directly; handled dynamically below
     notes: "Notatki",
-    product: "Produkt",
+    products: "Produkt",
 };

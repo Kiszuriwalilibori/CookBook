@@ -23,9 +23,9 @@ export async function GET(req: Request) {
     const filters: Partial<FilterState> = {
         cuisine: searchParams.get("cuisine") || undefined,
         title: searchParams.get("title") || undefined,
-        tag: searchParams.getAll("tag"),
+        tags: searchParams.getAll("tags"),
         dietary: searchParams.getAll("dietary"),
-        product: searchParams.getAll("product"),
+        products: searchParams.getAll("products"),
     };
 
     try {

@@ -6,7 +6,8 @@ import { Footer, Header } from "@/components";
 import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { layoutContainerStyles, mainContentStyles } from "./layout.styles";
-import { fetchRecipesSummarySafe } from "@/lib/fetchRecipesSummarySafe";
+
+import { fetchSummary } from "@/lib/fetchSummary";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +18,8 @@ export const viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-    const { summary, error: fetchError } = await fetchRecipesSummarySafe();
+    // const { summary, error: fetchError } = await fetchRecipesSummarySafe();
+    const { summary, error: fetchError } = await fetchSummary();
 
     return (
         <html lang="pl" suppressHydrationWarning={true}>

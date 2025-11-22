@@ -5,14 +5,14 @@ import React, { useState, useEffect } from "react";
 import { Menu } from "@/components";
 
 import { useEscapeKey, useRecipesSummary, useGoogleSignIn, useNavItems } from "@/hooks";
-import { Options } from "@/types";
+import { RecipeFilter } from "@/types";
 
 import GoogleLogoutButton from "./GoogleLogoutButton";
 import GoogleSignInButton from "./GoogleSignInButton";
 import { RecipeFiltersModal } from "./RecipeFiltersModal";
 
 interface HeaderProps {
-    initialSummary?: Options | null;
+    initialSummary?: RecipeFilter | null;
     fetchError?: string | null;
 }
 

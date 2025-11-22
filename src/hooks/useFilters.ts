@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { z } from "zod";
 import { useDebouncedCallback } from "./useDebouncedCallback";
 import { normalizeMultiple } from "@/components/RecipeFilters/utils/normalize";
-import { Options } from "@/types";
+import { RecipeFilter } from "@/types";
 
 // Constants (extracted for magic numbers)
 const MAX_TAGS = 10;
@@ -11,28 +11,28 @@ const MAX_TAGS = 10;
 const EMPTY_ERRORS: Record<keyof FilterState, string> = {
     title: "",
     cuisine: "",
-    tag: "",
+    tags: "",
     dietary: "",
-    product: "",
+    products: "",
 };
 
 const FilterSchema = z.object({
     title: z.string().default(""),
     cuisine: z.string().default(""),
-    tag: z.array(z.string()).max(MAX_TAGS, `Maksymalnie ${MAX_TAGS} tagów`),
+    tags: z.array(z.string()).max(MAX_TAGS, `Maksymalnie ${MAX_TAGS} tagów`),
     dietary: z.array(z.string()),
-    product: z.array(z.string()),
+    products: z.array(z.string()),
 });
 
 export type FilterState = z.infer<typeof FilterSchema>;
 
-export const useFilters = (options: Options, onFiltersChange: (filters: FilterState) => void) => {
+export const useFilters = (options:RecipeFilter, onFiltersChange: (filters: FilterState) => void) => {
     const [filters, setFilters] = useState<FilterState>({
         title: "",
         cuisine: "",
-        tag: [],
+        tags: [],
         dietary: [],
-        product: [],
+        products: [],
     });
 
     const [errors, setErrors] = useState<Record<keyof FilterState, string>>(EMPTY_ERRORS);
@@ -54,15 +54,15 @@ export const useFilters = (options: Options, onFiltersChange: (filters: FilterSt
                 if (Array.isArray(value)) {
                     // multi-value case
                     let normalized: string[];
-                    if (key === "tag") {
+                    if (key === "tags") {
                         normalized = normalizeMultiple(value, options.tags);
-                        updated.tag = normalized;
+                        updated.tags = normalized;
                     } else if (key === "dietary") {
                         normalized = normalizeMultiple(value, options.dietary);
                         updated.dietary = normalized;
-                    } else if (key === "product") {
+                    } else if (key === "products") {
                         normalized = normalizeMultiple(value, options.products);
-                        updated.product = normalized;
+                        updated.products = normalized;
                     }
                 } else {
                     // single-value case
@@ -83,9 +83,9 @@ export const useFilters = (options: Options, onFiltersChange: (filters: FilterSt
 
         setFilters(prev => {
             const normalized = { ...prev };
-            const multipleKeys: ("tag" | "dietary" | "product")[] = ["tag", "dietary", "product"];
+            const multipleKeys: ("tags" | "dietary" | "products")[] = ["tags", "dietary", "products"];
             multipleKeys.forEach(key => {
-                const optionsKey = key === "tag" ? "tags" : key === "dietary" ? "dietary" : "products";
+                const optionsKey = key === "tags" ? "tags" : key === "dietary" ? "dietary" : "products";
                 const currentValue = prev[key];
                 normalized[key] = normalizeMultiple(currentValue as string[], options[optionsKey as keyof typeof options] as string[]);
             });
@@ -128,9 +128,9 @@ export const useFilters = (options: Options, onFiltersChange: (filters: FilterSt
         const cleared: FilterState = {
             title: "",
             cuisine: "",
-            tag: [],
+            tags: [],
             dietary: [],
-            product: [],
+            products: [],
         };
         setFilters(cleared);
         setErrors(EMPTY_ERRORS);
