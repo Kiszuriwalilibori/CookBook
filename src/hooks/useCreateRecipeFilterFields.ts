@@ -13,7 +13,10 @@ interface FilterField {
     options: string[];
     placeholder?: string;
 }
-const BASE_FILTER_FIELDS = [
+
+type BaseFilterField = Omit<FilterField, "options">;
+
+const BASE_FILTER_FIELDS: BaseFilterField[] = [
     { key: "title", label: fieldTranslations.title, multiple: false, placeholder: GENERAL_PLACEHOLDER },
     { key: "cuisine", label: fieldTranslations.cuisine, multiple: false, placeholder: GENERAL_PLACEHOLDER },
     { key: "tags", label: fieldTranslations.tags, multiple: true, chips: true, placeholder: GENERAL_PLACEHOLDER },

@@ -11,9 +11,9 @@ import { useFilters, useCreateRecipeFilterFields } from "@/hooks";
 import { useFiltersStore } from "@/stores";
 import { renderLimitedChips } from "./parts/renderLimitedChips";
 import { searchRecipeByTitle } from "@/lib/searchRecipeByTitle"; // ← new utility
+import { Recipe } from "@/lib/types";
 
-export type ChipFieldKey = "tags" | "products" | "dietary";
-
+export type ChipFieldKey = keyof Pick<Recipe, "products" | "tags" | "dietary">;
 interface RecipeFiltersProps {
     onFiltersChange: (filters: FilterState) => void;
     onClose?: () => void;
