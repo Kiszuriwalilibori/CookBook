@@ -1,9 +1,16 @@
 import { fieldTranslations } from "@/lib/types";
-import { FilterState, RecipeFilter } from "@/types";
-import { useMemo } from "react";
+import { FilterableRecipeKeys, FilterState, RecipeFilter } from "@/types";
 
 const GENERAL_PLACEHOLDER = "Wszystkie";
 const DIETARY_PLACEHOLDER = "Bez ograniczeń";
+
+const PLACEHOLDERS: Record<FilterableRecipeKeys, string> = {
+    title: GENERAL_PLACEHOLDER,
+    cuisine: GENERAL_PLACEHOLDER,
+    tags: GENERAL_PLACEHOLDER,
+    dietary: DIETARY_PLACEHOLDER,
+    products: GENERAL_PLACEHOLDER,
+};
 
 interface FilterField {
     key: keyof FilterState;
@@ -14,14 +21,25 @@ interface FilterField {
     placeholder?: string;
 }
 
-type BaseFilterField = Omit<FilterField, "options">;
+function defineField<K extends FilterableRecipeKeys>(config: { key: K; multiple: boolean; chips?: boolean }) {
+    return {
+        key: config.key,
+        multiple: config.multiple,
+        chips: config.chips,
+        label: fieldTranslations[config.key],
+        placeholder: PLACEHOLDERS[config.key],
+        options: INITIAL_OPTIONS,
+    };
+}
 
-const BASE_FILTER_FIELDS: BaseFilterField[] = [
-    { key: "title", label: fieldTranslations.title, multiple: false, placeholder: GENERAL_PLACEHOLDER },
-    { key: "cuisine", label: fieldTranslations.cuisine, multiple: false, placeholder: GENERAL_PLACEHOLDER },
-    { key: "tags", label: fieldTranslations.tags, multiple: true, chips: true, placeholder: GENERAL_PLACEHOLDER },
-    { key: "dietary", label: fieldTranslations.dietary, multiple: true, chips: true, placeholder: DIETARY_PLACEHOLDER },
-    { key: "products", label: fieldTranslations.products, multiple: true, chips: true, placeholder: GENERAL_PLACEHOLDER },
+const INITIAL_OPTIONS: string[] = [];
+
+const BASE_FILTER_FIELDS: FilterField[] = [
+    defineField({ key: "title", multiple: false }),
+    defineField({ key: "cuisine", multiple: false }),
+    defineField({ key: "tags", multiple: true, chips: true }),
+    defineField({ key: "dietary", multiple: true, chips: true }),
+    defineField({ key: "products", multiple: true, chips: true }),
 ] as const;
 
 const sanitizeOptions = (arr: unknown): string[] => {
@@ -30,17 +48,10 @@ const sanitizeOptions = (arr: unknown): string[] => {
 };
 
 export const useCreateRecipeFilterFields = (options: RecipeFilter) => {
-    const filterFields = useMemo<FilterField[]>(() => {
-        return BASE_FILTER_FIELDS.map(baseFilterField => {
-            const rawOptions = options[baseFilterField.key];
-            return {
-                ...baseFilterField,
-                options: sanitizeOptions(rawOptions),
-            };
-        });
-    }, [options]);
-
-    return filterFields;
+    return BASE_FILTER_FIELDS.map(base => ({
+        ...base,
+        options: sanitizeOptions(options[base.key]),
+    }));
 };
 
 export default useCreateRecipeFilterFields;
