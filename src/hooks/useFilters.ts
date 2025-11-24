@@ -1,13 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { z } from "zod";
 import { useDebouncedCallback } from "./useDebouncedCallback";
 import { normalizeMultiple } from "@/components/RecipeFilters/utils/normalize";
 import { RecipeFilter } from "@/types";
 
-// Constants (extracted for magic numbers)
 const MAX_TAGS = 10;
 
-// Define empty errors object with all keys
 const EMPTY_ERRORS: Record<keyof FilterState, string> = {
     title: "",
     cuisine: "",
@@ -25,8 +23,11 @@ const FilterSchema = z.object({
 });
 
 export type FilterState = z.infer<typeof FilterSchema>;
+type Normalizers = {
+    [K in keyof FilterState]: (value: FilterState[K]) => FilterState[K];
+};
 
-export const useFilters = (options:RecipeFilter, onFiltersChange: (filters: FilterState) => void) => {
+export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: FilterState) => void) => {
     const [filters, setFilters] = useState<FilterState>({
         title: "",
         cuisine: "",
@@ -34,7 +35,16 @@ export const useFilters = (options:RecipeFilter, onFiltersChange: (filters: Filt
         dietary: [],
         products: [],
     });
-
+    const normalizers = useMemo<Normalizers>(
+        () => ({
+            title: val => val.trim().toLowerCase(),
+            cuisine: val => val.trim().toLowerCase(),
+            tags: val => normalizeMultiple(val, options.tags),
+            dietary: val => normalizeMultiple(val, options.dietary),
+            products: val => normalizeMultiple(val, options.products),
+        }),
+        [options]
+    );
     const [errors, setErrors] = useState<Record<keyof FilterState, string>>(EMPTY_ERRORS);
 
     const applyFiltersInternal = useCallback(
@@ -48,34 +58,16 @@ export const useFilters = (options:RecipeFilter, onFiltersChange: (filters: Filt
 
     const handleChange = useCallback(
         <K extends keyof FilterState>(key: K, value: FilterState[K]): void => {
+            
+
             setFilters(prev => {
                 const updated = { ...prev };
-
-                if (Array.isArray(value)) {
-                    // multi-value case
-                    let normalized: string[];
-                    if (key === "tags") {
-                        normalized = normalizeMultiple(value, options.tags);
-                        updated.tags = normalized;
-                    } else if (key === "dietary") {
-                        normalized = normalizeMultiple(value, options.dietary);
-                        updated.dietary = normalized;
-                    } else if (key === "products") {
-                        normalized = normalizeMultiple(value, options.products);
-                        updated.products = normalized;
-                    }
-                } else {
-                    // single-value case
-                    const normalized = (value as string).trim().toLowerCase();
-                    if (key === "title") updated.title = normalized;
-                    if (key === "cuisine") updated.cuisine = normalized;
-                }
-
+                updated[key] = normalizers[key](value);
                 debouncedApplyFilters(updated);
                 return updated;
             });
         },
-        [options, debouncedApplyFilters]
+        [normalizers, debouncedApplyFilters]
     );
 
     useEffect(() => {
@@ -90,7 +82,7 @@ export const useFilters = (options:RecipeFilter, onFiltersChange: (filters: Filt
                 normalized[key] = normalizeMultiple(currentValue as string[], options[optionsKey as keyof typeof options] as string[]);
             });
 
-            // Avoid JSON.stringify for performance; compare arrays directly
+            
             let isDifferent = false;
             multipleKeys.forEach(key => {
                 if (normalized[key].join(",") !== prev[key].join(",")) {
