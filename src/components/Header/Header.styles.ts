@@ -70,3 +70,12 @@ export const visuallyHidden: SxProps<Theme> = {
     whiteSpace: "nowrap",
     border: 0,
 };
+
+export const closeButtonStyles: SxProps<Theme> = {
+    position: "absolute",
+    top: -10,
+    right: -10,
+    backgroundColor: "white",
+};
+
+export const signinButtonWrapperStyles: SxProps<Theme> = { position: "absolute", top: 12, right: 16, zIndex: 1300 };

@@ -111,6 +111,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     },
     sourceText: {
         color: "text.secondary",
+        textAlign: "center",
     },
     accordion: {
         boxShadow: 0,
