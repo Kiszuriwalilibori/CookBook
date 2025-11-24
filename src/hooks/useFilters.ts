@@ -3,6 +3,15 @@ import { z } from "zod";
 import { useDebouncedCallback } from "./useDebouncedCallback";
 import { normalizeMultiple } from "@/components/RecipeFilters/utils/normalize";
 import { RecipeFilter } from "@/types";
+import isEqual from "lodash/isEqual";
+
+const initialFilters: FilterState = {
+    title: "",
+    cuisine: "",
+    tags: [],
+    dietary: [],
+    products: [],
+};
 
 const MAX_TAGS = 10;
 
@@ -27,14 +36,9 @@ type Normalizers = {
     [K in keyof FilterState]: (value: FilterState[K]) => FilterState[K];
 };
 
+
 export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: FilterState) => void) => {
-    const [filters, setFilters] = useState<FilterState>({
-        title: "",
-        cuisine: "",
-        tags: [],
-        dietary: [],
-        products: [],
-    });
+    const [filters, setFilters] = useState<FilterState>(initialFilters);
     const normalizers = useMemo<Normalizers>(
         () => ({
             title: val => val.trim().toLowerCase(),
@@ -58,8 +62,6 @@ export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: Fil
 
     const handleChange = useCallback(
         <K extends keyof FilterState>(key: K, value: FilterState[K]): void => {
-            
-
             setFilters(prev => {
                 const updated = { ...prev };
                 updated[key] = normalizers[key](value);
@@ -82,13 +84,7 @@ export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: Fil
                 normalized[key] = normalizeMultiple(currentValue as string[], options[optionsKey as keyof typeof options] as string[]);
             });
 
-            
-            let isDifferent = false;
-            multipleKeys.forEach(key => {
-                if (normalized[key].join(",") !== prev[key].join(",")) {
-                    isDifferent = true;
-                }
-            });
+            const isDifferent = multipleKeys.some(key => !isEqual(normalized[key], prev[key]));
 
             if (isDifferent) {
                 debouncedApplyFilters(normalized);
@@ -117,16 +113,9 @@ export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: Fil
     }, [filters, flushApplyFilters, onFiltersChange]);
 
     const clear = useCallback(() => {
-        const cleared: FilterState = {
-            title: "",
-            cuisine: "",
-            tags: [],
-            dietary: [],
-            products: [],
-        };
-        setFilters(cleared);
+        setFilters(initialFilters);
         setErrors(EMPTY_ERRORS);
-        onFiltersChange(cleared);
+        onFiltersChange(initialFilters);
     }, [onFiltersChange]);
 
     return { filters, errors, handleChange, clear, apply };
