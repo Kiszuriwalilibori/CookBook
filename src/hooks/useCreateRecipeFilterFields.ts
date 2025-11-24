@@ -11,7 +11,7 @@ const PLACEHOLDERS: Record<FilterableRecipeKeys, string> = {
     dietary: DIETARY_PLACEHOLDER,
     products: GENERAL_PLACEHOLDER,
 };
-
+type Renderer = "autocomplete" | "switch";
 interface FilterField {
     key: keyof FilterState;
     label: string;
@@ -19,15 +19,18 @@ interface FilterField {
     chips?: boolean;
     options: string[];
     placeholder?: string;
+    isAdmin?: boolean;
+    component: Renderer;
 }
 
-function defineField<K extends FilterableRecipeKeys>(config: { key: K; multiple: boolean; chips?: boolean }) {
+function defineField<K extends FilterableRecipeKeys>(config: { key: K; multiple: boolean; chips?: boolean; component?: Renderer }) {
     return {
         key: config.key,
         multiple: config.multiple,
         chips: config.chips,
         label: fieldTranslations[config.key],
         placeholder: PLACEHOLDERS[config.key],
+        component: config.component ?? "autocomplete",
         options: INITIAL_OPTIONS,
     };
 }
