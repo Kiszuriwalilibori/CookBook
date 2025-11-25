@@ -11,6 +11,6 @@ export type { FilterState, FilterValuesTypes } from "@/hooks/useFilters";
 
 export type FilterableRecipeKeys = keyof Pick<Recipe, "title" | "products" | "tags" | "dietary" | "cuisine" | "Kizia">;
 
-export type RecipeFilter = Record<FilterableRecipeKeys, string[]>;
-
+// export type RecipeFilter = Record<FilterableRecipeKeys, string[]>;
+export type RecipeFilter = Record<Exclude<FilterableRecipeKeys, "Kizia">, string[]>;
 // todo RecipeFilter => RecipeFilterOptions?

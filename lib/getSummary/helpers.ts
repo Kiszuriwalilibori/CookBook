@@ -15,7 +15,7 @@ export const initialSummary: RecipeFilter = {
     tags: [],
     dietary: [],
     products: [],
-    Kizia: [],
+    // Kizia: [],
 };
 
 export const INITIAL_SANITIZE_ISSUES: string[] = [];
