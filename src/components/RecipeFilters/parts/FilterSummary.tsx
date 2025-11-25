@@ -36,7 +36,7 @@ export default function FilterSummary({ filters }: FilterSummaryProps) {
             count += filters.products.length;
         }
         if (filters.Kizia) {
-            parts.push(`🐱 Kizia`);
+            parts.push(`👩 Kizia`);
             count += 1;
         }
 
