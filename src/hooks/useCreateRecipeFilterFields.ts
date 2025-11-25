@@ -19,7 +19,7 @@ export interface FilterField {
     chips?: boolean;
     options: string[];
     placeholder?: string;
-    isAdmin?: boolean;
+    requiredAdmin?: boolean;
     component: Renderer;
 }
 

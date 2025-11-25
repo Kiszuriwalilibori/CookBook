@@ -30,12 +30,11 @@ const FilterSchema = z.object({
     dietary: z.array(z.string()),
     products: z.array(z.string()),
 });
-
+export type FilterValuesTypes = z.infer<typeof FilterSchema>[keyof z.infer<typeof FilterSchema>];
 export type FilterState = z.infer<typeof FilterSchema>;
 type Normalizers = {
     [K in keyof FilterState]: (value: FilterState[K]) => FilterState[K];
 };
-
 
 export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: FilterState) => void) => {
     const [filters, setFilters] = useState<FilterState>(initialFilters);
