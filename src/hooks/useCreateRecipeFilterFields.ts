@@ -47,10 +47,11 @@ const BASE_FILTER_FIELDS: FilterField[] = [
     defineField({ key: "products", multiple: true, chips: true }),
 ] as const;
 
-const sanitizeOptions = (arr: unknown): string[] => {
-    if (!Array.isArray(arr)) return [];
-    return arr.filter((item): item is string => typeof item === "string" && item.trim() !== "");
-};
+// const sanitizeOptions = (arr: unknown): string[] => {
+//     if (!Array.isArray(arr)) return [];
+//     return arr.filter((item): item is string => typeof item === "string" && item.trim() !== "");
+// };
+const sanitizeOptions = (arr: unknown): string[] => (Array.isArray(arr) ? arr.filter((item): item is string => typeof item === "string" && item.trim() !== "") : []);
 
 export const useCreateRecipeFilterFields = (options: RecipeFilter) => {
     return BASE_FILTER_FIELDS.map(base => ({

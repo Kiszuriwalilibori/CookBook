@@ -6,6 +6,8 @@ import { fieldBoxSx } from "../styles";
 import FilterAutocomplete from "./FilterAutocomplete";
 import { renderLimitedChips } from "./renderLimitedChips";
 import { useTheme } from "@mui/material/styles";
+import { useAdminStore } from "@/stores";
+// import FilterSwitch from "./FilterSwitch";
 
 interface Props {
     field: FilterField;
@@ -20,6 +22,8 @@ interface Props {
 
 export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorProps }: Props) => {
     const theme = useTheme();
+    const isAdminLogged = useAdminStore(state => state.isAdminLogged);
+    if (!isAdminLogged && field.requiredAdmin) return null;
 
     switch (field.component) {
         case "autocomplete":
@@ -40,31 +44,35 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
                     />
                 </Box>
             );
-           
+
             break;
         case "switch":
-            // code block
+            return null;
+            // return (
+            //     <Box sx={fieldBoxSx} key={field.key}>
+            //         <FilterSwitch label={field.label} value={filters[field.key] as boolean} onChange={(checked: boolean) => handleChange(field.key, checked)} {...getErrorProps(field.key)} />
+            //     </Box>
+            // );
             break;
         default:
-        return (
-            <Box sx={fieldBoxSx} key={field.key}>
-                <FilterAutocomplete
-                    label={field.label}
-                    options={field.options}
-                    value={filters[field.key]}
-                    multiple={field.multiple}
-                    placeholder={field.placeholder}
-                    onChange={(newValue: FilterValuesTypes | null) => {
-                        const normalized = newValue ?? (field.multiple ? [] : "");
-                        handleChange(field.key, normalized);
-                    }}
-                    renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => renderLimitedChips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
-                    {...getErrorProps(field.key)}
-                />
-            </Box>
-        );
+            return (
+                <Box sx={fieldBoxSx} key={field.key}>
+                    <FilterAutocomplete
+                        label={field.label}
+                        options={field.options}
+                        value={filters[field.key]}
+                        multiple={field.multiple}
+                        placeholder={field.placeholder}
+                        onChange={(newValue: FilterValuesTypes | null) => {
+                            const normalized = newValue ?? (field.multiple ? [] : "");
+                            handleChange(field.key, normalized);
+                        }}
+                        renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => renderLimitedChips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
+                        {...getErrorProps(field.key)}
+                    />
+                </Box>
+            );
     }
-    
 };
 
 export default FilterFieldRendrerer;
