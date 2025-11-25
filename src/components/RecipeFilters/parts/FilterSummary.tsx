@@ -35,6 +35,10 @@ export default function FilterSummary({ filters }: FilterSummaryProps) {
             parts.push(`🛍️ ${filters.products.join(", ")}`);
             count += filters.products.length;
         }
+        if (filters.Kizia) {
+            parts.push(`🐱 Kizia`);
+            count += 1;
+        }
 
         if (count === 0) return "Brak aktywnych filtrów.";
 

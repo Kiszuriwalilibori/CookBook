@@ -10,15 +10,28 @@ interface RecipesPageProps {
 export const revalidate = 3600;
 
 export default async function RecipesPage({ searchParams }: RecipesPageProps) {
-
     const awaitedSearchParams = await searchParams;
 
+    // const filters: Partial<FilterState> = {
+    //     title: typeof awaitedSearchParams.title === "string" ? awaitedSearchParams.title : undefined,
+    //     cuisine: typeof awaitedSearchParams.cuisine === "string" ? awaitedSearchParams.cuisine : undefined,
+    //     tags: Array.isArray(awaitedSearchParams.tags) ? awaitedSearchParams.tags : awaitedSearchParams.tags ? [awaitedSearchParams.tags] : [],
+    //     dietary: Array.isArray(awaitedSearchParams.dietary) ? awaitedSearchParams.dietary : awaitedSearchParams.dietary ? [awaitedSearchParams.dietary] : [],
+    //     products: Array.isArray(awaitedSearchParams.products) ? awaitedSearchParams.products : awaitedSearchParams.products ? [awaitedSearchParams.products] : [],
+    // };
     const filters: Partial<FilterState> = {
         title: typeof awaitedSearchParams.title === "string" ? awaitedSearchParams.title : undefined,
+        
         cuisine: typeof awaitedSearchParams.cuisine === "string" ? awaitedSearchParams.cuisine : undefined,
+
         tags: Array.isArray(awaitedSearchParams.tags) ? awaitedSearchParams.tags : awaitedSearchParams.tags ? [awaitedSearchParams.tags] : [],
+
         dietary: Array.isArray(awaitedSearchParams.dietary) ? awaitedSearchParams.dietary : awaitedSearchParams.dietary ? [awaitedSearchParams.dietary] : [],
+
         products: Array.isArray(awaitedSearchParams.products) ? awaitedSearchParams.products : awaitedSearchParams.products ? [awaitedSearchParams.products] : [],
+
+        // ⭐ NEW → boolean Kizia
+        Kizia: awaitedSearchParams.Kizia === "true" ? true : undefined,
     };
 
     // Fetch filtered recipes on server with params

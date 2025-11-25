@@ -17,8 +17,9 @@ function buildFilterClause(filters?: Partial<FilterState>): string {
     if (filters.tags?.length) conditions.push(`count((tags[])[@ in ${JSON.stringify(filters.tags)}]) > 0`);
     if (filters.dietary?.length) conditions.push(`count((dietary[])[@ in ${JSON.stringify(filters.dietary)}]) > 0`);
     if (filters.products?.length) conditions.push(`count((products[])[@ in ${JSON.stringify(filters.products)}]) > 0`);
-    
-    return conditions.length ? ` && ${conditions.join(" && ")}` : "";
+    if (filters.Kizia === true) conditions.push(`Kizia == true`);
+    // return conditions.length ? ` && ${conditions.join(" && ")}` : "";
+    return conditions.length ? ` && (${conditions.join(" && ")})` : "";
 }
 
 /**
