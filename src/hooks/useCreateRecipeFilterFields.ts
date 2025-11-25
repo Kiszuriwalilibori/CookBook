@@ -12,7 +12,7 @@ const PLACEHOLDERS: Record<FilterableRecipeKeys, string> = {
     products: GENERAL_PLACEHOLDER,
 };
 type Renderer = "autocomplete" | "switch";
-interface FilterField {
+export interface FilterField {
     key: keyof FilterState;
     label: string;
     multiple: boolean;

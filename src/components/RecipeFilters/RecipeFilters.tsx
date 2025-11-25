@@ -3,15 +3,16 @@
 import React, { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Typography, Divider, CircularProgress } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { containerSx, fieldBoxSx, buttonGroupSx, dividerSx } from "./styles";
-import { FilterSummary, FilterAutocomplete } from "./parts";
+// import { useTheme } from "@mui/material/styles";
+import { containerSx, /*fieldBoxSx,*/ buttonGroupSx, dividerSx } from "./styles";
+import { FilterSummary/*, FilterAutocomplete */} from "./parts";
 import { FilterState, RecipeFilter } from "@/types";
 import { useFilters, useCreateRecipeFilterFields } from "@/hooks";
 import { useFiltersStore } from "@/stores";
-import { renderLimitedChips } from "./parts/renderLimitedChips";
+// import { renderLimitedChips } from "./parts/renderLimitedChips";
 import { searchRecipeByTitle } from "@/lib/searchRecipeByTitle"; // ← new utility
 import { Recipe } from "@/lib/types";
+import FilterFieldRendrerer from "./parts/FilterFieldRenderer";
 
 export type ChipFieldKey = keyof Pick<Recipe, "products" | "tags" | "dietary">;
 interface RecipeFiltersProps {
@@ -20,9 +21,11 @@ interface RecipeFiltersProps {
     options: RecipeFilter;
 }
 
+
+
 export default function RecipeFilters({ onFiltersChange, onClose, options }: RecipeFiltersProps) {
     const router = useRouter();
-    const theme = useTheme();
+    // const theme = useTheme();
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
 
@@ -117,21 +120,22 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
             <Divider sx={dividerSx} />
 
             {filterFields.map(field => (
-                <Box sx={fieldBoxSx} key={field.key}>
-                    <FilterAutocomplete
-                        label={field.label}
-                        options={field.options}
-                        value={filters[field.key]}
-                        multiple={field.multiple}
-                        placeholder={field.placeholder}
-                        onChange={(newValue: string | string[] | null) => {
-                            const normalized = newValue ?? (field.multiple ? [] : "");
-                            handleChange(field.key, normalized);
-                        }}
-                        renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => renderLimitedChips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
-                        {...getErrorProps(field.key)}
-                    />
-                </Box>
+                <FilterFieldRendrerer key={field.key} field={field} filters={filters} handleChange={handleChange} getErrorProps={getErrorProps} />
+                // <Box sx={fieldBoxSx} key={field.key}>
+                //     <FilterAutocomplete
+                //         label={field.label}
+                //         options={field.options}
+                //         value={filters[field.key]}
+                //         multiple={field.multiple}
+                //         placeholder={field.placeholder}
+                //         onChange={(newValue: string | string[] | null) => {
+                //             const normalized = newValue ?? (field.multiple ? [] : "");
+                //             handleChange(field.key, normalized);
+                //         }}
+                //         renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => renderLimitedChips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
+                //         {...getErrorProps(field.key)}
+                //     />
+                // </Box>
             ))}
 
             <Box sx={buttonGroupSx}>
