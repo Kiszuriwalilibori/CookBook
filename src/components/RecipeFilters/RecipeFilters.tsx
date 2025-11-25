@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Box, Button, Typography, Divider, CircularProgress } from "@mui/material";
 
 import { containerSx, buttonGroupSx, dividerSx } from "./styles";
-import { FilterSummary} from "./parts";
+import { FilterSummary } from "./parts";
 import { FilterState, RecipeFilter } from "@/types";
 import { useFilters, useCreateRecipeFilterFields } from "@/hooks";
 import { useFiltersStore } from "@/stores";
@@ -21,26 +21,31 @@ interface RecipeFiltersProps {
     options: RecipeFilter;
 }
 
-
-
 export default function RecipeFilters({ onFiltersChange, onClose, options }: RecipeFiltersProps) {
     const router = useRouter();
-  
+
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
 
-    // Helper: build normal query string for /recipes page
     const buildQueryString = useCallback((filters: FilterState): string => {
         const params = new URLSearchParams();
+
         Object.entries(filters).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+                value.forEach(item => params.append(key, item));
+                return;
+            }
+
+            if (typeof value === "boolean") {
+                if (value) params.set(key, "true"); // only include when true
+                return;
+            }
+
             if (value && value !== "") {
-                if (Array.isArray(value)) {
-                    value.forEach(item => params.append(key, item));
-                } else {
-                    params.set(key, value);
-                }
+                params.set(key, value);
             }
         });
+
         return params.toString();
     }, []);
 
@@ -121,7 +126,6 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
 
             {filterFields.map(field => (
                 <FilterFieldRendrerer key={field.key} field={field} filters={filters} handleChange={handleChange} getErrorProps={getErrorProps} />
-                
             ))}
 
             <Box sx={buttonGroupSx}>

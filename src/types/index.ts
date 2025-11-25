@@ -9,7 +9,7 @@ export interface MenuItem {
 
 export type { FilterState, FilterValuesTypes } from "@/hooks/useFilters";
 
-export type FilterableRecipeKeys = keyof Pick<Recipe, "title" | "products" | "tags" | "dietary" | "cuisine">;
+export type FilterableRecipeKeys = keyof Pick<Recipe, "title" | "products" | "tags" | "dietary" | "cuisine" | "Kizia">;
 
 export type RecipeFilter = Record<FilterableRecipeKeys, string[]>;
 

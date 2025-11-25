@@ -11,6 +11,7 @@ const initialFilters: FilterState = {
     tags: [],
     dietary: [],
     products: [],
+    Kizia: true,
 };
 
 const MAX_TAGS = 10;
@@ -21,6 +22,7 @@ const EMPTY_ERRORS: Record<keyof FilterState, string> = {
     tags: "",
     dietary: "",
     products: "",
+    Kizia: "",
 };
 
 const FilterSchema = z.object({
@@ -29,6 +31,7 @@ const FilterSchema = z.object({
     tags: z.array(z.string()).max(MAX_TAGS, `Maksymalnie ${MAX_TAGS} tagów`),
     dietary: z.array(z.string()),
     products: z.array(z.string()),
+    Kizia: z.boolean().default(true),
 });
 export type FilterValuesTypes = z.infer<typeof FilterSchema>[keyof z.infer<typeof FilterSchema>];
 export type FilterState = z.infer<typeof FilterSchema>;
@@ -45,6 +48,7 @@ export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: Fil
             tags: val => normalizeMultiple(val, options.tags),
             dietary: val => normalizeMultiple(val, options.dietary),
             products: val => normalizeMultiple(val, options.products),
+            Kizia: val => val,
         }),
         [options]
     );

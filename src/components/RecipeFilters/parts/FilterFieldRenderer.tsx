@@ -7,6 +7,7 @@ import FilterAutocomplete from "./FilterAutocomplete";
 import { renderLimitedChips } from "./renderLimitedChips";
 import { useTheme } from "@mui/material/styles";
 import { useAdminStore } from "@/stores";
+import FilterSwitch from "./FilterSwitch";
 // import FilterSwitch from "./FilterSwitch";
 
 interface Props {
@@ -32,10 +33,10 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
                     <FilterAutocomplete
                         label={field.label}
                         options={field.options}
-                        value={filters[field.key]}
+                        value={filters[field.key] as string | string[] | null}
                         multiple={field.multiple}
                         placeholder={field.placeholder}
-                        onChange={(newValue: FilterValuesTypes | null) => {
+                        onChange={(newValue: string | string[] | null) => {
                             const normalized = newValue ?? (field.multiple ? [] : "");
                             handleChange(field.key, normalized);
                         }}
@@ -47,12 +48,11 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
 
             break;
         case "switch":
-            return null;
-            // return (
-            //     <Box sx={fieldBoxSx} key={field.key}>
-            //         <FilterSwitch label={field.label} value={filters[field.key] as boolean} onChange={(checked: boolean) => handleChange(field.key, checked)} {...getErrorProps(field.key)} />
-            //     </Box>
-            // );
+            return (
+                <Box sx={fieldBoxSx} key={field.key}>
+                    <FilterSwitch placeholder={field.placeholder} label={field.label} value={filters[field.key] as boolean} onChange={(checked: boolean) => handleChange(field.key, checked)} {...getErrorProps(field.key)} />
+                </Box>
+            );
             break;
         default:
             return (
@@ -60,10 +60,10 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
                     <FilterAutocomplete
                         label={field.label}
                         options={field.options}
-                        value={filters[field.key]}
+                        value={filters[field.key] as string | string[] | null}
                         multiple={field.multiple}
                         placeholder={field.placeholder}
-                        onChange={(newValue: FilterValuesTypes | null) => {
+                        onChange={(newValue: string | string[] | null) => {
                             const normalized = newValue ?? (field.multiple ? [] : "");
                             handleChange(field.key, normalized);
                         }}

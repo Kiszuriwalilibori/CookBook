@@ -3,6 +3,7 @@ import { FilterableRecipeKeys, FilterState, RecipeFilter } from "@/types";
 
 const GENERAL_PLACEHOLDER = "Wszystkie";
 const DIETARY_PLACEHOLDER = "Bez ograniczeń";
+const KIZIA_PLACEHOLDER = "Kizia to lubi?";
 
 const PLACEHOLDERS: Record<FilterableRecipeKeys, string> = {
     title: GENERAL_PLACEHOLDER,
@@ -10,6 +11,7 @@ const PLACEHOLDERS: Record<FilterableRecipeKeys, string> = {
     tags: GENERAL_PLACEHOLDER,
     dietary: DIETARY_PLACEHOLDER,
     products: GENERAL_PLACEHOLDER,
+    Kizia: KIZIA_PLACEHOLDER,
 };
 type Renderer = "autocomplete" | "switch";
 export interface FilterField {
@@ -45,12 +47,9 @@ const BASE_FILTER_FIELDS: FilterField[] = [
     defineField({ key: "tags", multiple: true, chips: true }),
     defineField({ key: "dietary", multiple: true, chips: true }),
     defineField({ key: "products", multiple: true, chips: true }),
+    defineField({ key: "Kizia", multiple: false, component: "switch", requiredAdmin: true }),
 ] as const;
 
-// const sanitizeOptions = (arr: unknown): string[] => {
-//     if (!Array.isArray(arr)) return [];
-//     return arr.filter((item): item is string => typeof item === "string" && item.trim() !== "");
-// };
 const sanitizeOptions = (arr: unknown): string[] => (Array.isArray(arr) ? arr.filter((item): item is string => typeof item === "string" && item.trim() !== "") : []);
 
 export const useCreateRecipeFilterFields = (options: RecipeFilter) => {
