@@ -23,16 +23,18 @@ export interface FilterField {
     component: Renderer;
 }
 
-function defineField<K extends FilterableRecipeKeys>(config: { key: K; multiple: boolean; chips?: boolean; component?: Renderer }) {
+function defineField(config: Partial<FilterField> & { key: FilterableRecipeKeys; multiple: boolean }) {
     return {
-        key: config.key,
-        multiple: config.multiple,
-        chips: config.chips,
+        // Defaults and overrides
+        component: "autocomplete",
+        options: INITIAL_OPTIONS,
+        requiredAdmin: false,
+        // Merge provided config
+        ...config,
+        // Computed fields (always override if not provided)
         label: fieldTranslations[config.key],
         placeholder: PLACEHOLDERS[config.key],
-        component: config.component ?? "autocomplete",
-        options: INITIAL_OPTIONS,
-    };
+    } as FilterField; // Explicit cast to ensure full type compliance
 }
 
 const INITIAL_OPTIONS: string[] = [];
