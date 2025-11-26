@@ -116,7 +116,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         await handleApply();
         setCheckingDirect(false);
     };
-
+    console.log("filterFields", filterFields);
     return (
         <Box sx={containerSx}>
             <Typography variant="h6" gutterBottom align="center">

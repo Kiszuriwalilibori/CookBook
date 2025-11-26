@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { type FilterState } from "@/types";
+import { EMPTY_RECIPE_FILTER, type FilterState } from "@/types";
 import { RecipeFilter } from "@/types";
 
 const DEFAULT_FILTERS: FilterState = {
@@ -30,7 +30,7 @@ type FilterStore = FilterStoreState & FilterStoreActions;
 export const useFiltersStore = create<FilterStore>((set, get) => ({
     filters: DEFAULT_FILTERS,
     errors: {},
-    options: { title: [], cuisine: [], tags: [], dietary: [], products: [] }, // Empty default
+    options: EMPTY_RECIPE_FILTER,
 
     handleChange: (key, value) => {
         const current = get();
@@ -69,7 +69,7 @@ export const useFiltersStore = create<FilterStore>((set, get) => ({
 
     setFilters: (newFilters: Partial<FilterState>) => {
         const current = get();
-        
+
         set({
             filters: { ...current.filters, ...newFilters },
             errors: {}, // Clear errors on set
@@ -77,10 +77,8 @@ export const useFiltersStore = create<FilterStore>((set, get) => ({
     },
 
     initOptions: (options: RecipeFilter) => {
-        const current = get();
         set({
-            options,
-            filters: { ...current.filters }, // Preserve filters, but could reset if needed
+            options: { ...EMPTY_RECIPE_FILTER, ...options }, // guarantees all keys exist
         });
     },
 }));
