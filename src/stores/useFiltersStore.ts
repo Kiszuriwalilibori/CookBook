@@ -8,6 +8,7 @@ const DEFAULT_FILTERS: FilterState = {
     tags: [],
     dietary: [],
     products: [],
+    Kizia: false,
 };
 
 interface FilterStoreState {
