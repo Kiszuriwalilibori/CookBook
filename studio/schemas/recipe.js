@@ -1,3 +1,5 @@
+//recipe.js - schema for recipe document
+
 import ProductsInput from '../components/ProductsInput'
 
 export default {

@@ -1,3 +1,5 @@
+//summary.js - schema for summary document
+
 export default {
   name: 'summary',
   title: 'Summary',
