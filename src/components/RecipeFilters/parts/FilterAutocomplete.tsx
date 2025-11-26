@@ -22,6 +22,10 @@ export default function FilterAutocomplete<T = string>({ label, placeholder = "W
             fullWidth
             multiple={multiple}
             options={options}
+            slotProps={{
+                popupIndicator: { sx: { color: "var(--foreground)" } }, // Guzik rozwijania
+                clearIndicator: { sx: { color: "var(--foreground)" } }, // Guzik czyszczenia
+            }}
             value={value as T | T[] | null}
             onChange={(_, newValue) => onChange(newValue)}
             renderTags={multiple && renderTags ? (v: readonly T[]) => renderTags([...v]) : undefined}
@@ -29,3 +33,4 @@ export default function FilterAutocomplete<T = string>({ label, placeholder = "W
         />
     );
 }
+// todo renderTags is deprecated

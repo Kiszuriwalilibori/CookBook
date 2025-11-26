@@ -55,7 +55,7 @@ const sanitizeOptions = (arr: unknown): string[] => (Array.isArray(arr) ? arr.fi
 export const useCreateRecipeFilterFields = (options: RecipeFilter) => {
     return BASE_FILTER_FIELDS.map(base => ({
         ...base,
-        options: sanitizeOptions(options[base.key]),
+        options: base.component === "autocomplete" ? sanitizeOptions(options[base.key as keyof RecipeFilter]) : base.options,
     }));
 };
 
