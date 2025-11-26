@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getSummary } from "@/lib/getSummary";
-import type { RecipeFilter } from "@/types";
+import { EMPTY_RECIPE_FILTER, type RecipeFilter } from "@/types";
 
 interface RecipesSummaryState {
     summary: RecipeFilter;
@@ -11,15 +11,7 @@ interface RecipesSummaryState {
 }
 
 export function useRecipesSummary(initialSummary?: RecipeFilter) {
-    const [summary, setSummary] = useState<RecipeFilter>(
-        initialSummary || {
-            title: [],
-            cuisine: [],
-            tags: [],
-            dietary: [],
-            products: [],
-        }
-    );
+    const [summary, setSummary] = useState<RecipeFilter>(initialSummary ?? EMPTY_RECIPE_FILTER);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
