@@ -9,8 +9,18 @@ export interface MenuItem {
 
 export type { FilterState, FilterValuesTypes } from "@/hooks/useFilters";
 
-export type FilterableRecipeKeys = keyof Pick<Recipe, "title" | "products" | "tags" | "dietary" | "cuisine" | "Kizia">;
+type DotPrefix<T extends string> = `source.${T}`;
 
+type StringKeys<T> = {
+    [K in keyof T]-?: T[K] extends string | undefined ? K : never; // Accept optional strings
+}[keyof T];
+
+type SourceKeys = DotPrefix<StringKeys<NonNullable<Recipe["source"]>>>;
+
+export type BaseFilterableKeys = keyof Pick<Recipe, "title" | "products" | "tags" | "dietary" | "cuisine" | "Kizia">;
+
+// export type FilterableRecipeKeys = keyof Pick<Recipe, "title" | "products" | "tags" | "dietary" | "cuisine" | "Kizia">;
+export type FilterableRecipeKeys = BaseFilterableKeys | SourceKeys;
 // export type RecipeFilter = Record<FilterableRecipeKeys, string[]>;
 export type RecipeFilter = Record<Exclude<FilterableRecipeKeys, "Kizia">, string[]>;
 // todo RecipeFilter => RecipeFilterOptions?

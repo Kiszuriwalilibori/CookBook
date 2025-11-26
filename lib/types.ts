@@ -70,7 +70,7 @@ export interface Recipe {
         http?: string;
         book?: string;
         title?: string;
-        author: string;
+        author?: string;
         where?: string;
     };
 }

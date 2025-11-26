@@ -44,7 +44,7 @@ export async function getSummary(): Promise<SanitizedSummaryResult> {
         }`;
 
         const rawSummary = await client.fetch(query);
-
+        console.log("rawSummary from getSummary", rawSummary);
         // Sanitize the fetched summary first (removes faulty values, collects issues)
         const { sanitizedSummary, sanitizeIssues } = sanitizeSummary(rawSummary);
 

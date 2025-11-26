@@ -8,14 +8,28 @@ export const CLEAN_SUMMARY_MESSAGES = {
     REMOVED_FAULTY_VALUE: (value: unknown) => `Removed faulty array value: ${String(value)}`,
 };
 
-// 🟩 Base empty structure
+// // 🟩 Base empty structure
+// export const initialSummary: RecipeFilter = {
+//     title: [],
+//     cuisine: [],
+//     tags: [],
+//     dietary: [],
+//     products: [],
+    
+// };
+
 export const initialSummary: RecipeFilter = {
     title: [],
-    cuisine: [],
+    products: [],
     tags: [],
     dietary: [],
-    products: [],
-    // Kizia: [],
+    cuisine: [],
+    "source.http": [],
+    "source.book": [],
+    "source.title": [],
+    "source.author": [],
+    "source.where": [],
 };
+
 
 export const INITIAL_SANITIZE_ISSUES: string[] = [];

@@ -88,3 +88,6 @@ add default values on hydration
 add client-side filter summary
 
 Just ask!
+
+
+26.11.2025 zmienilem w interfejsie author w ten sposób, że jest opcjonalne podobnie jak reszta source
