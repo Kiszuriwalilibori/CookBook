@@ -4,7 +4,15 @@ import { FilterableRecipeKeys, FilterState, RecipeFilter } from "@/types";
 const GENERAL_PLACEHOLDER = "Wszystkie";
 const DIETARY_PLACEHOLDER = "Bez ograniczeń";
 const KIZIA_PLACEHOLDER = "Kizia to lubi?";
+// const PLACEHOLDERS: Record<BaseFilterableKeys, string> = {
+//     title: GENERAL_PLACEHOLDER,
+//     cuisine: GENERAL_PLACEHOLDER,
+//     tags: GENERAL_PLACEHOLDER,
+//     dietary: DIETARY_PLACEHOLDER,
+//     products: GENERAL_PLACEHOLDER,
+//     Kizia: KIZIA_PLACEHOLDER,
 
+// };
 const PLACEHOLDERS: Record<FilterableRecipeKeys, string> = {
     title: GENERAL_PLACEHOLDER,
     cuisine: GENERAL_PLACEHOLDER,
@@ -12,6 +20,11 @@ const PLACEHOLDERS: Record<FilterableRecipeKeys, string> = {
     dietary: DIETARY_PLACEHOLDER,
     products: GENERAL_PLACEHOLDER,
     Kizia: KIZIA_PLACEHOLDER,
+    "source.http": GENERAL_PLACEHOLDER,
+    "source.book": GENERAL_PLACEHOLDER,
+    "source.title": GENERAL_PLACEHOLDER,
+    "source.author": GENERAL_PLACEHOLDER,
+    "source.where": GENERAL_PLACEHOLDER,
 };
 type Renderer = "autocomplete" | "switch";
 export interface FilterField {

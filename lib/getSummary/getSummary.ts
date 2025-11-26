@@ -65,7 +65,7 @@ export async function getSummary(): Promise<SanitizedSummaryResult> {
             dietary: [...summary.dietary].sort(sortFn),
             products: [...summary.products].sort(sortFn),
         };
-
+console.log("summary just before return from getSummary", summary);
         return { sanitizedSummary: summary, sanitizeIssues };
     } catch (error) {
         console.error("Error fetching recipes summary:", error);
