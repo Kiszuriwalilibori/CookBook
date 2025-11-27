@@ -383,14 +383,22 @@ export async function POST(req: NextRequest) {
             incoming = null;
         }
 
-        if (incoming && (incoming["_id"] === "summary" || incoming["_type"] === "summary")) {
-            return new Response(JSON.stringify({ ok: "skipped_self_update" }), { status: 200, headers: { "Content-Type": "application/json" } });
-        }
+        // if (incoming && (incoming["_id"] === "summary" || incoming["_type"] === "summary")) {
+        //     return new Response(JSON.stringify({ ok: "skipped_self_update" }), { status: 200, headers: { "Content-Type": "application/json" } });
+        // }
 
-        if (incoming && typeof incoming["_type"] === "string" && incoming["_type"] !== "recipe") {
-            return new Response(JSON.stringify({ ok: "skipped_non_recipe" }), { status: 200, headers: { "Content-Type": "application/json" } });
-        }
+        // if (incoming && typeof incoming["_type"] === "string" && incoming["_type"] !== "recipe") {
+        //     return new Response(JSON.stringify({ ok: "skipped_non_recipe" }), { status: 200, headers: { "Content-Type": "application/json" } });
+        // }
+        //początek wstawki
 
+        const isRecipeUpdate = incoming && typeof incoming["_type"] === "string" && incoming["_type"] === "recipe";
+
+        // If webhook body is not a recipe update, just regenerate anyway
+        if (!isRecipeUpdate) {
+            console.log("⚠️ Running full summary rebuild due to manual trigger or unknown event.");
+        }
+        // koniec wstawki
         const groq = `*[_type == "recipe"]{products, dietary, cuisine, tags, title, source}`;
         const query = encodeURIComponent(groq);
         const url = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${query}`;
