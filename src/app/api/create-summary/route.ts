@@ -609,11 +609,11 @@ interface RecipeDoc {
     tags?: string[];
     title?: string;
     source?: {
-        http?: string;
-        book?: string;
-        title?: string;
-        author?: string;
-        where?: string;
+        http?: string[];
+        book?: string[];
+        title?: string[];
+        author?: string[];
+        where?: string[];
     };
 }
 
@@ -630,11 +630,13 @@ interface SummaryDoc {
     cuisine: string[];
     tags: string[];
     title: string[];
-    "source.http": string[];
-    "source.book": string[];
-    "source.title": string[];
-    "source.author": string[];
-    "source.where": string[];
+    source: {
+        http: string[];
+        book: string[];
+        title: string[];
+        author: string[];
+        where: string[];
+    };
 }
 
 type JsonRecord = Record<string, unknown>;
@@ -836,11 +838,13 @@ export async function POST(req: NextRequest) {
             cuisine: getUniqueSorted(cuisineSet),
             tags: getUniqueSorted(tagsSet),
             title: getUniqueSorted(titlesSet),
-            "source.http": getUniqueSorted(sourceHttpSet),
-            "source.book": getUniqueSorted(sourceBookSet),
-            "source.title": getUniqueSorted(sourceTitleSet),
-            "source.author": getUniqueSorted(sourceAuthorSet),
-            "source.where": getUniqueSorted(sourceWhereSet),
+            source: {
+                http: getUniqueSorted(sourceHttpSet),
+                book: getUniqueSorted(sourceBookSet),
+                title: getUniqueSorted(sourceTitleSet),
+                author: getUniqueSorted(sourceAuthorSet),
+                where: getUniqueSorted(sourceWhereSet),
+            },
         };
 
         console.log("Prepared summary document:", summaryDoc);
