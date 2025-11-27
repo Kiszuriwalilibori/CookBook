@@ -18,7 +18,7 @@ export const viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-    // const { summary, error: fetchError } = await fetchRecipesSummarySafe();
+    
     const { summary, error: fetchError } = await fetchSummary();
 
     return (

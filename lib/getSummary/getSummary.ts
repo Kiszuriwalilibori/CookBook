@@ -34,7 +34,7 @@ export interface SanitizedSummaryResult {
  */
 export async function getSummary(): Promise<SanitizedSummaryResult> {
     try {
-        // Fetch the single aggregated "recipesSummary" document
+        // Fetch the single aggregated "summary" document
         const query = `*[_type == "summary"][0]{
             title,
             cuisine,
