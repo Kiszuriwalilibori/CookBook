@@ -45,5 +45,17 @@ export default {
       of: [{type: 'string'}],
       description: 'Unique titles (first letter capitalized) aggregated from all recipes',
     },
+    {
+      name: 'source',
+      title: 'Source',
+      type: 'object',
+      fields: [
+        {name: 'http', title: 'HTTP', type: 'array', of: [{type: 'string'}]},
+        {name: 'book', title: 'Book', type: 'array', of: [{type: 'string'}]},
+        {name: 'title', title: 'Title', type: 'array', of: [{type: 'string'}]},
+        {name: 'author', title: 'Author', type: 'array', of: [{type: 'string'}]},
+        {name: 'where', title: 'Where', type: 'array', of: [{type: 'string'}]},
+      ],
+    },
   ],
 }

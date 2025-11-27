@@ -40,7 +40,8 @@ export async function getSummary(): Promise<SanitizedSummaryResult> {
             cuisine,
             tags,
             dietary,
-            products
+            products, 
+            source,
         }`;
 
         const rawSummary = await client.fetch(query);
@@ -48,13 +49,15 @@ export async function getSummary(): Promise<SanitizedSummaryResult> {
         // Sanitize the fetched summary first (removes faulty values, collects issues)
         const { sanitizedSummary, sanitizeIssues } = sanitizeSummary(rawSummary);
 
+        console.log("sanitized summary", sanitizedSummary);
+
         if (sanitizeIssues.length > 0) {
             console.warn("Issues detected and sanitized in fetched recipes summary:", sanitizeIssues);
         }
 
         // Ensure full structure with fallbacks for any remaining missing keys
         let summary = ensureSummaryStructure(sanitizedSummary);
-
+        console.log("summary between", summary);
         // Sort all arrays alphabetically using Polish locale compare
         const sortFn = (a: string, b: string) => a.localeCompare(b, "pl");
         summary = {
@@ -65,7 +68,7 @@ export async function getSummary(): Promise<SanitizedSummaryResult> {
             dietary: [...summary.dietary].sort(sortFn),
             products: [...summary.products].sort(sortFn),
         };
-console.log("summary just before return from getSummary", summary);
+        console.log("summary just before return from getSummary", summary);
         return { sanitizedSummary: summary, sanitizeIssues };
     } catch (error) {
         console.error("Error fetching recipes summary:", error);
