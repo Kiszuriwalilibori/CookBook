@@ -13,6 +13,7 @@ import { useFiltersStore } from "@/stores";
 import { searchRecipeByTitle } from "@/lib/searchRecipeByTitle";
 import { Recipe } from "@/lib/types";
 import FilterFieldRendrerer from "./parts/FilterFieldRenderer";
+import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
 
 export type ChipFieldKey = keyof Pick<Recipe, "products" | "tags" | "dietary">;
 interface RecipeFiltersProps {
@@ -124,7 +125,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
             </Typography>
             <Divider sx={dividerSx} />
 
-            {filterFields.map(field => (
+            {filterFields.map((field: FilterField) => (
                 <FilterFieldRendrerer key={field.key} field={field} filters={filters} handleChange={handleChange} getErrorProps={getErrorProps} />
             ))}
 

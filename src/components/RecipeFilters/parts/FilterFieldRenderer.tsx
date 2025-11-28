@@ -9,7 +9,6 @@ import { useTheme } from "@mui/material/styles";
 import { useAdminStore } from "@/stores";
 import FilterSwitch from "./FilterSwitch";
 import { createRenderTags } from "../utils/createRenderTags";
-// import FilterSwitch from "./FilterSwitch";
 
 interface Props {
     field: FilterField;
