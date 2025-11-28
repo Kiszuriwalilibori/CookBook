@@ -8,6 +8,7 @@ import { Chips } from "./Chips";
 import { useTheme } from "@mui/material/styles";
 import { useAdminStore } from "@/stores";
 import FilterSwitch from "./FilterSwitch";
+import { createRenderTags } from "../utils/createRenderTags";
 // import FilterSwitch from "./FilterSwitch";
 
 interface Props {
@@ -25,6 +26,7 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
     const theme = useTheme();
     const isAdminLogged = useAdminStore(state => state.isAdminLogged);
     if (!isAdminLogged && field.requiredAdmin) return null;
+    if (field.key === "Kizia" && !isAdminLogged) return null;
 
     switch (field.component) {
         case "autocomplete":
@@ -40,7 +42,8 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
                             const normalized = newValue ?? (field.multiple ? [] : "");
                             handleChange(field.key, normalized);
                         }}
-                        renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => Chips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
+                        renderTags={createRenderTags(field.key, !!field.chips, theme, handleChange)}
+                        // renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => Chips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
                         {...getErrorProps(field.key)}
                     />
                 </Box>
