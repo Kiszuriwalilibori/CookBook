@@ -23,7 +23,7 @@ interface RecipeFiltersProps {
 
 export default function RecipeFilters({ onFiltersChange, onClose, options }: RecipeFiltersProps) {
     const router = useRouter();
-
+    console.log("options", options);
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
 

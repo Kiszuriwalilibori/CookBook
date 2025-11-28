@@ -19,8 +19,8 @@ export function useRecipesSummary(initialSummary?: RecipeFilter) {
         const fetchSummary = async () => {
             try {
                 setIsLoading(true);
-                const { sanitizedSummary, sanitizeIssues } = await getSummary();
-                setSummary(sanitizedSummary);
+                const { summary, sanitizeIssues } = await getSummary();
+                setSummary(summary);
                 if (sanitizeIssues.length > 0) {
                     console.warn("⚠️ Faulty values found in recipes summary:", sanitizeIssues);
                     setError("Niektóre dane zawierały błędy i zostały oczyszczone.");
@@ -34,7 +34,7 @@ export function useRecipesSummary(initialSummary?: RecipeFilter) {
             }
         };
 
-        /*if (!initialSummary)*/ fetchSummary();
+        fetchSummary();
     }, [initialSummary]);
 
     return { summary, isLoading, error } as RecipesSummaryState;

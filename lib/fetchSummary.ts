@@ -12,20 +12,17 @@ export async function fetchSummary(): Promise<{
     error: string | null;
 }> {
     try {
-        // const rawSummary = await getSummary();
-
-        const { sanitizedSummary, sanitizeIssues } = await getSummary();
-        // sanitizeSummary(rawSummary);
+        const { summary, sanitizeIssues } = await getSummary();
 
         if (sanitizeIssues.length > 0) {
             console.warn("⚠️ Faulty values found in recipes summary:", sanitizeIssues);
             return {
-                summary: sanitizedSummary,
+                summary,
                 error: "Niektóre dane zawierały błędy i zostały oczyszczone.",
             };
         }
 
-        return { summary: sanitizedSummary, error: null };
+        return { summary, error: null };
     } catch (err) {
         console.error("❌ Failed to fetch recipes summary:", err);
         return {
