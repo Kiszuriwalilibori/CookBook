@@ -148,3 +148,4 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         </Box>
     );
 }
+//todo: Kizia jest widoczna w podsumowaniach zawsze, także w trybie nie-admina

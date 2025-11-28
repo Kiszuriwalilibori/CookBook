@@ -7,7 +7,7 @@ import type { ChipFieldKey } from "../RecipeFilters";
  * Renders a limited number of chips for a multi-select filter field.
  * Shows up to MAX_VISIBLE_CHIPS and a "+N więcej" indicator if hidden chips exist.
  */
-export const renderLimitedChips = (value: readonly string[], key: ChipFieldKey, theme: Theme, handleChange: (key: ChipFieldKey, value: string[]) => void) => {
+export const Chips = (value: readonly string[], key: ChipFieldKey, theme: Theme, handleChange: (key: ChipFieldKey, value: string[]) => void) => {
     if (!value.length) return null;
 
     const MAX_VISIBLE_CHIPS = 3;
@@ -35,3 +35,5 @@ export const renderLimitedChips = (value: readonly string[], key: ChipFieldKey, 
         </Box>
     );
 };
+
+export default Chips;

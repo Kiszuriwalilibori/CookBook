@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import { ChipFieldKey } from "../RecipeFilters";
 import { fieldBoxSx } from "../styles";
 import FilterAutocomplete from "./FilterAutocomplete";
-import { renderLimitedChips } from "./renderLimitedChips";
+import { Chips } from "./Chips";
 import { useTheme } from "@mui/material/styles";
 import { useAdminStore } from "@/stores";
 import FilterSwitch from "./FilterSwitch";
@@ -40,7 +40,7 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
                             const normalized = newValue ?? (field.multiple ? [] : "");
                             handleChange(field.key, normalized);
                         }}
-                        renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => renderLimitedChips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
+                        renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => Chips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
                         {...getErrorProps(field.key)}
                     />
                 </Box>
@@ -67,7 +67,7 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
                             const normalized = newValue ?? (field.multiple ? [] : "");
                             handleChange(field.key, normalized);
                         }}
-                        renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => renderLimitedChips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
+                        renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => Chips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
                         {...getErrorProps(field.key)}
                     />
                 </Box>
