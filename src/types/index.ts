@@ -7,7 +7,7 @@ export interface MenuItem {
     icon?: ReactNode; // For MUI icons
 }
 
-export type { FilterState, FilterValuesTypes } from "@/hooks/useFilters";
+export type { FilterState} from "@/hooks/useFilters";
 
 type DotPrefix<T extends string> = `source.${T}`;
 

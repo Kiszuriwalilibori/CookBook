@@ -11,6 +11,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "outDir": "./dist",
+    "noImplicitAny": true,
+    "noEmitOnError": true
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
