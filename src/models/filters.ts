@@ -1,13 +1,8 @@
 import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
 import { fieldTranslations } from "@/lib/types";
-import { BaseFilterableKeys, FilterableRecipeKeys, SourceKeys } from "@/types";
-
+import { FilterableRecipeKeys } from "@/types";
 
 const INITIAL_OPTIONS: string[] = [];
-
-
-
-
 
 const GENERAL_PLACEHOLDER = "Wszystkie";
 
@@ -25,8 +20,6 @@ export const PLACEHOLDERS: Record<FilterableRecipeKeys, string> = {
     "source.where": "Katalog",
 };
 
-
-
 export function defineField(config: Partial<FilterField> & { key: FilterableRecipeKeys; multiple: boolean }) {
     return {
         component: "autocomplete",
@@ -37,7 +30,6 @@ export function defineField(config: Partial<FilterField> & { key: FilterableReci
         placeholder: PLACEHOLDERS[config.key],
     } as FilterField;
 }
-
 
 export const BASE_FILTER_FIELDS: FilterField[] = [
     defineField({ key: "title", multiple: false }),
