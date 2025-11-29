@@ -13,17 +13,22 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     const awaitedSearchParams = await searchParams;
 
     const filters: Partial<FilterState> = {
-        title: typeof awaitedSearchParams.title === "string" ? awaitedSearchParams.title : undefined,
+        title: typeof awaitedSearchParams.title === "string" ? awaitedSearchParams.title.toLowerCase() : undefined,
+        cuisine: typeof awaitedSearchParams.cuisine === "string" ? awaitedSearchParams.cuisine.toLowerCase() : undefined,
 
-        cuisine: typeof awaitedSearchParams.cuisine === "string" ? awaitedSearchParams.cuisine : undefined,
+        tags: Array.isArray(awaitedSearchParams.tags) ? awaitedSearchParams.tags.map(t => t.toLowerCase()) : awaitedSearchParams.tags ? [awaitedSearchParams.tags.toLowerCase()] : [],
 
-        tags: Array.isArray(awaitedSearchParams.tags) ? awaitedSearchParams.tags : awaitedSearchParams.tags ? [awaitedSearchParams.tags] : [],
+        dietary: Array.isArray(awaitedSearchParams.dietary) ? awaitedSearchParams.dietary.map(d => d.toLowerCase()) : awaitedSearchParams.dietary ? [awaitedSearchParams.dietary.toLowerCase()] : [],
 
-        dietary: Array.isArray(awaitedSearchParams.dietary) ? awaitedSearchParams.dietary : awaitedSearchParams.dietary ? [awaitedSearchParams.dietary] : [],
+        products: Array.isArray(awaitedSearchParams.products) ? awaitedSearchParams.products.map(p => p.toLowerCase()) : awaitedSearchParams.products ? [awaitedSearchParams.products.toLowerCase()] : [],
 
-        products: Array.isArray(awaitedSearchParams.products) ? awaitedSearchParams.products : awaitedSearchParams.products ? [awaitedSearchParams.products] : [],
+        "source.http": typeof awaitedSearchParams["source.http"] === "string" ? awaitedSearchParams["source.http"].toLowerCase() : undefined,
+        "source.book": typeof awaitedSearchParams["source.book"] === "string" ? awaitedSearchParams["source.book"].toLowerCase() : undefined,
+        "source.title": typeof awaitedSearchParams["source.title"] === "string" ? awaitedSearchParams["source.title"].toLowerCase() : undefined,
+        "source.author": typeof awaitedSearchParams["source.author"] === "string" ? awaitedSearchParams["source.author"].toLowerCase() : undefined,
+        "source.where": typeof awaitedSearchParams["source.where"] === "string" ? awaitedSearchParams["source.where"].toLowerCase() : undefined,
 
-        // ⭐ NEW → boolean Kizia
+        // Boolean field
         Kizia: awaitedSearchParams.Kizia === "true" ? true : undefined,
     };
 
@@ -33,7 +38,6 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
         initialRecipes = await getRecipesForCards(filters);
     } catch (error) {
         console.error("SSR fetch error:", error);
-        // Fallback to empty or all? For now, empty to avoid errors
     }
 
     return <RecipesClient initialRecipes={initialRecipes} />;
