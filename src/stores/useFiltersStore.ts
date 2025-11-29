@@ -1,15 +1,7 @@
 import { create } from "zustand";
 import { EMPTY_RECIPE_FILTER, type FilterState } from "@/types";
 import { RecipeFilter } from "@/types";
-
-const DEFAULT_FILTERS: FilterState = {
-    title: "",
-    cuisine: "",
-    tags: [],
-    dietary: [],
-    products: [],
-    Kizia: false,
-};
+import { initialFilters } from "@/hooks/useFilters";
 
 interface FilterStoreState {
     filters: FilterState;
@@ -28,7 +20,7 @@ interface FilterStoreActions {
 type FilterStore = FilterStoreState & FilterStoreActions;
 
 export const useFiltersStore = create<FilterStore>((set, get) => ({
-    filters: DEFAULT_FILTERS,
+    filters: initialFilters,
     errors: {},
     options: EMPTY_RECIPE_FILTER,
 
@@ -55,7 +47,7 @@ export const useFiltersStore = create<FilterStore>((set, get) => ({
     },
 
     clear: () => {
-        set({ filters: DEFAULT_FILTERS, errors: {} });
+        set({ filters: initialFilters, errors: {} });
     },
 
     apply: () => {

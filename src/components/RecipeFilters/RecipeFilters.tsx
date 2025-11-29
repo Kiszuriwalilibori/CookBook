@@ -14,6 +14,7 @@ import { searchRecipeByTitle } from "@/lib/searchRecipeByTitle";
 import { Recipe } from "@/lib/types";
 import FilterFieldRendrerer from "./parts/FilterFieldRenderer";
 import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
+import { buildQueryString } from "./utils/buildQueryStrings";
 
 export type ChipFieldKey = keyof Pick<Recipe, "products" | "tags" | "dietary">;
 interface RecipeFiltersProps {
@@ -24,31 +25,31 @@ interface RecipeFiltersProps {
 
 export default function RecipeFilters({ onFiltersChange, onClose, options }: RecipeFiltersProps) {
     const router = useRouter();
-    console.log("options", options);
+
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
 
-    const buildQueryString = useCallback((filters: FilterState): string => {
-        const params = new URLSearchParams();
+    // const buildQueryString = useCallback((filters: FilterState): string => {
+    //     const params = new URLSearchParams();
 
-        Object.entries(filters).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
-                value.forEach(item => params.append(key, item));
-                return;
-            }
+    //     Object.entries(filters).forEach(([key, value]) => {
+    //         if (Array.isArray(value)) {
+    //             value.forEach(item => params.append(key, item));
+    //             return;
+    //         }
 
-            if (typeof value === "boolean") {
-                if (value) params.set(key, "true"); // only include when true
-                return;
-            }
+    //         if (typeof value === "boolean") {
+    //             if (value) params.set(key, "true"); // only include when true
+    //             return;
+    //         }
 
-            if (value && value !== "") {
-                params.set(key, value);
-            }
-        });
+    //         if (value && value !== "") {
+    //             params.set(key, value);
+    //         }
+    //     });
 
-        return params.toString();
-    }, []);
+    //     return params.toString();
+    // }, []);
 
     // New smart Apply logic
     const handleApply = useCallback(async () => {
@@ -70,7 +71,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         if (hasOnlyTitle && currentFilters.title) {
             const title = (currentFilters.title as string).trim();
             const slug = await searchRecipeByTitle(title);
-            console.log("slug", slug);
+
             if (slug) {
                 router.push(`/recipes/${slug}`);
                 onClose?.();
@@ -83,9 +84,10 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
 
         // CASE 2: Normal filtering → go to /recipes list
         const queryString = buildQueryString(currentFilters);
+        console.log("queryString", queryString);
         router.push(`/recipes${queryString ? `?${queryString}` : ""}`);
         onClose?.();
-    }, [apply, filters, setFilters, router, onClose, buildQueryString]);
+    }, [apply, filters, setFilters, router, onClose]);
 
     const handleClear = useCallback(() => {
         clear();
@@ -149,4 +151,5 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         </Box>
     );
 }
-//todo: Kizia jest widoczna w podsumowaniach zawsze, także w trybie nie-admina
+
+//queryString Kizia=true&source.http=https%3A%2F%2Fwww.kwestiasmaku.com%2Fprzepis%2Fzapiekanka-warzywna-z-serem-feta

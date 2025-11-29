@@ -7,7 +7,7 @@ export interface MenuItem {
     icon?: ReactNode; // For MUI icons
 }
 
-export type { FilterState} from "@/hooks/useFilters";
+export type { FilterState } from "@/hooks/useFilters";
 
 type DotPrefix<T extends string> = `source.${T}`;
 
@@ -15,10 +15,9 @@ type StringKeys<T> = {
     [K in keyof T]-?: T[K] extends string | undefined ? K : never; // Accept optional strings
 }[keyof T];
 
-type SourceKeys = DotPrefix<StringKeys<NonNullable<Recipe["source"]>>>;
+export type SourceKeys = DotPrefix<StringKeys<NonNullable<Recipe["source"]>>>;
 
 export type BaseFilterableKeys = keyof Pick<Recipe, "title" | "products" | "tags" | "dietary" | "cuisine" | "Kizia">;
-
 
 export type FilterableRecipeKeys = BaseFilterableKeys | SourceKeys;
 // export type RecipeFilter = Record<FilterableRecipeKeys, string[]>;
