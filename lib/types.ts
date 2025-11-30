@@ -83,7 +83,12 @@ export const fieldTranslations: Record<string, string> = {
     tags: "Etykiety",
     cuisine: "Kuchnia",
     preparationTime: "Całkowity czas przygotowania",
-    servings: "Porcje", // Not used directly; handled dynamically below
+    servings: "Porcje",
     notes: "Notatki",
     products: "Produkt",
+    "source.http": "Link",
+    "source.book": "Tytuł książki",
+    "source.title": "Tytuł książki",
+    "source.author": "Autor książki",
+    "source.where": "Katalog",
 };
