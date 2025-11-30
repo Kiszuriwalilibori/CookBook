@@ -29,28 +29,6 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
 
-    // const buildQueryString = useCallback((filters: FilterState): string => {
-    //     const params = new URLSearchParams();
-
-    //     Object.entries(filters).forEach(([key, value]) => {
-    //         if (Array.isArray(value)) {
-    //             value.forEach(item => params.append(key, item));
-    //             return;
-    //         }
-
-    //         if (typeof value === "boolean") {
-    //             if (value) params.set(key, "true"); // only include when true
-    //             return;
-    //         }
-
-    //         if (value && value !== "") {
-    //             params.set(key, value);
-    //         }
-    //     });
-
-    //     return params.toString();
-    // }, []);
-
     // New smart Apply logic
     const handleApply = useCallback(async () => {
         if (!apply()) return; // validation failed → do nothing
@@ -151,5 +129,3 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         </Box>
     );
 }
-
-//queryString Kizia=true&source.http=https%3A%2F%2Fwww.kwestiasmaku.com%2Fprzepis%2Fzapiekanka-warzywna-z-serem-feta
