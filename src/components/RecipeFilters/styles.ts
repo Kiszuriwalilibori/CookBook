@@ -102,3 +102,18 @@ export const highlightSx: SxProps<Theme> = {
     borderRadius: 0.5,
     fontWeight: 600,
 };
+
+// tooltipStyles.ts
+
+export const filterSummaryTooltipSx: SxProps<Theme> = theme => ({
+    border: `2px solid ${theme.palette.primary.main}`,
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.common.white,
+});
+
+export const filterSummaryTooltipArrowSx: SxProps<Theme> = theme => ({
+    "&:before": {
+        border: `2px solid ${theme.palette.primary.main}`,
+        backgroundColor: theme.palette.common.white,
+    },
+});

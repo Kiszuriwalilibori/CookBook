@@ -1,7 +1,7 @@
 import React, { JSX, useMemo } from "react";
 import { Typography, Tooltip } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { summaryTextSx } from "../styles";
+import { filterSummaryTooltipArrowSx, filterSummaryTooltipSx, summaryTextSx } from "../styles";
 import { FilterState } from "@/types";
 import { useAdminStore } from "@/stores";
 import { BASE_FILTER_FIELDS } from "@/models/filters";
@@ -65,7 +65,19 @@ export default function FilterSummary({ filters }: FilterSummaryProps) {
                 const shortened = shorten(fullText);
                 const isShortened = fullText.length > MAX_LENGTH;
                 const textElement = isShortened ? (
-                    <Tooltip title={fullText}>
+                    <Tooltip
+                        title={fullText}
+                        sx={filterSummaryTooltipSx}
+                        arrow
+                        slotProps={{
+                            tooltip: {
+                                sx: filterSummaryTooltipSx,
+                            },
+                            arrow: {
+                                sx: filterSummaryTooltipArrowSx,
+                            },
+                        }}
+                    >
                         <span>{shortened}</span>
                     </Tooltip>
                 ) : (
