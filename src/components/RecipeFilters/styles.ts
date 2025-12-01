@@ -69,3 +69,36 @@ export const limitedChipBoxSx = (isScrollable: boolean): SxProps<Theme> => ({
     ...chipContainerSx,
     overflowY: isScrollable ? "auto" : "visible",
 });
+
+// export const popupIndicatorSx: SxProps<Theme> = {
+//     color: "var(--foreground)",
+// };
+
+// export const clearIndicatorSx: SxProps<Theme> = {
+//     color: "var(--foreground)",
+// };
+
+// export const highlightSx: SxProps<Theme> = theme => ({
+//     backgroundColor: theme.palette.secondary.light,
+//     color: theme.palette.secondary.contrastText,
+//     px: 0.5,
+//     borderRadius: 0.5,
+//     fontWeight: 600,
+// });
+
+export const popupIndicatorSx: SxProps<Theme> = {
+    color: "var(--foreground)",
+};
+
+export const clearIndicatorSx: SxProps<Theme> = {
+    color: "var(--foreground)",
+};
+
+// This is now a static object — no function!
+export const highlightSx: SxProps<Theme> = {
+    backgroundColor: "secondary.light",
+    color: "secondary.contrastText",
+    px: 0.5,
+    borderRadius: 0.5,
+    fontWeight: 600,
+};
