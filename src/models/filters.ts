@@ -1,4 +1,3 @@
-
 import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
 import { fieldTranslations } from "@/lib/types";
 import { FilterableRecipeKeys } from "@/types";
@@ -30,6 +29,13 @@ export const BASE_FILTER_FIELDS: FilterField[] = [
         component: "switch",
         requiredAdmin: true,
         placeholder: "Kizia to lubi?",
+    }),
+    defineField({
+        key: "status",
+        multiple: false,
+        component: "checkbox",
+        requiredAdmin: true,
+        placeholder: "Status",
     }),
 
     defineField({ key: "source.http", multiple: false, requiredAdmin: true, placeholder: "Link" }),

@@ -27,7 +27,7 @@ export async function GET(req: Request) {
         dietary: searchParams.getAll("dietary"),
         products: searchParams.getAll("products"),
     };
-
+    //todo tu ewidentnie brakuje nowszych pól!!!
     try {
         const recipes = await getRecipesForCards(filters);
         return NextResponse.json(recipes, { status: 200 });

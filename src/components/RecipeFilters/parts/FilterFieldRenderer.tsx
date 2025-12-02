@@ -1,5 +1,5 @@
 import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
-import { FilterState } from "@/types";
+import { FilterState, Status } from "@/types";
 import { Box } from "@mui/material";
 import { ChipFieldKey } from "../RecipeFilters";
 import { fieldBoxSx } from "../styles";
@@ -10,6 +10,7 @@ import { useAdminStore } from "@/stores";
 import FilterSwitch from "./FilterSwitch";
 import { createRenderTags } from "../utils/createRenderTags";
 import { FilterValuesTypes } from "@/hooks/useFilters";
+import StatusFilter from "./FilterCheckbox";
 
 interface Props {
     field: FilterField;
@@ -25,6 +26,7 @@ interface Props {
 export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorProps }: Props) => {
     const theme = useTheme();
     const isAdminLogged = useAdminStore(state => state.isAdminLogged);
+
     if (!isAdminLogged && field.requiredAdmin) return null;
     if (field.key === "Kizia" && !isAdminLogged) return null;
 
@@ -35,7 +37,7 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
                     <FilterAutocomplete
                         label={field.label}
                         options={field.options}
-                        value={filters[field.key] as string | string[] | null}
+                        value={filters[field.key] as string | string[]}
                         multiple={field.multiple}
                         placeholder={field.placeholder}
                         onChange={(newValue: string | string[] | null) => {
@@ -43,27 +45,32 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
                             handleChange(field.key, normalized);
                         }}
                         renderTags={createRenderTags(field.key, !!field.chips, theme, handleChange)}
-                        // renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => Chips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
                         {...getErrorProps(field.key)}
                     />
                 </Box>
             );
 
-            break;
         case "switch":
             return (
                 <Box sx={fieldBoxSx} key={field.key}>
                     <FilterSwitch placeholder={field.placeholder} label={field.label} value={filters[field.key] as boolean} onChange={(checked: boolean) => handleChange(field.key, checked)} {...getErrorProps(field.key)} />
                 </Box>
             );
-            break;
+
+        case "checkbox": // or whatever key/component you use for status
+            return (
+                <Box sx={fieldBoxSx} key={field.key}>
+                    <StatusFilter label={field.label} value={filters[field.key] as Status | null} onChange={(newValue: Status) => handleChange(field.key, newValue)} {...getErrorProps(field.key)} />
+                </Box>
+            );
+
         default:
             return (
                 <Box sx={fieldBoxSx} key={field.key}>
                     <FilterAutocomplete
                         label={field.label}
                         options={field.options}
-                        value={filters[field.key] as string | string[] | null}
+                        value={filters[field.key] as string | string[]}
                         multiple={field.multiple}
                         placeholder={field.placeholder}
                         onChange={(newValue: string | string[] | null) => {

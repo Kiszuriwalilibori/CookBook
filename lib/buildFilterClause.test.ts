@@ -33,7 +33,7 @@ function setFilterField<K extends keyof FilterState>(filter: Partial<FilterState
 }
 
 // Group fields by type
-const stringFields: (keyof FilterState)[] = ["title", "cuisine", "source.http", "source.book", "source.title", "source.author", "source.where"];
+const stringFields: (keyof FilterState)[] = ["title", "cuisine", "source.http", "source.book", "source.title", "source.author", "source.where", "status"];
 const booleanFields: (keyof FilterState)[] = ["Kizia"];
 const arrayFields: (keyof FilterState)[] = ["tags", "dietary", "products"];
 

@@ -92,12 +92,12 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
                 if (k === "title") return true;
                 return Array.isArray(v) ? v.length === 0 : !v;
             });
-        console.log("hasOnlyTitle", hasOnlyTitle);
+        
         if (hasOnlyTitle) setCheckingDirect(true);
         await handleApply();
         setCheckingDirect(false);
     };
-    console.log("filterFields", filterFields);
+   
     return (
         <Box sx={containerSx}>
             <Typography variant="h6" gutterBottom align="center">

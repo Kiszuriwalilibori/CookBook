@@ -9,7 +9,7 @@ import { useSyncRecipesStore } from "@/hooks";
 
 export default function RecipesClient({ initialRecipes }: { initialRecipes: Recipe[] }) {
     const { recipes, loading, error } = useRecipesStore();
-
+    console.log("recipes", recipes);
     useSyncRecipesStore(initialRecipes);
 
     const displayRecipes = recipes.length > 0 ? recipes : initialRecipes;

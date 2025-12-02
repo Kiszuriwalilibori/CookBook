@@ -1,13 +1,31 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useDebouncedCallback } from "./useDebouncedCallback";
 import { normalizeMultiple } from "@/components/RecipeFilters/utils/normalize";
-import { BaseFilterableKeys, RecipeFilter, SourceKeys } from "@/types";
+import { BaseFilterableKeys, RecipeFilter, SourceKeys, Status } from "@/types";
 import isEqual from "lodash/isEqual";
 
 const MAX_TAGS = 10;
 
+// export type FilterState = {
+//     [K in BaseFilterableKeys]: K extends "title" | "cuisine"
+//         ? string
+//         : K extends "status"
+//           ? Status | null // <-- changed here
+//           : K extends "Kizia"
+//             ? boolean
+//             : string[];
+// } & {
+//     [K in SourceKeys]: string;
+// };
+
+// export type FilterState = {
+//     [K in BaseFilterableKeys]: K extends "title" | "cuisine" | "status" ? string : K extends "Kizia" ? boolean : string[];
+// } & {
+//     [K in SourceKeys]: string;
+// };
+
 export type FilterState = {
-    [K in BaseFilterableKeys]: K extends "title" | "cuisine" ? string : K extends "Kizia" ? boolean : string[];
+    [K in BaseFilterableKeys]: K extends "title" | "cuisine" ? string : K extends "status" ? Status | null : K extends "Kizia" ? boolean : string[];
 } & {
     [K in SourceKeys]: string;
 };
@@ -24,6 +42,7 @@ export const initialFilters: FilterState = {
     tags: [],
     dietary: [],
     products: [],
+    status: null,
     Kizia: true,
     "source.http": "",
     "source.book": "",
@@ -39,6 +58,7 @@ const EMPTY_ERRORS: Record<keyof FilterState, string> = {
     dietary: "",
     products: "",
     Kizia: "",
+    status: "",
     "source.http": "",
     "source.book": "",
     "source.title": "",
@@ -61,6 +81,7 @@ export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: Fil
             tags: val => normalizeMultiple(val as string[], options.tags),
             dietary: val => normalizeMultiple(val as string[], options.dietary),
             products: val => normalizeMultiple(val as string[], options.products),
+            status: val => val,
             Kizia: val => val,
             "source.http": val => (val as string).trim().toLowerCase(),
             "source.book": val => (val as string).trim().toLowerCase(),

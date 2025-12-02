@@ -1,5 +1,5 @@
 //recipe.js - schema for recipe document
-
+import {StatusOptions} from '../../src/types/index';
 import ProductsInput from '../components/ProductsInput'
 
 export default {
@@ -313,10 +313,14 @@ export default {
       type: 'boolean',
     },
     {
-      name: 'isReady',
-      title: 'Is Ready',
-      type: 'boolean',
-      initialValue: true,
+      name: 'status',
+      title: 'Status',
+      type: 'string',
+      options: {
+        list: StatusOptions,
+      },
+      validation: (Rule) => Rule.required().error('Status is required'),
+      initialValue: 'Good',
     },
     {
       name: 'source',

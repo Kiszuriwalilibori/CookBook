@@ -1,7 +1,7 @@
 import React, { JSX, useMemo } from "react";
 import { Typography, Tooltip, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { filterSummaryTooltipArrowSx, filterSummaryTooltipSx, summaryTextSx } from "../styles";
+import { filterSummaryTooltipArrowSx, filterSummaryTooltipSx, summaryItemTextSx, summaryTextSx } from "../styles";
 import { FilterState } from "@/types";
 import { useAdminStore } from "@/stores";
 import { BASE_FILTER_FIELDS } from "@/models/filters";
@@ -14,6 +14,7 @@ const icons = {
     tags: "🏷️",
     dietary: "🌱",
     products: "🛍️",
+    status: "⭐",
     Kizia: "👩",
     "source.http": "🌐",
     "source.book": "📚",
@@ -78,7 +79,9 @@ export default function FilterSummary({ filters }: FilterSummaryProps) {
                             },
                         }}
                     >
-                        <Box component="span">{shortened}</Box>
+                        <Box component="span" sx={summaryItemTextSx}>
+                            {shortened}
+                        </Box>
                     </Tooltip>
                 ) : (
                     <Box component="span">{shortened}</Box>

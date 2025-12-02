@@ -1,3 +1,5 @@
+import { Status } from "@/types";
+
 // lib/types.ts (updated to match query's firstBlockText structure)
 export interface PortableTextBlock {
     _key: string;
@@ -66,6 +68,7 @@ export interface Recipe {
     tags?: string[];
     notes?: string;
     Kizia?: boolean;
+    status: Status;
     source?: {
         http?: string;
         book?: string;
@@ -86,6 +89,7 @@ export const fieldTranslations: Record<string, string> = {
     servings: "Porcje",
     notes: "Notatki",
     products: "Produkt",
+    status: "Status",
     "source.http": "Link",
     "source.book": "Tytuł książki",
     "source.title": "Tytuł książki",

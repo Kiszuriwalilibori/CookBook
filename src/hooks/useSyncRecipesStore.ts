@@ -6,8 +6,6 @@ export function useSyncRecipesStore(initialRecipes: Recipe[]) {
     const { setRecipes } = useRecipesStore();
 
     useEffect(() => {
-        if (initialRecipes.length > 0) {
-            setRecipes(initialRecipes);
-        }
+        setRecipes(initialRecipes);
     }, [initialRecipes, setRecipes]);
 }

@@ -25,7 +25,6 @@ export async function getSummary(): Promise<SummaryResult> {
         const withStructureSummary = ensureSummaryStructure(rawSummary);
         const { sanitizedSummary, sanitizeIssues } = sanitizeSummary(withStructureSummary);
         handleSanitizeIssues(sanitizeIssues);
-        console.log("sanitizedSummary", sanitizedSummary);
         const summary = sortSummary(sanitizedSummary);
 
         return { summary, sanitizeIssues };

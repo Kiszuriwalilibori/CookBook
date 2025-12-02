@@ -117,3 +117,7 @@ export const filterSummaryTooltipArrowSx: SxProps<Theme> = theme => ({
         backgroundColor: theme.palette.common.white,
     },
 });
+
+export const summaryItemTextSx = {
+    color: "inherit",
+};

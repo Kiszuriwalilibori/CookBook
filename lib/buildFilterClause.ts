@@ -1,5 +1,4 @@
-
-import { FilterState } from "@/types";
+import { FilterState } from "@/types"; // remove Status import
 
 export function buildFilterClause(filters?: Partial<FilterState>): string {
     if (!filters) return "";
@@ -23,6 +22,13 @@ export function buildFilterClause(filters?: Partial<FilterState>): string {
     function processStringField(filters: Partial<FilterState>, field: StringKeys<FilterState>) {
         const value = filters[field];
         if (!value) return;
+
+        // handle status by name without TypeScript complaining
+        if (field === ("status" as StringKeys<FilterState>)) {
+            conditions.push(`lower(${field}) == "${normalize(value)}"`);
+            return;
+        }
+
         const op = field === "title" ? "match" : "==";
         const condition = op === "match" ? `lower(${field}) match "${normalize(value)}*"` : `lower(${field}) == "${normalize(value)}"`;
         conditions.push(condition);

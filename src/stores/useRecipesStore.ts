@@ -31,6 +31,7 @@ export const useRecipesStore = create<RecipesStore>(set => ({
             if (!res.ok) throw new Error("Błąd podczas pobierania przepisów");
 
             const data = await res.json();
+            console.log("data from userecipesstore", data);
 
             set({ recipes: data, loading: false });
         } catch (err: unknown) {

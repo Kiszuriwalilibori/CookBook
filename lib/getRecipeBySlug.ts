@@ -45,6 +45,7 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
       tags,
       notes,
       Kizia,
+      status,
       source
     }`,
         { slug } // Param for safe query

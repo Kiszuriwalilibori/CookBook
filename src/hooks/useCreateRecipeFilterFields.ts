@@ -2,7 +2,7 @@ import { BASE_FILTER_FIELDS } from "@/models/filters";
 import {FilterState, RecipeFilter } from "@/types";
 
 
-type Renderer = "autocomplete" | "switch";
+type Renderer = "autocomplete" | "switch" | "checkbox";
 
 export interface FilterField {
     key: keyof FilterState;
