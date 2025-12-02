@@ -11,6 +11,7 @@ export default {
       name: 'title',
       title: 'Recipe Title',
       type: 'string',
+      validation: (Rule) => Rule.required().error('Title is required'),
     },
     {
       name: 'slug',
@@ -20,7 +21,9 @@ export default {
         source: 'title',
         maxLength: 96,
       },
+      validation: (Rule) => Rule.required().error('Slug is required'),
     },
+
     {
       name: 'description',
       title: 'Description',
