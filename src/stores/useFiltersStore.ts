@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { EMPTY_RECIPE_FILTER, type FilterState } from "@/types";
 import { RecipeFilter } from "@/types";
 import { initialFilters } from "@/hooks/useFilters";
+import { FilterValuesTypes } from "@/hooks/useFilters";
 
 interface FilterStoreState {
     filters: FilterState;
@@ -10,7 +11,7 @@ interface FilterStoreState {
 }
 
 interface FilterStoreActions {
-    handleChange: (key: keyof FilterState, value: string | string[] | boolean) => void;
+    handleChange: (key: keyof FilterState, value: FilterValuesTypes) => void;
     clear: () => void;
     apply: () => boolean;
     setFilters: (filters: Partial<FilterState>) => void;
