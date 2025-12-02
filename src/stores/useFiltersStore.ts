@@ -10,7 +10,7 @@ interface FilterStoreState {
 }
 
 interface FilterStoreActions {
-    handleChange: (key: keyof FilterState, value: string | string[]) => void;
+    handleChange: (key: keyof FilterState, value: string | string[] | boolean) => void;
     clear: () => void;
     apply: () => boolean;
     setFilters: (filters: Partial<FilterState>) => void;
