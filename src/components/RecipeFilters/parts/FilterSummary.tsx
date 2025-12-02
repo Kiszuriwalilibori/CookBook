@@ -1,5 +1,5 @@
 import React, { JSX, useMemo } from "react";
-import { Typography, Tooltip } from "@mui/material";
+import { Typography, Tooltip, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { filterSummaryTooltipArrowSx, filterSummaryTooltipSx, summaryTextSx } from "../styles";
 import { FilterState } from "@/types";
@@ -78,10 +78,10 @@ export default function FilterSummary({ filters }: FilterSummaryProps) {
                             },
                         }}
                     >
-                        <span>{shortened}</span>
+                        <Box component="span">{shortened}</Box>
                     </Tooltip>
                 ) : (
-                    <span>{shortened}</span>
+                    <Box component="span">{shortened}</Box>
                 );
                 elements.push(
                     <React.Fragment key={key}>
