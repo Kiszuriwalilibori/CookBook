@@ -1,6 +1,6 @@
 import type { Theme } from "@mui/material/styles";
 import Chips from "../parts/Chips";
-import { FilterState } from "@/types";
+import { FilterState } from "@/models/filters";
 import { ChipEligibleKey, FilterValuesTypes } from "@/models/filters";
 
 export function createRenderTags(key: keyof FilterState, chipsEnabled: boolean, theme: Theme, handleChange: (key: ChipEligibleKey, value: FilterValuesTypes) => void) {
