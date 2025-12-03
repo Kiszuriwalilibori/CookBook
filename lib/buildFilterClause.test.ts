@@ -1,5 +1,5 @@
 import { buildFilterClause } from "./buildFilterClause";
-import { FilterState } from "@/types";
+import { FilterState } from "@/models/filters";
 
 // Example values for each field
 const exampleValues: Partial<FilterState> = {

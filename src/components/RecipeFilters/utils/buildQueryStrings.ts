@@ -1,4 +1,4 @@
-import { FilterState } from "@/types";
+import { FilterState } from "@/models/filters";
 
 export const buildQueryString = (filters: FilterState): string => {
     const params = new URLSearchParams();

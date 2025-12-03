@@ -1,4 +1,4 @@
-import { FilterState } from "@/types"; // remove Status import
+import { FilterState } from "@/models/filters"; // remove Status import
 
 export function buildFilterClause(filters?: Partial<FilterState>): string {
     if (!filters) return "";

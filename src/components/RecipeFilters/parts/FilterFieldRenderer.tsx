@@ -1,5 +1,5 @@
 import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
-import { FilterState, Status } from "@/types";
+import { Status } from "@/types";
 import { Box } from "@mui/material";
 import { ChipFieldKey } from "../RecipeFilters";
 import { fieldBoxSx } from "../styles";
@@ -9,7 +9,7 @@ import { useTheme } from "@mui/material/styles";
 import { useAdminStore } from "@/stores";
 import FilterSwitch from "./FilterSwitch";
 import { createRenderTags } from "../utils/createRenderTags";
-
+import {FilterState} from "@/models/filters";
 import StatusFilter from "./FilterCheckbox";
 import { FilterValuesTypes } from "@/models/filters";
 

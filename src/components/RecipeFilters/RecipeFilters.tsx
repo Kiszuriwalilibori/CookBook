@@ -6,9 +6,10 @@ import { Box, Button, Typography, Divider, CircularProgress } from "@mui/materia
 
 import { containerSx, buttonGroupSx, dividerSx } from "./styles";
 import { FilterSummary } from "./parts";
-import { FilterState, RecipeFilter } from "@/types";
+import { RecipeFilter } from "@/types";
 import { useFilters, useCreateRecipeFilterFields } from "@/hooks";
 import { useFiltersStore } from "@/stores";
+import { FilterState } from "@/models/filters";
 
 import { searchRecipeByTitle } from "@/lib/searchRecipeByTitle";
 import { Recipe } from "@/lib/types";
@@ -92,12 +93,12 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
                 if (k === "title") return true;
                 return Array.isArray(v) ? v.length === 0 : !v;
             });
-        
+
         if (hasOnlyTitle) setCheckingDirect(true);
         await handleApply();
         setCheckingDirect(false);
     };
-   
+
     return (
         <Box sx={containerSx}>
             <Typography variant="h6" gutterBottom align="center">

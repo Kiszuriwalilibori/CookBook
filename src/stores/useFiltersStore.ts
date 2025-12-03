@@ -1,8 +1,8 @@
 import { create } from "zustand";
-import { EMPTY_RECIPE_FILTER, type FilterState } from "@/types";
+import { EMPTY_RECIPE_FILTER } from "@/types";
 import { RecipeFilter } from "@/types";
 import { initialFilters } from "@/hooks/useFilters";
-import { FilterValuesTypes } from "@/models/filters";
+import { FilterValuesTypes, FilterState } from "@/models/filters";
 
 interface FilterStoreState {
     filters: FilterState;
