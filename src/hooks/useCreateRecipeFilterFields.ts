@@ -1,6 +1,5 @@
-import { BASE_FILTER_FIELDS } from "@/models/filters";
-import {FilterState, RecipeFilter } from "@/types";
-
+import { FILTER_FIELDS_CONFIG, FilterState } from "@/models/filters";
+import { RecipeFilter } from "@/types";
 
 type Renderer = "autocomplete" | "switch" | "checkbox";
 
@@ -21,7 +20,7 @@ const sanitizeOptions = (arr: unknown): string[] => (Array.isArray(arr) ? arr.fi
  * Hook to create type-safe filter fields for UI
  */
 export const useCreateRecipeFilterFields = (options: RecipeFilter) => {
-    return BASE_FILTER_FIELDS.map(base => ({
+    return FILTER_FIELDS_CONFIG.map(base => ({
         ...base,
         options: base.component === "autocomplete" ? sanitizeOptions(options[base.key as keyof RecipeFilter]) : base.options,
     }));

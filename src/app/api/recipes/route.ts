@@ -1,7 +1,7 @@
 // app/api/recipes/route.ts
 import { NextResponse } from "next/server";
-import { getRecipesForCards } from "@/lib/getRecipesForCards";
-import { type FilterState } from "@/types";
+import { getRecipesForCards } from "@/utils/getRecipesForCards";
+import { type FilterState } from "@/models/filters";
 
 // Handles POST requests: client sends JSON { filters }
 export async function POST(req: Request) {

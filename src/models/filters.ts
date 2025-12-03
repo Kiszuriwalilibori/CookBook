@@ -1,6 +1,6 @@
 import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
 import { fieldTranslations } from "@/lib/types";
-import { BaseFilterableKeys, FilterableRecipeKeys,SourceKeys, Status } from "@/types";
+import { BaseFilterableKeys, FilterableRecipeKeys, SourceKeys, Status } from "@/types";
 
 const INITIAL_OPTIONS: string[] = [];
 const GENERAL_PLACEHOLDER = "Wszystkie";
@@ -16,7 +16,7 @@ export function defineField(config: Partial<FilterField> & { key: FilterableReci
     } as FilterField;
 }
 
-export const BASE_FILTER_FIELDS: FilterField[] = [
+export const FILTER_FIELDS_CONFIG: FilterField[] = [
     defineField({ key: "title", multiple: false }),
     defineField({ key: "cuisine", multiple: false }),
     defineField({ key: "tags", multiple: true, chips: true }),
@@ -32,34 +32,12 @@ export const BASE_FILTER_FIELDS: FilterField[] = [
 ] as const;
 export type FilterValuesTypes = FilterState[keyof FilterState];
 
-
-
-
-
-
-
-
-
 export type FilterState = {
     [K in BaseFilterableKeys]: K extends "title" | "cuisine" ? string : K extends "status" ? Status | null : K extends "Kizia" ? boolean : string[];
 } & {
     [K in SourceKeys]: string;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 export type ChipEligibleKey = {
     [K in keyof FilterState]: FilterState[K] extends string[] ? K : never;
 }[keyof FilterState];
-

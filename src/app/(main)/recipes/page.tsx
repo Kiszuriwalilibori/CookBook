@@ -1,42 +1,51 @@
-import { getRecipesForCards } from "@/lib/getRecipesForCards";
 import RecipesClient from "./RecipesClient";
-import { Status, type FilterState } from "@/types";
+import { getRecipesForCards } from "@/utils/getRecipesForCards";
+import { Status } from "@/types";
 import { Recipe } from "@/lib/types";
+import { FilterState } from "@/models/filters";
 
 interface RecipesPageProps {
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>; // Explicitly type as Promise
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export const revalidate = 3600;
 
+// --- Helpers ---
+const normalizeString = (val: unknown) => (typeof val === "string" ? val.toLowerCase() : undefined);
+const normalizeArrayOrString = (val?: string | string[]) => (Array.isArray(val) ? val.map(v => v.toLowerCase()) : typeof val === "string" ? [val.toLowerCase()] : []);
+
+const parseBoolean = (val?: string): boolean | undefined => (val === "true" ? true : undefined);
+
+const VALID_STATUSES: Status[] = ["Good", "Acceptable", "Improvement", "Forget"];
+const parseStatus = (val?: string): Status | null => (val && VALID_STATUSES.includes(val as Status) ? (val as Status) : null);
+
+const SOURCE_KEYS: Array<keyof FilterState & string> = ["source.http", "source.book", "source.title", "source.author", "source.where"];
+
 export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     const awaitedSearchParams = await searchParams;
 
+    // Parse source fields
+    const sourceFilters = Object.fromEntries(SOURCE_KEYS.map(key => [key, normalizeString(awaitedSearchParams[key])]));
+
+    // Boolean and status safely handle array query params
+    const KiziaValue = Array.isArray(awaitedSearchParams.Kizia) ? parseBoolean(awaitedSearchParams.Kizia[0]) : parseBoolean(awaitedSearchParams.Kizia);
+
+    const statusValue = Array.isArray(awaitedSearchParams.status) ? parseStatus(awaitedSearchParams.status[0]) : parseStatus(awaitedSearchParams.status);
+
     const filters: Partial<FilterState> = {
-        title: typeof awaitedSearchParams.title === "string" ? awaitedSearchParams.title.toLowerCase() : undefined,
-        cuisine: typeof awaitedSearchParams.cuisine === "string" ? awaitedSearchParams.cuisine.toLowerCase() : undefined,
-
-        tags: Array.isArray(awaitedSearchParams.tags) ? awaitedSearchParams.tags.map(t => t.toLowerCase()) : awaitedSearchParams.tags ? [awaitedSearchParams.tags.toLowerCase()] : [],
-
-        dietary: Array.isArray(awaitedSearchParams.dietary) ? awaitedSearchParams.dietary.map(d => d.toLowerCase()) : awaitedSearchParams.dietary ? [awaitedSearchParams.dietary.toLowerCase()] : [],
-
-        products: Array.isArray(awaitedSearchParams.products) ? awaitedSearchParams.products.map(p => p.toLowerCase()) : awaitedSearchParams.products ? [awaitedSearchParams.products.toLowerCase()] : [],
-
-        "source.http": typeof awaitedSearchParams["source.http"] === "string" ? awaitedSearchParams["source.http"].toLowerCase() : undefined,
-        "source.book": typeof awaitedSearchParams["source.book"] === "string" ? awaitedSearchParams["source.book"].toLowerCase() : undefined,
-        "source.title": typeof awaitedSearchParams["source.title"] === "string" ? awaitedSearchParams["source.title"].toLowerCase() : undefined,
-        "source.author": typeof awaitedSearchParams["source.author"] === "string" ? awaitedSearchParams["source.author"].toLowerCase() : undefined,
-        "source.where": typeof awaitedSearchParams["source.where"] === "string" ? awaitedSearchParams["source.where"].toLowerCase() : undefined,
-        // Boolean field
-        Kizia: awaitedSearchParams.Kizia === "true" ? true : undefined,
-        status: typeof awaitedSearchParams.status === "string" && ["Good", "Acceptable", "Improvement", "Forget"].includes(awaitedSearchParams.status) ? (awaitedSearchParams.status as Status) : null,
+        title: normalizeString(awaitedSearchParams.title),
+        cuisine: normalizeString(awaitedSearchParams.cuisine),
+        tags: normalizeArrayOrString(awaitedSearchParams.tags),
+        dietary: normalizeArrayOrString(awaitedSearchParams.dietary),
+        products: normalizeArrayOrString(awaitedSearchParams.products),
+        ...sourceFilters,
+        Kizia: KiziaValue,
+        status: statusValue,
     };
 
-    // Fetch filtered recipes on server with params
     let initialRecipes: Recipe[] = [];
     try {
         initialRecipes = await getRecipesForCards(filters);
-        console.log("initialRecipes", initialRecipes);
     } catch (error) {
         console.error("SSR fetch error:", error);
     }

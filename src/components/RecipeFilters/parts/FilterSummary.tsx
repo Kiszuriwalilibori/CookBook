@@ -2,9 +2,9 @@ import React, { JSX, useMemo } from "react";
 import { Typography, Tooltip, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { filterSummaryTooltipArrowSx, filterSummaryTooltipSx, summaryItemTextSx, summaryTextSx } from "../styles";
-import { FilterState } from "@/types";
+
 import { useAdminStore } from "@/stores";
-import { BASE_FILTER_FIELDS } from "@/models/filters";
+import { FILTER_FIELDS_CONFIG, FilterState } from "@/models/filters";
 
 const MAX_LENGTH = 15;
 
@@ -36,7 +36,7 @@ export default function FilterSummary({ filters }: FilterSummaryProps) {
 
         const shorten = (text: string) => (text.length > MAX_LENGTH ? text.slice(0, MAX_LENGTH) + "..." : text);
 
-        for (const field of BASE_FILTER_FIELDS) {
+        for (const field of FILTER_FIELDS_CONFIG) {
             if (field.requiredAdmin && !isAdminLogged) continue;
 
             let fullText: string | undefined;

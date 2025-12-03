@@ -1,5 +1,5 @@
 import { getRecipeBySlug } from "./getRecipeBySlug";
-import { getRecipesForCards } from "./getRecipesForCards";
+import { getRecipesForCards } from "../src/utils/getRecipesForCards";
 import { getSummary } from "./getSummary";
 import { fetchSummary } from "./fetchSummary";
 

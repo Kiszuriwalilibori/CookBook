@@ -1,11 +1,10 @@
-
 // lib/getRecipesForCards.ts
 import { groq } from "next-sanity";
-import type { Recipe } from "./types";
-import { client } from "./createClient";
-import type { FilterState } from "@/types";
-import { buildFilterClause } from "./buildFilterClause";
+import type { Recipe } from "../../lib/types";
+import { client } from "../../lib/createClient";
 
+import { buildFilterClause } from "../../lib/buildFilterClause";
+import { FilterState } from "@/models/filters";
 
 /**
  * Fetch recipes for cards — supports optional filters.
