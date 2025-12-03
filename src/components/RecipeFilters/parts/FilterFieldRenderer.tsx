@@ -9,8 +9,9 @@ import { useTheme } from "@mui/material/styles";
 import { useAdminStore } from "@/stores";
 import FilterSwitch from "./FilterSwitch";
 import { createRenderTags } from "../utils/createRenderTags";
-import { FilterValuesTypes } from "@/hooks/useFilters";
+
 import StatusFilter from "./FilterCheckbox";
+import { FilterValuesTypes } from "@/models/filters";
 
 interface Props {
     field: FilterField;

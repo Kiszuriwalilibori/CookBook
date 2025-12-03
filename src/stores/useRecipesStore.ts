@@ -1,43 +1,19 @@
-// stores/useRecipesStore.ts
+// useRecipesStore.ts
 import { create } from "zustand";
-import { type Recipe } from "@/lib/types";
-import { type FilterState } from "@/types";
+import type { Recipe } from "@/lib/types";
 
 interface RecipesStore {
     recipes: Recipe[];
-    loading: boolean;
-    error: string | null;
-    fetchFilteredRecipes: (filters: Partial<FilterState>) => Promise<void>;
+    hydrated: boolean;
+    hydrate: (recipes: Recipe[]) => void;
     setRecipes: (recipes: Recipe[]) => void;
 }
 
 export const useRecipesStore = create<RecipesStore>(set => ({
     recipes: [],
-    loading: false,
-    error: null,
+    hydrated: false,
+
+    hydrate: recipes => set(state => (state.hydrated ? state : { recipes, hydrated: true })),
 
     setRecipes: recipes => set({ recipes }),
-
-    fetchFilteredRecipes: async filters => {
-        try {
-            set({ loading: true, error: null });
-
-            const res = await fetch("/api/recipes", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ filters }),
-            });
-
-            if (!res.ok) throw new Error("Błąd podczas pobierania przepisów");
-
-            const data = await res.json();
-            console.log("data from userecipesstore", data);
-
-            set({ recipes: data, loading: false });
-        } catch (err: unknown) {
-            const msg = err instanceof Error ? err.message : "Nieznany błąd";
-            console.error("Error fetching filtered recipes:", err);
-            set({ loading: false, error: msg });
-        }
-    },
 }));

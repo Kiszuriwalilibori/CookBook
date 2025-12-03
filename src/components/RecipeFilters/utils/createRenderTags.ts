@@ -1,9 +1,7 @@
 import type { Theme } from "@mui/material/styles";
-
 import Chips from "../parts/Chips";
-import { ChipEligibleKey, FilterValuesTypes } from "@/hooks/useFilters";
 import { FilterState } from "@/types";
-
+import { ChipEligibleKey, FilterValuesTypes } from "@/models/filters";
 
 export function createRenderTags(key: keyof FilterState, chipsEnabled: boolean, theme: Theme, handleChange: (key: ChipEligibleKey, value: FilterValuesTypes) => void) {
     if (!chipsEnabled) return undefined;
@@ -16,6 +14,5 @@ export function createRenderTags(key: keyof FilterState, chipsEnabled: boolean, 
 
     return (value: string[]) => Chips(value, chipKey, theme, handleChange);
 }
-
 
 // todo kliknięcie na krzyżyk w filtrach zamyka je całe a mialo tylko czyścić jedno (ale tak działa tylko przed wyborem)

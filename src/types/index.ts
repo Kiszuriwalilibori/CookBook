@@ -7,8 +7,6 @@ export interface MenuItem {
     icon?: ReactNode; // For MUI icons
 }
 
-export type { FilterState } from "@/hooks/useFilters";
-
 type DotPrefix<T extends string> = `source.${T}`;
 
 type StringKeys<T> = {
