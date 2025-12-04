@@ -1,6 +1,6 @@
 // app/recipes/[slug]/parts/RecipeIngredients.tsx
 import { Box, Typography, List } from "@mui/material";
-import { Recipe } from "@/lib/types";
+import { Recipe } from "@/types";
 import { styles } from "../styles";
 
 interface RecipeIngredientsProps {

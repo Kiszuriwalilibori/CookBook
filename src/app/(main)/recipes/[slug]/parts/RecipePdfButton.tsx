@@ -1,11 +1,10 @@
-
 "use client";
 
 import { IconButton, Tooltip } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import jsPDF from "jspdf";
 import { styles } from "../styles";
-import { Recipe } from "@/lib/types";
+import { Recipe } from "@/types";
 
 interface RecipePdfButtonProps {
     recipe: Recipe;

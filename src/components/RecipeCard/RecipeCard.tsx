@@ -3,7 +3,7 @@ import { Card, CardMedia, CardContent, Typography, Chip, Box } from "@mui/materi
 import NextLink from "next/link";
 import { styles } from "./styles";
 import Separator from "../Common/Separator/Separator";
-import type { Recipe } from "@/lib/types"; // Import full Recipe type for 1:1 mapping
+import type { Recipe } from "@/types"; // Import full Recipe type for 1:1 mapping
 
 // Props now accept the full Recipe object for 1:1 schema alignment
 interface RecipeCardProps {

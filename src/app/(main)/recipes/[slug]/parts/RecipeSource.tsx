@@ -1,7 +1,7 @@
 // "use client";
 // import { useAdminStore } from "@/stores/useAdminStore";
 // import { Box, Typography } from "@mui/material";
-// import { Recipe } from "@/lib/types";
+// import { Recipe } from "@/types";
 // import { styles } from "../styles";
 // interface RecipeSourceProps {
 //     recipe: Recipe;
@@ -26,7 +26,7 @@
 "use client";
 import { useAdminStore } from "@/stores/useAdminStore";
 import { Box, Typography } from "@mui/material";
-import { Recipe } from "@/lib/types";
+import { Recipe } from "@/types";
 import { styles } from "../styles";
 
 interface RecipeSourceProps {

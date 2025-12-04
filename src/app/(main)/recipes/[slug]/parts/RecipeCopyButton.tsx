@@ -3,7 +3,7 @@
 import { IconButton, Tooltip, Snackbar, Alert } from "@mui/material";
 import CopyAllIcon from "@mui/icons-material/CopyAll";
 import { useState } from "react";
-import { Recipe } from "@/lib/types";
+import { Recipe } from "@/types";
 import { styles } from "../styles";
 
 interface RecipeCopyButtonProps {

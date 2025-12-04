@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import RecipesPage from "./page";
 import { getRecipesForCards } from "@/utils/getRecipesForCards";
-import { Recipe } from "@/lib/types";
+import { Recipe } from "@/types";
 
 // --- Mocks ---
 

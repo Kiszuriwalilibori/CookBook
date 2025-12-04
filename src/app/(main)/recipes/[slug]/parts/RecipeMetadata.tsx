@@ -1,7 +1,7 @@
 // app/recipes/[slug]/parts/RecipeMetadata.tsx
 import { Typography, Box } from "@mui/material";
-import { Recipe } from "@/lib/types";
-import { fieldTranslations } from "@/lib/types";
+import { Recipe } from "@/types";
+import { fieldTranslations } from "@/types";
 import { styles } from "../styles";
 
 // Funkcja do pobierania tłumaczenia etykiety

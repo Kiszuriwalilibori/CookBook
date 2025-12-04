@@ -2,7 +2,7 @@
 import { Box, Typography } from "@mui/material";
 import { PortableText } from "@portabletext/react";
 import type { PortableTextComponents } from "@portabletext/react";
-import { Recipe } from "@/lib/types";
+import { Recipe } from "@/types";
 import { Separator } from "@/components";
 import { styles, portableTextSx } from "../styles";
 

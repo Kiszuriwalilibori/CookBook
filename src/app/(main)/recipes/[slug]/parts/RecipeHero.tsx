@@ -1,7 +1,7 @@
 // app/recipes/[slug]/parts/RecipeHero.tsx
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
-import { Recipe } from "@/lib/types";
+import { Recipe } from "@/types";
 import { styles } from "../styles";
 
 interface RecipeHeroProps {

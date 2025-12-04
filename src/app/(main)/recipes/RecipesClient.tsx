@@ -4,7 +4,7 @@ import { Grid, Box, Typography } from "@mui/material";
 import { PageTitle, RecipeCard } from "@/components";
 import { gridSize, pageContainerStyle } from "./styles";
 import { useRecipesStore } from "@/stores/useRecipesStore";
-import { type Recipe } from "@/lib/types";
+import { type Recipe } from "@/types";
 import { useEffect } from "react";
 
 export default function RecipesClient({ initialRecipes }: { initialRecipes: Recipe[] }) {

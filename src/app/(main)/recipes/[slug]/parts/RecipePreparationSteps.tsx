@@ -4,7 +4,7 @@ import { PortableText } from "@portabletext/react";
 import type { PortableTextComponents } from "@portabletext/react";
 import Image from "next/image";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Recipe } from "@/lib/types";
+import { Recipe } from "@/types";
 import { styles, portableTextSx } from "../styles";
 
 // Custom PortableText components (typed correctly for compatibility)

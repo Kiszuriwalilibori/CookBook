@@ -1,7 +1,7 @@
 import RecipesClient from "./RecipesClient";
 import { getRecipesForCards } from "@/utils/getRecipesForCards";
 import { Status } from "@/types";
-import { Recipe } from "@/lib/types";
+import { Recipe } from "@/types";
 import { FilterState } from "@/models/filters";
 
 interface RecipesPageProps {

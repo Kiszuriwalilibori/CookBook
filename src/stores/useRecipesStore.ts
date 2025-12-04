@@ -1,6 +1,6 @@
 // useRecipesStore.ts
 import { create } from "zustand";
-import type { Recipe } from "@/lib/types";
+import type { Recipe } from "@/types";
 
 interface RecipesStore {
     recipes: Recipe[];
