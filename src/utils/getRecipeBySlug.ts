@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
-import type { Recipe } from "./types";
 import { client } from "./createClient";
+import { Recipe } from "@/types";
 
 export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
     return client.fetch(

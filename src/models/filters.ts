@@ -1,5 +1,5 @@
 import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
-import { fieldTranslations } from "@/lib/types";
+import { fieldTranslations } from "@/types";
 import { BaseFilterableKeys, FilterableRecipeKeys, SourceKeys, Status } from "@/types";
 
 const INITIAL_OPTIONS: string[] = [];

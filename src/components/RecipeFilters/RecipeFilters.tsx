@@ -11,8 +11,8 @@ import { useFilters, useCreateRecipeFilterFields } from "@/hooks";
 import { useFiltersStore } from "@/stores";
 import { FilterState } from "@/models/filters";
 
-import { searchRecipeByTitle } from "@/lib/searchRecipeByTitle";
-import { Recipe } from "@/lib/types";
+import { searchRecipeByTitle } from "@/utils/searchRecipeByTitle";
+import { Recipe } from "@/types";
 import FilterFieldRendrerer from "./parts/FilterFieldRenderer";
 import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
 import { buildQueryString } from "./utils/buildQueryStrings";

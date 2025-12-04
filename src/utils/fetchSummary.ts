@@ -1,6 +1,6 @@
-import { getSummary } from "@/lib/getSummary";
+import { getSummary } from "@/utils/getSummary";
 import type { RecipeFilter } from "@/types";
-import { initialSummary } from "@/lib/getSummary/helpers";
+import { initialSummary } from "@/utils/getSummary/helpers";
 
 /**
  * Fetches recipes summary from Sanity safely.

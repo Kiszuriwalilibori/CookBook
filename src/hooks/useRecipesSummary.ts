@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSummary } from "@/lib/getSummary";
+import { getSummary } from "@/utils/getSummary";
 import { EMPTY_RECIPE_FILTER, type RecipeFilter } from "@/types";
 
 interface RecipesSummaryState {
