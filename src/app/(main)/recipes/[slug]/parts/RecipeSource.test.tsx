@@ -2,7 +2,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { RecipeSource } from "./RecipeSource";
-import type { Recipe } from "@/lib/types";
+import type { Recipe } from "@//types";
 
 // -----------------------------
 //  Store typing for strict mode
