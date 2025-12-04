@@ -26,10 +26,10 @@
         "groq": "^4.10.2",
         "jspdf": "^3.0.3",
         "lodash.debounce": "^4.0.8",
-        "next": "15.5.4",
+        "next": "^15.5.7",
         "next-sanity": "^11.4.2",
-        "react": "19.1.0",
-        "react-dom": "19.1.0",
+        "react": "^19.1.2",
+        "react-dom": "^19.1.2",
         "styled-components": "^6.1.19"
     },
     "devDependencies": {
