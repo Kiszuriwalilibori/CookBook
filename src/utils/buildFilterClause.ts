@@ -34,8 +34,20 @@ export function buildFilterClause(filters?: Partial<FilterState>): string {
         conditions.push(condition);
     }
 
+    // function processBooleanField(filters: Partial<FilterState>, field: BooleanKeys<FilterState>) {
+    //     if (filters[field] === true) {
+    //         conditions.push(`${field} == true`);
+    //     }
+    // }
     function processBooleanField(filters: Partial<FilterState>, field: BooleanKeys<FilterState>) {
-        if (filters[field] === true) {
+        const value = filters[field];
+
+        if (field === "Kizia") {
+            if (value === true) conditions.push("Kizia == true");
+            return;
+        }
+
+        if (value === true) {
             conditions.push(`${field} == true`);
         }
     }

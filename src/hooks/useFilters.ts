@@ -2,12 +2,11 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useDebouncedCallback } from "./useDebouncedCallback";
 import { normalizeMultiple } from "@/components/RecipeFilters/utils/normalize";
-import {  RecipeFilter } from "@/types";
+import { RecipeFilter } from "@/types";
 import isEqual from "lodash/isEqual";
 import { FilterState } from "@/models/filters";
 
 const MAX_TAGS = 10;
-
 
 export const initialFilters: FilterState = {
     title: "",
@@ -16,7 +15,7 @@ export const initialFilters: FilterState = {
     dietary: [],
     products: [],
     status: null,
-    Kizia: true,
+    Kizia: false,
     "source.http": "",
     "source.book": "",
     "source.title": "",
