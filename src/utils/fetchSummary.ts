@@ -1,3 +1,4 @@
+
 import { useAdminStore } from "@/stores";
 import { getOptions } from "./getOptions";
 import type { RecipeFilter } from "@/types";
@@ -14,8 +15,13 @@ export async function fetchSummary(): Promise<{
 }> {
     try {
         const isAdminLogged = useAdminStore.getState().isAdminLogged;
-        const { summary, publicSummary, sanitizeIssues } = await getOptions();
-        const effectiveSummary = isAdminLogged ? summary : publicSummary;
+
+        const { fullSummary, publicSummary, sanitizeIssues } = await getOptions();
+
+        // Select summary depending on admin mode
+        const effectiveSummary = isAdminLogged ? fullSummary : publicSummary;
+
+        // Warn about sanitize issues if any
         if (sanitizeIssues.length > 0) {
             console.warn("⚠️ Faulty values found in recipes summary:", sanitizeIssues);
             return {
