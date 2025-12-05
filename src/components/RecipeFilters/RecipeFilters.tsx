@@ -4,18 +4,16 @@ import React, { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Typography, Divider, CircularProgress } from "@mui/material";
 
+import { FilterFieldRenderer, FilterSummary } from "./parts";
 import { containerSx, buttonGroupSx, dividerSx } from "./styles";
-import { FilterSummary } from "./parts";
-import { RecipeFilter } from "@/types";
+import { buildQueryString } from "./utils/buildQueryStrings";
+
+import { RecipeFilter, Recipe } from "@/types";
+import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
 import { useFilters, useCreateRecipeFilterFields } from "@/hooks";
 import { useFiltersStore } from "@/stores";
 import { FilterState } from "@/models/filters";
-
 import { searchRecipeByTitle } from "@/utils/searchRecipeByTitle";
-import { Recipe } from "@/types";
-import FilterFieldRendrerer from "./parts/FilterFieldRenderer";
-import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
-import { buildQueryString } from "./utils/buildQueryStrings";
 
 export type ChipFieldKey = keyof Pick<Recipe, "products" | "tags" | "dietary">;
 interface RecipeFiltersProps {
@@ -107,7 +105,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
             <Divider sx={dividerSx} />
 
             {filterFields.map((field: FilterField) => (
-                <FilterFieldRendrerer key={field.key} field={field} filters={filters} handleChange={handleChange} getErrorProps={getErrorProps} />
+                <FilterFieldRenderer key={field.key} field={field} filters={filters} handleChange={handleChange} getErrorProps={getErrorProps} />
             ))}
 
             <Box sx={buttonGroupSx}>
