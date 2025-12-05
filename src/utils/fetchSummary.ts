@@ -1,7 +1,7 @@
-import { getOptions } from "./getSummary";
-// import { getSummary } from "./getSummary";
+import { useAdminStore } from "@/stores";
+import { getOptions } from "./getOptions";
 import type { RecipeFilter } from "@/types";
-import { initialSummary } from "@/utils/getSummary/helpers";
+import { initialSummary } from "@/utils/getOptions/helpers";
 
 /**
  * Fetches recipes summary from Sanity safely.
@@ -13,17 +13,18 @@ export async function fetchSummary(): Promise<{
     error: string | null;
 }> {
     try {
-        // const { summary, sanitizeIssues } = await getSummary();
-        const { summary, sanitizeIssues } = await getOptions();
+        const isAdminLogged = useAdminStore.getState().isAdminLogged;
+        const { summary, publicSummary, sanitizeIssues } = await getOptions();
+        const effectiveSummary = isAdminLogged ? summary : publicSummary;
         if (sanitizeIssues.length > 0) {
             console.warn("⚠️ Faulty values found in recipes summary:", sanitizeIssues);
             return {
-                summary,
+                summary: effectiveSummary,
                 error: "Niektóre dane zawierały błędy i zostały oczyszczone.",
             };
         }
 
-        return { summary, error: null };
+        return { summary: effectiveSummary, error: null };
     } catch (err) {
         console.error("❌ Failed to fetch recipes summary:", err);
         return {

@@ -1,4 +1,6 @@
 // hooks/useDebouncedCallback.ts
+
+"use client";
 import { useMemo, useEffect, useRef } from "react";
 import debounce from "lodash/debounce";
 import type { DebouncedFunc } from "lodash";

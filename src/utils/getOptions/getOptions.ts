@@ -7,7 +7,8 @@ import { sortSummary } from "./sortSummary";
 import { handleSanitizeIssues } from "./handleSanitizeIssues";
 
 export interface SummaryResult {
-    summary: RecipeFilter; // only fullSummary returned
+    summary: RecipeFilter;
+    publicSummary:RecipeFilter; // only fullSummary returned
     sanitizeIssues: string[];
 }
 
@@ -20,7 +21,7 @@ export async function getOptions(): Promise<SummaryResult> {
 console.log("rawSummary", rawSummary);
         if (!rawSummary) {
             console.warn("No summary document found, returning initialSummary");
-            return { summary: initialSummary, sanitizeIssues: INITIAL_SANITIZE_ISSUES };
+            return { summary: initialSummary, publicSummary: initialSummary, sanitizeIssues: INITIAL_SANITIZE_ISSUES };
         }
 
         // Ensure both fullSummary and goodSummary have the correct structure
@@ -44,9 +45,9 @@ console.log("rawSummary", rawSummary);
         console.log("Good/Acceptable Summary:", sortedGood);
 
         // Return only the fullSummary to preserve existing API
-        return { summary: sortedFull, sanitizeIssues };
+        return { summary: sortedFull, publicSummary: sortedGood, sanitizeIssues };
     } catch (error) {
         console.error("Error fetching recipes summary:", error);
-        return { summary: initialSummary, sanitizeIssues: INITIAL_SANITIZE_ISSUES };
+        return { summary: initialSummary, publicSummary: initialSummary, sanitizeIssues: INITIAL_SANITIZE_ISSUES };
     }
 }

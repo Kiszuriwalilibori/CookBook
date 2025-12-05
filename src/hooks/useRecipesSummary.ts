@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import { getSummary } from "@/utils/getSummary";
-import { getOptions } from "@/utils/getSummary";
+import { getOptions } from "@/utils/getOptions";
 import { EMPTY_RECIPE_FILTER, type RecipeFilter } from "@/types";
+import { useAdminStore } from "@/stores";
 
 interface RecipesSummaryState {
     summary: RecipeFilter;
@@ -15,14 +15,13 @@ export function useRecipesSummary(initialSummary?: RecipeFilter) {
     const [summary, setSummary] = useState<RecipeFilter>(initialSummary ?? EMPTY_RECIPE_FILTER);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
+    const isAdminLogged = useAdminStore(state => state.isAdminLogged);
     useEffect(() => {
         const fetchSummary = async () => {
             try {
                 setIsLoading(true);
-                // const { summary, sanitizeIssues } = await getSummary();
-                const { summary, sanitizeIssues } = await getOptions();
-                setSummary(summary);
+                const { summary, publicSummary, sanitizeIssues } = await getOptions();
+                setSummary(isAdminLogged ? summary : publicSummary);
                 if (sanitizeIssues.length > 0) {
                     console.warn("⚠️ Faulty values found in recipes summary:", sanitizeIssues);
                     setError("Niektóre dane zawierały błędy i zostały oczyszczone.");
@@ -37,7 +36,7 @@ export function useRecipesSummary(initialSummary?: RecipeFilter) {
         };
 
         fetchSummary();
-    }, [initialSummary]);
+    }, [initialSummary, isAdminLogged]);
 
     return { summary, isLoading, error } as RecipesSummaryState;
 }
