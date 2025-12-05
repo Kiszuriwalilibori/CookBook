@@ -1,3 +1,3 @@
 import { getSummary } from "./getSummary";
-
-export { getSummary };
+import{ getOptions} from "./getOptions";
+export { getSummary,getOptions };

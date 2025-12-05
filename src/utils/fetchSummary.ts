@@ -1,4 +1,5 @@
-import { getSummary } from "@/utils/getSummary";
+import { getOptions } from "./getSummary";
+// import { getSummary } from "./getSummary";
 import type { RecipeFilter } from "@/types";
 import { initialSummary } from "@/utils/getSummary/helpers";
 
@@ -12,8 +13,8 @@ export async function fetchSummary(): Promise<{
     error: string | null;
 }> {
     try {
-        const { summary, sanitizeIssues } = await getSummary();
-
+        // const { summary, sanitizeIssues } = await getSummary();
+        const { summary, sanitizeIssues } = await getOptions();
         if (sanitizeIssues.length > 0) {
             console.warn("⚠️ Faulty values found in recipes summary:", sanitizeIssues);
             return {

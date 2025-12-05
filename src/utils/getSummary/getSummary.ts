@@ -17,7 +17,7 @@ export async function getSummary(): Promise<SummaryResult> {
             cuisine,
             tags,
             dietary,
-            products, 
+            products,
             source,
         }`;
 
