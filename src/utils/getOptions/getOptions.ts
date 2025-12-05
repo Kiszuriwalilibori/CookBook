@@ -16,8 +16,7 @@ export async function getOptions(): Promise<SummaryResult> {
         const query = `*[_type == "options"][0]{fullSummary, goodSummary}`;
 
         const raw = await client.fetch(query);
-        console.log("rawSummary", raw);
-
+        
         if (!raw) {
             console.warn("No summary document found, returning initialSummary");
             return {
