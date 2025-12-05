@@ -1,10 +1,11 @@
-import { notFound } from "next/navigation";
-import { Recipe } from "@/types";
 import { Box } from "@mui/material";
+import { notFound } from "next/navigation";
+
+import { Recipe } from "@/types";
 import { Separator } from "@/components";
-import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton } from "./parts";
+import { getRecipeBySlug } from "@/utils";
 import { styles } from "./styles";
-import { getRecipeBySlug } from "@/utils/getRecipeBySlug";
+import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton } from "./parts";
 
 interface Params {
     slug: string;

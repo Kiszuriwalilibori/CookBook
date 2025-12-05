@@ -7,3 +7,6 @@ export const client = createClient({
     apiVersion,
     useCdn,
 });
+
+export default client;
+

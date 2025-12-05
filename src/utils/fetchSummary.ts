@@ -1,8 +1,8 @@
-
 import { useAdminStore } from "@/stores";
 import { getOptions } from "./getOptions";
 import type { RecipeFilter } from "@/types";
-import { initialSummary } from "@/utils/getOptions/helpers";
+import { initialSummary } from "./getOptions/helpers";
+
 
 /**
  * Fetches recipes summary from Sanity safely.

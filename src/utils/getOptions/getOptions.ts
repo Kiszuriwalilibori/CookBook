@@ -1,11 +1,10 @@
 import type { RecipeFilter } from "@/types";
-import { client } from "../createClient";
-import { INITIAL_SANITIZE_ISSUES, initialSummary } from "./helpers";
-import { sanitizeSummary } from "./sanitizeSummary";
+import { client } from "../client";
+import { initialSummary, INITIAL_SANITIZE_ISSUES } from "./helpers";
 import { ensureSummaryStructure } from "./ensureSummaryStructure";
+import { sanitizeSummary } from "./sanitizeSummary";
 import { sortSummary } from "./sortSummary";
 import { handleSanitizeIssues } from "./handleSanitizeIssues";
-
 export interface SummaryResult {
     fullSummary: RecipeFilter;
     publicSummary: RecipeFilter;
@@ -43,8 +42,6 @@ export async function getOptions(): Promise<SummaryResult> {
         // Sort
         const fullSummary = sortSummary(sanitizedFull);
         const publicSummary = sortSummary(sanitizedPublic);
-
-        
 
         return { fullSummary, publicSummary, sanitizeIssues };
     } catch (error) {

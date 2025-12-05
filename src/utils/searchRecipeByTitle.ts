@@ -1,6 +1,6 @@
 // lib/searchRecipeByTitle.ts
 import { groq } from "next-sanity";
-import { client } from "./createClient";
+import { client } from "./client";
 
 export async function searchRecipeByTitle(title: string) {
     const slug = await client.fetch(

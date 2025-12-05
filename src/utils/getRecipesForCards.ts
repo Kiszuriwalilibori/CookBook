@@ -1,7 +1,7 @@
 // lib/getRecipesForCards.ts
 import { groq } from "next-sanity";
 import type { Recipe } from "@/types";
-import { client } from "./createClient";
+import { client } from "./client";
 
 import { buildFilterClause } from "./buildFilterClause";
 import { FilterState } from "@/models/filters";

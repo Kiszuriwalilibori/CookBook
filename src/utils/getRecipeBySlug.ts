@@ -1,5 +1,5 @@
 import { groq } from "next-sanity";
-import { client } from "./createClient";
+import { client } from "./client";
 import { Recipe } from "@/types";
 
 export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
