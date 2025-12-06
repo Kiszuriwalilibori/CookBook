@@ -1,5 +1,5 @@
 //recipe.js - schema for recipe document
-import {StatusOptions} from '../../src/types/index';
+import {StatusOptions} from '../../src/types/index'
 import ProductsInput from '../components/ProductsInput'
 
 export default {
@@ -261,11 +261,6 @@ export default {
           title: 'Reorder Steps',
         },
       },
-    },
-    {
-      name: 'calories',
-      title: 'Calories',
-      type: 'number',
     },
     {
       name: 'preparationTime',
