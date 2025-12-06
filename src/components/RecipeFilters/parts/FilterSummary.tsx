@@ -15,7 +15,7 @@ const icons = {
     dietary: "🌱",
     products: "🛍️",
     status: "⭐",
-    Kizia: "👩",
+    kizia: "👩",
     "source.http": "🌐",
     "source.book": "📚",
     "source.title": "📝",

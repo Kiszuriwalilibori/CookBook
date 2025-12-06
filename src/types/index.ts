@@ -33,11 +33,11 @@ type StringKeys<T> = {
 
 export type SourceKeys = DotPrefix<StringKeys<NonNullable<Recipe["source"]>>>;
 
-export type BaseFilterableKeys = keyof Pick<Recipe, "title" | "products" | "tags" | "dietary" | "cuisine" | "Kizia" | "status">;
+export type BaseFilterableKeys = keyof Pick<Recipe, "title" | "products" | "tags" | "dietary" | "cuisine" | "kizia" | "status">;
 
 export type FilterableRecipeKeys = BaseFilterableKeys | SourceKeys;
 // export type RecipeFilter = Record<FilterableRecipeKeys, string[]>;
-export type RecipeFilter = Record<Exclude<FilterableRecipeKeys, "Kizia" | "status">, string[]>;
+export type RecipeFilter = Record<Exclude<FilterableRecipeKeys, "kizia" | "status">, string[]>;
 // todo RecipeFilter => RecipeFilterOptions?
 
 export const EMPTY_RECIPE_FILTER: RecipeFilter = {
@@ -111,7 +111,7 @@ export interface Recipe {
     dietary?: string[];
     tags?: string[];
     notes?: string;
-    Kizia?: boolean;
+    kizia?: boolean;
     status: Status;
     source?: {
         http?: string;

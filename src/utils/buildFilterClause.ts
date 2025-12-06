@@ -42,8 +42,8 @@ export function buildFilterClause(filters?: Partial<FilterState>): string {
     function processBooleanField(filters: Partial<FilterState>, field: BooleanKeys<FilterState>) {
         const value = filters[field];
 
-        if (field === "Kizia") {
-            if (value === true) conditions.push("Kizia == true");
+        if (field === "kizia") {
+            if (value === true) conditions.push("kizia == true");
             return;
         }
 

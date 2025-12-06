@@ -22,7 +22,7 @@ export const FILTER_FIELDS_CONFIG: FilterField[] = [
     defineField({ key: "tags", multiple: true, chips: true }),
     defineField({ key: "dietary", multiple: true, chips: true, placeholder: "Bez ograniczeń" }),
     defineField({ key: "products", multiple: true, chips: true }),
-    defineField({ key: "Kizia", multiple: false, component: "switch", requiredAdmin: true, placeholder: "Kizia to lubi?" }),
+    defineField({ key: "kizia", multiple: false, component: "switch", requiredAdmin: true, placeholder: "Kizia to lubi?" }),
     defineField({ key: "status", multiple: false, component: "checkbox", requiredAdmin: true, placeholder: "Status" }),
     defineField({ key: "source.http", multiple: false, requiredAdmin: true, placeholder: "Link" }),
     defineField({ key: "source.book", multiple: false, requiredAdmin: true, placeholder: "Tytuł książki" }),
@@ -33,7 +33,7 @@ export const FILTER_FIELDS_CONFIG: FilterField[] = [
 export type FilterValuesTypes = FilterState[keyof FilterState];
 
 export type FilterState = {
-    [K in BaseFilterableKeys]: K extends "title" | "cuisine" ? string : K extends "status" ? Status | null : K extends "Kizia" ? boolean : string[];
+    [K in BaseFilterableKeys]: K extends "title" | "cuisine" ? string : K extends "status" ? Status | null : K extends "kizia" ? boolean : string[];
 } & {
     [K in SourceKeys]: string;
 };

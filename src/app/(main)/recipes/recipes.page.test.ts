@@ -39,7 +39,7 @@ describe("RecipesPage (server component)", () => {
             "source.title": "TitleVal",
             "source.author": "AuthorVal",
             "source.where": "WhereVal",
-            Kizia: "true",
+            kizia: "true",
             status: "Good",
         } as { [key: string]: string | string[] | undefined });
 
@@ -67,7 +67,7 @@ describe("RecipesPage (server component)", () => {
         expect(calledFilters["source.title"]).toBe("titleval");
         expect(calledFilters["source.author"]).toBe("authorval");
         expect(calledFilters["source.where"]).toBe("whereval");
-        expect(calledFilters.Kizia).toBe(true);
+        expect(calledFilters.kizia).toBe(true);
         expect(calledFilters.status).toBe("Good");
 
         // Ensure RecipesClient received the same recipes
@@ -93,7 +93,7 @@ describe("RecipesPage (server component)", () => {
         expect(calledFilters.tags).toEqual([]);
         expect(calledFilters.dietary).toEqual([]);
         expect(calledFilters.products).toEqual([]);
-        expect(calledFilters.Kizia).toBeUndefined();
+        expect(calledFilters.kizia).toBeUndefined();
         expect(calledFilters.status).toBeNull();
 
         expect(screen.getByTestId("recipes-client")).toBeInTheDocument();

@@ -67,7 +67,7 @@ describe("useCreateRecipeFilterFields", () => {
 
         const { result } = renderHook(() => useCreateRecipeFilterFields(mockOptions));
 
-        const kiziaField = result.current.find(f => f.key === "Kizia");
+        const kiziaField = result.current.find(f => f.key === "kizia");
         expect(kiziaField?.component).toBe("switch");
         expect(kiziaField?.options).toEqual([]);
     });
@@ -138,7 +138,7 @@ describe("useCreateRecipeFilterFields", () => {
         const singleFields = result.current.filter(f => !f.multiple);
         const multipleFields = result.current.filter(f => f.multiple);
 
-        expect(singleFields.map(f => f.key)).toEqual(["title", "cuisine", "Kizia", "source.http", "source.book", "source.title", "source.author", "source.where"]);
+        expect(singleFields.map(f => f.key)).toEqual(["title", "cuisine", "kizia", "source.http", "source.book", "source.title", "source.author", "source.where"]);
         expect(multipleFields.map(f => f.key)).toEqual(["tags", "dietary", "products"]);
     });
 
@@ -186,7 +186,7 @@ describe("useCreateRecipeFilterFields", () => {
         const { result } = renderHook(() => useCreateRecipeFilterFields(mockOptions));
 
         const adminFields = result.current.filter(f => f.requiredAdmin);
-        expect(adminFields.map(f => f.key)).toEqual(["Kizia", "source.http", "source.book", "source.title", "source.author", "source.where"]);
+        expect(adminFields.map(f => f.key)).toEqual(["kizia", "source.http", "source.book", "source.title", "source.author", "source.where"]);
     });
 
     it("should handle empty options object", () => {

@@ -32,7 +32,7 @@ export async function getRecipesForCards(filters?: Partial<FilterState>): Promis
     tags,
     dietary,
     products,
-    Kizia
+    kizia
   } | order(_createdAt desc)`;
 
     return client.fetch(query);

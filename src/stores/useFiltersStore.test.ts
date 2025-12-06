@@ -104,14 +104,14 @@ describe("useFiltersStore", () => {
             expect(result.current.errors.title).toBeUndefined();
         });
 
-        it("should handle boolean field (Kizia)", () => {
+        it("should handle boolean field (kizia)", () => {
             const { result } = renderHook(() => useFiltersStore());
 
             act(() => {
-                result.current.handleChange("Kizia", true);
+                result.current.handleChange("kizia", true);
             });
 
-            expect(result.current.filters.Kizia).toBe(true);
+            expect(result.current.filters.kizia).toBe(true);
         });
 
         it("should preserve other filters when changing one", () => {

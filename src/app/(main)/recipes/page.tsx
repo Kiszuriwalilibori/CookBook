@@ -28,7 +28,7 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     const sourceFilters = Object.fromEntries(SOURCE_KEYS.map(key => [key, normalizeString(awaitedSearchParams[key])]));
 
     // Boolean and status safely handle array query params
-    const KiziaValue = Array.isArray(awaitedSearchParams.Kizia) ? parseBoolean(awaitedSearchParams.Kizia[0]) : parseBoolean(awaitedSearchParams.Kizia);
+    const kiziaValue = Array.isArray(awaitedSearchParams.kizia) ? parseBoolean(awaitedSearchParams.kizia[0]) : parseBoolean(awaitedSearchParams.kizia);
 
     const statusValue = Array.isArray(awaitedSearchParams.status) ? parseStatus(awaitedSearchParams.status[0]) : parseStatus(awaitedSearchParams.status);
 
@@ -39,7 +39,7 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
         dietary: normalizeArrayOrString(awaitedSearchParams.dietary),
         products: normalizeArrayOrString(awaitedSearchParams.products),
         ...sourceFilters,
-        Kizia: KiziaValue,
+        kizia: kiziaValue,
         status: statusValue,
     };
 

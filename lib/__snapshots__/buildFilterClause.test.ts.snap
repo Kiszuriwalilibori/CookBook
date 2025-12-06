@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles all fields combined 1`] = `" && (lower(title) match "  pizza  *" && lower(cuisine) == "italian" && lower(source.http) == "example.com" && lower(source.book) == "cookbook" && lower(source.title) == "sourcetitle" && lower(source.author) == "authorname" && lower(source.where) == "library" && Kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0 && count((dietary[])[@ in ["gluten-free"]]) > 0 && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles all fields combined 1`] = `" && (lower(title) match "  pizza  *" && lower(cuisine) == "italian" && lower(source.http) == "example.com" && lower(source.book) == "cookbook" && lower(source.title) == "sourcetitle" && lower(source.author) == "authorname" && lower(source.where) == "library" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0 && count((dietary[])[@ in ["gluten-free"]]) > 0 && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles array combination: dietary 1`] = `" && (count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
@@ -14,49 +14,49 @@ exports[`buildFilterClause - fully type-safe combinatorial tests handles array c
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles array combination: tags, products 1`] = `" && (count((tags[])[@ in ["vegan","quick"]]) > 0 && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: cuisine + Kizia + dietary 1`] = `" && (lower(cuisine) == "italian" && Kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: cuisine + kizia + dietary 1`] = `" && (lower(cuisine) == "italian" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: cuisine + Kizia + products 1`] = `" && (lower(cuisine) == "italian" && Kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: cuisine + kizia + products 1`] = `" && (lower(cuisine) == "italian" && kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: cuisine + Kizia + tags 1`] = `" && (lower(cuisine) == "italian" && Kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: cuisine + kizia + tags 1`] = `" && (lower(cuisine) == "italian" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.author + Kizia + dietary 1`] = `" && (lower(source.author) == "authorname" && Kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.author + kizia + dietary 1`] = `" && (lower(source.author) == "authorname" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.author + Kizia + products 1`] = `" && (lower(source.author) == "authorname" && Kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.author + kizia + products 1`] = `" && (lower(source.author) == "authorname" && kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.author + Kizia + tags 1`] = `" && (lower(source.author) == "authorname" && Kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.author + kizia + tags 1`] = `" && (lower(source.author) == "authorname" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.book + Kizia + dietary 1`] = `" && (lower(source.book) == "cookbook" && Kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.book + kizia + dietary 1`] = `" && (lower(source.book) == "cookbook" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.book + Kizia + products 1`] = `" && (lower(source.book) == "cookbook" && Kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.book + kizia + products 1`] = `" && (lower(source.book) == "cookbook" && kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.book + Kizia + tags 1`] = `" && (lower(source.book) == "cookbook" && Kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.book + kizia + tags 1`] = `" && (lower(source.book) == "cookbook" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.http + Kizia + dietary 1`] = `" && (lower(source.http) == "example.com" && Kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.http + kizia + dietary 1`] = `" && (lower(source.http) == "example.com" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.http + Kizia + products 1`] = `" && (lower(source.http) == "example.com" && Kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.http + kizia + products 1`] = `" && (lower(source.http) == "example.com" && kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.http + Kizia + tags 1`] = `" && (lower(source.http) == "example.com" && Kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.http + kizia + tags 1`] = `" && (lower(source.http) == "example.com" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.title + Kizia + dietary 1`] = `" && (lower(source.title) == "sourcetitle" && Kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.title + kizia + dietary 1`] = `" && (lower(source.title) == "sourcetitle" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.title + Kizia + products 1`] = `" && (lower(source.title) == "sourcetitle" && Kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.title + kizia + products 1`] = `" && (lower(source.title) == "sourcetitle" && kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.title + Kizia + tags 1`] = `" && (lower(source.title) == "sourcetitle" && Kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.title + kizia + tags 1`] = `" && (lower(source.title) == "sourcetitle" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.where + Kizia + dietary 1`] = `" && (lower(source.where) == "library" && Kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.where + kizia + dietary 1`] = `" && (lower(source.where) == "library" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.where + Kizia + products 1`] = `" && (lower(source.where) == "library" && Kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.where + kizia + products 1`] = `" && (lower(source.where) == "library" && kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.where + Kizia + tags 1`] = `" && (lower(source.where) == "library" && Kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.where + kizia + tags 1`] = `" && (lower(source.where) == "library" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: title + Kizia + dietary 1`] = `" && (lower(title) match "  pizza  *" && Kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: title + kizia + dietary 1`] = `" && (lower(title) match "  pizza  *" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: title + Kizia + products 1`] = `" && (lower(title) match "  pizza  *" && Kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: title + kizia + products 1`] = `" && (lower(title) match "  pizza  *" && kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: title + Kizia + tags 1`] = `" && (lower(title) match "  pizza  *" && Kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: title + kizia + tags 1`] = `" && (lower(title) match "  pizza  *" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles single field: Kizia 1`] = `" && (Kizia == true)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles single field: kizia 1`] = `" && (kizia == true)"`;
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles single field: cuisine 1`] = `" && (lower(cuisine) == "italian")"`;
 

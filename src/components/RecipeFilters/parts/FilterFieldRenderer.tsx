@@ -9,7 +9,7 @@ import { useTheme } from "@mui/material/styles";
 import { useAdminStore } from "@/stores";
 import FilterSwitch from "./FilterSwitch";
 import { createRenderTags } from "../utils/createRenderTags";
-import {FilterState} from "@/models/filters";
+import { FilterState } from "@/models/filters";
 import StatusFilter from "./FilterCheckbox";
 import { FilterValuesTypes } from "@/models/filters";
 
@@ -29,7 +29,7 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
     const isAdminLogged = useAdminStore(state => state.isAdminLogged);
 
     if (!isAdminLogged && field.requiredAdmin) return null;
-    if (field.key === "Kizia" && !isAdminLogged) return null;
+    if (field.key === "kizia" && !isAdminLogged) return null;
 
     switch (field.component) {
         case "autocomplete":

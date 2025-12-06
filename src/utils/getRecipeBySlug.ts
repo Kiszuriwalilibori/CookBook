@@ -44,7 +44,7 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
       dietary,
       tags,
       notes,
-      Kizia,
+      kizia,
       status,
       source
     }`,

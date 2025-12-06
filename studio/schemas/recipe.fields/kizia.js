@@ -1,5 +1,5 @@
 export default {
-  name: 'Kizia',
-  title: 'Kizia',
+  name: 'kizia',
+  title: 'kizia',
   type: 'boolean',
 }

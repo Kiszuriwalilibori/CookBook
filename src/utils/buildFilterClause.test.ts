@@ -10,7 +10,7 @@ const exampleValues: Partial<FilterState> = {
     "source.title": "SourceTitle",
     "source.author": "AuthorName",
     "source.where": "Library",
-    Kizia: true,
+    kizia: true,
     tags: ["Vegan", "Quick"],
     dietary: ["Gluten-Free"],
     products: ["Tomato", "Cheese"],
@@ -34,7 +34,7 @@ function setFilterField<K extends keyof FilterState>(filter: Partial<FilterState
 
 // Group fields by type
 const stringFields: (keyof FilterState)[] = ["title", "cuisine", "source.http", "source.book", "source.title", "source.author", "source.where", "status"];
-const booleanFields: (keyof FilterState)[] = ["Kizia"];
+const booleanFields: (keyof FilterState)[] = ["kizia"];
 const arrayFields: (keyof FilterState)[] = ["tags", "dietary", "products"];
 
 // Helper: generate subsets (up to 2 items)
