@@ -124,17 +124,56 @@ export default {
         },
       },
     },
+
     {
       name: 'ingredients',
-      title: 'Ingredients',
+      title: 'Składniki',
       type: 'array',
       of: [
         {
           type: 'object',
+          name: 'ingredient',
+          title: 'Składnik',
           fields: [
-            {name: 'name', title: 'Ingredient Name', type: 'string'},
-            {name: 'quantity', title: 'Quantity', type: 'number'},
+            {name: 'quantity', title: 'Ilość', type: 'number'},
+            {name: 'unit', title: 'Jednostka miary', type: 'string'},
+            {
+              name: 'name',
+              title: 'Nazwa składnika',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            },
           ],
+          preview: {
+            select: {
+              quantity: 'quantity',
+              unit: 'unit',
+              name: 'name',
+            },
+            prepare({quantity, unit, name}) {
+              const parts = []
+
+              // Ilość – obsługa liczb dziesiętnych i całkowitych
+              if (quantity !== null && quantity !== undefined) {
+                const qty = Number(quantity)
+                if (!isNaN(qty)) {
+                  // Opcjonalnie: zamiana . na przecinek dla polskiego stylu
+                  const formatted = qty % 1 === 0 ? qty : qty.toString().replace('.', ',')
+                  parts.push(formatted)
+                }
+              }
+
+              // Jednostka
+              if (unit) parts.push(unit)
+
+              // Nazwa składnika (zawsze na końcu)
+              if (name) parts.push(name)
+
+              return {
+                title: parts.join(' ') || '— brak danych —',
+              }
+            },
+          },
         },
       ],
     },
