@@ -188,6 +188,7 @@ export default {
       description: 'List of product names derived from the last word of each ingredient name',
       validation: (Rule) => Rule.unique(), // Optional: Ensure unique strings
     },
+
     {
       name: 'preparationSteps',
       title: 'Preparation Steps',
@@ -224,12 +225,7 @@ export default {
                         type: 'object',
                         title: 'Link',
                         fields: [
-                          {
-                            name: 'href',
-                            type: 'url',
-                            title: 'URL',
-                            validation: (Rule) => Rule.uri({scheme: ['http', 'https']}),
-                          },
+                          {name: 'href', type: 'url', title: 'URL'},
                           {
                             name: 'openInNewTab',
                             title: 'Open in new tab?',
@@ -242,24 +238,17 @@ export default {
                   },
                 },
               ],
-              description: 'Detailed instructions for this step. Use lists for sub-steps.',
             },
             {
               name: 'image',
               title: 'Step Image',
               type: 'image',
-              options: {
-                hotspot: true,
-              },
+              options: {hotspot: true},
               fields: [
                 {
                   name: 'alt',
                   type: 'string',
                   title: 'Alternative text',
-                  description: 'Important for accessibility',
-                  options: {
-                    isHighlighted: true,
-                  },
                   validation: (Rule) => Rule.required().error('Alt text is required for images'),
                 },
               ],
@@ -269,36 +258,38 @@ export default {
               title: 'Additional Notes',
               type: 'text',
               rows: 2,
-              description: 'Optional tips or warnings for this step.',
             },
           ],
+
+          // ← Czysty, bezpieczny preview – tylko tekst + zdjęcie
           preview: {
             select: {
-              media: 'image',
+              content: 'content',
+              image: 'image',
             },
-            prepare(selection) {
-              const {media} = selection
+            prepare({content, image}) {
+              let text = ''
+              if (Array.isArray(content)) {
+                const firstBlock = content.find((b) => b._type === 'block' && b.children)
+                if (firstBlock) {
+                  text = firstBlock.children
+                    .filter((c) => c._type === 'span')
+                    .map((c) => c.text)
+                    .join('')
+                }
+              }
+              if (text.length > 120) text = text.slice(0, 120).trim() + '…'
+
               return {
-                title: 'Preparation Step', // Fallback preview title
-                media,
+                title: text || '(pusty krok)',
+                media: image,
               }
             },
           },
-          orderings: [
-            {
-              title: 'Step Order',
-              name: 'stepOrder',
-              by: [
-                {fields: ['_createdAt'], direction: 'asc'}, // Order by creation time as fallback
-              ],
-            },
-          ],
         },
       ],
       options: {
-        reorder: {
-          title: 'Reorder Steps',
-        },
+        sortable: true,
       },
     },
     {
