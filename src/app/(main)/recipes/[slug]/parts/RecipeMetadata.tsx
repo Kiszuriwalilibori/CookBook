@@ -22,9 +22,9 @@ export function RecipeMetadata({ recipe }: RecipeMetadataProps) {
                     ⏲️ {getLabel("cookingTime")}: {recipe.cookingTime} min
                 </Typography>
             )}
-            {recipe.servings && (
+            {recipe.recipeYield && (
                 <Typography component="div">
-                    🍽️ {recipe.servings} {recipe.servings === 1 ? "porcja" : recipe.servings >= 2 && recipe.servings <= 4 ? "porcje" : "porcji"}
+                    🍽️ {recipe.recipeYield} {recipe.recipeYield === 1 ? "porcja" : recipe.recipeYield >= 2 && recipe.recipeYield <= 4 ? "porcje" : "porcji"}
                 </Typography>
             )}
 

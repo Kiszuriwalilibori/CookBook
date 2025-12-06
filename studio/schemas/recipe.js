@@ -374,12 +374,12 @@ import nutrition from './recipe.fields/nutrition'
 import preparationSteps from './recipe.fields/preparationSteps'
 import preparationTime from './recipe.fields/preparationTime'
 import products from './recipe.fields/products'
-import servings from './recipe.fields/servings'
 import slug from './recipe.fields/slug'
 import source from './recipe.fields/source'
 import status from './recipe.fields/status'
 import title from './recipe.fields/title'
 import tags from './recipe.fields/tags'
+import recipeYield from './recipe.fields/recipeYield'
 
 export default {
   name: 'recipe',
@@ -394,7 +394,7 @@ export default {
     preparationSteps,
     preparationTime,
     cookingTime,
-    servings,
+    recipeYield,
     cuisine,
     dietary,
     tags,

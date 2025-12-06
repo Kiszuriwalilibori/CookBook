@@ -106,7 +106,7 @@ export interface Recipe {
     calories?: number;
     preparationTime?: number;
     cookingTime?: number;
-    servings?: number;
+    recipeYield?: number;
     cuisine?: string;
     dietary?: string[];
     tags?: string[];
@@ -130,7 +130,7 @@ export const fieldTranslations: Record<string, string> = {
     tags: "Etykiety",
     cuisine: "Kuchnia",
     preparationTime: "Całkowity czas przygotowania",
-    servings: "Porcje",
+    recipeYield: "Porcje",
     notes: "Notatki",
     products: "Produkt",
     status: "Status",
