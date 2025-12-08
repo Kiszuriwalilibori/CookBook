@@ -14,7 +14,7 @@ export const initialFilters: FilterState = {
     tags: [],
     dietary: [],
     products: [],
-    status: null,
+    status: "Good",
     kizia: false,
     "source.http": "",
     "source.book": "",

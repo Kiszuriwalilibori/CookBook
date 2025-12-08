@@ -19,11 +19,11 @@ describe("useCreateRecipeFilterFields", () => {
 
         const { result } = renderHook(() => useCreateRecipeFilterFields(mockOptions));
 
-        expect(result.current).toHaveLength(11);
+        expect(result.current).toHaveLength(12); // ← UPDATED
         expect(result.current[0].key).toBe("title");
         expect(result.current[1].key).toBe("cuisine");
         expect(result.current[2].key).toBe("tags");
-        expect(result.current[10].key).toBe("source.where");
+        expect(result.current[11].key).toBe("source.where"); // ← UPDATED index
     });
 
     it("should populate autocomplete options from provided options", () => {
@@ -42,17 +42,13 @@ describe("useCreateRecipeFilterFields", () => {
 
         const { result } = renderHook(() => useCreateRecipeFilterFields(mockOptions));
 
-        const titleField = result.current.find(f => f.key === "title");
-        const cuisineField = result.current.find(f => f.key === "cuisine");
-        const tagsField = result.current.find(f => f.key === "tags");
-
-        expect(titleField?.options).toEqual(["pasta", "pizza"]);
-        expect(cuisineField?.options).toEqual(["Italian"]);
-        expect(tagsField?.options).toEqual(["quick"]);
+        expect(result.current.find(f => f.key === "title")?.options).toEqual(["pasta", "pizza"]);
+        expect(result.current.find(f => f.key === "cuisine")?.options).toEqual(["Italian"]);
+        expect(result.current.find(f => f.key === "tags")?.options).toEqual(["quick"]);
     });
 
     it("should not populate options for switch component", () => {
-        const mockOptions: RecipeFilter = {
+        const mockOptions = {
             title: [],
             cuisine: [],
             tags: [],
@@ -88,8 +84,7 @@ describe("useCreateRecipeFilterFields", () => {
 
         const { result } = renderHook(() => useCreateRecipeFilterFields(mockOptions));
 
-        const titleField = result.current.find(f => f.key === "title");
-        expect(titleField?.options).toEqual(["pasta", "pizza"]);
+        expect(result.current.find(f => f.key === "title")?.options).toEqual(["pasta", "pizza"]);
     });
 
     it("should include all required field properties", () => {
@@ -120,7 +115,7 @@ describe("useCreateRecipeFilterFields", () => {
     });
 
     it("should have correct multiple flag for each field", () => {
-        const mockOptions: RecipeFilter = {
+        const mockOptions = {
             title: [],
             cuisine: [],
             tags: [],
@@ -138,12 +133,23 @@ describe("useCreateRecipeFilterFields", () => {
         const singleFields = result.current.filter(f => !f.multiple);
         const multipleFields = result.current.filter(f => f.multiple);
 
-        expect(singleFields.map(f => f.key)).toEqual(["title", "cuisine", "kizia", "source.http", "source.book", "source.title", "source.author", "source.where"]);
+        expect(singleFields.map(f => f.key)).toEqual([
+            "title",
+            "cuisine",
+            "kizia",
+            "status", // ← NEW
+            "source.http",
+            "source.book",
+            "source.title",
+            "source.author",
+            "source.where",
+        ]);
+
         expect(multipleFields.map(f => f.key)).toEqual(["tags", "dietary", "products"]);
     });
 
     it("should have chips enabled for array fields", () => {
-        const mockOptions: RecipeFilter = {
+        const mockOptions = {
             title: [],
             cuisine: [],
             tags: [],
@@ -158,19 +164,15 @@ describe("useCreateRecipeFilterFields", () => {
 
         const { result } = renderHook(() => useCreateRecipeFilterFields(mockOptions));
 
-        const tagsField = result.current.find(f => f.key === "tags");
-        const dietaryField = result.current.find(f => f.key === "dietary");
-        const productsField = result.current.find(f => f.key === "products");
-        const titleField = result.current.find(f => f.key === "title");
+        expect(result.current.find(f => f.key === "tags")?.chips).toBe(true);
+        expect(result.current.find(f => f.key === "dietary")?.chips).toBe(true);
+        expect(result.current.find(f => f.key === "products")?.chips).toBe(true);
 
-        expect(tagsField?.chips).toBe(true);
-        expect(dietaryField?.chips).toBe(true);
-        expect(productsField?.chips).toBe(true);
-        expect(titleField?.chips).toBeUndefined();
+        expect(result.current.find(f => f.key === "title")?.chips).toBeUndefined();
     });
 
     it("should mark admin-required fields correctly", () => {
-        const mockOptions: RecipeFilter = {
+        const mockOptions = {
             title: [],
             cuisine: [],
             tags: [],
@@ -186,7 +188,16 @@ describe("useCreateRecipeFilterFields", () => {
         const { result } = renderHook(() => useCreateRecipeFilterFields(mockOptions));
 
         const adminFields = result.current.filter(f => f.requiredAdmin);
-        expect(adminFields.map(f => f.key)).toEqual(["kizia", "source.http", "source.book", "source.title", "source.author", "source.where"]);
+
+        expect(adminFields.map(f => f.key)).toEqual([
+            "kizia",
+            "status", // ← NEW
+            "source.http",
+            "source.book",
+            "source.title",
+            "source.author",
+            "source.where",
+        ]);
     });
 
     it("should handle empty options object", () => {
@@ -205,7 +216,8 @@ describe("useCreateRecipeFilterFields", () => {
 
         const { result } = renderHook(() => useCreateRecipeFilterFields(mockOptions));
 
-        expect(result.current).toHaveLength(11);
+        expect(result.current).toHaveLength(12); // ← UPDATED
+
         result.current.forEach(field => {
             if (field.component === "autocomplete") {
                 expect(field.options).toEqual([]);
@@ -214,7 +226,7 @@ describe("useCreateRecipeFilterFields", () => {
     });
 
     it("should return correct placeholder for dietary field", () => {
-        const mockOptions: RecipeFilter = {
+        const mockOptions = {
             title: [],
             cuisine: [],
             tags: [],
@@ -229,12 +241,11 @@ describe("useCreateRecipeFilterFields", () => {
 
         const { result } = renderHook(() => useCreateRecipeFilterFields(mockOptions));
 
-        const dietaryField = result.current.find(f => f.key === "dietary");
-        expect(dietaryField?.placeholder).toBe("Bez ograniczeń");
+        expect(result.current.find(f => f.key === "dietary")?.placeholder).toBe("Bez ograniczeń");
     });
 
     it("should have link placeholder for source.http field", () => {
-        const mockOptions: RecipeFilter = {
+        const mockOptions = {
             title: [],
             cuisine: [],
             tags: [],
@@ -249,7 +260,6 @@ describe("useCreateRecipeFilterFields", () => {
 
         const { result } = renderHook(() => useCreateRecipeFilterFields(mockOptions));
 
-        const httpField = result.current.find(f => f.key === "source.http");
-        expect(httpField?.placeholder).toBe("Link");
+        expect(result.current.find(f => f.key === "source.http")?.placeholder).toBe("Link");
     });
 });
