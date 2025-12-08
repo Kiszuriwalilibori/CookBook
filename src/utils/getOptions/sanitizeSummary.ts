@@ -28,7 +28,7 @@ export function sanitizeSummary(summary: unknown): { sanitizedSummary: RecipeFil
     // -------------------------------------------------------
     if ("source" in obj && obj.source && typeof obj.source === "object" && !Array.isArray(obj.source)) {
         const src = obj.source as Record<string, unknown>;
-        const sourceKeys = ["http", "book", "title", "author", "where"] as const;
+        const sourceKeys = ["url", "book", "title", "author", "where"] as const;
 
         for (const key of sourceKeys) {
             const flatKey = `source.${key}` as keyof RecipeFilter;

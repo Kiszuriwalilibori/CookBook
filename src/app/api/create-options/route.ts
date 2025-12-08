@@ -15,7 +15,7 @@ interface RecipeDoc {
     title?: string;
     status?: string;
     source?: {
-        http?: string[];
+        url?: string[];
         book?: string[];
         title?: string[];
         author?: string[];
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Fetch all recipes
-        const groq = `*[_type == "recipe"]{products, dietary, cuisine, tags, title, status, source{http,book,title,author,where}}`;
+        const groq = `*[_type == "recipe"]{products, dietary, cuisine, tags, title, status, source{url,book,title,author,where}}`;
         const url = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${encodeURIComponent(groq)}`;
         const resp = await fetch(url, { method: "GET", headers: { "Content-Type": "application/json", ...(SANITY_TOKEN ? { Authorization: `Bearer ${SANITY_TOKEN}` } : {}) } });
         if (!resp.ok) throw new Error(`Sanity read failed: ${resp.status} ${resp.statusText}`);
@@ -144,8 +144,8 @@ export async function POST(req: NextRequest) {
                 if (v) setMap.title.add(v);
             }
             if (r.source) {
-                if (typeof r.source.http === "string") {
-                    const v = normalizeHttp(r.source.http);
+                if (typeof r.source.url === "string") {
+                    const v = normalizeHttp(r.source.url);
                     if (v) setMap.sourceHttp.add(v);
                 }
                 if (typeof r.source.book === "string") {
@@ -207,7 +207,7 @@ export async function POST(req: NextRequest) {
                 tags: getUniqueSorted(fullSets.tags),
                 title: getUniqueSorted(fullSets.title),
                 source: {
-                    http: getUniqueSorted(fullSets.sourceHttp),
+                    url: getUniqueSorted(fullSets.sourceHttp),
                     book: getUniqueSorted(fullSets.sourceBook),
                     title: getUniqueSorted(fullSets.sourceTitle),
                     author: getUniqueSorted(fullSets.sourceAuthor),
@@ -221,7 +221,7 @@ export async function POST(req: NextRequest) {
                 tags: getUniqueSorted(goodSets.tags),
                 title: getUniqueSorted(goodSets.title),
                 source: {
-                    http: getUniqueSorted(goodSets.sourceHttp),
+                    url: getUniqueSorted(goodSets.sourceHttp),
                     book: getUniqueSorted(goodSets.sourceBook),
                     title: getUniqueSorted(goodSets.sourceTitle),
                     author: getUniqueSorted(goodSets.sourceAuthor),

@@ -44,7 +44,7 @@ export default {
           title: 'Source',
           type: 'object',
           fields: [
-            {name: 'http', type: 'array', of: [{type: 'string'}]},
+            {name: 'url', type: 'array', of: [{type: 'string'}]},
             {name: 'book', type: 'array', of: [{type: 'string'}]},
             {name: 'title', type: 'array', of: [{type: 'string'}]},
             {name: 'author', type: 'array', of: [{type: 'string'}]},

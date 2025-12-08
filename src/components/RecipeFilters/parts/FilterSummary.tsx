@@ -16,7 +16,7 @@ const icons = {
     products: "🛍️",
     status: "⭐",
     kizia: "👩",
-    "source.http": "🌐",
+    "source.url": "🌐",
     "source.book": "📚",
     "source.title": "📝",
     "source.author": "✍️",

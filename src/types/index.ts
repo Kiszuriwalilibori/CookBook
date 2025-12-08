@@ -48,7 +48,7 @@ export const EMPTY_RECIPE_FILTER: RecipeFilter = {
     products: [],
 
     "source.title": [],
-    "source.http": [],
+    "source.url": [],
     "source.book": [],
     "source.author": [],
     "source.where": [],
@@ -114,7 +114,7 @@ export interface Recipe {
     kizia?: boolean;
     status: Status;
     source?: {
-        http?: string;
+        url?: string;
         book?: string;
         title?: string;
         author?: string;
@@ -134,7 +134,7 @@ export const fieldTranslations: Record<string, string> = {
     notes: "Notatki",
     products: "Produkt",
     status: "Status",
-    "source.http": "Link",
+    "source.url": "Link",
     "source.book": "Tytuł książki",
     "source.title": "Tytuł książki",
     "source.author": "Autor książki",

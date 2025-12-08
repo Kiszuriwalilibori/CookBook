@@ -23,7 +23,7 @@ describe("ensureSummaryStructure", () => {
         // Other fields fallback to initialSummary (empty arrays)
         expect(result.tags).toEqual([]);
         expect(result.dietary).toEqual([]);
-        expect(result["source.http"]).toEqual([]);
+        expect(result["source.url"]).toEqual([]);
         expect(result["source.book"]).toEqual([]);
         expect(result["source.title"]).toEqual([]);
         expect(result["source.author"]).toEqual([]);
@@ -42,7 +42,7 @@ describe("ensureSummaryStructure", () => {
         const result = ensureSummaryStructure(partialWithSource);
 
         expect(result.title).toEqual(["Recipe 1"]);
-        expect(result["source.http"]).toEqual(["https://example.com"]);
+        expect(result["source.url"]).toEqual(["https://example.com"]);
         expect(result["source.author"]).toEqual(["Jane Doe"]);
 
         // Other source fields fallback
@@ -58,7 +58,7 @@ describe("ensureSummaryStructure", () => {
             tags: ["Quick"],
             dietary: ["Vegan"],
             products: ["Tomato"],
-            "source.http": ["https://example.com"],
+            "source.url": ["https://example.com"],
             "source.book": ["Book 1"],
             "source.title": ["Book Title"],
             "source.author": ["Jane Doe"],
@@ -80,7 +80,7 @@ describe("ensureSummaryStructure", () => {
         expect(result.tags).toEqual([]);
         expect(result.dietary).toEqual([]);
         expect(result.products).toEqual([]);
-        expect(result["source.http"]).toEqual([]);
+        expect(result["source.url"]).toEqual([]);
         expect(result["source.book"]).toEqual([]);
         expect(result["source.title"]).toEqual([]);
         expect(result["source.author"]).toEqual([]);

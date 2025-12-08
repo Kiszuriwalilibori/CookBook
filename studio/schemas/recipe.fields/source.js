@@ -3,7 +3,7 @@ export default {
   title: 'Source',
   type: 'object',
   fields: [
-    {name: 'http', title: 'HTTP', type: 'string'},
+    {name: 'url', title: 'URL', type: 'string'},
     {name: 'book', title: 'Book', type: 'string'},
     {name: 'title', title: 'Title', type: 'string'},
     {name: 'author', title: 'Author', type: 'string'},

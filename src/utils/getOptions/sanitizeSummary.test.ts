@@ -1,4 +1,3 @@
-
 import { sanitizeSummary } from "./sanitizeSummary";
 import { CLEAN_SUMMARY_MESSAGES } from "./helpers";
 import type { RecipeFilter } from "@/types";
@@ -10,7 +9,7 @@ describe("sanitizeSummary - comprehensive scenarios", () => {
         tags: ["Quick"],
         dietary: ["Vegan"],
         products: ["Tomato"],
-        "source.http": ["https://example.com"],
+        "source.url": ["https://example.com"],
         "source.book": ["Some Book"],
         "source.title": ["Book Title"],
         "source.author": ["John Doe"],
@@ -25,7 +24,7 @@ describe("sanitizeSummary - comprehensive scenarios", () => {
             tags: [],
             dietary: [],
             products: [],
-            "source.http": [],
+            "source.url": [],
             "source.book": [],
             "source.title": [],
             "source.author": [],
@@ -48,7 +47,7 @@ describe("sanitizeSummary - comprehensive scenarios", () => {
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD("tags"));
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD("dietary"));
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD("products"));
-        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD("source.http"));
+        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD("source.url"));
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD("source.book"));
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD("source.title"));
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.MISSING_FIELD("source.author"));
@@ -62,7 +61,7 @@ describe("sanitizeSummary - comprehensive scenarios", () => {
             tags: ["Okay"],
             dietary: null as unknown as string[],
             products: ["Fine"],
-            "source.http": "https://oops" as unknown as string[],
+            "source.url": "https://oops" as unknown as string[],
             "source.book": null as unknown as string[],
             "source.title": undefined as unknown as string[],
             "source.author": null as unknown as string[],
@@ -71,7 +70,7 @@ describe("sanitizeSummary - comprehensive scenarios", () => {
 
         const result = sanitizeSummary(input);
 
-        const emptyFields: (keyof RecipeFilter)[] = ["cuisine", "dietary", "source.http", "source.book", "source.title", "source.author", "source.where"];
+        const emptyFields: (keyof RecipeFilter)[] = ["cuisine", "dietary", "source.url", "source.book", "source.title", "source.author", "source.where"];
 
         for (const key of emptyFields) {
             expect(result.sanitizedSummary[key]).toEqual([]);
@@ -79,7 +78,7 @@ describe("sanitizeSummary - comprehensive scenarios", () => {
 
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("cuisine", "string"));
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("dietary", "object"));
-        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("source.http", "string"));
+        expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("source.url", "string"));
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("source.book", "object"));
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("source.title", "undefined"));
         expect(result.sanitizeIssues).toContain(CLEAN_SUMMARY_MESSAGES.NOT_ARRAY_FIELD("source.author", "object"));
@@ -106,7 +105,7 @@ describe("sanitizeSummary - comprehensive scenarios", () => {
             tags: [],
             dietary: [],
             products: [],
-            "source.http": [],
+            "source.url": [],
             "source.book": [],
             "source.title": [],
             "source.author": [],
@@ -125,7 +124,7 @@ describe("sanitizeSummary - comprehensive scenarios", () => {
             tags: ["Quick", null as unknown as string],
             dietary: ["Vegan", ""],
             products: ["Tomato", ""],
-            "source.http": ["https://site.com", ""],
+            "source.url": ["https://site.com", ""],
             "source.book": ["Book Name", ""],
             "source.title": ["Book Title", ""],
             "source.author": ["John Doe", ""],
@@ -139,7 +138,7 @@ describe("sanitizeSummary - comprehensive scenarios", () => {
         expect(result.sanitizedSummary.tags).toEqual(["Quick"]);
         expect(result.sanitizedSummary.dietary).toEqual(["Vegan"]);
         expect(result.sanitizedSummary.products).toEqual(["Tomato"]);
-        expect(result.sanitizedSummary["source.http"]).toEqual(["https://site.com"]);
+        expect(result.sanitizedSummary["source.url"]).toEqual(["https://site.com"]);
         expect(result.sanitizedSummary["source.book"]).toEqual(["Book Name"]);
         expect(result.sanitizedSummary["source.title"]).toEqual(["Book Title"]);
         expect(result.sanitizedSummary["source.author"]).toEqual(["John Doe"]);
@@ -167,7 +166,7 @@ describe("sanitizeSummary - comprehensive scenarios", () => {
 
         const result = sanitizeSummary(input);
 
-        expect(result.sanitizedSummary["source.http"]).toEqual(["https://flatten.com"]);
+        expect(result.sanitizedSummary["source.url"]).toEqual(["https://flatten.com"]);
         expect(result.sanitizedSummary["source.book"]).toEqual(["Book Flat"]);
         expect(result.sanitizedSummary["source.title"]).toEqual(["Title Flat"]);
         expect(result.sanitizedSummary["source.author"]).toEqual(["Author Flat"]);

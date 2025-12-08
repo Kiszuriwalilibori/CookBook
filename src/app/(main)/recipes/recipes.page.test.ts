@@ -34,7 +34,7 @@ describe("RecipesPage (server component)", () => {
             tags: ["VEGAN", "Quick"],
             dietary: "GLUTEN-FREE",
             products: ["Tomato"],
-            "source.http": "HTTPVal",
+            "source.url": "HTTPVal",
             "source.book": "BookVal",
             "source.title": "TitleVal",
             "source.author": "AuthorVal",
@@ -62,7 +62,7 @@ describe("RecipesPage (server component)", () => {
         expect(calledFilters.tags).toEqual(["vegan", "quick"]);
         expect(calledFilters.dietary).toEqual(["gluten-free"]);
         expect(calledFilters.products).toEqual(["tomato"]);
-        expect(calledFilters["source.http"]).toBe("httpval");
+        expect(calledFilters["source.url"]).toBe("httpval");
         expect(calledFilters["source.book"]).toBe("bookval");
         expect(calledFilters["source.title"]).toBe("titleval");
         expect(calledFilters["source.author"]).toBe("authorval");

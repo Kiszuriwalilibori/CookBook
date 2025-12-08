@@ -10,7 +10,7 @@ describe("useCreateRecipeFilterFields", () => {
             tags: ["quick", "easy"],
             dietary: ["vegan", "gluten-free"],
             products: ["flour", "oil"],
-            "source.http": ["https://example.com"],
+            "source.url": ["https://example.com"],
             "source.book": ["cookbook"],
             "source.title": ["recipe title"],
             "source.author": ["author"],
@@ -33,7 +33,7 @@ describe("useCreateRecipeFilterFields", () => {
             tags: ["quick"],
             dietary: [],
             products: ["cheese"],
-            "source.http": [],
+            "source.url": [],
             "source.book": [],
             "source.title": [],
             "source.author": [],
@@ -54,7 +54,7 @@ describe("useCreateRecipeFilterFields", () => {
             tags: [],
             dietary: [],
             products: [],
-            "source.http": [],
+            "source.url": [],
             "source.book": [],
             "source.title": [],
             "source.author": [],
@@ -75,7 +75,7 @@ describe("useCreateRecipeFilterFields", () => {
             tags: ["quick"],
             dietary: [],
             products: [],
-            "source.http": [],
+            "source.url": [],
             "source.book": [],
             "source.title": [],
             "source.author": [],
@@ -94,7 +94,7 @@ describe("useCreateRecipeFilterFields", () => {
             tags: [],
             dietary: [],
             products: [],
-            "source.http": [],
+            "source.url": [],
             "source.book": [],
             "source.title": [],
             "source.author": [],
@@ -121,7 +121,7 @@ describe("useCreateRecipeFilterFields", () => {
             tags: [],
             dietary: [],
             products: [],
-            "source.http": [],
+            "source.url": [],
             "source.book": [],
             "source.title": [],
             "source.author": [],
@@ -138,7 +138,7 @@ describe("useCreateRecipeFilterFields", () => {
             "cuisine",
             "kizia",
             "status", // ← NEW
-            "source.http",
+            "source.url",
             "source.book",
             "source.title",
             "source.author",
@@ -155,7 +155,7 @@ describe("useCreateRecipeFilterFields", () => {
             tags: [],
             dietary: [],
             products: [],
-            "source.http": [],
+            "source.url": [],
             "source.book": [],
             "source.title": [],
             "source.author": [],
@@ -178,7 +178,7 @@ describe("useCreateRecipeFilterFields", () => {
             tags: [],
             dietary: [],
             products: [],
-            "source.http": [],
+            "source.url": [],
             "source.book": [],
             "source.title": [],
             "source.author": [],
@@ -192,7 +192,7 @@ describe("useCreateRecipeFilterFields", () => {
         expect(adminFields.map(f => f.key)).toEqual([
             "kizia",
             "status", // ← NEW
-            "source.http",
+            "source.url",
             "source.book",
             "source.title",
             "source.author",
@@ -207,7 +207,7 @@ describe("useCreateRecipeFilterFields", () => {
             tags: [],
             dietary: [],
             products: [],
-            "source.http": [],
+            "source.url": [],
             "source.book": [],
             "source.title": [],
             "source.author": [],
@@ -232,7 +232,7 @@ describe("useCreateRecipeFilterFields", () => {
             tags: [],
             dietary: [],
             products: [],
-            "source.http": [],
+            "source.url": [],
             "source.book": [],
             "source.title": [],
             "source.author": [],
@@ -244,14 +244,14 @@ describe("useCreateRecipeFilterFields", () => {
         expect(result.current.find(f => f.key === "dietary")?.placeholder).toBe("Bez ograniczeń");
     });
 
-    it("should have link placeholder for source.http field", () => {
+    it("should have link placeholder for source.url field", () => {
         const mockOptions = {
             title: [],
             cuisine: [],
             tags: [],
             dietary: [],
             products: [],
-            "source.http": [],
+            "source.url": [],
             "source.book": [],
             "source.title": [],
             "source.author": [],
@@ -260,6 +260,6 @@ describe("useCreateRecipeFilterFields", () => {
 
         const { result } = renderHook(() => useCreateRecipeFilterFields(mockOptions));
 
-        expect(result.current.find(f => f.key === "source.http")?.placeholder).toBe("Link");
+        expect(result.current.find(f => f.key === "source.url")?.placeholder).toBe("Link");
     });
 });

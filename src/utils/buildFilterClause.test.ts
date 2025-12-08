@@ -5,7 +5,7 @@
 // const exampleValues: Partial<FilterState> = {
 //     title: "  Pizza  ",
 //     cuisine: "iTAlian",
-//     "source.http": "EXAMPLE.com",
+//     "source.url": "EXAMPLE.com",
 //     "source.book": "Cookbook",
 //     "source.title": "SourceTitle",
 //     "source.author": "AuthorName",
@@ -33,7 +33,7 @@
 // }
 
 // // Group fields by type
-// const stringFields: (keyof FilterState)[] = ["title", "cuisine", "source.http", "source.book", "source.title", "source.author", "source.where", "status"];
+// const stringFields: (keyof FilterState)[] = ["title", "cuisine", "source.url", "source.book", "source.title", "source.author", "source.where", "status"];
 // const booleanFields: (keyof FilterState)[] = ["kizia"];
 // const arrayFields: (keyof FilterState)[] = ["tags", "dietary", "products"];
 
@@ -132,7 +132,7 @@ import { FilterState } from "@/models/filters";
 const exampleValues: Partial<FilterState> = {
     title: "  Pizza  ",
     cuisine: "iTAlian",
-    "source.http": "EXAMPLE.com",
+    "source.url": "EXAMPLE.com",
     "source.book": "Cookbook",
     "source.title": "SourceTitle",
     "source.author": "AuthorName",
@@ -158,7 +158,7 @@ function set<K extends keyof FilterState>(t: Partial<FilterState>, key: K, v: Fi
 }
 
 // --- Field groups ----------------------------------------------------------
-const stringFields: (keyof FilterState)[] = ["title", "cuisine", "source.http", "source.book", "source.title", "source.author", "source.where", "status"];
+const stringFields: (keyof FilterState)[] = ["title", "cuisine", "source.url", "source.book", "source.title", "source.author", "source.where", "status"];
 
 const booleanFields: (keyof FilterState)[] = ["kizia"];
 const arrayFields: (keyof FilterState)[] = ["tags", "dietary", "products"];
@@ -245,6 +245,5 @@ describe("buildFilterClause – combinatorial Jest test suite", () => {
         expect(buildFilterClause({ tags: [], dietary: [], products: [] })).toBe("");
     });
 });
-
 
 // ale wyższy suite też działa dobrze

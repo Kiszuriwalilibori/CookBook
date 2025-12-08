@@ -24,7 +24,7 @@ export const FILTER_FIELDS_CONFIG: FilterField[] = [
     defineField({ key: "products", multiple: true, chips: true }),
     defineField({ key: "kizia", multiple: false, component: "switch", requiredAdmin: true, placeholder: "Kizia to lubi?" }),
     defineField({ key: "status", multiple: false, component: "checkbox", requiredAdmin: true, placeholder: "Status" }),
-    defineField({ key: "source.http", multiple: false, requiredAdmin: true, placeholder: "Link" }),
+    defineField({ key: "source.url", multiple: false, requiredAdmin: true, placeholder: "Link" }),
     defineField({ key: "source.book", multiple: false, requiredAdmin: true, placeholder: "Tytuł książki" }),
     defineField({ key: "source.title", multiple: false, requiredAdmin: true, placeholder: "Tytuł książki" }),
     defineField({ key: "source.author", multiple: false, requiredAdmin: true, placeholder: "Autor książki" }),

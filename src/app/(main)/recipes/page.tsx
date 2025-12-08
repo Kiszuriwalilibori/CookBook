@@ -19,7 +19,7 @@ const parseBoolean = (val?: string): boolean | undefined => (val === "true" ? tr
 const VALID_STATUSES: Status[] = ["Good", "Acceptable", "Improvement", "Forget"];
 // const parseStatus = (val?: string): Status | null => (val && VALID_STATUSES.includes(val as Status) ? (val as Status) : null);
 const parseStatus = (val?: string): Status | undefined => (val && VALID_STATUSES.includes(val as Status) ? (val as Status) : undefined);
-const SOURCE_KEYS: Array<keyof FilterState & string> = ["source.http", "source.book", "source.title", "source.author", "source.where"];
+const SOURCE_KEYS: Array<keyof FilterState & string> = ["source.url", "source.book", "source.title", "source.author", "source.where"];
 
 export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     const awaitedSearchParams = await searchParams;

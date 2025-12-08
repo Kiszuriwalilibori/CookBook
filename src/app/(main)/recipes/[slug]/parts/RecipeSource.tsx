@@ -16,16 +16,16 @@ export function RecipeSource({ recipe }: RecipeSourceProps) {
         return null;
     }
 
-    const { http, title, book, author, where } = recipe.source;
+    const {url, title, book, author, where } = recipe.source;
 
     // Sprawdź, czy http ma sensowną wartość (niepusta, nie null/undefined)
-    const hasValidHttp = http && http.trim() !== "";
+    const hasValidURL = url && url.trim() !== "";
 
     let sourceText = "";
 
-    if (hasValidHttp) {
+    if (hasValidURL) {
         // Wyświetl tylko HTTP
-        sourceText = `Źródło: ${http}`;
+        sourceText = `Źródło: ${url}`;
     } else {
         // Wyświetl pozostałe: title, author, book, where (jeśli dostępne)
         const parts: string[] = [];

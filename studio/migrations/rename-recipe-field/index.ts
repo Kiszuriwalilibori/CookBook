@@ -1,7 +1,7 @@
 import {defineMigration, at, setIfMissing, unset} from 'sanity/migrate'
 
-const from = 'cookTime'
-const to = 'cookTime'
+const from = 'http'
+const to = 'url'
 
 export default defineMigration({
   title: 'Rename recipe field',

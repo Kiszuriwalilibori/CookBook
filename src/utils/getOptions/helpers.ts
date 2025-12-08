@@ -15,7 +15,7 @@ export const CLEAN_SUMMARY_MESSAGES = {
 //     tags: [],
 //     dietary: [],
 //     products: [],
-    
+
 // };
 
 export const initialSummary: RecipeFilter = {
@@ -24,12 +24,11 @@ export const initialSummary: RecipeFilter = {
     tags: [],
     dietary: [],
     cuisine: [],
-    "source.http": [],
+    "source.url": [],
     "source.book": [],
     "source.title": [],
     "source.author": [],
     "source.where": [],
 };
-
 
 export const INITIAL_SANITIZE_ISSUES: string[] = [];

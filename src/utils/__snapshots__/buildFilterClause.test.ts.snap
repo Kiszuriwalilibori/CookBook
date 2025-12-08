@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles all fields combined 1`] = `" && (lower(title) match "  pizza  *" && lower(cuisine) == "italian" && lower(source.http) == "example.com" && lower(source.book) == "cookbook" && lower(source.title) == "sourcetitle" && lower(source.author) == "authorname" && lower(source.where) == "library" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0 && count((dietary[])[@ in ["gluten-free"]]) > 0 && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles all fields combined 1`] = `" && (lower(title) match "  pizza  *" && lower(cuisine) == "italian" && lower(source.url) == "example.com" && lower(source.book) == "cookbook" && lower(source.title) == "sourcetitle" && lower(source.author) == "authorname" && lower(source.where) == "library" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0 && count((dietary[])[@ in ["gluten-free"]]) > 0 && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles array combination: dietary 1`] = `" && (count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
@@ -32,11 +32,11 @@ exports[`buildFilterClause - fully type-safe combinatorial tests handles combina
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.book + kizia + tags 1`] = `" && (lower(source.book) == "cookbook" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.http + kizia + dietary 1`] = `" && (lower(source.http) == "example.com" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.url + kizia + dietary 1`] = `" && (lower(source.url) == "example.com" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.http + kizia + products 1`] = `" && (lower(source.http) == "example.com" && kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.url + kizia + products 1`] = `" && (lower(source.url) == "example.com" && kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.http + kizia + tags 1`] = `" && (lower(source.http) == "example.com" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.url + kizia + tags 1`] = `" && (lower(source.url) == "example.com" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles combination: source.title + kizia + dietary 1`] = `" && (lower(source.title) == "sourcetitle" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
@@ -74,7 +74,7 @@ exports[`buildFilterClause - fully type-safe combinatorial tests handles single 
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles single field: source.book 1`] = `" && (lower(source.book) == "cookbook")"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles single field: source.http 1`] = `" && (lower(source.http) == "example.com")"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles single field: source.url 1`] = `" && (lower(source.url) == "example.com")"`;
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles single field: source.title 1`] = `" && (lower(source.title) == "sourcetitle")"`;
 
@@ -92,7 +92,7 @@ exports[`buildFilterClause - fully type-safe combinatorial tests handles string 
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: cuisine, source.book 1`] = `" && (lower(cuisine) == "italian" && lower(source.book) == "cookbook")"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: cuisine, source.http 1`] = `" && (lower(cuisine) == "italian" && lower(source.http) == "example.com")"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: cuisine, source.url 1`] = `" && (lower(cuisine) == "italian" && lower(source.url) == "example.com")"`;
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: cuisine, source.title 1`] = `" && (lower(cuisine) == "italian" && lower(source.title) == "sourcetitle")"`;
 
@@ -116,17 +116,17 @@ exports[`buildFilterClause - fully type-safe combinatorial tests handles string 
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.book, status 1`] = `" && (lower(source.book) == "cookbook")"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.http 1`] = `" && (lower(source.http) == "example.com")"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.url 1`] = `" && (lower(source.url) == "example.com")"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.http, source.author 1`] = `" && (lower(source.http) == "example.com" && lower(source.author) == "authorname")"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.url, source.author 1`] = `" && (lower(source.url) == "example.com" && lower(source.author) == "authorname")"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.http, source.book 1`] = `" && (lower(source.http) == "example.com" && lower(source.book) == "cookbook")"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.url, source.book 1`] = `" && (lower(source.url) == "example.com" && lower(source.book) == "cookbook")"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.http, source.title 1`] = `" && (lower(source.http) == "example.com" && lower(source.title) == "sourcetitle")"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.url, source.title 1`] = `" && (lower(source.url) == "example.com" && lower(source.title) == "sourcetitle")"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.http, source.where 1`] = `" && (lower(source.http) == "example.com" && lower(source.where) == "library")"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.url, source.where 1`] = `" && (lower(source.url) == "example.com" && lower(source.where) == "library")"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.http, status 1`] = `" && (lower(source.http) == "example.com")"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.url, status 1`] = `" && (lower(source.url) == "example.com")"`;
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: source.title 1`] = `" && (lower(source.title) == "sourcetitle")"`;
 
@@ -150,7 +150,7 @@ exports[`buildFilterClause - fully type-safe combinatorial tests handles string 
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: title, source.book 1`] = `" && (lower(title) match "  pizza  *" && lower(source.book) == "cookbook")"`;
 
-exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: title, source.http 1`] = `" && (lower(title) match "  pizza  *" && lower(source.http) == "example.com")"`;
+exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: title, source.url 1`] = `" && (lower(title) match "  pizza  *" && lower(source.url) == "example.com")"`;
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: title, source.title 1`] = `" && (lower(title) match "  pizza  *" && lower(source.title) == "sourcetitle")"`;
 
@@ -158,7 +158,7 @@ exports[`buildFilterClause - fully type-safe combinatorial tests handles string 
 
 exports[`buildFilterClause - fully type-safe combinatorial tests handles string combination: title, status 1`] = `" && (lower(title) match "  pizza  *")"`;
 
-exports[`buildFilterClause – combinatorial Jest test suite all fields 1`] = `" && (lower(title) match "pizza*" && lower(cuisine) == "italian" && lower(source.http) == "example.com" && lower(source.book) == "cookbook" && lower(source.title) == "sourcetitle" && lower(source.author) == "authorname" && lower(source.where) == "library" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0 && count((dietary[])[@ in ["gluten-free"]]) > 0 && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
+exports[`buildFilterClause – combinatorial Jest test suite all fields 1`] = `" && (lower(title) match "pizza*" && lower(cuisine) == "italian" && lower(source.url) == "example.com" && lower(source.book) == "cookbook" && lower(source.title) == "sourcetitle" && lower(source.author) == "authorname" && lower(source.where) == "library" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0 && count((dietary[])[@ in ["gluten-free"]]) > 0 && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
 exports[`buildFilterClause – combinatorial Jest test suite array combo: dietary, products 1`] = `" && (count((dietary[])[@ in ["gluten-free"]]) > 0 && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
@@ -184,11 +184,11 @@ exports[`buildFilterClause – combinatorial Jest test suite mixed: source.book 
 
 exports[`buildFilterClause – combinatorial Jest test suite mixed: source.book + kizia + tags 1`] = `" && (lower(source.book) == "cookbook" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
 
-exports[`buildFilterClause – combinatorial Jest test suite mixed: source.http + kizia + dietary 1`] = `" && (lower(source.http) == "example.com" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
+exports[`buildFilterClause – combinatorial Jest test suite mixed: source.url + kizia + dietary 1`] = `" && (lower(source.url) == "example.com" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
-exports[`buildFilterClause – combinatorial Jest test suite mixed: source.http + kizia + products 1`] = `" && (lower(source.http) == "example.com" && kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
+exports[`buildFilterClause – combinatorial Jest test suite mixed: source.url + kizia + products 1`] = `" && (lower(source.url) == "example.com" && kizia == true && count((products[])[@ in ["tomato","cheese"]]) > 0)"`;
 
-exports[`buildFilterClause – combinatorial Jest test suite mixed: source.http + kizia + tags 1`] = `" && (lower(source.http) == "example.com" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
+exports[`buildFilterClause – combinatorial Jest test suite mixed: source.url + kizia + tags 1`] = `" && (lower(source.url) == "example.com" && kizia == true && count((tags[])[@ in ["vegan","quick"]]) > 0)"`;
 
 exports[`buildFilterClause – combinatorial Jest test suite mixed: source.title + kizia + dietary 1`] = `" && (lower(source.title) == "sourcetitle" && kizia == true && count((dietary[])[@ in ["gluten-free"]]) > 0)"`;
 
@@ -226,7 +226,7 @@ exports[`buildFilterClause – combinatorial Jest test suite single field: sourc
 
 exports[`buildFilterClause – combinatorial Jest test suite single field: source.book 1`] = `" && (lower(source.book) == "cookbook")"`;
 
-exports[`buildFilterClause – combinatorial Jest test suite single field: source.http 1`] = `" && (lower(source.http) == "example.com")"`;
+exports[`buildFilterClause – combinatorial Jest test suite single field: source.url 1`] = `" && (lower(source.url) == "example.com")"`;
 
 exports[`buildFilterClause – combinatorial Jest test suite single field: source.title 1`] = `" && (lower(source.title) == "sourcetitle")"`;
 
@@ -242,7 +242,7 @@ exports[`buildFilterClause – combinatorial Jest test suite string combo: cuisi
 
 exports[`buildFilterClause – combinatorial Jest test suite string combo: cuisine, source.book 1`] = `" && (lower(cuisine) == "italian" && lower(source.book) == "cookbook")"`;
 
-exports[`buildFilterClause – combinatorial Jest test suite string combo: cuisine, source.http 1`] = `" && (lower(cuisine) == "italian" && lower(source.http) == "example.com")"`;
+exports[`buildFilterClause – combinatorial Jest test suite string combo: cuisine, source.url 1`] = `" && (lower(cuisine) == "italian" && lower(source.url) == "example.com")"`;
 
 exports[`buildFilterClause – combinatorial Jest test suite string combo: cuisine, source.title 1`] = `" && (lower(cuisine) == "italian" && lower(source.title) == "sourcetitle")"`;
 
@@ -262,15 +262,15 @@ exports[`buildFilterClause – combinatorial Jest test suite string combo: sourc
 
 exports[`buildFilterClause – combinatorial Jest test suite string combo: source.book, status 1`] = `" && (lower(source.book) == "cookbook")"`;
 
-exports[`buildFilterClause – combinatorial Jest test suite string combo: source.http, source.author 1`] = `" && (lower(source.http) == "example.com" && lower(source.author) == "authorname")"`;
+exports[`buildFilterClause – combinatorial Jest test suite string combo: source.url, source.author 1`] = `" && (lower(source.url) == "example.com" && lower(source.author) == "authorname")"`;
 
-exports[`buildFilterClause – combinatorial Jest test suite string combo: source.http, source.book 1`] = `" && (lower(source.http) == "example.com" && lower(source.book) == "cookbook")"`;
+exports[`buildFilterClause – combinatorial Jest test suite string combo: source.url, source.book 1`] = `" && (lower(source.url) == "example.com" && lower(source.book) == "cookbook")"`;
 
-exports[`buildFilterClause – combinatorial Jest test suite string combo: source.http, source.title 1`] = `" && (lower(source.http) == "example.com" && lower(source.title) == "sourcetitle")"`;
+exports[`buildFilterClause – combinatorial Jest test suite string combo: source.url, source.title 1`] = `" && (lower(source.url) == "example.com" && lower(source.title) == "sourcetitle")"`;
 
-exports[`buildFilterClause – combinatorial Jest test suite string combo: source.http, source.where 1`] = `" && (lower(source.http) == "example.com" && lower(source.where) == "library")"`;
+exports[`buildFilterClause – combinatorial Jest test suite string combo: source.url, source.where 1`] = `" && (lower(source.url) == "example.com" && lower(source.where) == "library")"`;
 
-exports[`buildFilterClause – combinatorial Jest test suite string combo: source.http, status 1`] = `" && (lower(source.http) == "example.com")"`;
+exports[`buildFilterClause – combinatorial Jest test suite string combo: source.url, status 1`] = `" && (lower(source.url) == "example.com")"`;
 
 exports[`buildFilterClause – combinatorial Jest test suite string combo: source.title, source.author 1`] = `" && (lower(source.title) == "sourcetitle" && lower(source.author) == "authorname")"`;
 
@@ -286,7 +286,7 @@ exports[`buildFilterClause – combinatorial Jest test suite string combo: title
 
 exports[`buildFilterClause – combinatorial Jest test suite string combo: title, source.book 1`] = `" && (lower(title) match "pizza*" && lower(source.book) == "cookbook")"`;
 
-exports[`buildFilterClause – combinatorial Jest test suite string combo: title, source.http 1`] = `" && (lower(title) match "pizza*" && lower(source.http) == "example.com")"`;
+exports[`buildFilterClause – combinatorial Jest test suite string combo: title, source.url 1`] = `" && (lower(title) match "pizza*" && lower(source.url) == "example.com")"`;
 
 exports[`buildFilterClause – combinatorial Jest test suite string combo: title, source.title 1`] = `" && (lower(title) match "pizza*" && lower(source.title) == "sourcetitle")"`;
 
