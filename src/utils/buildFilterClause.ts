@@ -1,4 +1,4 @@
-import { FilterState } from "@/models/filters"; // remove Status import
+import { FilterState } from "@/models/filters"; 
 
 export function buildFilterClause(filters?: Partial<FilterState>): string {
     if (!filters) return "";
@@ -34,11 +34,7 @@ export function buildFilterClause(filters?: Partial<FilterState>): string {
         conditions.push(condition);
     }
 
-    // function processBooleanField(filters: Partial<FilterState>, field: BooleanKeys<FilterState>) {
-    //     if (filters[field] === true) {
-    //         conditions.push(`${field} == true`);
-    //     }
-    // }
+    
     function processBooleanField(filters: Partial<FilterState>, field: BooleanKeys<FilterState>) {
         const value = filters[field];
 
