@@ -26,8 +26,8 @@ export async function getRecipesForCards(filters?: Partial<FilterState>): Promis
         alt
       }
     },
-    preparationTime,
-    cookingTime,
+    prepTime,
+    cookTime,
     recipeYield,
     tags,
     dietary,

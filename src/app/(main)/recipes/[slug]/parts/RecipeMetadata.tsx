@@ -15,11 +15,11 @@ export function RecipeMetadata({ recipe }: RecipeMetadataProps) {
     return (
         <Box id="RecipeMetadata" sx={styles.metadata}>
             <Typography component="div">
-                ⏱️ {getLabel("preparationTime")}: {recipe.preparationTime} min
+                ⏱️ {getLabel("prepTime")}: {recipe.prepTime} min
             </Typography>
-            {recipe.cookingTime && (
+            {recipe.cookTime && (
                 <Typography component="div">
-                    ⏲️ {getLabel("cookingTime")}: {recipe.cookingTime} min
+                    ⏲️ {getLabel("cookTime")}: {recipe.cookTime} min
                 </Typography>
             )}
             {recipe.recipeYield && (

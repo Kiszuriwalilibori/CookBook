@@ -104,8 +104,8 @@ export interface Recipe {
         notes?: string;
     }>;
     calories?: number;
-    preparationTime?: number;
-    cookingTime?: number;
+    prepTime?: number;
+    cookTime?: number;
     recipeYield?: number;
     cuisine?: string;
     dietary?: string[];
@@ -125,11 +125,11 @@ export interface Recipe {
 export const fieldTranslations: Record<string, string> = {
     title: "Nazwa",
     calories: "Kalorie",
-    cookingTime: "Czas aktywnej pracy",
+    cookTime: "Czas aktywnej pracy",
     dietary: "Rodzaj diety",
     tags: "Etykiety",
     cuisine: "Kuchnia",
-    preparationTime: "Całkowity czas przygotowania",
+    prepTime: "Całkowity czas przygotowania",
     recipeYield: "Porcje",
     notes: "Notatki",
     products: "Produkt",

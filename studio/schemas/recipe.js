@@ -293,13 +293,13 @@
 //       },
 //     },
 //     {
-//       name: 'preparationTime',
+//       name: 'prepTime',
 //       title: 'Preparation Time',
 //       type: 'number',
 //       description: 'Time in minutes',
 //     },
 //     {
-//       name: 'cookingTime',
+//       name: 'cookTime',
 //       title: 'Cooking Time',
 //       type: 'number',
 //       description: 'Time in minutes',
@@ -363,7 +363,7 @@
 // }
 
 // recipe.js
-import cookingTime from './recipe.fields/cookingTime'
+import cookTime from './recipe.fields/cookTime'
 import cuisine from './recipe.fields/cuisine'
 import description from './recipe.fields/description'
 import dietary from './recipe.fields/dietary'
@@ -372,7 +372,7 @@ import kizia from './recipe.fields/kizia'
 import notes from './recipe.fields/notes'
 import nutrition from './recipe.fields/nutrition'
 import preparationSteps from './recipe.fields/preparationSteps'
-import preparationTime from './recipe.fields/preparationTime'
+import prepTime from './recipe.fields/prepTime'
 import products from './recipe.fields/products'
 import slug from './recipe.fields/slug'
 import source from './recipe.fields/source'
@@ -392,8 +392,8 @@ export default {
     ingredients,
     products,
     preparationSteps,
-    preparationTime,
-    cookingTime,
+    prepTime,
+    cookTime,
     recipeYield,
     cuisine,
     dietary,
@@ -408,3 +408,4 @@ export default {
 
 // todo: add SEO fields,add jsDoc for files
 // Przeczytać dokłądnie bestPractices for recipeSchemas w GROK redefinicja recipe.js
+// w sumie fajnie by było wykorzystać polish translations

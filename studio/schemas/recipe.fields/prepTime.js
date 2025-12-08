@@ -1,6 +1,6 @@
 export default {
-  name: 'cookingTime',
-  title: 'Cooking Time',
+  name: 'prepTime',
+  title: 'Preparation Time',
   type: 'number',
   description: 'Time in minutes',
 }

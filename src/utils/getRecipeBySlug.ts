@@ -37,8 +37,8 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
         notes
       },
       calories,
-      preparationTime,
-      cookingTime,
+      prepTime,
+      cookTime,
       recipeYield,
       cuisine,
       dietary,

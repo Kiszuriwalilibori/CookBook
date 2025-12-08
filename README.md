@@ -91,3 +91,7 @@ Just ask!
 
 
 26.11.2025 zmienilem w interfejsie author w ten sposób, że jest opcjonalne podobnie jak reszta source
+
+
+
+sanity migration run rename-recipe-field --project=mextu0pu --dataset production --no-dry-run
