@@ -41,7 +41,7 @@ function capitalizeFirst(s: unknown): string | null {
     if (!t) return null;
     return t.charAt(0).toUpperCase() + t.slice(1);
 }
-function normalizeHttp(value: unknown): string | null {
+function normalizeUrl(value: unknown): string | null {
     if (typeof value !== "string") return null;
     const t = value.trim();
     return t ? t : null;
@@ -145,8 +145,8 @@ export async function POST(req: NextRequest) {
             }
             if (r.source) {
                 if (typeof r.source.url === "string") {
-                    const v = normalizeHttp(r.source.url);
-                    if (v) setMap.sourceHttp.add(v);
+                    const v = normalizeUrl(r.source.url);
+                    if (v) setMap.sourceUrl.add(v);
                 }
                 if (typeof r.source.book === "string") {
                     const v = normalizeFirstWordCapital(r.source.book);
@@ -173,7 +173,7 @@ export async function POST(req: NextRequest) {
             cuisine: new Set<string>(),
             tags: new Set<string>(),
             title: new Set<string>(),
-            sourceHttp: new Set<string>(),
+            sourceUrl: new Set<string>(),
             sourceBook: new Set<string>(),
             sourceTitle: new Set<string>(),
             sourceAuthor: new Set<string>(),
@@ -185,7 +185,7 @@ export async function POST(req: NextRequest) {
             cuisine: new Set<string>(),
             tags: new Set<string>(),
             title: new Set<string>(),
-            sourceHttp: new Set<string>(),
+            sourceUrl: new Set<string>(),
             sourceBook: new Set<string>(),
             sourceTitle: new Set<string>(),
             sourceAuthor: new Set<string>(),
@@ -207,7 +207,7 @@ export async function POST(req: NextRequest) {
                 tags: getUniqueSorted(fullSets.tags),
                 title: getUniqueSorted(fullSets.title),
                 source: {
-                    url: getUniqueSorted(fullSets.sourceHttp),
+                    url: getUniqueSorted(fullSets.sourceUrl),
                     book: getUniqueSorted(fullSets.sourceBook),
                     title: getUniqueSorted(fullSets.sourceTitle),
                     author: getUniqueSorted(fullSets.sourceAuthor),
@@ -221,7 +221,7 @@ export async function POST(req: NextRequest) {
                 tags: getUniqueSorted(goodSets.tags),
                 title: getUniqueSorted(goodSets.title),
                 source: {
-                    url: getUniqueSorted(goodSets.sourceHttp),
+                    url: getUniqueSorted(goodSets.sourceUrl),
                     book: getUniqueSorted(goodSets.sourceBook),
                     title: getUniqueSorted(goodSets.sourceTitle),
                     author: getUniqueSorted(goodSets.sourceAuthor),
