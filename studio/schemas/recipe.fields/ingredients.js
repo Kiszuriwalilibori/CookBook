@@ -9,10 +9,14 @@ export default {
     {
       type: 'object',
       fields: [
+        {name: 'excluded', title: 'Wykluczone', type: 'boolean'},
         {name: 'name', title: 'Składnik', type: 'string'},
         {name: 'quantity', title: 'Ilość', type: 'number'},
         {name: 'unit', title: 'Jednostka miary', type: 'string'},
       ],
+      initialValue: {
+        excluded: false,
+      },
       preview: {
         select: {quantity: 'quantity', unit: 'unit', name: 'name'},
         prepare({quantity, unit, name}) {
