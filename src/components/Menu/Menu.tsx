@@ -31,13 +31,7 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
                 {navItems.map(item => (
                     <React.Fragment key={item.label}>
                         {item.href ? (
-                            <ListItem
-                                component={Link}
-                                href={item.href}
-                                aria-label={`Navigate to ${item.label}`}
-                                
-                                sx={mobileMenuItemStyle(currentPathname, item.href, item.hidden)}
-                            >
+                            <ListItem component={Link} href={item.href} aria-label={`Navigate to ${item.label}`} onClick={handleDrawerToggle} sx={mobileMenuItemStyle(currentPathname, item.href, item.hidden)}>
                                 <ListItemIcon sx={mobileMenuIconStyle}>{item.icon}</ListItemIcon>
                                 <ListItemText
                                     primary={item.label.trim()}
@@ -90,12 +84,7 @@ const Menu: React.FC<MenuProps> = ({ navItems }) => {
                         {navItems.map((item, index) => (
                             <React.Fragment key={item.label}>
                                 {item.href ? (
-                                    <Box
-                                        component={Link}
-                                        href={item.href}
-                                        sx={desktopItemStyles(currentPathname, "", item.hidden)}
-                                        
-                                    >
+                                    <Box component={Link} href={item.href} sx={desktopItemStyles(currentPathname, "", item.hidden)}>
                                         <Box component="span" sx={desktopMenuIconStyle}>
                                             {item.icon}
                                         </Box>
