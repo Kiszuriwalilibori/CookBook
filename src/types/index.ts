@@ -89,6 +89,7 @@ export interface Recipe {
     ingredients?: Array<{
         name: string;
         quantity: number;
+        unit?: string;
     }>;
     products?: string[];
     preparationSteps?: Array<{

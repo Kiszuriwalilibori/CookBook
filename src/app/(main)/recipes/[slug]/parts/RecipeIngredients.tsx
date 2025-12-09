@@ -8,6 +8,7 @@ interface RecipeIngredientsProps {
 }
 
 export function RecipeIngredients({ recipe }: RecipeIngredientsProps) {
+    console.log(recipe.ingredients);
     return (
         recipe.ingredients &&
         recipe.ingredients.length > 0 && (
@@ -24,16 +25,17 @@ export function RecipeIngredients({ recipe }: RecipeIngredientsProps) {
                             sx={{
                                 ...styles.ingredientsListItem,
                                 display: "flex",
-                                justifyContent: "flex-start",
-                                alignItems: "flex-start",
-                                padding: 0,
+                                justifyContent: "space-between", // ← NAJWAŻNIEJSZE
+                                width: "100%",
                                 listStyle: "none",
+                                padding: 0,
                             }}
                         >
-                            <Typography sx={styles.ingredientsQuantity}>
-                                {ing.quantity || "\u00A0"} {/* Rezerwuje miejsce w kolumnie */}
-                            </Typography>
+                            {/* NAME (lewa strona) */}
                             <Typography sx={styles.ingredientsName}>{ing.name}</Typography>
+
+                            {/* QUANTITY + UNIT (prawa strona) */}
+                            <Typography sx={styles.ingredientsQuantity}> {ing.quantity ? `${ing.quantity} ${ing.unit || ""}` : ""}</Typography>
                         </Box>
                     ))}
                 </List>

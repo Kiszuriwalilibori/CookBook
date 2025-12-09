@@ -174,17 +174,31 @@ export const styles: { [key: string]: SxProps<Theme> } = {
             borderRadius: theme => `${theme.shape.borderRadius}px`,
         },
     },
+    // ingredientsQuantity: {
+    //     fontSize: FONT_SIZE,
+    //     width: "30px", // Stała szerokość kolumny ilości (zwiększ do np. 120px dla dłuższych wartości)
+    //     textAlign: "left",
+    //     minWidth: "30px", // Zapewnia wyrównanie nawet dla pustych ilości
+    // },
+
     ingredientsQuantity: {
         fontSize: FONT_SIZE,
-        width: "30px", // Stała szerokość kolumny ilości (zwiększ do np. 120px dla dłuższych wartości)
-        textAlign: "left",
-        minWidth: "30px", // Zapewnia wyrównanie nawet dla pustych ilości
+        textAlign: "right",
+        whiteSpace: "nowrap", // ensures "200 g" stays together
     },
+
+    // ingredientsName: {
+    //     fontSize: FONT_SIZE,
+    //     flex: 1, // Elastyczna szerokość
+    //     marginLeft: "16px", // Odstęp między kolumnami (dostosuj jeśli potrzeba)
+    //     textAlign: "left",
+    // },
+
     ingredientsName: {
         fontSize: FONT_SIZE,
-        flex: 1, // Elastyczna szerokość
-        marginLeft: "16px", // Odstęp między kolumnami (dostosuj jeśli potrzeba)
+        flex: 1,
         textAlign: "left",
+        paddingRight: "16px",
     },
 };
 

@@ -22,7 +22,8 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
       },
       ingredients[] {
         name,
-        quantity
+        quantity,
+        unit
       },
       products,
       preparationSteps[] {
