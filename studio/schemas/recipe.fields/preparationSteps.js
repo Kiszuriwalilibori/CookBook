@@ -110,5 +110,6 @@ export default {
   ],
   options: {
     sortable: true, // tylko drag & drop – działa idealnie
+    collapsible: true,
   },
 }

@@ -1,6 +1,9 @@
 export default {
   name: 'ingredients',
   title: 'Składniki',
+  options: {
+    collapsible: true,
+  },
   type: 'array',
   of: [
     {
