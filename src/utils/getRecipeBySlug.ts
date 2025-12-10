@@ -1,10 +1,67 @@
-import { groq } from "next-sanity";
-import { client } from "./client";
-import { Recipe } from "@/types";
+// import { groq } from "next-sanity";
+// import { client } from "./client";
+// import { Recipe } from "@/types";
+
+// export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
+//     return client.fetch(
+//         groq`*[_type == "recipe" && slug.current == $slug][0]{
+//       _id,
+//       title,
+//       slug,
+//       description {
+//         title,
+//         content[],
+//         image {
+//           asset-> {
+//             _id,
+//             url
+//           },
+//           alt
+//         },
+//         notes
+//       },
+//       ingredients[] {
+//         name,
+//         quantity,
+//         unit
+//       },
+//       products,
+//       ingredientsNotes,
+//       preparationSteps[] {
+//         content[],
+//         image {
+//           asset-> {
+//             _id,
+//             url
+//           },
+//           alt
+//         },
+//         notes
+//       },
+//       calories,
+//       prepTime,
+//       cookTime,
+//       recipeYield,
+//       cuisine,
+//       dietary,
+//       tags,
+//       notes,
+//       kizia,
+//       status,
+//       source
+//     }`,
+//         { slug } // Param for safe query
+//     );
+// }
+
+
+import { groq } from "next-sanity"
+import { client } from "./client"
+import { Recipe } from "@/types"
 
 export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
-    return client.fetch(
-        groq`*[_type == "recipe" && slug.current == $slug][0]{
+  return client.fetch(
+    groq`*[_type == "recipe" && slug.current == $slug][0]{
       _id,
       title,
       slug,
@@ -23,10 +80,11 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
       ingredients[] {
         name,
         quantity,
-        unit
+        unit,
+        excluded
       },
-      products,
       ingredientsNotes,
+      products,
       preparationSteps[] {
         content[],
         image {
@@ -38,6 +96,7 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
         },
         notes
       },
+      // Stare pole – zostaje na razie
       calories,
       prepTime,
       cookTime,
@@ -48,8 +107,20 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
       notes,
       kizia,
       status,
-      source
+      source,
+      
+      // NOWE: wartości odżywcze na 100 g + całkowita waga
+      nutrition {
+        per100g {
+          calories,
+          protein,
+          fat,
+          carbohydrate
+        },
+        totalWeight,
+        calculatedAt
+      }
     }`,
-        { slug } // Param for safe query
-    );
+    { slug }
+  )
 }
