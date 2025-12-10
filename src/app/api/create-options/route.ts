@@ -281,6 +281,7 @@
 // app/api/create-options/route.ts
 // app/api/create-options/route.ts
 // app/api/create-options/route.ts
+
 import type { NextRequest } from "next/server";
 import { calculateNutritionFromIngredients } from "@/utils/fatsecret";
 
@@ -359,7 +360,7 @@ function stableStringify(obj: unknown): string {
     return `{${keys.map(k => `${JSON.stringify(k)}:${stableStringify(typedObj[k])}`).join(",")}}`;
 }
 
-// === KLUCZOWA POPRAWKA: aktualizacja nutrition (teraz działa!) ===
+// === Typ dla ingredients ===
 interface Ingredient {
     name: string;
     quantity: number;
@@ -367,6 +368,7 @@ interface Ingredient {
     excluded: boolean;
 }
 
+// === Aktualizacja nutrition (zapisuje całą strukturę naraz) ===
 async function updateRecipeNutrition(recipeId: string, ingredients: Ingredient[]) {
     if (!SANITY_TOKEN) {
         console.warn("Brak SANITY_TOKEN – pomijam obliczenia nutrition");
@@ -382,7 +384,6 @@ async function updateRecipeNutrition(recipeId: string, ingredients: Ingredient[]
                     patch: {
                         id: recipeId,
                         set: {
-                            // Teraz Sanity sam stworzy całą strukturę
                             nutrition: {
                                 per100g: result.per100g,
                                 totalWeight: result.totalWeight,
@@ -430,16 +431,16 @@ export async function POST(req: NextRequest) {
 
         const incoming = await req.json().catch(() => null);
 
+        // Pomijamy aktualizację samego dokumentu options
         if (incoming && (incoming["_id"] === "options" || incoming["_type"] === "options")) {
             return new Response(JSON.stringify({ ok: "skipped_self_update" }), { status: 200 });
         }
 
-        // === Jeśli to przepis – liczymy nutrition + options ===
-        if (incoming?._type === "recipe") {
-            const recipeId = incoming._id as string;
-            if (!recipeId) return new Response(JSON.stringify({ error: "Brak _id przepisu" }), { status: 400 });
+        // === KLUCZOWA POPRAWKA: każdy webhook z _id (oprócz options) → traktujemy jako przepis ===
+        const recipeId = incoming?._id as string | undefined;
+        if (recipeId && recipeId !== "options") {
+            console.log(`Wykryto dokument do przeliczenia nutrition: ${recipeId}`);
 
-            // Pobieramy tylko ingredients (z excluded)
             const recipeQuery = `*[_id == $id][0]{ ingredients[] { name, quantity, unit, excluded } }`;
             const recipeUrl = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${encodeURIComponent(recipeQuery)}`;
             const recipeResp = await fetch(recipeUrl, { headers: { Authorization: `Bearer ${SANITY_TOKEN}` } });
@@ -447,7 +448,11 @@ export async function POST(req: NextRequest) {
             if (recipeResp.ok) {
                 const data = await recipeResp.json();
                 const ingredients: Ingredient[] = data.result?.ingredients || [];
-                await updateRecipeNutrition(recipeId, ingredients);
+                if (ingredients.length > 0) {
+                    await updateRecipeNutrition(recipeId, ingredients);
+                } else {
+                    console.log(`Przepis ${recipeId} nie ma składników – pomijam nutrition`);
+                }
             }
         }
 
