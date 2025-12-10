@@ -1,4 +1,4 @@
-// import fieldTranslations from '../fieldTranslations'
+
 import {fieldTranslations} from '../../../src/types/index'
 const t = fieldTranslations
 
