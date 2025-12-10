@@ -447,19 +447,31 @@ export async function POST(req: NextRequest) {
 
         // === KAŻDY DOKUMENT Z _id (oprócz options) → traktujemy jako przepis i przeliczamy nutrition ===
         const recipeId = incoming?._id as string | undefined;
+        // === Przetwarzanie nutrition – poprawione zapytanie z parametrem $id ===
         if (recipeId && recipeId !== "options") {
             console.log(`Przetwarzam nutrition dla przepisu: ${recipeId}`);
 
-            const recipeQuery = `*[_id == $id][0]{ ingredients[] { name, quantity, unit, excluded } }`;
-            const recipeUrl = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${encodeURIComponent(recipeQuery)}`;
+            const query = `*[_id == $id][0]{ ingredients[] { name, quantity, unit, excluded } }`;
+            const url = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}`;
 
             try {
-                const recipeResp = await fetch(recipeUrl, { headers: { Authorization: `Bearer ${SANITY_TOKEN}` } });
+                const resp = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${SANITY_TOKEN}`,
+                    },
+                    body: JSON.stringify({
+                        query,
+                        params: { id: recipeId }, // ← KLUCZOWA LINIA!
+                    }),
+                });
 
-                if (!recipeResp.ok) {
-                    console.error(`Błąd pobierania składników: ${recipeResp.status} ${recipeResp.statusText}`);
+                if (!resp.ok) {
+                    const text = await resp.text();
+                    console.error(`Błąd pobierania składników: ${resp.status} – ${text}`);
                 } else {
-                    const data = await recipeResp.json();
+                    const data = await resp.json();
                     const ingredients: Ingredient[] = data.result?.ingredients || [];
 
                     if (ingredients.length === 0) {
