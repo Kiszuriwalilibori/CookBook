@@ -19,7 +19,9 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
     if (!recipe) {
         notFound(); // 404 if no recipe
     }
-
+    if (recipe) {
+        console.log("recipe", recipe);
+    }
     return (
         <Box id="RecipePage" sx={styles.root}>
             <RecipeHero recipe={recipe} />

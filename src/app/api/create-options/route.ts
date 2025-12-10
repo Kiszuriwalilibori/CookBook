@@ -368,15 +368,68 @@ interface Ingredient {
     excluded: boolean;
 }
 
-// === Aktualizacja nutrition (zapisuje całą strukturę naraz) ===
+// // === Aktualizacja nutrition (zapisuje całą strukturę naraz) ===
+// async function updateRecipeNutrition(recipeId: string, ingredients: Ingredient[]) {
+//     if (!SANITY_TOKEN) {
+//         console.warn("Brak SANITY_TOKEN – pomijam obliczenia nutrition");
+//         return;
+//     }
+
+//     try {
+//         const result = await calculateNutritionFromIngredients(ingredients);
+
+//         const patchBody = {
+//             mutations: [
+//                 {
+//                     patch: {
+//                         id: recipeId,
+//                         set: {
+//                             nutrition: {
+//                                 per100g: result.per100g,
+//                                 totalWeight: result.totalWeight,
+//                                 calculatedAt: new Date().toISOString(),
+//                             },
+//                         },
+//                     },
+//                 },
+//             ],
+//         };
+
+//         const mutateUrl = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/mutate/${SANITY_DATASET}`;
+//         const resp = await fetch(mutateUrl, {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: `Bearer ${SANITY_TOKEN}`,
+//             },
+//             body: JSON.stringify(patchBody),
+//         });
+
+//         if (!resp.ok) {
+//             const text = await resp.text();
+//             console.error("Błąd zapisu nutrition:", resp.status, text);
+//         } else {
+//             console.log(`Nutrition zaktualizowane – ${recipeId} | ${result.totalWeight}g | ${result.per100g.calories} kcal/100g`);
+//         }
+//     } catch (err) {
+//         console.error("Błąd FatSecret/nutrition:", err);
+//     }
+// }
 async function updateRecipeNutrition(recipeId: string, ingredients: Ingredient[]) {
     if (!SANITY_TOKEN) {
         console.warn("Brak SANITY_TOKEN – pomijam obliczenia nutrition");
         return;
     }
 
+    if (ingredients.length === 0) {
+        console.log(`Przepis ${recipeId} nie ma składników – pomijam nutrition`);
+        return;
+    }
+
     try {
+        console.log(`Rozpoczynam obliczanie nutrition dla ${recipeId} – ${ingredients.length} składników`);
         const result = await calculateNutritionFromIngredients(ingredients);
+        console.log(`FatSecret zwrócił: ${result.totalWeight}g, ${result.per100g.calories} kcal/100g`);
 
         const patchBody = {
             mutations: [
@@ -407,15 +460,15 @@ async function updateRecipeNutrition(recipeId: string, ingredients: Ingredient[]
 
         if (!resp.ok) {
             const text = await resp.text();
-            console.error("Błąd zapisu nutrition:", resp.status, text);
+            console.error("Błąd zapisu nutrition do Sanity:", resp.status, text);
         } else {
-            console.log(`Nutrition zaktualizowane – ${recipeId} | ${result.totalWeight}g | ${result.per100g.calories} kcal/100g`);
+            console.log(`Nutrition ZAPISANE – ${recipeId} | ${result.totalWeight}g | ${result.per100g.calories} kcal/100g`);
         }
-    } catch (err) {
-        console.error("Błąd FatSecret/nutrition:", err);
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error("BŁĄD FATSECRET:", message);
     }
 }
-
 // === GŁÓWNY HANDLER ===
 export async function POST(req: NextRequest) {
     try {
