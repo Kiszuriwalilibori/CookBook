@@ -67,6 +67,14 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         py: 0.5,
         listStyle: "none",
     },
+    ingredientsListItemFull: {
+        display: "flex",
+        justifyContent: "space-between",
+        width: "100%",
+        padding: 0,
+        listStyle: "none",
+        py: 0.5,
+    },
     preparationContainer: {
         mb: 4,
     },
@@ -174,25 +182,21 @@ export const styles: { [key: string]: SxProps<Theme> } = {
             borderRadius: theme => `${theme.shape.borderRadius}px`,
         },
     },
-    // ingredientsQuantity: {
-    //     fontSize: FONT_SIZE,
-    //     width: "30px", // Stała szerokość kolumny ilości (zwiększ do np. 120px dla dłuższych wartości)
-    //     textAlign: "left",
-    //     minWidth: "30px", // Zapewnia wyrównanie nawet dla pustych ilości
-    // },
+    
 
     ingredientsQuantity: {
         fontSize: FONT_SIZE,
         textAlign: "right",
-        whiteSpace: "nowrap", // ensures "200 g" stays together
+        whiteSpace: "nowrap", 
+    },
+    ingredientsNotes: {
+        mt: 2,
+        fontSize: "0.9rem",
+        color: "text.primary",
+        fontStyle: "italic",
     },
 
-    // ingredientsName: {
-    //     fontSize: FONT_SIZE,
-    //     flex: 1, // Elastyczna szerokość
-    //     marginLeft: "16px", // Odstęp między kolumnami (dostosuj jeśli potrzeba)
-    //     textAlign: "left",
-    // },
+    
 
     ingredientsName: {
         fontSize: FONT_SIZE,

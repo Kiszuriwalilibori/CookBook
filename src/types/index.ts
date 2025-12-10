@@ -90,7 +90,9 @@ export interface Recipe {
         name: string;
         quantity: number;
         unit?: string;
+        excluded: boolean;
     }>;
+    ingredientsNotes?: string;
     products?: string[];
     preparationSteps?: Array<{
         _key?: string; //

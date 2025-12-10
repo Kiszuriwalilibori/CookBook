@@ -26,6 +26,7 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
         unit
       },
       products,
+      ingredientsNotes,
       preparationSteps[] {
         content[],
         image {
