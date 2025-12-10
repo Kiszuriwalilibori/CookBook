@@ -282,6 +282,7 @@
 // app/api/create-options/route.ts
 // app/api/create-options/route.ts
 
+// app/api/create-options/route.ts
 import type { NextRequest } from "next/server";
 import { calculateNutritionFromIngredients } from "@/utils/fatsecret";
 
@@ -368,53 +369,7 @@ interface Ingredient {
     excluded: boolean;
 }
 
-// // === Aktualizacja nutrition (zapisuje całą strukturę naraz) ===
-// async function updateRecipeNutrition(recipeId: string, ingredients: Ingredient[]) {
-//     if (!SANITY_TOKEN) {
-//         console.warn("Brak SANITY_TOKEN – pomijam obliczenia nutrition");
-//         return;
-//     }
-
-//     try {
-//         const result = await calculateNutritionFromIngredients(ingredients);
-
-//         const patchBody = {
-//             mutations: [
-//                 {
-//                     patch: {
-//                         id: recipeId,
-//                         set: {
-//                             nutrition: {
-//                                 per100g: result.per100g,
-//                                 totalWeight: result.totalWeight,
-//                                 calculatedAt: new Date().toISOString(),
-//                             },
-//                         },
-//                     },
-//                 },
-//             ],
-//         };
-
-//         const mutateUrl = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/mutate/${SANITY_DATASET}`;
-//         const resp = await fetch(mutateUrl, {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json",
-//                 Authorization: `Bearer ${SANITY_TOKEN}`,
-//             },
-//             body: JSON.stringify(patchBody),
-//         });
-
-//         if (!resp.ok) {
-//             const text = await resp.text();
-//             console.error("Błąd zapisu nutrition:", resp.status, text);
-//         } else {
-//             console.log(`Nutrition zaktualizowane – ${recipeId} | ${result.totalWeight}g | ${result.per100g.calories} kcal/100g`);
-//         }
-//     } catch (err) {
-//         console.error("Błąd FatSecret/nutrition:", err);
-//     }
-// }
+// === Aktualizacja nutrition (z pełnym logowaniem) ===
 async function updateRecipeNutrition(recipeId: string, ingredients: Ingredient[]) {
     if (!SANITY_TOKEN) {
         console.warn("Brak SANITY_TOKEN – pomijam obliczenia nutrition");
@@ -469,6 +424,7 @@ async function updateRecipeNutrition(recipeId: string, ingredients: Ingredient[]
         console.error("BŁĄD FATSECRET:", message);
     }
 }
+
 // === GŁÓWNY HANDLER ===
 export async function POST(req: NextRequest) {
     try {
@@ -489,23 +445,32 @@ export async function POST(req: NextRequest) {
             return new Response(JSON.stringify({ ok: "skipped_self_update" }), { status: 200 });
         }
 
-        // === KLUCZOWA POPRAWKA: każdy webhook z _id (oprócz options) → traktujemy jako przepis ===
+        // === KAŻDY DOKUMENT Z _id (oprócz options) → traktujemy jako przepis i przeliczamy nutrition ===
         const recipeId = incoming?._id as string | undefined;
         if (recipeId && recipeId !== "options") {
-            console.log(`Wykryto dokument do przeliczenia nutrition: ${recipeId}`);
+            console.log(`Przetwarzam nutrition dla przepisu: ${recipeId}`);
 
             const recipeQuery = `*[_id == $id][0]{ ingredients[] { name, quantity, unit, excluded } }`;
             const recipeUrl = `https://${SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/${SANITY_DATASET}?query=${encodeURIComponent(recipeQuery)}`;
-            const recipeResp = await fetch(recipeUrl, { headers: { Authorization: `Bearer ${SANITY_TOKEN}` } });
 
-            if (recipeResp.ok) {
-                const data = await recipeResp.json();
-                const ingredients: Ingredient[] = data.result?.ingredients || [];
-                if (ingredients.length > 0) {
-                    await updateRecipeNutrition(recipeId, ingredients);
+            try {
+                const recipeResp = await fetch(recipeUrl, { headers: { Authorization: `Bearer ${SANITY_TOKEN}` } });
+
+                if (!recipeResp.ok) {
+                    console.error(`Błąd pobierania składników: ${recipeResp.status} ${recipeResp.statusText}`);
                 } else {
-                    console.log(`Przepis ${recipeId} nie ma składników – pomijam nutrition`);
+                    const data = await recipeResp.json();
+                    const ingredients: Ingredient[] = data.result?.ingredients || [];
+
+                    if (ingredients.length === 0) {
+                        console.log(`Przepis ${recipeId} nie ma składników – pomijam nutrition`);
+                    } else {
+                        console.log(`Znaleziono ${ingredients.length} składników – uruchamiam FatSecret`);
+                        await updateRecipeNutrition(recipeId, ingredients);
+                    }
                 }
+            } catch (err) {
+                console.error("Błąd podczas pobierania przepisu:", err);
             }
         }
 
