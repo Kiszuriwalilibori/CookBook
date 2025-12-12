@@ -11,35 +11,17 @@ if (!CONSUMER_KEY || !CONSUMER_SECRET) {
     throw new Error("FatSecret credentials are missing");
 }
 
-// Hardcoded product
-const PRODUCT_NAME = "Apple" as const;
+// Hardcoded Polish product
+const PRODUCT_NAME = "jabłko" as const;
 
 // Minimal types
-type Nutrient = {
-    nutrient: string;
-    value: string;
-    unit: string;
-};
+type Nutrient = { nutrient: string; value: string; unit: string };
+type FatSecretServing = { food_nutrition?: Nutrient | Nutrient[] };
+type FatSecretFood = { food_id: string; food_name: string; servings?: { serving: FatSecretServing | FatSecretServing[] } };
+type FoodsSearchResponse = { foods?: { food: FatSecretFood[] } };
+type FoodGetResponse = { food?: FatSecretFood };
 
-type FatSecretServing = {
-    food_nutrition?: Nutrient | Nutrient[];
-};
-
-type FatSecretFood = {
-    food_id: string;
-    food_name: string;
-    servings?: { serving: FatSecretServing | FatSecretServing[] };
-};
-
-type FoodsSearchResponse = {
-    foods?: { food: FatSecretFood[] };
-};
-
-type FoodGetResponse = {
-    food?: FatSecretFood;
-};
-
-// Setup OAuth 1.0a
+// OAuth setup
 const oauth = new OAuth({
     consumer: { key: CONSUMER_KEY, secret: CONSUMER_SECRET },
     signature_method: "HMAC-SHA1",
@@ -48,51 +30,66 @@ const oauth = new OAuth({
     },
 });
 
-// Signed GET request helper with improved logging
+// Signed GET request
 async function signedGet<T>(url: string, extraParams: Record<string, string> = {}): Promise<T> {
-    const requestData = {
-        url,
-        method: "GET",
-        data: extraParams,
-    };
-
-    // Type-safe headers
+    const requestData = { url, method: "GET", data: extraParams };
     const headers = oauth.toHeader(oauth.authorize(requestData)) as unknown as Record<string, string>;
-
     const res = await fetch(url + "?" + new URLSearchParams(extraParams), { headers });
 
-    // Read raw response text
     const text = await res.text();
     console.log("Raw FatSecret response text:", text);
 
-    // Try parsing JSON
     let data: T;
     try {
         data = JSON.parse(text);
-    } catch (err) {
-        console.error("Failed to parse JSON:", err);
+    } catch {
         data = {} as T;
     }
 
     console.log("Parsed FatSecret response:", data);
-
-    if (!res.ok) {
-        throw new Error(`HTTP error ${res.status}`);
-    }
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
 
     return data;
 }
 
-// Fetch nutrition for PRODUCT_NAME
+// Translate Polish -> English via LibreTranslate
+async function translateToEnglish(polishText: string): Promise<string> {
+    try {
+        const res = await fetch("https://libretranslate.com/translate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                q: polishText,
+                source: "pl",
+                target: "en",
+                format: "text",
+            }),
+        });
+
+        const rawData = await res.json();
+        const data = rawData as { translatedText: string };
+
+        console.log(`Translated "${polishText}" -> "${data.translatedText}"`);
+        return data.translatedText;
+    } catch (err) {
+        console.error("Translation failed:", err);
+        return polishText; // fallback if translation fails
+    }
+}
+
+// Fetch nutrition
 async function getNutritionForProduct() {
     const baseUrl = "https://platform.fatsecret.com/rest/server.api";
 
-    // Search for the food
+    // Translate Polish -> English
+    const productEnglish = await translateToEnglish(PRODUCT_NAME);
+
+    // Search food
     const searchData = await signedGet<FoodsSearchResponse>(baseUrl, {
         method: "foods.search",
         format: "json",
         locale: "en_US",
-        search_expression: PRODUCT_NAME,
+        search_expression: productEnglish,
     });
 
     const foods = searchData.foods?.food;
