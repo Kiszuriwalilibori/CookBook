@@ -1,4 +1,4 @@
-import {getTranslation} from '@/models/fieldTranslations'
+import {getTranslation} from 'src/models/fieldTranslations'
 export default {
   name: 'cookTime',
   title: getTranslation('cookTime'),
