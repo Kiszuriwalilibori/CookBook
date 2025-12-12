@@ -80,7 +80,7 @@ async function getNutritionForProduct() {
     const searchExpression = encodeURIComponent(PRODUCT_NAME);
     const searchUrl = `https://platform.fatsecret.com/rest/server.api?method=foods.search&format=json&locale=pl_PL`;
     const searchData = await signedGet<FoodsSearchResponse>(searchUrl, { search_expression: searchExpression });
-
+    console.log("Raw searchData:", searchData);
     const foods = searchData.foods?.food;
     if (!foods || foods.length === 0) return null;
 
