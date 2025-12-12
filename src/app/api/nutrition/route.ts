@@ -11,7 +11,7 @@ if (!CONSUMER_KEY || !CONSUMER_SECRET) {
 }
 
 // Hardcoded product
-const PRODUCT_NAME = "jabłko" as const;
+const PRODUCT_NAME = "Apple" as const;
 
 // Minimal types
 type Nutrient = {
