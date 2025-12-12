@@ -48,7 +48,7 @@ const oauth = new OAuth({
     },
 });
 
-// Signed GET request helper
+// Signed GET request helper with improved logging
 async function signedGet<T>(url: string, extraParams: Record<string, string> = {}): Promise<T> {
     const requestData = {
         url,
@@ -56,18 +56,31 @@ async function signedGet<T>(url: string, extraParams: Record<string, string> = {
         data: extraParams,
     };
 
-    // Safe TypeScript cast for headers
+    // Type-safe headers
     const headers = oauth.toHeader(oauth.authorize(requestData)) as unknown as Record<string, string>;
 
     const res = await fetch(url + "?" + new URLSearchParams(extraParams), { headers });
-    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
 
-    const data = await res.json();
+    // Read raw response text
+    const text = await res.text();
+    console.log("Raw FatSecret response text:", text);
 
-    // Vercel logging of raw response
-    console.log("Raw FatSecret response:", JSON.stringify(data, null, 2));
+    // Try parsing JSON
+    let data: T;
+    try {
+        data = JSON.parse(text);
+    } catch (err) {
+        console.error("Failed to parse JSON:", err);
+        data = {} as T;
+    }
 
-    return data as T;
+    console.log("Parsed FatSecret response:", data);
+
+    if (!res.ok) {
+        throw new Error(`HTTP error ${res.status}`);
+    }
+
+    return data;
 }
 
 // Fetch nutrition for PRODUCT_NAME
@@ -78,11 +91,9 @@ async function getNutritionForProduct() {
     const searchData = await signedGet<FoodsSearchResponse>(baseUrl, {
         method: "foods.search",
         format: "json",
-        locale: "pl_PL",
+        locale: "en_US",
         search_expression: PRODUCT_NAME,
     });
-
-    console.log("Search results:", JSON.stringify(searchData, null, 2));
 
     const foods = searchData.foods?.food;
     if (!foods || foods.length === 0) return null;
