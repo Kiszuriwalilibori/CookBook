@@ -12,7 +12,7 @@ if (!CONSUMER_KEY || !CONSUMER_SECRET) {
 }
 
 // Hardcoded product
-const PRODUCT_NAME = "jabłko" as const;
+const PRODUCT_NAME = "Apple" as const;
 
 // Minimal types
 type Nutrient = {
@@ -61,12 +61,20 @@ async function signedGet<T>(url: string, extraParams: Record<string, string> = {
 
     const res = await fetch(url + "?" + new URLSearchParams(extraParams), { headers });
     if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-    return (await res.json()) as T;
+
+    const data = await res.json();
+
+    // Vercel logging of raw response
+    console.log("Raw FatSecret response:", JSON.stringify(data, null, 2));
+
+    return data as T;
 }
 
 // Fetch nutrition for PRODUCT_NAME
 async function getNutritionForProduct() {
     const baseUrl = "https://platform.fatsecret.com/rest/server.api";
+
+    // Search for the food
     const searchData = await signedGet<FoodsSearchResponse>(baseUrl, {
         method: "foods.search",
         format: "json",
@@ -74,10 +82,14 @@ async function getNutritionForProduct() {
         search_expression: PRODUCT_NAME,
     });
 
+    console.log("Search results:", JSON.stringify(searchData, null, 2));
+
     const foods = searchData.foods?.food;
     if (!foods || foods.length === 0) return null;
 
     const foodId = foods[0].food_id;
+
+    // Get food details
     const foodData = await signedGet<FoodGetResponse>(baseUrl, {
         method: "food.get",
         format: "json",
@@ -116,10 +128,13 @@ async function getNutritionForProduct() {
 export async function GET() {
     try {
         const nutrition = await getNutritionForProduct();
-        if (!nutrition) return NextResponse.json({ error: "Food not found" }, { status: 404 });
+        if (!nutrition) {
+            console.warn(`Food not found for "${PRODUCT_NAME}"`);
+            return NextResponse.json({ error: "Food not found" }, { status: 404 });
+        }
         return NextResponse.json(nutrition);
     } catch (err) {
-        console.error(err);
+        console.error("Error fetching nutrition:", err);
         return NextResponse.json({ error: "Failed to fetch nutrition" }, { status: 500 });
     }
 }
