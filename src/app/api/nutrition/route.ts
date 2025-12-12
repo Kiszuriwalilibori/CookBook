@@ -1,5 +1,6 @@
 // src/app/api/nutrition/route.ts
 import { NextResponse } from "next/server";
+import OAuth from "oauth-1.0a";
 import crypto from "crypto";
 import fetch from "node-fetch";
 
@@ -11,7 +12,7 @@ if (!CONSUMER_KEY || !CONSUMER_SECRET) {
 }
 
 // Hardcoded product
-const PRODUCT_NAME = "Apple" as const;
+const PRODUCT_NAME = "jabłko" as const;
 
 // Minimal types
 type Nutrient = {
@@ -38,55 +39,51 @@ type FoodGetResponse = {
     food?: FatSecretFood;
 };
 
-// Manual OAuth 1.0a signing
-function signRequest(params: Record<string, string>, method: string, url: string): string {
-    const sorted = Object.keys(params)
-        .sort()
-        .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
-        .join("&");
-    const base = `${method.toUpperCase()}&${encodeURIComponent(url)}&${encodeURIComponent(sorted)}`;
-    const key = `${CONSUMER_SECRET}&`;
-    return crypto.createHmac("sha1", key).update(base).digest("base64");
-}
+// Setup OAuth 1.0a
+const oauth = new OAuth({
+    consumer: { key: CONSUMER_KEY, secret: CONSUMER_SECRET },
+    signature_method: "HMAC-SHA1",
+    hash_function(base_string: string, key: string) {
+        return crypto.createHmac("sha1", key).update(base_string).digest("base64");
+    },
+});
 
-// Helper to make signed GET requests
+// Signed GET request helper
 async function signedGet<T>(url: string, extraParams: Record<string, string> = {}): Promise<T> {
-    const oauthParams: Record<string, string> = {
-        oauth_consumer_key: CONSUMER_KEY,
-        oauth_signature_method: "HMAC-SHA1",
-        oauth_timestamp: Math.floor(Date.now() / 1000).toString(),
-        oauth_nonce: crypto.randomBytes(16).toString("hex"),
-        oauth_version: "1.0",
-        ...extraParams,
+    const requestData = {
+        url,
+        method: "GET",
+        data: extraParams,
     };
 
-    const signature = signRequest(oauthParams, "GET", url);
-    oauthParams.oauth_signature = signature;
+    // Safe TypeScript cast for headers
+    const headers = oauth.toHeader(oauth.authorize(requestData)) as unknown as Record<string, string>;
 
-    // Build Authorization header
-    const authHeader =
-        "OAuth " +
-        Object.entries(oauthParams)
-            .map(([k, v]) => `${encodeURIComponent(k)}="${encodeURIComponent(v)}"`)
-            .join(", ");
-
-    const res = await fetch(url, { headers: { Authorization: authHeader } });
+    const res = await fetch(url + "?" + new URLSearchParams(extraParams), { headers });
     if (!res.ok) throw new Error(`HTTP error ${res.status}`);
     return (await res.json()) as T;
 }
 
 // Fetch nutrition for PRODUCT_NAME
 async function getNutritionForProduct() {
-    const searchExpression = encodeURIComponent(PRODUCT_NAME);
-    const searchUrl = `https://platform.fatsecret.com/rest/server.api?method=foods.search&format=json&locale=pl_PL`;
-    const searchData = await signedGet<FoodsSearchResponse>(searchUrl, { search_expression: searchExpression });
-    console.log("Raw searchData:", searchData);
+    const baseUrl = "https://platform.fatsecret.com/rest/server.api";
+    const searchData = await signedGet<FoodsSearchResponse>(baseUrl, {
+        method: "foods.search",
+        format: "json",
+        locale: "pl_PL",
+        search_expression: PRODUCT_NAME,
+    });
+
     const foods = searchData.foods?.food;
     if (!foods || foods.length === 0) return null;
 
     const foodId = foods[0].food_id;
-    const foodUrl = `https://platform.fatsecret.com/rest/server.api?method=food.get&format=json&food_id=${foodId}`;
-    const foodData = await signedGet<FoodGetResponse>(foodUrl);
+    const foodData = await signedGet<FoodGetResponse>(baseUrl, {
+        method: "food.get",
+        format: "json",
+        food_id: foodId,
+    });
+
     const food = foodData.food;
     if (!food) return null;
 
