@@ -18,68 +18,6 @@ interface PortableTextBlock {
     }>; // Expand for other annotations as needed
 }
 
-// export interface Recipe {
-//     _id: string;
-//     title: string;
-//     slug?: {
-//         current: string;
-//     };
-//     description?: {
-//         title?: string;
-//         firstBlockText?: {
-//             children?: Array<{
-//                 text: string;
-//             }>;
-//         };
-//         content?: PortableTextBlock[];
-//         image?: {
-//             asset?: {
-//                 _id: string;
-//                 url?: string;
-//             };
-//             alt?: string;
-//         };
-//         notes?: string;
-//     };
-//     ingredients?: Array<{
-//         name: string;
-//         quantity: number;
-//         unit?: string;
-//         excluded: boolean;
-//     }>;
-//     ingredientsNotes?: string;
-//     products?: string[];
-//     preparationSteps?: Array<{
-//         _key?: string; //
-//         content?: PortableTextBlock[];
-//         image?: {
-//             asset?: {
-//                 _id: string;
-//                 url?: string;
-//             };
-//             alt?: string;
-//         };
-//         notes?: string;
-//     }>;
-//     calories?: number;
-//     prepTime?: number;
-//     cookTime?: number;
-//     recipeYield?: number;
-//     cuisine?: string;
-//     dietary?: string[];
-//     tags?: string[];
-//     notes?: string;
-//     kizia?: boolean;
-//     status: Status;
-//     source?: {
-//         url?: string;
-//         book?: string;
-//         title?: string;
-//         author?: string;
-//         where?: string;
-//     };
-// }
-
 
 export interface Recipe {
     _id: string;

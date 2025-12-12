@@ -1,4 +1,9 @@
-export const fieldTranslations: Record<string, string> = {
+import { Recipe } from "./recipe";
+type SourceKeys = `source.${keyof NonNullable<Recipe["source"]>}`;
+type AllowedRecipeFields = keyof Recipe | SourceKeys;
+
+
+export const fieldTranslations: Partial<Record<AllowedRecipeFields, string>> = {
     title: "Nazwa",
     calories: "Kalorie",
     cookTime: "Czas aktywnej pracy",
