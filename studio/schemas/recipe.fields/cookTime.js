@@ -1,10 +1,7 @@
-
-import {fieldTranslations} from '../../../src/types/index'
-const t = fieldTranslations
-
+import {getTranslation} from '@/models/fieldTranslations'
 export default {
   name: 'cookTime',
-  title: t.cookTime,
+  title: getTranslation('cookTime'),
   type: 'number',
   description: 'Czas faktycznej, aktywnej pracy',
 }

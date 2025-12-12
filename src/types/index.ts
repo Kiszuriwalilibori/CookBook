@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { fieldTranslations } from "./fieldTranslations";
 import { Recipe } from "./recipe";
 
 export interface MenuItem {
@@ -48,86 +47,5 @@ const StatusOptions: { title: string; value: Status }[] = [
     { title: "Forget", value: "Forget" },
 ];
 
-// export interface Recipe {
-//     _id: string;
-//     title: string;
-//     slug?: {
-//         current: string;
-//     };
-//     description?: {
-//         title?: string;
-//         firstBlockText?: {
-//             children?: Array<{
-//                 text: string;
-//             }>;
-//         };
-//         content?: PortableTextBlock[];
-//         image?: {
-//             asset?: {
-//                 _id: string;
-//                 url?: string;
-//             };
-//             alt?: string;
-//         };
-//         notes?: string;
-//     };
-//     ingredients?: Array<{
-//         name: string;
-//         quantity: number;
-//         unit?: string;
-//         excluded: boolean;
-//     }>;
-//     ingredientsNotes?: string;
-//     products?: string[];
-//     preparationSteps?: Array<{
-//         _key?: string; //
-//         content?: PortableTextBlock[];
-//         image?: {
-//             asset?: {
-//                 _id: string;
-//                 url?: string;
-//             };
-//             alt?: string;
-//         };
-//         notes?: string;
-//     }>;
-//     calories?: number;
-//     prepTime?: number;
-//     cookTime?: number;
-//     recipeYield?: number;
-//     cuisine?: string;
-//     dietary?: string[];
-//     tags?: string[];
-//     notes?: string;
-//     kizia?: boolean;
-//     status: Status;
-//     source?: {
-//         url?: string;
-//         book?: string;
-//         title?: string;
-//         author?: string;
-//         where?: string;
-//     };
-// }
-
-// export const fieldTranslations: Record<string, string> = {
-//     title: "Nazwa",
-//     calories: "Kalorie",
-//     cookTime: "Czas aktywnej pracy",
-//     dietary: "Rodzaj diety",
-//     tags: "Etykiety",
-//     cuisine: "Kuchnia",
-//     prepTime: "Całkowity czas przygotowania",
-//     recipeYield: "Porcje",
-//     notes: "Notatki",
-//     products: "Produkt",
-//     status: "Status",
-//     "source.url": "Link",
-//     "source.book": "Tytuł książki",
-//     "source.title": "Tytuł książki",
-//     "source.author": "Autor książki",
-//     "source.where": "Katalog",
-// };
-
-export { fieldTranslations, StatusOptions };
+export { StatusOptions };
 export type { Recipe, Status };

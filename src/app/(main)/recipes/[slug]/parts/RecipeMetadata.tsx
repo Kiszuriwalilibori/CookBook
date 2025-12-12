@@ -1,10 +1,9 @@
 // app/recipes/[slug]/parts/RecipeMetadata.tsx
 import { Typography, Box } from "@mui/material";
-import  {fieldTranslations,Recipe} from "@/types";
-import { styles } from "../styles";
+import { Recipe } from "@/types";
 
-// Funkcja do pobierania tłumaczenia etykiety
-const getLabel = (field: string): string => fieldTranslations[field] || field;
+import { styles } from "../styles";
+import { getTranslation } from "@/models/fieldTranslations";
 
 interface RecipeMetadataProps {
     recipe: Recipe;
@@ -14,11 +13,11 @@ export function RecipeMetadata({ recipe }: RecipeMetadataProps) {
     return (
         <Box id="RecipeMetadata" sx={styles.metadata}>
             <Typography component="div">
-                ⏱️ {getLabel("prepTime")}: {recipe.prepTime} min
+                ⏱️ {getTranslation("prepTime")}: {recipe.prepTime} min
             </Typography>
             {recipe.cookTime && (
                 <Typography component="div">
-                    ⏲️ {getLabel("cookTime")}: {recipe.cookTime} min
+                    ⏲️ {getTranslation("cookTime")}: {recipe.cookTime} min
                 </Typography>
             )}
             {recipe.recipeYield && (
@@ -30,17 +29,17 @@ export function RecipeMetadata({ recipe }: RecipeMetadataProps) {
             {recipe.cuisine && <Typography component="div">🌍 {recipe.cuisine}</Typography>}
             {recipe.calories && (
                 <Typography component="div">
-                    🔥 {getLabel("calories")}: {recipe.calories}
+                    🔥 {getTranslation("calories")}: {recipe.calories}
                 </Typography>
             )}
             {recipe.dietary && recipe.dietary.length > 0 && (
                 <Typography component="div">
-                    🚫 {getLabel("dietary")}: {recipe.dietary.join(", ")}
+                    🚫 {getTranslation("dietary")}: {recipe.dietary.join(", ")}
                 </Typography>
             )}
             {recipe.tags && recipe.tags.length > 0 && (
                 <Typography component="div">
-                    🏷️ {getLabel("tags")}: {recipe.tags.join(", ")}
+                    🏷️ {getTranslation("tags")}: {recipe.tags.join(", ")}
                 </Typography>
             )}
         </Box>

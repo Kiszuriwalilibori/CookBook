@@ -1,6 +1,6 @@
 import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
-import { fieldTranslations } from "@/types";
 import { BaseFilterableKeys, FilterableRecipeKeys, SourceKeys, Status } from "@/types";
+import { getTranslation } from "./fieldTranslations";
 
 const INITIAL_OPTIONS: string[] = [];
 const GENERAL_PLACEHOLDER = "Wszystkie";
@@ -12,7 +12,7 @@ export function defineField(config: Partial<FilterField> & { key: FilterableReci
         requiredAdmin: false,
         placeholder: GENERAL_PLACEHOLDER,
         ...config,
-        label: fieldTranslations[config.key],
+        label: getTranslation(config.key),
     } as FilterField;
 }
 
