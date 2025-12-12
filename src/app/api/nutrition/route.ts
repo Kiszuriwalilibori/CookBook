@@ -77,8 +77,10 @@ async function signedGet<T>(url: string, extraParams: Record<string, string> = {
 
 // Fetch nutrition for PRODUCT_NAME
 async function getNutritionForProduct() {
-    const searchUrl = "https://platform.fatsecret.com/rest/server.api?method=foods.search&format=json&locale=pl_PL";
-    const searchData = await signedGet<FoodsSearchResponse>(searchUrl, { search_expression: PRODUCT_NAME });
+    const searchExpression = encodeURIComponent(PRODUCT_NAME);
+    const searchUrl = `https://platform.fatsecret.com/rest/server.api?method=foods.search&format=json&locale=pl_PL`;
+    const searchData = await signedGet<FoodsSearchResponse>(searchUrl, { search_expression: searchExpression });
+
     const foods = searchData.foods?.food;
     if (!foods || foods.length === 0) return null;
 
