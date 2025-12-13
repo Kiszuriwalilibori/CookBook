@@ -36,16 +36,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         setFilters(currentFilters);
 
         // Detect if ONLY title is filled
-        const hasOnlyTitle =
-            !!currentFilters.title &&
-            Object.entries(currentFilters).every(([key, value]) => {
-                if (key === "title") return true;
-                if (Array.isArray(value)) return value.length === 0;
-                return value === "" || value == null;
-            });
-
-        // CASE 1: Only title → try direct navigation
-        if (hasOnlyTitle && currentFilters.title) {
+        if (currentFilters.title) {
             const title = (currentFilters.title as string).trim();
             const slug = await searchRecipeByTitle(title);
 
@@ -55,13 +46,12 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
                 return;
             }
 
-            // Optional: you can show a toast here that no exact match was found
-            // For now we just fall through to normal search
+            // Optional: You can show a toast here that no exact match was found
         }
 
         // CASE 2: Normal filtering → go to /recipes list
         const queryString = buildQueryString(currentFilters);
-        
+
         router.push(`/recipes${queryString ? `?${queryString}` : ""}`);
         onClose?.();
     }, [apply, filters, setFilters, router, onClose]);
