@@ -2,10 +2,11 @@
 // import {PatchEvent, set} from 'sanity'
 // import {TextInput, Stack, Card, Flex, Text} from '@sanity/ui'
 // import {createClient} from 'next-sanity'
-// import {styles} from './DietaryInput.styles'
-// import {getTranslation} from '../../src/models/fieldTranslations'
 
-// interface DietaryInputProps {
+// import {getTranslation} from '../../src/models/fieldTranslations'
+// import { styles } from './DietaryInput.styles'
+
+// interface TagsInputProps {
 //   value?: string[]
 //   onChange: (event: PatchEvent) => void
 //   schemaType?: {title: string}
@@ -15,37 +16,35 @@
 
 // let cachedOptions: string[] | null = null
 
-// export default function DietaryInput({
+// export default function TagsInput({
 //   value = [],
 //   onChange,
 //   schemaType,
 //   readOnly,
-// }: DietaryInputProps) {
+// }: TagsInputProps) {
 //   const [options, setOptions] = useState<string[]>([])
 //   const [input, setInput] = useState('')
 //   const [highlightedIndex, setHighlightedIndex] = useState(-1)
-//   const [isExpanded, setIsExpanded] = useState(false) // ⬅️ whole field accordion
+//   const [isExpanded, setIsExpanded] = useState(false)
 //   const fetchTimeout = useRef<NodeJS.Timeout | null>(null)
-//   const containerRef = useRef<HTMLDivElement>(null) // For detecting clicks outside
+//   const containerRef = useRef<HTMLDivElement>(null)
 
-//   const id = 'dietary-' + Math.random().toString(36).slice(2, 11)
-//   const title = getTranslation(schemaType!.title)
+//   const id = 'tags-' + Math.random().toString(36).slice(2, 11)
+//   const title = getTranslation(schemaType?.title || 'Tags')
 
-//   // Close the accordion if the user clicks outside
+//   // Close accordion on outside click
 //   const handleClickOutside = useCallback((event: MouseEvent) => {
 //     if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
 //       setIsExpanded(false)
 //     }
 //   }, [])
 
-//   // Register click outside listener
 //   useEffect(() => {
 //     document.addEventListener('mousedown', handleClickOutside)
-//     return () => {
-//       document.removeEventListener('mousedown', handleClickOutside)
-//     }
+//     return () => document.removeEventListener('mousedown', handleClickOutside)
 //   }, [handleClickOutside])
 
+//   // Fetch options from Sanity (replace your query if needed)
 //   const fetchOptions = useCallback(() => {
 //     if (cachedOptions) {
 //       setOptions(cachedOptions)
@@ -60,7 +59,7 @@
 //     })
 
 //     client
-//       .fetch<string[]>(`*[_id=="options"][0].fullSummary.dietary`)
+//       .fetch<string[]>(`*[_id=="options"][0].fullSummary.tags`)
 //       .then((data) => {
 //         cachedOptions = Array.isArray(data) ? data : []
 //         setOptions(cachedOptions)
@@ -96,7 +95,7 @@
 //   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
 //     if (event.key === 'Enter' && highlightedIndex >= 0) {
 //       event.preventDefault()
-//       addValue(filteredOptions[highlightedIndex]) // Select highlighted option
+//       addValue(filteredOptions[highlightedIndex])
 //     } else if (event.key === 'ArrowDown') {
 //       setHighlightedIndex((prev) => Math.min(prev + 1, filteredOptions.length - 1))
 //     } else if (event.key === 'ArrowUp') {
@@ -106,7 +105,7 @@
 
 //   return (
 //     <Stack space={2} ref={containerRef}>
-//       {/* 🔘 Accordion header */}
+//       {/* Accordion header */}
 //       <Card
 //         padding={3}
 //         radius={2}
@@ -118,14 +117,12 @@
 //         <Flex align="center" justify="space-between">
 //           <Text weight="semibold">{title}</Text>
 //           <Text size={1} muted>
-//             {value.length > 0
-//               ? value.join(', ') // Show selected items instead of count
-//               : 'Add'}
+//             {value.length > 0 ? value.join(', ') : 'Add'}
 //           </Text>
 //         </Flex>
 //       </Card>
 
-//       {/* ⬇️ Collapsible content */}
+//       {/* Collapsible content */}
 //       {isExpanded && (
 //         <Stack space={2}>
 //           <div style={styles.selectedList}>
@@ -147,9 +144,7 @@
 //             id={id}
 //             value={input}
 //             readOnly={readOnly}
-//             onChange={(event) => {
-//               setInput(event.currentTarget.value)
-//             }}
+//             onChange={(event) => setInput(event.currentTarget.value)}
 //             onKeyDown={handleKeyDown}
 //           />
 
@@ -184,10 +179,10 @@ import React, {useState, useEffect, useRef, useCallback} from 'react'
 import {PatchEvent, set} from 'sanity'
 import {TextInput, Stack, Card, Flex, Text} from '@sanity/ui'
 import {createClient} from 'next-sanity'
-import {styles} from './DietaryInput.styles'
+import {styles} from './TagsInput.styles'
 import {getTranslation} from '../../src/models/fieldTranslations'
 
-interface DietaryInputProps {
+interface TagsInputProps {
   value?: string[]
   onChange: (event: PatchEvent) => void
   schemaType?: {title: string}
@@ -197,12 +192,7 @@ interface DietaryInputProps {
 
 let cachedOptions: string[] | null = null
 
-export default function DietaryInput({
-  value = [],
-  onChange,
-  schemaType,
-  readOnly,
-}: DietaryInputProps) {
+export default function TagsInput({value = [], onChange, schemaType, readOnly}: TagsInputProps) {
   const [options, setOptions] = useState<string[]>([])
   const [input, setInput] = useState('')
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
@@ -210,8 +200,8 @@ export default function DietaryInput({
   const fetchTimeout = useRef<NodeJS.Timeout | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const id = 'dietary-' + Math.random().toString(36).slice(2, 11)
-  const title = getTranslation(schemaType!.title)
+  const id = 'tags-' + Math.random().toString(36).slice(2, 11)
+  const title = getTranslation(schemaType?.title || 'Tags')
 
   const handleClickOutside = useCallback((event: MouseEvent) => {
     if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -238,7 +228,7 @@ export default function DietaryInput({
     })
 
     client
-      .fetch<string[]>(`*[_id=="options"][0].fullSummary.dietary`)
+      .fetch<string[]>(`*[_id=="options"][0].fullSummary.tags`)
       .then((data) => {
         cachedOptions = Array.isArray(data) ? data : []
         setOptions(cachedOptions)
