@@ -1,4 +1,5 @@
 // recipe.fields/preparationSteps.js
+import PreparationStepsInput from '../../components/PreparationStepsInput'
 
 export default {
   name: 'preparationSteps',
@@ -111,5 +112,8 @@ export default {
   options: {
     sortable: true, // tylko drag & drop – działa idealnie
     collapsible: true,
+  },
+  components: {
+    input: PreparationStepsInput,
   },
 }
