@@ -1,3 +1,5 @@
+import IngredientsInput from '../../components/IngredientsInput'
+
 export default {
   name: 'ingredients',
   title: 'Składniki',
@@ -29,4 +31,5 @@ export default {
       },
     },
   ],
+  components: {input: IngredientsInput},
 }
