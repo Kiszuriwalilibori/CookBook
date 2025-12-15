@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect, useRef, useCallback} from 'react'
 import {PatchEvent, set} from 'sanity'
 import {TextInput, Stack, Card, Flex, Text} from '@sanity/ui'
@@ -27,9 +26,25 @@ export default function DietaryInput({
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [isExpanded, setIsExpanded] = useState(false) // ⬅️ whole field accordion
   const fetchTimeout = useRef<NodeJS.Timeout | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null) // For detecting clicks outside
 
   const id = 'dietary-' + Math.random().toString(36).slice(2, 11)
   const title = getTranslation(schemaType!.title)
+
+  // Close the accordion if the user clicks outside
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      setIsExpanded(false)
+    }
+  }, [])
+
+  // Register click outside listener
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [handleClickOutside])
 
   const fetchOptions = useCallback(() => {
     if (cachedOptions) {
@@ -79,9 +94,9 @@ export default function DietaryInput({
   )
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && input.trim()) {
+    if (event.key === 'Enter' && highlightedIndex >= 0) {
       event.preventDefault()
-      addValue(input.trim())
+      addValue(filteredOptions[highlightedIndex]) // Select highlighted option
     } else if (event.key === 'ArrowDown') {
       setHighlightedIndex((prev) => Math.min(prev + 1, filteredOptions.length - 1))
     } else if (event.key === 'ArrowUp') {
@@ -90,7 +105,7 @@ export default function DietaryInput({
   }
 
   return (
-    <Stack space={2}>
+    <Stack space={2} ref={containerRef}>
       {/* 🔘 Accordion header */}
       <Card
         padding={3}
@@ -103,7 +118,9 @@ export default function DietaryInput({
         <Flex align="center" justify="space-between">
           <Text weight="semibold">{title}</Text>
           <Text size={1} muted>
-            {value.length > 0 ? `${value.length} selected` : 'Add'}
+            {value.length > 0
+              ? value.join(', ') // Show selected items instead of count
+              : 'Add'}
           </Text>
         </Flex>
       </Card>
@@ -147,6 +164,7 @@ export default function DietaryInput({
                   }}
                   onMouseDown={(event) => {
                     event.preventDefault()
+                    event.stopPropagation()
                     addValue(option)
                   }}
                   onMouseEnter={() => setHighlightedIndex(index)}
