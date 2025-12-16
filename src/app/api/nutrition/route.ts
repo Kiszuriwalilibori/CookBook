@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import OAuth from "oauth-1.0a";
 import crypto from "crypto";
 import fetch from "node-fetch";
+// import translateToEnglish from "@/utils/translateToEnglish";
 
 const CONSUMER_KEY = process.env.FATSECRET_CONSUMER_KEY!;
 const CONSUMER_SECRET = process.env.FATSECRET_CONSUMER_SECRET!;
@@ -12,79 +13,115 @@ if (!CONSUMER_KEY || !CONSUMER_SECRET) {
 }
 
 // Hardcoded Polish product
-const PRODUCT_NAME = "jabłko" as const;
+const PRODUCT_NAME = "Apple" as const;
 
-// Minimal types
 type Nutrient = { nutrient: string; value: string; unit: string };
-type FatSecretServing = { food_nutrition?: Nutrient | Nutrient[] };
-type FatSecretFood = { food_id: string; food_name: string; servings?: { serving: FatSecretServing | FatSecretServing[] } };
+
+type FatSecretServing = {
+    calories?: string;
+    protein?: string;
+    fat?: string;
+    carbohydrate?: string;
+    fiber?: string;
+    sugar?: string;
+    sodium?: string;
+    cholesterol?: string;
+    saturated_fat?: string;
+    polyunsaturated_fat?: string;
+    monounsaturated_fat?: string;
+    potassium?: string;
+    vitamin_a?: string;
+    vitamin_c?: string;
+    calcium?: string;
+    iron?: string;
+
+    // Other optional properties
+    measurement_description?: string;
+    metric_serving_amount?: string;
+    metric_serving_unit?: string;
+    number_of_units?: string;
+    serving_description?: string;
+    serving_id?: string;
+    serving_url?: string;
+
+    // Optional nutrition array
+    food_nutrition?: Nutrient | Nutrient[];
+};
+
+type FatSecretFood = {
+    food_id: string;
+    food_name: string;
+    food_type?: string;
+    brand_name?: string;
+    servings?: { serving: FatSecretServing | FatSecretServing[] };
+    food_url?: string;
+    food_description?: string;
+};
+
 type FoodsSearchResponse = { foods?: { food: FatSecretFood[] } };
 type FoodGetResponse = { food?: FatSecretFood };
 
-// OAuth setup
-const oauth = new OAuth({
-    consumer: { key: CONSUMER_KEY, secret: CONSUMER_SECRET },
-    signature_method: "HMAC-SHA1",
-    hash_function(base_string: string, key: string) {
-        return crypto.createHmac("sha1", key).update(base_string).digest("base64");
-    },
-});
+function createOAuth() {
+    return new OAuth({
+        consumer: {
+            key: CONSUMER_KEY,
+            secret: CONSUMER_SECRET,
+        },
+        signature_method: "HMAC-SHA1",
+        hash_function(base_string: string, key: string) {
+            return crypto.createHmac("sha1", key).update(base_string).digest("base64");
+        },
+    });
+}
 
-// Signed GET request
-async function signedGet<T>(url: string, extraParams: Record<string, string> = {}): Promise<T> {
-    const requestData = { url, method: "GET", data: extraParams };
-    const headers = oauth.toHeader(oauth.authorize(requestData)) as unknown as Record<string, string>;
-    const res = await fetch(url + "?" + new URLSearchParams(extraParams), { headers });
+async function signedGet<T>(url: string, extraParams: Record<string, string>, retry = true): Promise<T> {
+    const oauth = createOAuth();
 
-    const text = await res.text();
-    console.log("Raw FatSecret response text:", text);
+    const requestData = {
+        url,
+        method: "GET",
+        data: extraParams,
+    };
 
-    let data: T;
+    const authHeader = oauth.toHeader(oauth.authorize(requestData)) as unknown as HeadersInit;
+
     try {
-        data = JSON.parse(text);
-    } catch {
-        data = {} as T;
+        const res = await fetch(`${url}?${new URLSearchParams(extraParams)}`, {
+            headers: authHeader,
+        });
+
+        const text = await res.text();
+        const data = JSON.parse(text);
+
+        if (!res.ok || (data && typeof data === "object" && "error" in data)) {
+            // Detect timestamp error (code 6) and retry once
+            if (retry && data?.error?.code === 6) {
+                console.warn("OAuth timestamp error, retrying...");
+                // Wait 500ms to avoid same nonce/timestamp
+                await new Promise(r => setTimeout(r, 500));
+                return signedGet<T>(url, extraParams, false);
+            }
+            throw new Error(JSON.stringify(data));
+        }
+
+        return data as T;
+    } catch (err) {
+        throw err;
     }
-
-    console.log("Parsed FatSecret response:", data);
-    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-
-    return data;
 }
 
 // Translate Polish -> English via LibreTranslate
-async function translateToEnglish(polishText: string): Promise<string> {
-    try {
-        const res = await fetch("https://libretranslate.com/translate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                q: polishText,
-                source: "pl",
-                target: "en",
-                format: "text",
-            }),
-        });
 
-        const rawData = await res.json();
-        const data = rawData as { translatedText: string };
+// (async () => {
+//     const polishSentence = "Jabłko jest czerwone";
+//     const english = await translateToEnglish(polishSentence);
+//     console.log("Final translation:", english);
+// })();
 
-        console.log(`Translated "${polishText}" -> "${data.translatedText}"`);
-        return data.translatedText;
-    } catch (err) {
-        console.error("Translation failed:", err);
-        return polishText; // fallback if translation fails
-    }
-}
-
-// Fetch nutrition
 async function getNutritionForProduct() {
     const baseUrl = "https://platform.fatsecret.com/rest/server.api";
+    const productEnglish = "Apple";
 
-    // Translate Polish -> English
-    const productEnglish = await translateToEnglish(PRODUCT_NAME);
-
-    // Search food
     const searchData = await signedGet<FoodsSearchResponse>(baseUrl, {
         method: "foods.search",
         format: "json",
@@ -93,11 +130,10 @@ async function getNutritionForProduct() {
     });
 
     const foods = searchData.foods?.food;
-    if (!foods || foods.length === 0) return null;
+    if (!foods?.length) return null;
 
     const foodId = foods[0].food_id;
 
-    // Get food details
     const foodData = await signedGet<FoodGetResponse>(baseUrl, {
         method: "food.get",
         format: "json",
@@ -105,30 +141,26 @@ async function getNutritionForProduct() {
     });
 
     const food = foodData.food;
-    if (!food) return null;
+    if (!food?.servings?.serving) return null;
 
-    const nutrients: Record<string, number> = {};
-    if (food.servings?.serving) {
-        const serving: FatSecretServing = Array.isArray(food.servings.serving) ? food.servings.serving[0] : food.servings.serving;
+    const serving = Array.isArray(food.servings.serving) ? food.servings.serving[0] : food.servings.serving;
 
-        if (serving.food_nutrition) {
-            const nutArray: Nutrient[] = Array.isArray(serving.food_nutrition) ? serving.food_nutrition : [serving.food_nutrition];
+    // Read directly from serving
+    const calories = Number(serving.calories ?? 0);
+    const protein = Number(serving.protein ?? 0);
+    const fat = Number(serving.fat ?? 0);
+    const carbs = Number(serving.carbohydrate ?? 0);
+    const fiber = Number(serving.fiber ?? 0);
 
-            nutArray.forEach(n => {
-                const name = n.nutrient.toLowerCase();
-                const value = parseFloat(n.value);
-                if (!isNaN(value)) nutrients[name] = value;
-            });
-        }
-    }
+    console.log("calories", calories, "protein", protein, "fat", fat, "carbs", carbs, "fiber", fiber);
 
     return {
         name: food.food_name,
-        calories: nutrients["energy"] ?? 0,
-        protein: nutrients["protein"] ?? 0,
-        fat: nutrients["total fat"] ?? 0,
-        carbs: nutrients["carbohydrate, by difference"] ?? 0,
-        fiber: nutrients["fiber, total dietary"] ?? 0,
+        calories,
+        protein,
+        fat,
+        carbs,
+        fiber,
     };
 }
 
