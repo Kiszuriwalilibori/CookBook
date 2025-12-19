@@ -4,9 +4,10 @@ import { SxProps, Theme } from "@mui/material";
 export const layoutContainerStyles: SxProps<Theme> = {
     display: "flex",
     flexDirection: "column",
-    minHeight: "100vh",
+    height: "100vh",
 };
 
 export const mainContentStyles: SxProps<Theme> = {
     flexGrow: 1,
+    // backgroundColor: "#EAF0E1",
 };

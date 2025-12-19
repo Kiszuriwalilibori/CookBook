@@ -2,7 +2,7 @@ import { SxProps, Theme } from "@mui/material/styles";
 
 const MENU_HEIGHT = 64;
 
-export const navigationStyle: SxProps<Theme> = { flexGrow: 1, height: MENU_HEIGHT };
+export const navigationStyle: SxProps<Theme> = { flexGrow: 0, height: MENU_HEIGHT };
 
 export const desktopItemStyles = (currentPathname: string, href: string, hidden?: boolean): SxProps<Theme> => ({
     display: "flex",
