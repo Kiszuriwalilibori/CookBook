@@ -84,3 +84,6 @@ export const metadata: {
 };
 
 export default metadata;
+
+
+// todo do całkowitego przerobu
