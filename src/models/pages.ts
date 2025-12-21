@@ -1,4 +1,4 @@
-export const PAGES = ["about", "skills", "projects", "career", "contact"] as const;
+export const PAGES = ["home","about", "blog", "favorites", "recipes"] as const;
 export type Pages = (typeof PAGES)[number];
 
 export abstract class PageUtils {

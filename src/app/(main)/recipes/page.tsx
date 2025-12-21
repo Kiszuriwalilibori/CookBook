@@ -52,3 +52,6 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
 
     return <RecipesClient initialRecipes={initialRecipes} />;
 }
+
+
+// jest zwłoka w wyświetlaniu, na początku pokazuje że nie znaleziono przepisów, źle to wygląda
