@@ -19,26 +19,6 @@ export const viewport = {
     themeColor: "#1976d2",
 };
 
-
-// export async function generateMetadata({ request }: { request?: Request }) {
-//     // 1. Try header (Vercel + middleware)
-//     const headerList = headers();
-//     let pathName = (await headerList).get("x-current-path") ?? "";
-
-//     // 2. Fallback to request URL (local dev)
-//     if (!pathName && request?.url) {
-//         const url = new URL(request.url);
-//         pathName = url.pathname;
-//     }
-
-//     // 3. Determine page key
-//     const segments = pathName.split("/").filter(Boolean);
-//     const pageKey = (segments[0] ?? "home") as Pages;
-
-//     return metadata[pageKey] ?? metadata.home;
-// }
-
-
 export async function generateMetadata() {
     const headerList = headers();
     const pathName = (await headerList).get("x-current-path") ?? "";
