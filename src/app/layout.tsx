@@ -37,9 +37,7 @@ export const viewport = {
 
 //     return metadata[pageKey] ?? metadata.home;
 // }
-import metadata from "../../public/metadata/metadata";
-import { headers } from "next/headers";
-import { Pages } from "@/models/pages";
+
 
 export async function generateMetadata() {
     const headerList = headers();
