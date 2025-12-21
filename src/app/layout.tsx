@@ -19,33 +19,31 @@ export const viewport = {
     themeColor: "#1976d2",
 };
 
-// export async function generateMetadata() {
+
+// export async function generateMetadata({ request }: { request?: Request }) {
+//     // 1. Try header (Vercel + middleware)
 //     const headerList = headers();
-//     const pathName = (await headerList).get("x-current-path") ?? "";
+//     let pathName = (await headerList).get("x-current-path") ?? "";
+
+//     // 2. Fallback to request URL (local dev)
+//     if (!pathName && request?.url) {
+//         const url = new URL(request.url);
+//         pathName = url.pathname;
+//     }
+
+//     // 3. Determine page key
 //     const segments = pathName.split("/").filter(Boolean);
 //     const pageKey = (segments[0] ?? "home") as Pages;
-//     const pageMetadata = metadata[pageKey] ?? metadata.home;
 
-//     return {
-//         ...pageMetadata,
-//         verification: {
-//             google: "cFu6GdRx-Aw37ldkxLM8oi8l8DqxVXEVswbcZPdsd3o",
-//         },
-//     };
+//     return metadata[pageKey] ?? metadata.home;
 // }
+import metadata from "../../public/metadata/metadata";
+import { headers } from "next/headers";
+import { Pages } from "@/models/pages";
 
-export async function generateMetadata({ request }: { request?: Request }) {
-    // 1. Try header (Vercel + middleware)
+export async function generateMetadata() {
     const headerList = headers();
-    let pathName = (await headerList).get("x-current-path") ?? "";
-
-    // 2. Fallback to request URL (local dev)
-    if (!pathName && request?.url) {
-        const url = new URL(request.url);
-        pathName = url.pathname;
-    }
-
-    // 3. Determine page key
+    const pathName = (await headerList).get("x-current-path") ?? "";
     const segments = pathName.split("/").filter(Boolean);
     const pageKey = (segments[0] ?? "home") as Pages;
 
