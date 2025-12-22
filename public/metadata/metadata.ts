@@ -135,6 +135,17 @@ export const metadata: {
         description: "Moje najbardziej lubiane i najczęściej przygotowywane przepisy. Klasyki domowej kuchni w jednym miejscu.",
         keywords: ["ulubione przepisy", "najlepsze przepisy", "przepisy domowe"],
     }),
+    contact: createPageMetadata("contact", {
+        title: "Kontakt z autorem Książki Kucharskiej Piotra",
+        description: "O tym, jak się ze mną skontaktować i jak tego nie robić",
+        keywords: ["kontakt", "kontakt z autorem", "kontakt z autorem Książki Kucharskiej Piotra"],
+    }),
+    privacy: createPageMetadata("privacy", {
+        title: "Zasady prywatności Książki Kucharskiej Piotra",
+        description: "Zasady prywatności",
+        keywords: ["zasady prywatności", "polityka prywatności", "zasady prywatności Książki Kucharskiej Piotra"],
+    }),
+    terms: createPageMetadata("terms", { title: "Regulamin Książki Kucharskiej Piotra", description: "Regulamin Książki Kucharskiej Piotra", keywords: ["regulamin", "regulamin Książki Kucharskiej Piotra", "regulamin Książki Kucharskiej Piotra"] }),
 
     recipes: createPageMetadata("recipes", {
         title: "Przepisy kulinarne – Książka Kucharska Piotra",
