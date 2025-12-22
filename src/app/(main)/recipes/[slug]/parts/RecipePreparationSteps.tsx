@@ -5,7 +5,7 @@ import type { PortableTextComponents } from "@portabletext/react";
 import Image from "next/image";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Recipe } from "@/types";
-import { styles, portableTextSx } from "../styles";
+import { styles, portableTextSx} from "../styles";
 
 // Custom PortableText components (typed correctly for compatibility)
 const PortableTextComponents: Partial<PortableTextComponents> = {
@@ -62,38 +62,18 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
                     id={`RecipePreparationStep-${i + 1}`}
                     key={step._key || i}
                     defaultExpanded={true} // Initially expanded
-                    sx={{
-                        boxShadow: 0, // No shadow/borders to blend with surface
-                        border: "none", // No border
-                        "&:before": { display: "none" }, // Remove default divider
-                        "& .MuiAccordionSummary-root": { px: 0, minHeight: "auto" }, // Custom summary
-                        "&.Mui-expanded": {
-                            margin: 0,
-                        },
-                    }}
+                    sx={styles.recipeStepAccordion}
                 >
                     <AccordionSummary
                         expandIcon={null} // Hide default icon
-                        sx={{
-                            justifyContent: "flex-start", // Start from left for alignment
-                            alignItems: "center", // Vertical alignment with number
-                            px: 0,
-                            minHeight: "auto",
-                            py: 0.25, // Reduced from 0.5 to quarter for even tighter vertical spacing
-                            "& .MuiAccordionSummary-content": {
-                                ml: 0, // No margin for tight alignment
-                            },
-                            "& .MuiAccordionSummary-content.Mui-expanded": {
-                                margin: "8px 0",
-                            },
-                        }}
+                        sx={styles.recipeStepAccordionSummary}
                     >
-                        <Typography variant="h3" sx={{ fontWeight: "600", fontSize: { xs: "18px", sm: "19px", md: "20px" }, mb: 0, lineHeight: 1 }}>
+                        <Typography variant="h3" sx={styles.recipeStepIndex}>
                             {i + 1}
                         </Typography>
-                        <ExpandMoreIcon sx={{ color: "grey.800", ml: 1, transform: "translateY(0px)" }} /> {/* Removed translateY for flush alignment */}
+                        <ExpandMoreIcon sx={styles.recipeStepExpandIcon} />
                     </AccordionSummary>
-                    <AccordionDetails sx={{ p: 0, mt: -0.5 }}>
+                    <AccordionDetails sx={styles.recipeStepAccordionDetails}>
                         {" "}
                         {/* Negative margin to reduce gap between summary and details */}
                         {step.image?.asset?.url && (

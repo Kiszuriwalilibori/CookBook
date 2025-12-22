@@ -9,6 +9,66 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         px: { xs: 2, md: 3 },
         py: 3,
     },
+    recipeStepAccordion: {
+        backgroundColor: "common.white",
+        boxShadow: 0,
+        border: "none",
+
+        "&:before": {
+            display: "none",
+        },
+
+        "& .MuiAccordionSummary-root": {
+            px: 0,
+            minHeight: "auto",
+        },
+
+        "& .MuiAccordionSummary-content": {
+            margin: 0,
+        },
+
+        "&.Mui-expanded": {
+            margin: 0,
+        },
+    },
+
+    recipeStepAccordionSummary: {
+        justifyContent: "flex-start",
+        alignItems: "center",
+        px: 0,
+        minHeight: "auto",
+        py: 0.25,
+
+        "& .MuiAccordionSummary-content": {
+            ml: 0,
+        },
+
+        "& .MuiAccordionSummary-content.Mui-expanded": {
+            margin: "8px 0",
+        },
+    },
+
+    recipeStepIndex: {
+        fontWeight: 600,
+        fontSize: {
+            xs: "18px",
+            sm: "19px",
+            md: "20px",
+        },
+        mb: 0,
+        lineHeight: 1,
+    },
+
+    recipeStepExpandIcon: {
+        color: "grey.800",
+        ml: 1,
+        transform: "translateY(0px)",
+    },
+    recipeStepAccordionDetails: {
+        p: 0,
+        mt: -0.5,
+    },
+
     heroImageContainer: {
         position: "relative",
         height: 384,
@@ -16,6 +76,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         borderRadius: 1,
         overflow: "hidden",
     },
+
     mainTitle: {
         fontSize: { xs: "2rem", md: "3rem" },
         fontFamily: "Playfair Display, Georgia, serif",
@@ -182,12 +243,11 @@ export const styles: { [key: string]: SxProps<Theme> } = {
             borderRadius: theme => `${theme.shape.borderRadius}px`,
         },
     },
-    
 
     ingredientsQuantity: {
         fontSize: FONT_SIZE,
         textAlign: "right",
-        whiteSpace: "nowrap", 
+        whiteSpace: "nowrap",
     },
     ingredientsNotes: {
         mt: 2,
@@ -195,8 +255,6 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         color: "text.primary",
         fontStyle: "italic",
     },
-
-    
 
     ingredientsName: {
         fontSize: FONT_SIZE,

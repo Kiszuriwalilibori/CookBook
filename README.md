@@ -89,9 +89,8 @@ add client-side filter summary
 
 Just ask!
 
-
 26.11.2025 zmienilem w interfejsie author w ten sposób, że jest opcjonalne podobnie jak reszta source
 
-
-
 sanity migration run rename-recipe-field --project=mextu0pu --dataset production --no-dry-run
+
+// todo: zmienić w generowaniu products z ingredients: jeżeli ingredient składa się z więcej niż dwóch to nie jest wogóle rozkładany. A rozkładany jest tylko dla 2

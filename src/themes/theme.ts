@@ -53,7 +53,7 @@ const baseTheme = createTheme({
         },
         background: {
             default: "#f5f5f5",
-            paper: "#ffffff",
+            paper: "#A8BBA3",
         },
         // ⬇️ Surface retained (do not remove)
         surface: {

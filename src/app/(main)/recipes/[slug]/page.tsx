@@ -14,9 +14,13 @@ interface Params {
 }
 export const revalidate = 3600;
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-    const recipe = await getRecipeBySlug(params.slug);
-    if (!recipe) return { title: "Nie znaleziono przepisu" };
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const recipe = await getRecipeBySlug(slug);
+
+    if (!recipe) {
+        return { title: "Nie znaleziono przepisu" };
+    }
 
     return generateRecipeMetadata(recipe);
 }
