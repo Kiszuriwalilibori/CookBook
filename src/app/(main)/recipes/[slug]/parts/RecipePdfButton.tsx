@@ -13,28 +13,26 @@ interface RecipePdfButtonProps {
 
 export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
     const normalizePolishText = (text: string): string => {
-        return (
-            text
-                .replace(/ą/g, "a")
-                .replace(/Ą/g, "A")
-                .replace(/ć/g, "c")
-                .replace(/Ć/g, "C")
-                .replace(/ę/g, "e")
-                .replace(/Ę/g, "E")
-                // .replace(/ł/g, "l")
-                // .replace(/Ł/g, "L")
-                .replace(/ń/g, "n")
-                .replace(/Ń/g, "N")
-                .replace(/ó/g, "o")
-                .replace(/Ó/g, "O")
-                .replace(/ś/g, "s")
-                .replace(/Ś/g, "S")
-                .replace(/ź/g, "z")
-                .replace(/Ź/g, "Z")
-                .replace(/ż/g, "z")
-                .replace(/Ż/g, "Z")
-                .trim()
-        );
+        return text
+            .replace(/ą/g, "a")
+            .replace(/Ą/g, "A")
+            .replace(/ć/g, "c")
+            .replace(/Ć/g, "C")
+            .replace(/ę/g, "e")
+            .replace(/Ę/g, "E")
+            .replace(/ł/g, "l")
+            .replace(/Ł/g, "L")
+            .replace(/ń/g, "n")
+            .replace(/Ń/g, "N")
+            .replace(/ó/g, "o")
+            .replace(/Ó/g, "O")
+            .replace(/ś/g, "s")
+            .replace(/Ś/g, "S")
+            .replace(/ź/g, "z")
+            .replace(/Ź/g, "Z")
+            .replace(/ż/g, "z")
+            .replace(/Ż/g, "Z")
+            .trim();
     };
 
     const handlePdfExport = () => {
