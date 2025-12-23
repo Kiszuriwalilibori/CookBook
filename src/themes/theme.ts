@@ -47,13 +47,13 @@ const baseTheme = createTheme({
             contrastText: "#fff",
         },
         secondary: {
-            main: "#9c27b0",
-            light: "#ba68c8",
+            main: "#A8BBA3",
+            light: "#EAF0E1",
             dark: "#7b1fa2",
         },
         background: {
             default: "#f5f5f5",
-            paper: "#A8BBA3",
+            paper: "#ffffff",
         },
         // ⬇️ Surface retained (do not remove)
         surface: {
@@ -161,3 +161,5 @@ const baseTheme = createTheme({
 const theme = responsiveFontSizes(createTheme(baseTheme));
 
 export default theme;
+
+//  paper: "#A8BBA3",

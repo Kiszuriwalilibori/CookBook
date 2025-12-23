@@ -14,5 +14,3 @@ export function createRenderTags(key: keyof FilterState, chipsEnabled: boolean, 
 
     return (value: string[]) => Chips(value, chipKey, theme, handleChange);
 }
-
-// todo kliknięcie na krzyżyk w filtrach zamyka je całe a mialo tylko czyścić jedno (ale tak działa tylko przed wyborem)
