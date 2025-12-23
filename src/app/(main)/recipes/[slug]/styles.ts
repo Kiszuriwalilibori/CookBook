@@ -68,17 +68,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         p: 0,
         mt: -0.5,
     },
-    recipeCopyButtonSx: {
-        color: theme => theme.palette.surface.main, // Base color
-        "&:hover": {
-            color: theme => theme.palette.surface.light, // Hover color
-            backgroundColor: "transparent", // No grey background
-            borderRadius: "50%", // Round hover effect
-        },
-        fontSize: { xs: "36px", md: "48px" }, // Example responsive icon sizing
-        padding: 1,
-        minHeight: 0, // To match your previous WCAG-friendly style
-    },
+
     heroImageContainer: {
         position: "relative",
         height: 384,
@@ -240,8 +230,30 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         borderColor: theme => theme.palette.surface.main, // Menu background color for border
         transition: "all 0.2s ease-in-out", // Smooth hover transition
         "&:hover": {
-            borderColor: theme => theme.palette.surface.light,
-            color: theme => theme.palette.surface.light,
+            borderColor: theme => theme.palette.primary.light,
+            color: theme => theme.palette.primary.light,
+            backgroundColor: "transparent", // No grey hover background
+            borderRadius: "50%", // Round hover background
+        },
+        "&:focus-visible": {
+            // WCAG focus ring (2px primary color outline)
+            outline: "2px solid",
+            outlineColor: theme => theme.palette.primary.main,
+            outlineOffset: 2,
+            borderRadius: theme => `${theme.shape.borderRadius}px`,
+        },
+    },
+    recipeButton: {
+        color: theme => theme.palette.primary.main,
+
+        fontSize: { xs: "0.875rem", sm: "1rem" }, // Responsive font sizing for readability
+        padding: { xs: "8px 16px", sm: "12px 24px" }, // Responsive padding for touch targets (min ~44px height)
+        minHeight: "44px", // WCAG touch target minimum
+        borderColor: theme => theme.palette.surface.main, // Menu background color for border
+        transition: "all 0.2s ease-in-out", // Smooth hover transition
+        "&:hover": {
+            borderColor: theme => theme.palette.primary.light,
+            color: theme => theme.palette.primary.light,
             backgroundColor: "transparent", // No grey hover background
             borderRadius: "50%", // Round hover background
         },

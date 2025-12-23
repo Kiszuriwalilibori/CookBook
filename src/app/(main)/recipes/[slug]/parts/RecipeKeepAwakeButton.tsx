@@ -59,19 +59,7 @@ export function RecipeKeepAwakeButton() {
 
     return (
         <Tooltip title={isActive ? "Wyłącz zapobieganie ciemieniu ekranu" : "Zapobiegaj ciemieniu ekranu (aktywuj jasność)"} placement="top">
-            <IconButton
-                id="RecipeKeepAwakeButton"
-                onClick={handleToggle}
-                sx={{
-                    color: theme => theme.palette.surface.main, // Basic color matching current buttons
-                    "&:hover": {
-                        color: theme => theme.palette.surface.light, // Hover color matching current
-                        backgroundColor: "transparent", // No grey hover background
-                        borderRadius: "50%", // Round hover background
-                    },
-                    ...styles.copyButton, // Reuse responsive/WCAG (fontSize, padding, minHeight, focus-visible)
-                }}
-            >
+            <IconButton id="RecipeKeepAwakeButton" onClick={handleToggle} sx={styles.recipeButton}>
                 <BrightnessHighIcon sx={{ fontSize: "48px" }} /> {/* Twice bigger icon (default 24px → 48px) */}
             </IconButton>
         </Tooltip>

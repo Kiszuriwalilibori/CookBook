@@ -141,19 +141,7 @@ export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
 
     return (
         <Tooltip title="Eksportuj do PDF" placement="top">
-            <IconButton
-                id="RecipePdfButton"
-                onClick={handlePdfExport}
-                sx={{
-                    color: theme => theme.palette.surface.main,
-                    "&:hover": {
-                        color: theme => theme.palette.surface.light,
-                        backgroundColor: theme => theme.palette.action.hover,
-                        borderRadius: "50%",
-                    },
-                    ...styles.copyButton,
-                }}
-            >
+            <IconButton id="RecipePdfButton" onClick={handlePdfExport} sx={styles.recipeButton}>
                 <PictureAsPdfIcon sx={{ fontSize: "48px" }} />
             </IconButton>
         </Tooltip>
