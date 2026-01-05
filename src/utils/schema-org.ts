@@ -35,7 +35,8 @@ export function generateRecipeSchema(recipe: Recipe) {
         cookTime: recipe.cookTime ? `PT${recipe.cookTime}M` : undefined,
         totalTime: recipe.prepTime && recipe.cookTime ? `PT${recipe.prepTime + recipe.cookTime}M` : undefined,
         recipeYield: recipe.recipeYield ? `${recipe.recipeYield} porcji` : undefined,
-        recipeCuisine: recipe.cuisine,
+        // recipeCuisine: recipe.cuisine,
+        recipeCuisine: recipe.cuisine?.join(", "),
         keywords: recipe.tags?.join(", "),
 
         recipeIngredient: recipe.ingredients?.filter(i => !i.excluded).map(i => `${i.quantity || ""} ${i.unit || ""} ${i.name || ""}`.trim()) || [],

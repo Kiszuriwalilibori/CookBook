@@ -5,25 +5,6 @@ import { styles } from "./about.styles";
 import { content } from "./content";
 import AuthorImage from "./AuthorImage";
 
-//     width: {
-//         xs: MIN_SIZE,
-//         sm: `clamp(${MIN_SIZE}px, 16vw, ${MAX_SIZE}px)`,
-//         md: `clamp(${MIN_SIZE}px, 16vw, ${MAX_SIZE}px)`,
-//         lg: `clamp(${MIN_SIZE}px, 16vw, ${MAX_SIZE}px)`,
-//         xl: MAX_SIZE,
-//     },
-//     height: {
-//         xs: MIN_SIZE,
-//         sm: `clamp(${MIN_SIZE}px, 16vw, ${MAX_SIZE}px)`,
-//         md: `clamp(${MIN_SIZE}px, 16vw, ${MAX_SIZE}px)`,
-//         lg: `clamp(${MIN_SIZE}px, 16vw, ${MAX_SIZE}px)`,
-//         xl: MAX_SIZE,
-//     },
-//     borderRadius: "50%",
-//     overflow: "hidden",
-//     marginBottom: "16px",
-// };
-
 export default function About(): JSX.Element {
     return (
         <Box id="RecipePage" sx={styles.root}>

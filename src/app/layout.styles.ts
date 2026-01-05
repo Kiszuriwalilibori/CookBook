@@ -9,5 +9,5 @@ export const layoutContainerStyles: SxProps<Theme> = {
 
 export const mainContentStyles: SxProps<Theme> = {
     flexGrow: 1,
-    // backgroundColor: "#EAF0E1",
+    
 };

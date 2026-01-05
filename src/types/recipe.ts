@@ -65,7 +65,7 @@ export interface Recipe {
     prepTime?: number;
     cookTime?: number;
     recipeYield?: number;
-    cuisine?: string;
+    cuisine?: string[];
     dietary?: string[];
     tags?: string[];
     notes?: string;

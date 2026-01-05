@@ -10,7 +10,7 @@ const MAX_TAGS = 10;
 
 export const initialFilters: FilterState = {
     title: "",
-    cuisine: "",
+    cuisine: [],
     tags: [],
     dietary: [],
     products: [],
@@ -49,7 +49,8 @@ export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: Fil
     const normalizers = useMemo<Normalizers>(
         () => ({
             title: val => (val as string).trim().toLowerCase(),
-            cuisine: val => (val as string).trim().toLowerCase(),
+            // cuisine: val => (val as string).trim().toLowerCase(),
+            cuisine: val => normalizeMultiple(val as string[], options.cuisine),
             tags: val => normalizeMultiple(val as string[], options.tags),
             dietary: val => normalizeMultiple(val as string[], options.dietary),
             products: val => normalizeMultiple(val as string[], options.products),

@@ -6,7 +6,7 @@ import { ChipEligibleKey, FilterValuesTypes } from "@/models/filters";
 export function createRenderTags(key: keyof FilterState, chipsEnabled: boolean, theme: Theme, handleChange: (key: ChipEligibleKey, value: FilterValuesTypes) => void) {
     if (!chipsEnabled) return undefined;
 
-    const eligibleKeys: ChipEligibleKey[] = ["tags", "products", "dietary"];
+    const eligibleKeys: ChipEligibleKey[] = ["tags", "products", "dietary", "cuisine"];
 
     if (!eligibleKeys.includes(key as ChipEligibleKey)) return undefined;
 

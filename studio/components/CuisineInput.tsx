@@ -3,10 +3,10 @@ import React, {useState, useEffect, useRef, useCallback} from 'react'
 import {PatchEvent, set} from 'sanity'
 import {TextInput, Stack, Card, Flex, Text} from '@sanity/ui'
 import {createClient} from 'next-sanity'
-import {styles} from './TagsInput.styles'
+import {styles} from './CuisineInput.styles'
 import {getTranslation} from '../../src/models/fieldTranslations'
 
-interface TagsInputProps {
+interface CuisineInputProps {
   value?: string[]
   onChange: (event: PatchEvent) => void
   schemaType?: {title: string}
@@ -16,7 +16,7 @@ interface TagsInputProps {
 
 let cachedOptions: string[] | null = null
 
-export default function TagsInput({value = [], onChange, schemaType, readOnly}: TagsInputProps) {
+export default function CuisineInput({value = [], onChange, schemaType, readOnly}: CuisineInputProps) {
   const [options, setOptions] = useState<string[]>([])
   const [input, setInput] = useState('')
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
@@ -25,8 +25,8 @@ export default function TagsInput({value = [], onChange, schemaType, readOnly}: 
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const id = 'tags-' + Math.random().toString(36).slice(2, 11)
-  const title = getTranslation(schemaType?.title || 'Tags')
+  const id = 'cuisine-' + Math.random().toString(36).slice(2, 11)
+  const title = getTranslation(schemaType?.title || 'Cuisine')
 
   /* ------------------ outside click ------------------ */
   const handleClickOutside = useCallback((event: MouseEvent) => {
@@ -55,7 +55,7 @@ export default function TagsInput({value = [], onChange, schemaType, readOnly}: 
     })
 
     client
-      .fetch<string[]>(`*[_id=="options"][0].fullSummary.tags`)
+      .fetch<string[]>(`*[_id=="options"][0].fullSummary.cuisine`)
       .then((data) => {
         cachedOptions = Array.isArray(data) ? data : []
         setOptions(cachedOptions)

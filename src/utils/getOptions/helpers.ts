@@ -8,16 +8,6 @@ export const CLEAN_SUMMARY_MESSAGES = {
     REMOVED_FAULTY_VALUE: (value: unknown) => `Removed faulty array value: ${String(value)}`,
 };
 
-// // 🟩 Base empty structure
-// export const initialSummary: RecipeFilter = {
-//     title: [],
-//     cuisine: [],
-//     tags: [],
-//     dietary: [],
-//     products: [],
-
-// };
-
 export const initialSummary: RecipeFilter = {
     title: [],
     products: [],

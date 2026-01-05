@@ -26,7 +26,7 @@ export function RecipeMetadata({ recipe }: RecipeMetadataProps) {
                 </Typography>
             )}
 
-            {recipe.cuisine && <Typography component="div">🌍 {recipe.cuisine}</Typography>}
+            {recipe.cuisine && recipe.cuisine.length > 0 && <Typography component="div">🌍 {recipe.cuisine.join(", ")}</Typography>}
             {recipe.calories && (
                 <Typography component="div">
                     🔥 {getTranslation("calories")}: {recipe.calories}
@@ -45,3 +45,5 @@ export function RecipeMetadata({ recipe }: RecipeMetadataProps) {
         </Box>
     );
 }
+
+// todo: wstawić jakieś funkcje uzależniające od typów czy cokolwiek, nie taki goły kod w stylu {getTranslation("tags")}: {recipe.tags.join(", ")}

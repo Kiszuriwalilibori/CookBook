@@ -34,7 +34,8 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
 
     const filters: Partial<FilterState> = {
         title: normalizeString(awaitedSearchParams.title),
-        cuisine: normalizeString(awaitedSearchParams.cuisine),
+        cuisine: normalizeArrayOrString(awaitedSearchParams.cuisine),
+        // cuisine: normalizeString(awaitedSearchParams.cuisine),
         tags: normalizeArrayOrString(awaitedSearchParams.tags),
         dietary: normalizeArrayOrString(awaitedSearchParams.dietary),
         products: normalizeArrayOrString(awaitedSearchParams.products),
@@ -42,7 +43,7 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
         kizia: kiziaValue,
         status: statusValue,
     };
-
+    console.log("filters from RecipesPage", filters);
     let initialRecipes: Recipe[] = [];
     try {
         initialRecipes = await getRecipesForCards(filters);
@@ -52,6 +53,5 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
 
     return <RecipesClient initialRecipes={initialRecipes} />;
 }
-
 
 // jest zwłoka w wyświetlaniu, na początku pokazuje że nie znaleziono przepisów, źle to wygląda

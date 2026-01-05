@@ -15,7 +15,7 @@ import { useFiltersStore } from "@/stores";
 import { FilterState } from "@/models/filters";
 import { searchRecipeByTitle } from "@/utils/searchRecipeByTitle";
 
-export type ChipFieldKey = keyof Pick<Recipe, "products" | "tags" | "dietary">;
+export type ChipFieldKey = keyof Pick<Recipe, "products" | "tags" | "dietary" | "cuisine">;
 interface RecipeFiltersProps {
     onFiltersChange: (filters: FilterState) => void;
     onClose?: () => void;
@@ -51,7 +51,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
 
         // CASE 2: Normal filtering → go to /recipes list
         const queryString = buildQueryString(currentFilters);
-
+        console.log("queryString", queryString);
         router.push(`/recipes${queryString ? `?${queryString}` : ""}`);
         onClose?.();
     }, [apply, filters, setFilters, router, onClose]);
