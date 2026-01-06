@@ -156,7 +156,7 @@ describe("sanitizeSummary - comprehensive scenarios", () => {
             dietary: ["Vegetarian"],
             products: ["Cheese"],
             source: {
-                http: ["https://flatten.com"],
+                url: ["https://flatten.com"],
                 book: ["Book Flat"],
                 title: ["Title Flat"],
                 author: ["Author Flat"],

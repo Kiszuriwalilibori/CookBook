@@ -1,8 +1,9 @@
-// RecipeSource.test.tsx
+
+
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { RecipeSource } from "./RecipeSource";
-import type { Recipe } from "@//types";
+import type { Recipe } from "@/types";
 
 // -----------------------------
 //  Store typing for strict mode
@@ -46,11 +47,12 @@ jest.mock("../styles", () => ({
 //  Recipe factory (strict mode)
 // -----------------------------
 const createRecipe = (partial: Partial<Recipe>): Recipe => {
-    const base = {
+    const base: Recipe = {
         _id: "1",
         title: "Test",
+        status: "Good",
     };
-    return { ...base, ...partial } as Recipe;
+    return { ...base, ...partial };
 };
 
 // -----------------------------
@@ -60,17 +62,13 @@ const mockRecipeNoSource = createRecipe({});
 
 const mockRecipeWithHttp = createRecipe({
     source: {
-        http: "https://example.com/recipe",
-        title: "",
-        book: "",
-        author: "",
-        where: "",
+        url: "https://example.com/recipe",
     },
 });
 
 const mockRecipeWithoutHttp = createRecipe({
     source: {
-        http: "",
+        url: "",
         title: "Tytuł Przepisu",
         author: "Jan Kowalski",
         book: "Książka Gotowania",
@@ -80,7 +78,7 @@ const mockRecipeWithoutHttp = createRecipe({
 
 const mockRecipeEmptySource = createRecipe({
     source: {
-        http: "",
+        url: "",
         title: "",
         book: "",
         author: "",
@@ -137,11 +135,7 @@ describe("RecipeSource", () => {
     it("handles whitespace in HTTP correctly", () => {
         const recipeWithWhitespace = createRecipe({
             source: {
-                http: "  https://example.com/recipe  ",
-                title: "",
-                book: "",
-                author: "",
-                where: "",
+                url: "  https://example.com/recipe  ",
             },
         });
 
@@ -149,18 +143,15 @@ describe("RecipeSource", () => {
 
         render(<RecipeSource recipe={recipeWithWhitespace} />);
 
-        // Whitespace collapses, so match without exact spacing
         expect(screen.getByText(text => text.includes("Źródło: https://example.com/recipe"))).toBeInTheDocument();
     });
 
     it("handles partial source fields", () => {
         const partial = createRecipe({
             source: {
-                http: "",
+                url: "",
                 title: "Tytuł",
                 book: "Książka",
-                author: "",
-                where: "",
             },
         });
 
