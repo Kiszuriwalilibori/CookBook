@@ -19,7 +19,6 @@ export function defineField(config: Partial<FilterField> & { key: FilterableReci
 export const FILTER_FIELDS_CONFIG: FilterField[] = [
     defineField({ key: "title", multiple: false }),
     defineField({ key: "cuisine", multiple: true, chips: true }),
-    // defineField({ key: "cuisine", multiple: false }),
     defineField({ key: "tags", multiple: true, chips: true }),
     defineField({ key: "dietary", multiple: true, chips: true, placeholder: "Bez ograniczeń" }),
     defineField({ key: "products", multiple: true, chips: true }),
@@ -34,7 +33,7 @@ export const FILTER_FIELDS_CONFIG: FilterField[] = [
 export type FilterValuesTypes = FilterState[keyof FilterState];
 
 export type FilterState = {
-    [K in BaseFilterableKeys]: K extends "title" /*| "cuisine"*/ ? string : K extends "status" ? Status : K extends "kizia" ? boolean : string[];
+    [K in BaseFilterableKeys]: K extends "title" ? string : K extends "status" ? Status : K extends "kizia" ? boolean : string[];
 } & {
     [K in SourceKeys]: string;
 };

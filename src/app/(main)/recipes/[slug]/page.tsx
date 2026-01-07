@@ -5,7 +5,7 @@ import { Recipe } from "@/types";
 import { Separator } from "@/components";
 import { getRecipeBySlug } from "@/utils";
 import { styles } from "./styles";
-import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton } from "./parts";
+import RecipeMetadata, { RecipeHero,  RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton } from "./parts";
 import { generateRecipeMetadata } from "@/utils/generateRecipeMetadata";
 import { generateRecipeSchema } from "@/utils/schema-org";
 

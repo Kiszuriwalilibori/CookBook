@@ -14,3 +14,5 @@ export function createRenderTags(key: keyof FilterState, chipsEnabled: boolean, 
 
     return (value: string[]) => Chips(value, chipKey, theme, handleChange);
 }
+// todo tu mamy zahardkodowane chipeligiblekey, natomiast mamy także export type ChipFieldKey = keyof Pick<Recipe, "products" | "tags" | "dietary" | "cuisine">; Na coś się trzeba zdecydować
+// GPT Chat wątek Typowanie Kluczy Chipowych

@@ -1,5 +1,5 @@
 export { RecipeHero } from "./RecipeHero";
-export { RecipeMetadata } from "./RecipeMetadata";
+export { default } from "./RecipeMetadata";
 export { RecipeDescription } from "./RecipeDescription";
 export { RecipeIngredients } from "./RecipeIngredients";
 export { RecipePreparationSteps } from "./RecipePreparationSteps";
