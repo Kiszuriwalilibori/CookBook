@@ -1,11 +1,10 @@
-
-import { groq } from "next-sanity"
-import { client } from "./client"
-import { Recipe } from "@/types"
+import { groq } from "next-sanity";
+import { client } from "./client";
+import { Recipe } from "@/types";
 
 export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
-  return client.fetch(
-    groq`*[_type == "recipe" && slug.current == $slug][0]{
+    return client.fetch(
+        groq`*[_type == "recipe" && slug.current == $slug][0]{
       _id,
       title,
       slug,
@@ -65,6 +64,8 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
         calculatedAt
       }
     }`,
-    { slug }
-  )
+        { slug }
+    );
 }
+
+//todo tak naprawdę to powinien brać po id (_id)

@@ -79,6 +79,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
             !!filters.title &&
             Object.entries(filters).every(([k, v]) => {
                 if (k === "title") return true;
+                if (k === "status") return true;
                 return Array.isArray(v) ? v.length === 0 : !v;
             });
 

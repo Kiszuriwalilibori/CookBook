@@ -23,7 +23,7 @@ export const FILTER_FIELDS_CONFIG: FilterField[] = [
     defineField({ key: "dietary", multiple: true, chips: true, placeholder: "Bez ograniczeń" }),
     defineField({ key: "products", multiple: true, chips: true }),
     defineField({ key: "kizia", multiple: false, component: "switch", requiredAdmin: true, placeholder: "Kizia to lubi?" }),
-    defineField({ key: "status", multiple: false, component: "checkbox", requiredAdmin: true, placeholder: "Status" }),
+    defineField({ key: "status", multiple: true, component: "checkbox", requiredAdmin: true, placeholder: "Status" }),
     defineField({ key: "source.url", multiple: false, requiredAdmin: true, placeholder: "Link" }),
     defineField({ key: "source.book", multiple: false, requiredAdmin: true, placeholder: "Tytuł książki" }),
     defineField({ key: "source.title", multiple: false, requiredAdmin: true, placeholder: "Tytuł książki" }),
@@ -32,8 +32,13 @@ export const FILTER_FIELDS_CONFIG: FilterField[] = [
 ] as const;
 export type FilterValuesTypes = FilterState[keyof FilterState];
 
+// export type FilterState = {
+//     [K in BaseFilterableKeys]: K extends "title" ? string : K extends "status" ? Status : K extends "kizia" ? boolean : string[];
+// } & {
+//     [K in SourceKeys]: string;
+// };
 export type FilterState = {
-    [K in BaseFilterableKeys]: K extends "title" ? string : K extends "status" ? Status : K extends "kizia" ? boolean : string[];
+    [K in BaseFilterableKeys]: K extends "title" ? string : K extends "status" ? Status[] : K extends "kizia" ? boolean : string[];
 } & {
     [K in SourceKeys]: string;
 };

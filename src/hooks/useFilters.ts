@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useDebouncedCallback } from "./useDebouncedCallback";
 import { normalizeMultiple } from "@/components/RecipeFilters/utils/normalize";
-import { RecipeFilter } from "@/types";
+import { RecipeFilter, Status } from "@/types";
 import isEqual from "lodash/isEqual";
 import { FilterState } from "@/models/filters";
 
@@ -14,7 +14,7 @@ export const initialFilters: FilterState = {
     tags: [],
     dietary: [],
     products: [],
-    status: "Good",
+    status: ["Good", "Acceptable"],
     kizia: false,
     "source.url": "",
     "source.book": "",
@@ -54,7 +54,8 @@ export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: Fil
             tags: val => normalizeMultiple(val as string[], options.tags),
             dietary: val => normalizeMultiple(val as string[], options.dietary),
             products: val => normalizeMultiple(val as string[], options.products),
-            status: val => val,
+            // status: val => val,
+            status: val => val as Status[],
             kizia: val => val,
             "source.url": val => (val as string).trim().toLowerCase(),
             "source.book": val => (val as string).trim().toLowerCase(),
