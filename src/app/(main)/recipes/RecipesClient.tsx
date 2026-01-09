@@ -1,11 +1,10 @@
-
 "use client";
 import { useEffect, useState } from "react";
 import { Grid, Box, Typography } from "@mui/material";
 import { PageTitle, RecipeCard } from "@/components";
 import { gridSize, pageContainerStyle } from "./styles";
 import { useRecipesStore } from "@/stores/useRecipesStore";
-import { useAdminStore } from "@/stores/useAdminStore"; 
+import { useAdminStore } from "@/stores/useAdminStore";
 import { type Recipe } from "@/types";
 import { getRecipesForCards } from "@/utils/getRecipesForCards";
 import { FilterState } from "@/models/filters";
@@ -29,6 +28,17 @@ export default function RecipesClient({ initialRecipes }: { initialRecipes: Reci
         setRecipes(initialRecipes);
         setDisplayRecipes(initialRecipes);
     }, [initialRecipes, hydrated, hydrate, setRecipes]);
+
+    useEffect(() => {
+        // Po wylogowaniu admina → wracamy do stanu z SSR (już przefiltrowanego dla nie-admina)
+        if (!isAdminLogged) {
+            const refetch = async () => {
+                const fresh = await getRecipesForCards({ status: ["Good", "Acceptable"] });
+                setDisplayRecipes(fresh);
+            };
+            refetch();
+        }
+    }, [isAdminLogged, initialRecipes]);
 
     // 2. Refetch po zmianie statusu admina
     useEffect(() => {
