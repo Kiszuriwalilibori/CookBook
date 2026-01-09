@@ -1,64 +1,55 @@
-import { FilterState } from "@/models/filters"; 
+import { FilterState } from "@/models/filters";
 
 export function buildFilterClause(filters?: Partial<FilterState>): string {
     if (!filters) return "";
 
     const conditions: string[] = [];
-    const normalize = (value: string) => value.toLowerCase();
 
-    // ---------------- Helper types ----------------
-    type StringKeys<T> = { [K in keyof T]: T[K] extends string ? K : never }[keyof T];
-    type BooleanKeys<T> = { [K in keyof T]: T[K] extends boolean ? K : never }[keyof T];
-    type ArrayKeys<T> = { [K in keyof T]: T[K] extends string[] ? K : never }[keyof T];
+    // Pomocnicze normalizowanie
+    const normalize = (value: string) => value.toLowerCase().trim();
 
-    // Extract keys automatically from filters
-    const stringFields = Object.keys(filters).filter((k): k is StringKeys<FilterState> => typeof filters[k as keyof FilterState] === "string");
+    // 1. Status – specjalne traktowanie (tablica)
+    if (filters.status && Array.isArray(filters.status) && filters.status.length > 0) {
+        const validStatuses = filters.status.map(s => normalize(s)).filter(s => ["good", "acceptable", "improvement", "forget"].includes(s));
 
-    const booleanFields = Object.keys(filters).filter((k): k is BooleanKeys<FilterState> => typeof filters[k as keyof FilterState] === "boolean");
+        if (validStatuses.length > 0) {
+            const quoted = validStatuses.map(s => `"${s}"`).join(", ");
+            conditions.push(`lower(status) in [${quoted}]`);
+        }
+    }
 
-    const arrayFields = Object.keys(filters).filter((k): k is ArrayKeys<FilterState> => Array.isArray(filters[k as keyof FilterState]) && (filters[k as keyof FilterState] as unknown[]).every(v => typeof v === "string"));
+    // 2. Pozostałe pola stringowe (bez status!)
+    const stringFields = ["title", "source.url", "source.book", "source.title", "source.author", "source.where"] as const;
 
-    // ---------------- Helper functions ----------------
-    function processStringField(filters: Partial<FilterState>, field: StringKeys<FilterState>) {
+    stringFields.forEach(field => {
         const value = filters[field];
-        if (!value) return;
+        if (typeof value !== "string" || !value.trim()) return;
 
-        // handle status by name without TypeScript complaining
-        if (field === ("status" as StringKeys<FilterState>)) {
-            conditions.push(`lower(${field}) == "${normalize(value)}"`);
-            return;
+        const normValue = normalize(value);
+        if (field === "title") {
+            conditions.push(`lower(${field}) match "${normValue}*"`);
+        } else {
+            conditions.push(`lower(${field}) == "${normValue}"`);
         }
+    });
 
-        const op = field === "title" ? "match" : "==";
-        const condition = op === "match" ? `lower(${field}) match "${normalize(value)}*"` : `lower(${field}) == "${normalize(value)}"`;
-        conditions.push(condition);
+    // 3. Pola tablicowe (tags, cuisine, dietary, products)
+    const arrayFields = ["cuisine", "tags", "dietary", "products"] as const;
+
+    arrayFields.forEach(field => {
+        const arr = filters[field];
+        if (!Array.isArray(arr) || arr.length === 0) return;
+
+        const normalized = arr.map(v => normalize(v));
+        const quoted = normalized.map(v => `"${v}"`).join(", ");
+        conditions.push(`count((${field}[])[@ in [${quoted}]]) > 0`);
+    });
+
+    // 4. Pola boolowskie
+    if (filters.kizia === true) {
+        conditions.push("kizia == true");
     }
 
-    
-    function processBooleanField(filters: Partial<FilterState>, field: BooleanKeys<FilterState>) {
-        const value = filters[field];
-
-        if (field === "kizia") {
-            if (value === true) conditions.push("kizia == true");
-            return;
-        }
-
-        if (value === true) {
-            conditions.push(`${field} == true`);
-        }
-    }
-
-    function processArrayField(filters: Partial<FilterState>, field: ArrayKeys<FilterState>) {
-        const arr = ((filters[field] ?? []) as string[]).map(v => v.toLowerCase());
-        if (arr.length) {
-            conditions.push(`count((${field}[])[@ in ${JSON.stringify(arr)}]) > 0`);
-        }
-    }
-
-    // ---------------- Process each field type ----------------
-    stringFields.forEach(f => processStringField(filters, f));
-    booleanFields.forEach(f => processBooleanField(filters, f));
-    arrayFields.forEach(f => processArrayField(filters, f));
-
+    // Składamy całość
     return conditions.length ? ` && (${conditions.join(" && ")})` : "";
 }

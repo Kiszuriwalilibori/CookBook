@@ -17,8 +17,14 @@ const normalizeArrayOrString = (val?: string | string[]) => (Array.isArray(val) 
 const parseBoolean = (val?: string): boolean | undefined => (val === "true" ? true : undefined);
 
 const VALID_STATUSES: Status[] = ["Good", "Acceptable", "Improvement", "Forget"];
-// const parseStatus = (val?: string): Status | null => (val && VALID_STATUSES.includes(val as Status) ? (val as Status) : null);
-const parseStatus = (val?: string): Status | undefined => (val && VALID_STATUSES.includes(val as Status) ? (val as Status) : undefined);
+
+const parseStatuses = (val?: string | string[]): Status[] | undefined => {
+    if (!val) return undefined;
+    const values = Array.isArray(val) ? val : [val];
+    const parsed = values.map(v => v as Status).filter(v => VALID_STATUSES.includes(v));
+    return parsed.length > 0 ? parsed : undefined;
+};
+
 const SOURCE_KEYS: Array<keyof FilterState & string> = ["source.url", "source.book", "source.title", "source.author", "source.where"];
 
 export default async function RecipesPage({ searchParams }: RecipesPageProps) {
@@ -30,12 +36,11 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     // Boolean and status safely handle array query params
     const kiziaValue = Array.isArray(awaitedSearchParams.kizia) ? parseBoolean(awaitedSearchParams.kizia[0]) : parseBoolean(awaitedSearchParams.kizia);
 
-    const statusValue = Array.isArray(awaitedSearchParams.status) ? parseStatus(awaitedSearchParams.status[0]) : parseStatus(awaitedSearchParams.status);
+    const statusValue = parseStatuses(awaitedSearchParams.status);
 
     const filters: Partial<FilterState> = {
         title: normalizeString(awaitedSearchParams.title),
         cuisine: normalizeArrayOrString(awaitedSearchParams.cuisine),
-        // cuisine: normalizeString(awaitedSearchParams.cuisine),
         tags: normalizeArrayOrString(awaitedSearchParams.tags),
         dietary: normalizeArrayOrString(awaitedSearchParams.dietary),
         products: normalizeArrayOrString(awaitedSearchParams.products),
@@ -43,7 +48,7 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
         kizia: kiziaValue,
         status: statusValue,
     };
-    console.log("filters from RecipesPage", filters);
+    
     let initialRecipes: Recipe[] = [];
     try {
         initialRecipes = await getRecipesForCards(filters);

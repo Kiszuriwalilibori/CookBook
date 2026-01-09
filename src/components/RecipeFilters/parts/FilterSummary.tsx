@@ -27,6 +27,7 @@ interface FilterSummaryProps {
 }
 
 export default function FilterSummary({ filters }: FilterSummaryProps) {
+    console.log("filters from FilterSummary", filters);
     const isAdminLogged = useAdminStore(state => state.isAdminLogged);
     const theme = useTheme();
 

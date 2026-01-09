@@ -33,6 +33,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         if (!apply()) return; // validation failed → do nothing
 
         const currentFilters = { ...filters };
+        console.log("currentFilters",currentFilters);
         setFilters(currentFilters);
 
         // Detect if ONLY title is filled
