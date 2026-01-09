@@ -32,11 +32,6 @@ export const FILTER_FIELDS_CONFIG: FilterField[] = [
 ] as const;
 export type FilterValuesTypes = FilterState[keyof FilterState];
 
-// export type FilterState = {
-//     [K in BaseFilterableKeys]: K extends "title" ? string : K extends "status" ? Status : K extends "kizia" ? boolean : string[];
-// } & {
-//     [K in SourceKeys]: string;
-// };
 export type FilterState = {
     [K in BaseFilterableKeys]: K extends "title" ? string : K extends "status" ? Status[] : K extends "kizia" ? boolean : string[];
 } & {

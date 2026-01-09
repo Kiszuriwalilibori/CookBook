@@ -14,7 +14,7 @@ export const initialFilters: FilterState = {
     tags: [],
     dietary: [],
     products: [],
-    status: ["Good", "Acceptable"],
+    status: [],
     kizia: false,
     "source.url": "",
     "source.book": "",
@@ -54,7 +54,7 @@ export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: Fil
             tags: val => normalizeMultiple(val as string[], options.tags),
             dietary: val => normalizeMultiple(val as string[], options.dietary),
             products: val => normalizeMultiple(val as string[], options.products),
-            // status: val => val,
+
             status: val => val as Status[],
             kizia: val => val,
             "source.url": val => (val as string).trim().toLowerCase(),

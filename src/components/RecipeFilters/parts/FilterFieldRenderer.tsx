@@ -58,10 +58,10 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
                 </Box>
             );
 
-        case "checkbox": // or whatever key/component you use for status
+        case "checkbox": 
             return (
                 <Box sx={fieldBoxSx} key={field.key}>
-                    <StatusFilter label={field.label} value={filters[field.key] as Status | null} onChange={(newValue: Status) => handleChange(field.key, newValue)} {...getErrorProps(field.key)} />
+                    <StatusFilter label={field.label} value={filters[field.key] as Status[] ?? []} onChange={(newValue: Status[]) => handleChange(field.key, newValue)} {...getErrorProps(field.key)} />
                 </Box>
             );
 

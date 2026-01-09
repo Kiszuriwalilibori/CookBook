@@ -30,6 +30,7 @@ export const EMPTY_RECIPE_FILTER: RecipeFilter = {
     tags: [],
     dietary: [],
     products: [],
+    
 
     "source.title": [],
     "source.url": [],

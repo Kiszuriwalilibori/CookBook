@@ -4,6 +4,7 @@ import { Status } from "@/types";
 import { Recipe } from "@/types";
 import { FilterState } from "@/models/filters";
 
+
 interface RecipesPageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
