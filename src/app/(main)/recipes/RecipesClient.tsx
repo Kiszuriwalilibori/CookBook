@@ -19,6 +19,20 @@ export default function RecipesClient({ initialRecipes }: RecipesClientProps) {
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
 
     // -------------------------------
+    // Effect 0: Clear URL query params after hydration
+    // -------------------------------
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const url = new URL(window.location.href);
+            if ([...url.searchParams.keys()].length > 0) {
+                url.search = "";
+                window.history.replaceState({}, document.title, url.toString());
+                console.log("[Effect] Cleared query params from URL");
+            }
+        }
+    }, []);
+
+    // -------------------------------
     // Effect 1: Hydrate SSR data
     // -------------------------------
     useEffect(() => {
