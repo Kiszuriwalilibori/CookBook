@@ -41,3 +41,5 @@ export type FilterState = {
 export type ChipEligibleKey = {
     [K in keyof FilterState]: FilterState[K] extends string[] ? K : never;
 }[keyof FilterState];
+
+export type ActualChipKey = Exclude<ChipEligibleKey, "status">;

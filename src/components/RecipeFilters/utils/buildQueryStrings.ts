@@ -21,4 +21,3 @@ export const buildQueryString = (filters: FilterState): string => {
 
     return params.toString();
 };
-// todo: krótko mówiąc nie zakładalismy, że możemy brać więcej niż jeden status, ajednak możemy - potrzebny jest Good i Acceptable razem

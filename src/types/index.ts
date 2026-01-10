@@ -23,14 +23,13 @@ export type FilterableRecipeKeys = BaseFilterableKeys | SourceKeys;
 // export type RecipeFilter = Record<FilterableRecipeKeys, string[]>;
 export type RecipeFilter = Record<Exclude<FilterableRecipeKeys, "kizia" | "status">, string[]>;
 // todo RecipeFilter => RecipeFilterOptions?
-
+export type FilterArrayKey = keyof RecipeFilter;
 export const EMPTY_RECIPE_FILTER: RecipeFilter = {
     title: [],
     cuisine: [],
     tags: [],
     dietary: [],
     products: [],
-    
 
     "source.title": [],
     "source.url": [],

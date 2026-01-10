@@ -1,18 +1,19 @@
-import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
-import { Status } from "@/types";
 import { Box } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+
+import { useAdminStore } from "@/stores";
+import { FilterState, FilterValuesTypes } from "@/models/filters";
+import { Status } from "@/types";
+import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
+
 import { ChipFieldKey } from "../RecipeFilters";
 import { fieldBoxSx } from "../styles";
-import FilterAutocomplete from "./FilterAutocomplete";
-import { Chips } from "./Chips";
-import { useTheme } from "@mui/material/styles";
-import { useAdminStore } from "@/stores";
-import FilterSwitch from "./FilterSwitch";
 import { createRenderTags } from "../utils/createRenderTags";
-import { FilterState } from "@/models/filters";
-import StatusFilter from "./FilterCheckbox";
-import { FilterValuesTypes } from "@/models/filters";
+import { Chips } from "./Chips";
 
+import FilterAutocomplete from "./FilterAutocomplete";
+import FilterSwitch from "./FilterSwitch";
+import StatusFilter from "./FilterCheckbox";
 interface Props {
     field: FilterField;
     filters: FilterState;
