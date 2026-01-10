@@ -18,17 +18,11 @@ export default function RecipesClient({ initialRecipes }: RecipesClientProps) {
     const isAdminLogged = useAdminStore(state => state.isAdminLogged);
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
 
-    // -------------------------------
-    // Efekty
-    // -------------------------------
     useHydrateSSR(initialRecipes, setDisplayRecipes);
     useNonAdminRefetch(isAdminLogged, setDisplayRecipes);
     useAdminRefetch(isAdminLogged, setDisplayRecipes);
     useClearQueryParams();
-
-    // -------------------------------
-    // Render
-    // -------------------------------
+    
     if (displayRecipes.length === 0) {
         return (
             <Box sx={pageContainerStyle}>
