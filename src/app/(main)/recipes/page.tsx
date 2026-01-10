@@ -4,7 +4,6 @@ import { Status } from "@/types";
 import { Recipe } from "@/types";
 import { FilterState } from "@/models/filters";
 
-
 interface RecipesPageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
@@ -49,10 +48,13 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
         kizia: kiziaValue,
         status: statusValue,
     };
-    
+
     let initialRecipes: Recipe[] = [];
     try {
-        initialRecipes = await getRecipesForCards(filters);
+        console.log("[SSR] isAdmin:", false);
+        console.log("[SSR] filters:", filters);
+        initialRecipes = await getRecipesForCards(filters, false);
+        console.log("[SSR] fetched recipes count:", initialRecipes.length);
     } catch (error) {
         console.error("SSR fetch error:", error);
     }

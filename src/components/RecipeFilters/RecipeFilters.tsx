@@ -27,14 +27,13 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
 
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
-    console.log("filters", filters);
+    
 
     // New smart Apply logic
     const handleApply = useCallback(async () => {
         if (!apply()) return; // validation failed → do nothing
 
         const currentFilters = { ...filters };
-        console.log("currentFilters", currentFilters);
         setFilters(currentFilters);
 
         // Detect if ONLY title is filled
@@ -89,7 +88,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         await handleApply();
         setCheckingDirect(false);
     };
-    console.log("filters", filters);
+   
     return (
         <Box sx={containerSx}>
             <Typography variant="h6" gutterBottom align="center">
