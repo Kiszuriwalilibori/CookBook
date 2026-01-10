@@ -30,8 +30,6 @@ export async function POST(request: NextRequest) {
         const email = payload.email.toLowerCase();
         const isAdminLogged = ALLOWED_ADMIN_EMAILS.includes(email);
 
-        console.log(`[check-session] ${email} → admin: ${isAdminLogged}`);
-
         return NextResponse.json({ isAdminLogged });
     } catch (error) {
         const err = error as Error;

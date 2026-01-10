@@ -27,7 +27,6 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
 
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
-    
 
     // New smart Apply logic
     const handleApply = useCallback(async () => {
@@ -52,7 +51,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
 
         // CASE 2: Normal filtering → go to /recipes list
         const queryString = buildQueryString(currentFilters);
-        console.log("queryString", queryString);
+
         router.push(`/recipes${queryString ? `?${queryString}` : ""}`);
         onClose?.();
     }, [apply, filters, setFilters, router, onClose]);
@@ -88,7 +87,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
         await handleApply();
         setCheckingDirect(false);
     };
-   
+
     return (
         <Box sx={containerSx}>
             <Typography variant="h6" gutterBottom align="center">

@@ -51,12 +51,9 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
 
     let initialRecipes: Recipe[] = [];
     try {
-        console.log("[SSR] isAdmin:", false);
-        console.log("[SSR] filters:", filters);
         initialRecipes = await getRecipesForCards(filters, false);
-        console.log("[SSR] fetched recipes count:", initialRecipes.length);
     } catch (error) {
-        console.error("SSR fetch error:", error);
+        console.error("Error fetching recipes:", error);
     }
 
     return <RecipesClient initialRecipes={initialRecipes} />;

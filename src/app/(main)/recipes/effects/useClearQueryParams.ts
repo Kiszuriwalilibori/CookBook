@@ -7,7 +7,6 @@ export function useClearQueryParams() {
             const url = new URL(window.location.href);
             url.search = "";
             window.history.replaceState({}, document.title, url.toString());
-            console.log("[Effect 4] Cleared URL query parameters");
         }
     }, []);
 }

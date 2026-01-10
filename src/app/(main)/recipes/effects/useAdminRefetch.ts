@@ -6,7 +6,6 @@ import { FilterState } from "@/models/filters";
 
 export function useAdminRefetch(isAdminLogged: boolean, setDisplayRecipes: (recipes: Recipe[]) => void) {
     useEffect(() => {
-        console.log("[Effect 3 START] isAdminLogged:", isAdminLogged);
         let cancelled = false;
 
         const refetch = async () => {
@@ -17,11 +16,10 @@ export function useAdminRefetch(isAdminLogged: boolean, setDisplayRecipes: (reci
 
                 const fresh = await getRecipesForCards(filters, isAdminLogged);
                 if (!cancelled) {
-                    console.log("[Effect 3 FETCHED] count:", fresh.length);
                     setDisplayRecipes(fresh);
                 }
             } catch (err) {
-                console.error("[Effect 3] refetch failed:", err);
+                console.error("useAdmin refetch failed:", err);
             }
         };
 
@@ -29,7 +27,6 @@ export function useAdminRefetch(isAdminLogged: boolean, setDisplayRecipes: (reci
 
         return () => {
             cancelled = true;
-            console.log("[Effect 3 CLEANUP]");
         };
     }, [isAdminLogged, setDisplayRecipes]);
 }
