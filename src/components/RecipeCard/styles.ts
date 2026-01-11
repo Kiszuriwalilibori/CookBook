@@ -104,3 +104,9 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         mt: "2px", // Roughly 2px distance between lines
     },
 };
+export const favoriteIcon = (isFavorite: boolean): SxProps => ({
+    position: "absolute",
+    top: 8,
+    right: 8,
+    color: isFavorite ? "red" : "grey.500",
+});
