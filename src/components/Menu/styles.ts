@@ -127,3 +127,11 @@ export const menuToolbarStyle: SxProps<Theme> = {
     paddingY: 0,
     height: "100%",
 };
+export const mobileMenuItemButtonStyle = (currentPathname: string, hidden?: boolean): SxProps<Theme> => ({
+    // Merge mobileMenuItemStyle with button-specific styles
+    ...mobileMenuItemStyle(currentPathname, "", hidden),
+    opacity: hidden ? 0 : 1,
+    transform: hidden ? "translateX(20px)" : "translateX(0)",
+    transition: "opacity 0.4s ease, transform 0.4s ease",
+    pointerEvents: hidden ? "none" : "auto",
+});
