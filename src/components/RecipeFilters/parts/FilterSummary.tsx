@@ -3,8 +3,8 @@ import { Typography, Tooltip, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { filterSummaryTooltipArrowSx, filterSummaryTooltipSx, summaryItemTextSx, summaryTextSx } from "../styles";
 
-import { useAdminStore } from "@/stores";
 import { FILTER_FIELDS_CONFIG, FilterState } from "@/models/filters";
+import { useIsAdminLogged } from "@/stores/useAdminStore";
 
 const MAX_LENGTH = 15;
 
@@ -27,7 +27,7 @@ interface FilterSummaryProps {
 }
 
 export default function FilterSummary({ filters }: FilterSummaryProps) {
-    const isAdminLogged = useAdminStore(state => state.isAdminLogged);
+    const isAdminLogged = useIsAdminLogged();
     const theme = useTheme();
 
     const summary = useMemo(() => {

@@ -1,22 +1,22 @@
-
 "use client";
-import { useAdminStore } from "@/stores/useAdminStore";
+
 import { Box, Typography } from "@mui/material";
 import { Recipe } from "@/types";
 import { styles } from "../styles";
+import { useIsAdminLogged } from "@/stores/useAdminStore";
 
 interface RecipeSourceProps {
     recipe: Recipe;
 }
 
 export function RecipeSource({ recipe }: RecipeSourceProps) {
-    const isAdminLogged = useAdminStore(state => state.isAdminLogged);
+    const isAdminLogged = useIsAdminLogged();
 
     if (!isAdminLogged || !recipe.source) {
         return null;
     }
 
-    const {url, title, book, author, where } = recipe.source;
+    const { url, title, book, author, where } = recipe.source;
 
     // Sprawdź, czy http ma sensowną wartość (niepusta, nie null/undefined)
     const hasValidURL = url && url.trim() !== "";

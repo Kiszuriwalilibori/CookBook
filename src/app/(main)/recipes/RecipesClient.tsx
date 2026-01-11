@@ -5,24 +5,23 @@ import { Grid, Box, Typography } from "@mui/material";
 
 import { PageTitle, RecipeCard } from "@/components";
 import { gridSize, pageContainerStyle } from "./styles";
-import { useAdminStore } from "@/stores/useAdminStore";
+import { useIsAdminLogged } from "@/stores/useAdminStore";
 import type { Recipe } from "@/types";
 import { useAdminRefetch, useClearQueryParams, useHydrateSSR, useNonAdminRefetch } from "./effects";
-
 
 interface RecipesClientProps {
     initialRecipes: Recipe[];
 }
 
 export default function RecipesClient({ initialRecipes }: RecipesClientProps) {
-    const isAdminLogged = useAdminStore(state => state.isAdminLogged);
+    const isAdminLogged = useIsAdminLogged();
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
 
     useHydrateSSR(initialRecipes, setDisplayRecipes);
     useNonAdminRefetch(isAdminLogged, setDisplayRecipes);
     useAdminRefetch(isAdminLogged, setDisplayRecipes);
     useClearQueryParams();
-    
+
     if (displayRecipes.length === 0) {
         return (
             <Box sx={pageContainerStyle}>

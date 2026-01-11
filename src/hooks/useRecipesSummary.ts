@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getOptions } from "@/utils/getOptions";
 import { EMPTY_RECIPE_FILTER, type RecipeFilter } from "@/types";
-import { useAdminStore } from "@/stores";
+import { useIsAdminLogged } from "@/stores/useAdminStore";
 
 interface RecipesSummaryState {
     summary: RecipeFilter;
@@ -16,7 +16,7 @@ export function useRecipesSummary(initialSummary?: RecipeFilter) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const isAdminLogged = useAdminStore(state => state.isAdminLogged);
+    const isAdminLogged = useIsAdminLogged();
 
     useEffect(() => {
         const fetchSummary = async () => {

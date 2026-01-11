@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-import { useAdminStore } from "@/stores";
 import { FilterState, FilterValuesTypes } from "@/models/filters";
 import { Status } from "@/types";
 import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
@@ -14,6 +13,7 @@ import { Chips } from "./Chips";
 import FilterAutocomplete from "./FilterAutocomplete";
 import FilterSwitch from "./FilterSwitch";
 import StatusFilter from "./FilterCheckbox";
+import { useIsAdminLogged } from "@/stores/useAdminStore";
 interface Props {
     field: FilterField;
     filters: FilterState;
@@ -27,7 +27,7 @@ interface Props {
 
 export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorProps }: Props) => {
     const theme = useTheme();
-    const isAdminLogged = useAdminStore(state => state.isAdminLogged);
+    const isAdminLogged = useIsAdminLogged();
 
     if (!isAdminLogged && field.requiredAdmin) return null;
     if (field.key === "kizia" && !isAdminLogged) return null;
@@ -59,10 +59,10 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
                 </Box>
             );
 
-        case "checkbox": 
+        case "checkbox":
             return (
                 <Box sx={fieldBoxSx} key={field.key}>
-                    <StatusFilter label={field.label} value={filters[field.key] as Status[] ?? []} onChange={(newValue: Status[]) => handleChange(field.key, newValue)} {...getErrorProps(field.key)} />
+                    <StatusFilter label={field.label} value={(filters[field.key] as Status[]) ?? []} onChange={(newValue: Status[]) => handleChange(field.key, newValue)} {...getErrorProps(field.key)} />
                 </Box>
             );
 

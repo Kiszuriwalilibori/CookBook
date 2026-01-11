@@ -1,26 +1,17 @@
-// src/hooks/useGoogleSignIn.ts
 "use client";
-
 import { useEffect } from "react";
 import { useAdminStore } from "@/stores/useAdminStore";
 
 export const useGoogleSignIn = () => {
-    const { isAdminLogged, setAdminLogged } = useAdminStore();
+    const { setLoginStatus } = useAdminStore();
 
     useEffect(() => {
-        // Jeśli już zalogowany – nie ładuj Google wcale
-        if (isAdminLogged) {
-            console.log("[Admin] Już zalogowany (z localStorage) → pomijam Google");
-            return;
-        }
-
         // Jeśli już załadowany – nie ładuj drugi raz
         if (window.googleInitialized) return;
 
         const script = document.createElement("script");
         script.src = "https://accounts.google.com/gsi/client";
         script.async = true;
-
         script.onload = () => {
             if (!window.google?.accounts?.id) return;
 
@@ -33,12 +24,12 @@ export const useGoogleSignIn = () => {
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ idToken: response.credential }),
                         });
-                        const { isAdminLogged } = await res.json();
-                        console.log(`[Admin] Google login → ${isAdminLogged ? "sukces" : "odmowa"}`);
-                        setAdminLogged(isAdminLogged, "google login");
+                        const { loginStatus } = await res.json();
+                        console.log(`[Auth] Google login → ${loginStatus}`);
+                        setLoginStatus(loginStatus, "google login");
                     } catch {
-                        console.log("[Admin] Błąd logowania Google");
-                        setAdminLogged(false, "google error");
+                        console.log("[Auth] Błąd logowania Google");
+                        setLoginStatus("not_logged", "google error");
                     }
                 },
             });
@@ -57,5 +48,5 @@ export const useGoogleSignIn = () => {
         };
 
         document.head.appendChild(script);
-    }, [isAdminLogged, setAdminLogged]);
+    }, [setLoginStatus]);
 };

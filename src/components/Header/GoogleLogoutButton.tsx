@@ -1,19 +1,19 @@
 "use client";
 import { Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useAdminStore } from "@/stores";
-import { useRouter, usePathname } from "next/navigation"; // ← poprawne importy
+import { useLoginStatus, useSetLoginStatus } from "@/stores/useAdminStore";
+import { useRouter, usePathname } from "next/navigation";
 import { logoutButtonWrapper } from "./Header.styles";
 
 export const GoogleLogoutButton = () => {
-    const isAdminLogged = useAdminStore(s => s.isAdminLogged);
-    const setAdminLogged = useAdminStore(s => s.setAdminLogged);
+    const loginStatus = useLoginStatus();
+    const setLoginStatus = useSetLoginStatus();
     const router = useRouter();
     const pathname = usePathname();
 
     const handleLogout = () => {
         // 1. Wylogowanie
-        setAdminLogged(false, "wylogowanie ręczne");
+        setLoginStatus("not_logged", "wylogowanie ręczne");
 
         // 2. Czyścimy query params (zostajemy na tej samej ścieżce)
         router.replace(pathname, { scroll: false });
@@ -22,10 +22,17 @@ export const GoogleLogoutButton = () => {
         router.refresh();
     };
 
-    if (!isAdminLogged) return null;
+    if (loginStatus === "not_logged") return null;
 
     return (
-        <Button sx={logoutButtonWrapper} variant="contained" color="error" size="small" startIcon={<LogoutIcon />} onClick={handleLogout}>
+        <Button 
+            sx={logoutButtonWrapper} 
+            variant="contained" 
+            color="error" 
+            size="small" 
+            startIcon={<LogoutIcon />} 
+            onClick={handleLogout}
+        >
             Wyloguj
         </Button>
     );
