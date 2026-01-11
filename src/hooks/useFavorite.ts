@@ -1,6 +1,7 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { useAdminStore, useIsUserLogged } from "@/stores/useAdminStore";
-
 
 export const useFavorite = (recipeId: string) => {
     const isUserLogged = useIsUserLogged(); // <- sprawdzamy zalogowanego usera
