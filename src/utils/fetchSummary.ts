@@ -3,7 +3,6 @@ import { getOptions } from "./getOptions";
 import type { RecipeFilter } from "@/types";
 import { initialSummary } from "./getOptions/helpers";
 
-
 /**
  * Fetches recipes summary from Sanity safely.
  * Ensures data is always valid, cleans faulty values,
@@ -14,7 +13,7 @@ export async function fetchSummary(): Promise<{
     error: string | null;
 }> {
     try {
-        const isAdminLogged = useAdminStore.getState().isAdminLogged;
+        const isAdminLogged = useAdminStore.getState().loginStatus === "admin";
 
         const { fullSummary, publicSummary, sanitizeIssues } = await getOptions();
 
