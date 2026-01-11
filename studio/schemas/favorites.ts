@@ -1,4 +1,5 @@
-// sanity/schemas/favorite.ts
+import type {Rule} from 'sanity'
+
 export default {
   name: 'favorite',
   title: 'Favorite',
@@ -8,14 +9,14 @@ export default {
       name: 'userId',
       title: 'User ID',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: Rule) => Rule.required(),
     },
     {
       name: 'recipe',
       title: 'Recipe',
       type: 'reference',
       to: [{type: 'recipe'}],
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: Rule) => Rule.required(),
     },
   ],
   indexes: [
