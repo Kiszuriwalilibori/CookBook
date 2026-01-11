@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAdminStore } from "@/stores/useAdminStore";
+import { useIsAdminLogged } from "@/stores/useAdminStore";
 import { IconButton, Box } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { closeButtonStyles, signinButtonWrapperStyles } from "./Header.styles";
 
 export default function GoogleSignInButton() {
-    const isAdminLogged = useAdminStore(s => s.isAdminLogged);
+    const isAdminLogged = useIsAdminLogged();
     const [visible, setVisible] = useState(true);
     const [loaded, setLoaded] = useState(false); // Nowy state – czeka na załadowanie przycisku Google
 

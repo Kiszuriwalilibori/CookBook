@@ -4,13 +4,8 @@ import { client } from "./client";
 import { buildFilterClause } from "./buildFilterClause";
 import { FilterState } from "@/models/filters";
 
-export async function getRecipesForCards(
-    filters?: Partial<FilterState>,
-    isAdmin?: boolean
-): Promise<Recipe[]> {
+export async function getRecipesForCards(filters?: Partial<FilterState>, isAdmin?: boolean): Promise<Recipe[]> {
     // --- DEBUG log ---
-    console.log("[SSR] incoming filters:", filters);
-    console.log("[SSR] isAdmin:", isAdmin);
 
     // --- Apply default status only for non-admin ---
     const appliedFilters: Partial<FilterState> = { ...filters };
@@ -24,9 +19,6 @@ export async function getRecipesForCards(
 
     // --- Build GROQ where clause ---
     const where = buildFilterClause(appliedFilters);
-
-    console.log("[SSR] appliedFilters for query:", appliedFilters);
-    console.log("[SSR] GROQ where clause:", where);
 
     const query = groq`*[_type == "recipe"${where}]{
         _id,
@@ -54,7 +46,6 @@ export async function getRecipesForCards(
 
     try {
         const recipes = await client.fetch<Recipe[]>(query);
-        console.log("[SSR] fetched recipes count:", recipes.length);
         return recipes;
     } catch (err) {
         console.error("[SSR] fetch error:", err);

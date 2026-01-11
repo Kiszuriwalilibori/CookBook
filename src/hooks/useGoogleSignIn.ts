@@ -25,10 +25,9 @@ export const useGoogleSignIn = () => {
                             body: JSON.stringify({ idToken: response.credential }),
                         });
                         const { loginStatus } = await res.json();
-                        console.log(`[Auth] Google login → ${loginStatus}`);
+
                         setLoginStatus(loginStatus, "google login");
                     } catch {
-                        console.log("[Auth] Błąd logowania Google");
                         setLoginStatus("not_logged", "google error");
                     }
                 },

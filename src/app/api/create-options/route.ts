@@ -10,7 +10,6 @@ const SANITY_WEBHOOK_SECRET_CREATE_OPTIONS = process.env.SANITY_WEBHOOK_SECRET_C
 interface RecipeDoc {
     products?: string[];
     dietary?: string[];
-    // cuisine?: string[] | string;
     cuisine?: string[];
     tags?: string[];
     title?: string;
@@ -138,8 +137,6 @@ const buildSummary = (sets: ReturnType<typeof createEmptySets>) => ({
 // === MAIN HANDLER ===
 export async function POST(req: NextRequest) {
     try {
-        console.log("Webhook /api/create-options – start");
-
         // Verify secret
         if (SANITY_WEBHOOK_SECRET_CREATE_OPTIONS) {
             const incomingSecret = (req.headers.get("x-webhook-secret") || req.headers.get("x-sanity-webhook-secret") || "").trim();
