@@ -5,5 +5,8 @@ import { getOptions } from "./getOptions";
 import { getRecipesForCards } from "./getRecipesForCards";
 import { searchRecipeByTitle } from "./searchRecipeByTitle";
 import { getRecipeBySlug } from "./getRecipeBySlug";
+import { getSessionUser } from "./session";
+import { verifyGoogle } from "./googleAuth";
+import writeClient from "./writeClient";
 
-export { getOptions, buildFilterClause, getRecipesForCards, searchRecipeByTitle, getRecipeBySlug, client, fetchSummary };
+export { writeClient, getOptions, buildFilterClause, getRecipesForCards, searchRecipeByTitle, getRecipeBySlug, client, getSessionUser, fetchSummary, verifyGoogle };

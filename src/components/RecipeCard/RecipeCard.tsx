@@ -43,12 +43,13 @@
 import React from "react";
 import { Card, CardMedia, CardContent, Typography, Chip, Box, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+
 import NextLink from "next/link";
 import { styles, favoriteIcon } from "./styles";
 import Separator from "../Common/Separator/Separator";
 import type { Recipe } from "@/types";
 import { useFavorite } from "@/hooks/useFavorite";
+import { useIsUserLogged } from "@/stores/useAdminStore";
 
 interface RecipeCardProps {
     recipe: Recipe;
@@ -56,6 +57,7 @@ interface RecipeCardProps {
 
 export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
     const { title, description, prepTime: rawPrepTime, cookTime: rawCookTime, slug } = recipe;
+    const isUserLogged = useIsUserLogged();
     const contentText = description?.firstBlockText?.children?.map(child => child.text).join(" ") || "";
     const descTitle = description?.title || contentText || "No description available.";
     const imageUrl = description?.image?.asset?.url || "/placeholder-image.jpg";
@@ -69,15 +71,17 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
             <Card sx={styles.card}>
                 <Box sx={{ position: "relative" }}>
                     <CardMedia component="img" height="200" image={imageUrl} alt={title} sx={styles.media} />
-                    <IconButton
-                        onClick={e => {
-                            e.preventDefault(); // nie przechodzimy do linku
-                            toggleFavorite();
-                        }}
-                        sx={favoriteIcon(isFavorite)}
-                    >
-                        {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                    </IconButton>
+                    {isUserLogged && (
+                        <IconButton
+                            onClick={e => {
+                                e.preventDefault(); // nie przechodzimy do linku
+                                toggleFavorite();
+                            }}
+                            sx={favoriteIcon(isFavorite)}
+                        >
+                            <FavoriteIcon />
+                        </IconButton>
+                    )}
                 </Box>
                 <CardContent sx={styles.content}>
                     <Typography variant="h6" gutterBottom sx={styles.title}>

@@ -1,4 +1,4 @@
 import options from '../schemas/options'
 import recipe from '../schemas/recipe'
-
-export const schemaTypes = [recipe, options]
+import favorites from '../schemas/favorites'
+export const schemaTypes = [recipe, options, favorites]

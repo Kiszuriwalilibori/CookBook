@@ -9,3 +9,5 @@ export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production"; /
 export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? ""; // Throws if missing, but ?? '' for safety
 
 export const useCdn = process.env.NODE_ENV === "production"; // false in dev (live queries), true in prod (cached)
+
+export const token = process.env.FAVORITES_API_KEY;

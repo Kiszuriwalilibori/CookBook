@@ -12,7 +12,10 @@ export const useFavorite = (recipeId: string) => {
         if (!isUserLogged || !googleToken) return; // <-- jeśli nie zalogowany, nie fetchujemy
 
         fetch("/api/favorites/list", {
-            headers: { Authorization: `Bearer ${googleToken}` },
+            headers: {
+                Authorization: `Bearer ${googleToken}`,
+            },
+            credentials: "include", // <-- dodajemy 'credentials' do każdego fetch
         })
             .then(res => res.json())
             .then((favorites: { recipe: { _id: string } }[]) => {
@@ -33,6 +36,7 @@ export const useFavorite = (recipeId: string) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ recipeId }),
+            credentials: "include", // <-- również dodajemy 'credentials' tutaj
         });
 
         setIsFavorite(!isFavorite);

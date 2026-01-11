@@ -108,5 +108,5 @@ export const favoriteIcon = (isFavorite: boolean): SxProps => ({
     position: "absolute",
     top: 8,
     right: 8,
-    color: isFavorite ? "red" : "grey.500",
+    color: isFavorite ? "red" : "#9e9e9e",
 });
