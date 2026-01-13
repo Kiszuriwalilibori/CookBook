@@ -4,7 +4,6 @@ import { client, verifyGoogle } from "@/utils";
 
 export async function GET(req: NextRequest) {
     try {
-        
         const token = req.cookies.get("session")?.value;
 
         if (!token) {
@@ -14,7 +13,6 @@ export async function GET(req: NextRequest) {
 
         // Verify token
         const user = await verifyGoogle(token);
-        console.log("[favorites][GET] Verified user:", user);
 
         // Fetch favorites from Sanity
         const favorites = await client.fetch(
@@ -27,8 +25,6 @@ export async function GET(req: NextRequest) {
             } | order(createdAt desc)`,
             { userId: user.userId }
         );
-
-        console.log("[favorites][GET] Favorites found:", favorites.length);
 
         return NextResponse.json(favorites);
     } catch (err) {

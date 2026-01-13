@@ -16,7 +16,7 @@ interface RecipesClientProps {
 export default function RecipesClient({ initialRecipes }: RecipesClientProps) {
     const isAdminLogged = useIsAdminLogged();
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
-
+    console.log(displayRecipes);
     useHydrateSSR(initialRecipes, setDisplayRecipes);
     useNonAdminRefetch(isAdminLogged, setDisplayRecipes);
     useAdminRefetch(isAdminLogged, setDisplayRecipes);
