@@ -1,5 +1,5 @@
 import { groq } from "next-sanity";
-import type { Recipe, Status } from "@/types";
+import { Recipe, REGULAR_USER_STATUSES } from "@/types";
 import { client } from "./client";
 import { buildFilterClause } from "./buildFilterClause";
 import { FilterState } from "@/models/filters";
@@ -13,7 +13,7 @@ export async function getRecipesForCards(filters?: Partial<FilterState>, isAdmin
     if (!isAdmin) {
         // jeśli non-admin i nie podano statusu, ustaw domyślnie Good i Acceptable
         if (!appliedFilters.status || appliedFilters.status.length === 0) {
-            appliedFilters.status = ["Good", "Acceptable"] as Status[];
+            appliedFilters.status = [...REGULAR_USER_STATUSES];
         }
     }
 

@@ -37,15 +37,32 @@ export const EMPTY_RECIPE_FILTER: RecipeFilter = {
     "source.author": [],
     "source.where": [],
 };
+// const enum – typ bazowy
+const enum StatusEnum {
+    Good = "Good",
+    Acceptable = "Acceptable",
+    Improvement = "Improvement",
+    Forget = "Forget",
+}
 
-type Status = "Good" | "Acceptable" | "Improvement" | "Forget";
+// brandowany typ – nie w runtime, tylko do typowania
+export type Status = `${StatusEnum}` & { readonly __brand: unique symbol };
 
-const StatusOptions: { title: string; value: Status }[] = [
-    { title: "Good", value: "Good" },
-    { title: "Acceptable", value: "Acceptable" },
-    { title: "Improvement", value: "Improvement" },
-    { title: "Forget", value: "Forget" },
+// obiekt, którego używasz w kodzie (z dużej litery)
+export const Status = {
+    Good: StatusEnum.Good as Status,
+    Acceptable: StatusEnum.Acceptable as Status,
+    Improvement: StatusEnum.Improvement as Status,
+    Forget: StatusEnum.Forget as Status,
+};
+
+export const StatusOptions = [
+    { title: "Good", value: Status.Good },
+    { title: "Acceptable", value: Status.Acceptable },
+    { title: "Improvement", value: Status.Improvement },
+    { title: "Forget", value: Status.Forget },
 ];
 
-export { StatusOptions };
-export type { Recipe, Status };
+export const REGULAR_USER_STATUSES: readonly Status[] = [Status.Good, Status.Acceptable];
+
+export type { Recipe };

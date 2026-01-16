@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import type { Recipe } from "@/types";
+import { Status, type Recipe } from "@/types";
 import { getRecipesForCards } from "@/utils/getRecipesForCards";
 import { FilterState } from "@/models/filters";
 
@@ -11,7 +11,7 @@ export function useNonAdminRefetch(isAdminLogged: boolean, setDisplayRecipes: (r
 
             const refetch = async () => {
                 try {
-                    const filters: Partial<FilterState> = { status: ["Good", "Acceptable"] };
+                    const filters: Partial<FilterState> = { status: [Status.Good, Status.Acceptable] };
                     const fresh = await getRecipesForCards(filters, isAdminLogged);
                     if (!cancelled) {
                         setDisplayRecipes(fresh);

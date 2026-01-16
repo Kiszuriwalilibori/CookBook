@@ -1,3 +1,4 @@
+import { Status } from "@/types";
 import type { NextRequest } from "next/server";
 
 // === Sanity config ===
@@ -168,7 +169,7 @@ export async function POST(req: NextRequest) {
 
         recipes.forEach(r => {
             accumulate(r, fullSets);
-            if (r.status === "Good" || r.status === "Acceptable") accumulate(r, goodSets);
+            if (r.status === Status.Good || r.status === Status.Acceptable) accumulate(r, goodSets);
         });
 
         const summaryDoc: JsonRecord = {

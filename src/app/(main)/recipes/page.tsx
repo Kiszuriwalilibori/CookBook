@@ -16,8 +16,7 @@ const normalizeArrayOrString = (val?: string | string[]) => (Array.isArray(val) 
 
 const parseBoolean = (val?: string): boolean | undefined => (val === "true" ? true : undefined);
 
-const VALID_STATUSES: Status[] = ["Good", "Acceptable", "Improvement", "Forget"];
-
+const VALID_STATUSES: readonly Status[] = [Status.Good, Status.Acceptable, Status.Improvement, Status.Forget];
 const parseStatuses = (val?: string | string[]): Status[] | undefined => {
     if (!val) return undefined;
     const values = Array.isArray(val) ? val : [val];
@@ -60,3 +59,13 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
 }
 
 // jest zwłoka w wyświetlaniu, na początku pokazuje że nie znaleziono przepisów, źle to wygląda
+
+// TODO: ma zastrzeżenia co do typów tutaj, później się temu przyjrzeć
+//
+// const VALID_STATUSES: readonly Status[] = [Status.Good, Status.Acceptable, Status.Improvement, Status.Forget];
+// const parseStatuses = (val?: string | string[]): Status[] | undefined => {
+//     if (!val) return undefined;
+//     const values = Array.isArray(val) ? val : [val];
+//     const parsed = values.map(v => v as Status).filter(v => VALID_STATUSES.includes(v));
+//     return parsed.length > 0 ? parsed : undefined;
+// };
