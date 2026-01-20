@@ -1,13 +1,16 @@
-import { JSX } from "react";
 import PageTitle from "@/components/PageTitle";
+import { getFavoriteRecipesForSSR } from "@/utils/getFavoriteRecipesForSSR";
+import FavoritesClient from "./FavoritesClient";
 
-export default function Favorites(): JSX.Element {
+export const dynamic = "force-dynamic";
+
+export default async function FavoritesPage() {
+    const initialRecipes = await getFavoriteRecipesForSSR();
+
     return (
         <>
-            <PageTitle title="Favorites" />
-            <div className="container mx-auto p-4">
-                <p className="text-lg">This is the favorites page. Your favorite items will be displayed here.</p>
-            </div>
+            <PageTitle title="Ulubione przepisy" />
+            <FavoritesClient initialRecipes={initialRecipes} />
         </>
     );
 }
