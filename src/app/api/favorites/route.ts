@@ -2,7 +2,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { writeClient, verifyGoogle } from "@/utils";
-
+import { getUserFavorites } from "@/utils/getUserFavorites";
 // POST → dodanie ulubionego
 export async function POST(req: NextRequest) {
     try {
@@ -81,40 +81,23 @@ export async function DELETE(req: NextRequest) {
     }
 }
 
+
 export async function GET(req: NextRequest) {
     try {
         const token = req.cookies.get("session")?.value;
-        
-        if (!token) {
-            console.warn("[favorites][GET] No token, user not logged in");
-            return NextResponse.json([], { status: 401 });
-        }
+        if (!token) return NextResponse.json([], { status: 401 });
 
-        // Weryfikacja tokena
         const user = await verifyGoogle(token);
-        console.log("[favorites][GET] Verified user:", user);
+        if (!user?.userId) return NextResponse.json([], { status: 401 });
 
-        if (!user?.userId) {
-            console.error("[favorites][GET] Token verified but no userId");
-            return NextResponse.json([], { status: 401 });
-        }
+        const favorites = await getUserFavorites(user.userId);
 
-        // Pobranie ulubionych
-        const favorites = await writeClient.fetch(
-            `*[_type=="favorite" && userId==$userId]{
-                recipe->{
-                    _id,
-                    title,
-                    slug
-                }
-            } | order(createdAt desc)`,
-            { userId: user.userId }
-        );
-
-        console.log("[favorites][GET] Favorites fetched:", favorites.length);
         return NextResponse.json(favorites);
     } catch (err) {
         console.error("[favorites][GET] Error:", err);
         return NextResponse.json([], { status: 401 });
     }
 }
+
+
+
