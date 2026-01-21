@@ -3,6 +3,7 @@ import { Recipe, REGULAR_USER_STATUSES } from "@/types";
 import { client } from "./client";
 import { buildFilterClause } from "./buildFilterClause";
 import { FilterState } from "@/models/filters";
+import { recipeCardProjection } from "@/utils/projections/recipeCardProjection";
 
 export async function getRecipesForCards(filters?: Partial<FilterState>, isAdmin?: boolean): Promise<Recipe[]> {
     // --- DEBUG log ---
@@ -20,30 +21,11 @@ export async function getRecipesForCards(filters?: Partial<FilterState>, isAdmin
     // --- Build GROQ where clause ---
     const where = buildFilterClause(appliedFilters);
 
-    const query = groq`*[_type == "recipe"${where}]{
-        _id,
-        title,
-        slug { current },
-        description {
-          title,
-          content[0] {
-            children[0] { text }
-          },
-          image {
-            asset-> { url },
-            alt
-          }
-        },
-        prepTime,
-        cookTime,
-        recipeYield,
-        tags,
-        dietary,
-        products,
-        kizia,
-        status
-    } | order(_createdAt desc)`;
-
+    const query = groq`
+  *[_type == "recipe"${where}]{
+    ${recipeCardProjection}
+  } | order(_createdAt desc)
+`;
     try {
         const recipes = await client.fetch<Recipe[]>(query);
         return recipes;

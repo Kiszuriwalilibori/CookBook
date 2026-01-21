@@ -1,31 +1,13 @@
 import { writeClient } from "@/utils";
 import type { Recipe } from "@/types";
+import { recipeCardProjection } from "@/utils/projections/recipeCardProjection";
 export async function getUserFavorites(userId: string): Promise<Recipe[]> {
     if (!userId) return [];
 
     const favorites = await writeClient.fetch(
         `*[_type=="favorite" && userId==$userId]{
             recipe->{
-                _id,
-                title,
-                slug,
-                prepTime,
-                cookTime,
-                recipeYield,
-                tags,
-                dietary,
-                products,
-                kizia,
-                status,
-                description {
-                    title,
-                    firstBlockText,
-                    image {
-                        asset->{
-                            url
-                        }
-                    }
-                }
+                ${recipeCardProjection}
             }
         } | order(createdAt desc)`,
         { userId }
