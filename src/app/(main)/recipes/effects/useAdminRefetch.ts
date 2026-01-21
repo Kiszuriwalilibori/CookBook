@@ -12,7 +12,7 @@ export function useAdminRefetch(isAdminLogged: boolean, setDisplayRecipes: (reci
             try {
                 const filters: Partial<FilterState> = isAdminLogged
                     ? {} // Admin sees everything
-                    : { status: REGULAR_USER_STATUSES }; // Non-admin default
+                    : { status: [...REGULAR_USER_STATUSES] }; // Non-admin default
 
                 const fresh = await getRecipesForCards(filters, isAdminLogged);
                 if (!cancelled) {
