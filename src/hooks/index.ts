@@ -7,6 +7,7 @@ import { useFilters } from "./useFilters";
 import { useGoogleSignIn } from "./useGoogleSignIn";
 import { useNavItems } from "./useNavItems";
 import { useRecipesSummary } from "./useRecipesSummary";
+import { useResetFavoritesOnLogout } from "./useResetFavoritesOnLogout";
 import { useSyncRecipesStore } from "./useSyncRecipesStore";
 
 export {
@@ -19,5 +20,6 @@ export {
   useGoogleSignIn,
   useNavItems,
   useRecipesSummary,
+  useResetFavoritesOnLogout,
   useSyncRecipesStore
 };;

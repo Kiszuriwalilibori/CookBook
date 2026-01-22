@@ -36,7 +36,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite, addF
                 <Box sx={{ position: "relative" }}>
                     <CardMedia component="img" height="200" image={imageUrl} alt={title} sx={styles.media} />
                     {isUserLogged && (
-                        <IconButton onClick={handleFavorite} sx={favoriteIcon(isFavorite)}>
+                        <IconButton disabled={loading} onClick={handleFavorite} sx={favoriteIcon(isFavorite)}>
                             <FavoriteIcon />
                         </IconButton>
                     )}
