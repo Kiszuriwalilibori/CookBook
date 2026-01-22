@@ -7,39 +7,43 @@ interface UseConfirmDialogOptions<T> {
 }
 
 export function useConfirmDialog<T>({ onConfirm }: UseConfirmDialogOptions<T>) {
-    const [open, setOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [payload, setPayload] = useState<T | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const requestConfirm = useCallback((value: T) => {
+    // Otwiera dialog z danym obiektem
+    const openDialog = useCallback((value: T) => {
         setPayload(value);
-        setOpen(true);
+        setIsOpen(true);
     }, []);
 
+    // Anuluje dialog
     const cancel = useCallback(() => {
-        setOpen(false);
+        if (loading) return; // blokada anulowania w trakcie akcji
+        setIsOpen(false);
         setPayload(null);
-    }, []);
+    }, [loading]);
 
+    // Potwierdza dialog
     const confirm = useCallback(async () => {
-        if (!payload) return;
+        if (!payload || loading) return; // blokada podwójnego kliknięcia
 
         setLoading(true);
         try {
             await onConfirm(payload);
         } finally {
             setLoading(false);
-            setOpen(false);
+            setIsOpen(false);
             setPayload(null);
         }
-    }, [payload, onConfirm]);
+    }, [payload, onConfirm, loading]);
 
     return {
-        open,
+        isOpen,
         payload,
         loading,
-        requestConfirm,
+        openDialog,
         cancel,
         confirm,
-    };
+    } as const;
 }

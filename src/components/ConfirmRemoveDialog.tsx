@@ -1,34 +1,34 @@
 "use client";
 
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from "@mui/material";
 
 interface ConfirmRemoveDialogProps {
     open: boolean;
+    loading: boolean;
     title: string;
-    loading?: boolean;
-    onConfirm: () => void;
     onCancel: () => void;
+    onConfirm: () => void;
 }
 
-export default function ConfirmRemoveDialog({ open, title, loading = false, onConfirm, onCancel }: ConfirmRemoveDialogProps) {
+export const ConfirmRemoveDialog: React.FC<ConfirmRemoveDialogProps> = ({ open, loading, title, onCancel, onConfirm }) => {
     return (
         <Dialog open={open} onClose={onCancel}>
-            <DialogTitle>Usunąć z Ulubionych?</DialogTitle>
-
+            <DialogTitle>Potwierdzenie usunięcia</DialogTitle>
             <DialogContent>
-                <DialogContentText>
-                    Czy na pewno chcesz usunąć
-                    <strong> {title}</strong> z Ulubionych?
-                </DialogContentText>
+                <Typography>
+                    Czy na pewno chcesz usunąć <strong>{title}</strong> z Ulubionych?
+                </Typography>
             </DialogContent>
-
             <DialogActions>
-                <Button onClick={onCancel}>Anuluj</Button>
-
-                <Button color="error" variant="contained" disabled={loading} onClick={onConfirm}>
-                    Usuń
+                <Button onClick={onCancel} disabled={loading}>
+                    Anuluj
+                </Button>
+                <Button onClick={onConfirm} color="error" disabled={loading}>
+                    {loading ? "Usuwanie..." : "Usuń"}
                 </Button>
             </DialogActions>
         </Dialog>
     );
-}
+};
+
+export default ConfirmRemoveDialog;
