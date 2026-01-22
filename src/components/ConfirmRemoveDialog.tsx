@@ -20,10 +20,10 @@ export const ConfirmRemoveDialog: React.FC<ConfirmRemoveDialogProps> = ({ open, 
                 </Typography>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onCancel} disabled={loading}>
+                <Button onClick={onCancel} disabled={loading} variant="contained" color="secondary">
                     Anuluj
                 </Button>
-                <Button onClick={onConfirm} color="error" disabled={loading}>
+                <Button onClick={onConfirm} disabled={loading} variant="contained" color="error">
                     {loading ? "Usuwanie..." : "Usuń"}
                 </Button>
             </DialogActions>
