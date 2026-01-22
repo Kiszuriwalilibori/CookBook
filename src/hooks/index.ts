@@ -1,3 +1,4 @@
+import { useConfirmDialog } from "./useConfirmDialog";
 import { useCreateRecipeFilterFields } from "./useCreateRecipeFilterFields";
 import { useDebouncedCallback } from "./useDebouncedCallback";
 import { useEscapeKey } from "./useEscapeKey";
@@ -9,6 +10,7 @@ import { useRecipesSummary } from "./useRecipesSummary";
 import { useSyncRecipesStore } from "./useSyncRecipesStore";
 
 export {
+  useConfirmDialog,
   useCreateRecipeFilterFields,
   useDebouncedCallback,
   useEscapeKey,

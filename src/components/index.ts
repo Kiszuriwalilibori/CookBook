@@ -1,9 +1,10 @@
+import ConfirmRemoveDialog from "./ConfirmRemoveDialog";
+import Footer from "./Footer/Footer";
+import Header from "./Header/Header";
 import Menu from "./Menu";
 import PageTitle from "./PageTitle";
-import Header from "./Header/Header";
 import RecipeCard from "./RecipeCard";
-import Separator from "./Common/Separator/Separator";
 import RecipeFilters from "./RecipeFilters";
-import Footer from "./Footer/Footer";
+import Separator from "./Common/Separator/Separator";
 
-export { Menu, Header, Footer, PageTitle, RecipeCard, Separator, RecipeFilters };
+export { ConfirmRemoveDialog, Footer, Header, Menu, PageTitle, RecipeCard, RecipeFilters, Separator };
