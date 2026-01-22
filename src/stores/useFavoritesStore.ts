@@ -1,38 +1,37 @@
-"use client";
-
 import { create } from "zustand";
 
-// Typ danych dla ulubionych
-export interface Favorite {
-    recipeId: string;
-    userId: string;
-}
-
-// Typ stanu store
 interface FavoritesState {
-    favorites: Set<string>; // przechowujemy tylko recipeId dla szybkiego lookup
+    favorites: Set<string>;
+    hydrated: boolean;
     setFavorites: (ids: string[]) => void;
-    addFavorite: (recipeId: string) => void;
-    removeFavorite: (recipeId: string) => void;
+    add: (id: string) => void;
+    remove: (id: string) => void;
+    reset: () => void;
 }
 
-// Store
-export const useFavoritesStore = create<FavoritesState>((set, get) => ({
+export const useFavoritesStore = create<FavoritesState>(set => ({
     favorites: new Set(),
+    hydrated: false,
 
-    setFavorites: (ids: string[]) => {
-        set({ favorites: new Set(ids) });
-    },
+    setFavorites: ids =>
+        set({
+            favorites: new Set(ids),
+            hydrated: true,
+        }),
 
-    addFavorite: (recipeId: string) => {
-        const current = new Set(get().favorites);
-        current.add(recipeId);
-        set({ favorites: current });
-    },
+    add: id =>
+        set(state => {
+            const next = new Set(state.favorites);
+            next.add(id);
+            return { favorites: next };
+        }),
 
-    removeFavorite: (recipeId: string) => {
-        const current = new Set(get().favorites);
-        current.delete(recipeId);
-        set({ favorites: current });
-    },
+    remove: id =>
+        set(state => {
+            const next = new Set(state.favorites);
+            next.delete(id);
+            return { favorites: next };
+        }),
+
+    reset: () => set({ favorites: new Set(), hydrated: false }),
 }));

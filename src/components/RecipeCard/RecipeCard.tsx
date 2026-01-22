@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardMedia, CardContent, Typography, Chip, Box, IconButton } from "@mui/material";
+import { Card, CardMedia, CardContent, Typography, Box, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import NextLink from "next/link";
@@ -17,13 +17,11 @@ interface RecipeCardProps {
 }
 
 export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite, addFavorite, removeFavorite, loading }) => {
-    const { title, description, prepTime: rawPrepTime, cookTime: rawCookTime, slug } = recipe;
+    const { title, description, slug } = recipe;
     const isUserLogged = useIsUserLogged();
     const contentText = description?.firstBlockText?.children?.map(child => child.text).join(" ") || "";
     const descTitle = description?.title || contentText || "No description available.";
     const imageUrl = description?.image?.asset?.url || "/placeholder-image.jpg";
-    const prepTime = `${rawPrepTime || 0} min`;
-    const cookTime = `${rawCookTime || 0} min`;
 
     const handleFavorite = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -51,10 +49,6 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite, addF
                     <Typography variant="body2" sx={styles.description}>
                         {descTitle}
                     </Typography>
-                    <Box sx={styles.details}>
-                        <Chip label={prepTime} size="small" sx={styles.chip} />
-                        <Chip label={cookTime} size="small" sx={styles.chip} />
-                    </Box>
                 </CardContent>
             </Card>
         </NextLink>
