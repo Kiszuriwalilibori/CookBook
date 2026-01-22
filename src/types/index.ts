@@ -66,3 +66,8 @@ export const StatusOptions = [
 export const REGULAR_USER_STATUSES: readonly Status[] = [Status.Good, Status.Acceptable];
 
 export type { Recipe };
+
+export interface User {
+    userId: string;
+    email: string;
+}

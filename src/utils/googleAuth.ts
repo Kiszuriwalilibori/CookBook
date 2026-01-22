@@ -1,11 +1,7 @@
 // utils/googleAuth.ts
+import { User } from "@/types";
 import { google } from "googleapis";
 import { NextRequest } from "next/server";
-
-interface User {
-    userId: string;
-    email: string;
-}
 
 // Accept either a NextRequest (from API route) OR a token string
 export async function verifyGoogle(input: NextRequest | string): Promise<User> {
