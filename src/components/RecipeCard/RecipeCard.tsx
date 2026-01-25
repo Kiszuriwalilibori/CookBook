@@ -4,9 +4,11 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import NextLink from "next/link";
 import { styles, favoriteIcon } from "./styles";
-import Separator from "../Common/Separator/Separator";
+
 import type { Recipe } from "@/types";
 import { useIsUserLogged } from "@/stores/useAdminStore";
+import { useFavoritesStore } from "@/stores/useFavoritesStore";
+import Separator from "../Common/Separator/Separator";
 
 interface RecipeCardProps {
     recipe: Recipe;
@@ -19,6 +21,7 @@ interface RecipeCardProps {
 export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite, addFavorite, removeFavorite, loading }) => {
     const { title, description, slug } = recipe;
     const isUserLogged = useIsUserLogged();
+    const { hydrated } = useFavoritesStore();
     const contentText = description?.firstBlockText?.children?.map(child => child.text).join(" ") || "";
     const descTitle = description?.title || contentText || "No description available.";
     const imageUrl = description?.image?.asset?.url || "/placeholder-image.jpg";
@@ -35,7 +38,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite, addF
             <Card sx={styles.card}>
                 <Box sx={{ position: "relative" }}>
                     <CardMedia component="img" height="200" image={imageUrl} alt={title} sx={styles.media} />
-                    {isUserLogged && (
+                    {isUserLogged && hydrated && (
                         <IconButton disabled={loading} onClick={handleFavorite} sx={favoriteIcon(isFavorite)}>
                             <FavoriteIcon />
                         </IconButton>
