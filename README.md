@@ -100,3 +100,6 @@ sanity migration run rename-recipe-field --project=mextu0pu --dataset production
 // todo
 Will install jspdf@4.0.0, which 
 is a breaking change
+
+
+https://chatgpt.com/?utm_source=google&utm_medium=paid_search&utm_campaign=GOOG_C_SEM_GBR_Core_CHT_BAU_ACQ_PER_MIX_ALL_EMEA_PL_EN_032525&c_id=22370420337&c_agid=180077792827&c_crid=741705098280&c_kwid={keywordid}&c_ims=&c_pms=9061076&c_nw=g&c_dvc=c&gad_source=1&gad_campaignid=22370420337&gclid=EAIaIQobChMI0bi_lPmwkgMVJQuiAx1ePDvaEAAYASAAEgJ1FvD_BwE

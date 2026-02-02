@@ -1,14 +1,13 @@
 "use client";
 
-import { Box, Button, Container, Typography } from "@mui/material";
-// import dynamic from "next/dynamic";
-
-// const Header = dynamic(() => import("@/components/layout/Header"), { ssr: false });
+import { Box /*, Button, Container, Typography*/ } from "@mui/material";
+import { HeroCarousel } from "@/components";
 
 const HomeContent = () => {
     return (
         <Box>
-            <Box
+            <HeroCarousel count={5} />
+            {/* <Box
                 sx={{
                     bgcolor: "primary.main",
                     color: "white",
@@ -110,7 +109,7 @@ const HomeContent = () => {
                         </Box>
                     ))}
                 </Box>
-            </Container>
+            </Container> */}
         </Box>
     );
 };
