@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmptyState matches snapshot (basic) 1`] = `
+<div>
+  <div
+    class="MuiBox-root css-1ejuk5a"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 css-1miy0lu-MuiTypography-root"
+    >
+      No items found
+    </h6>
+  </div>
+</div>
+`;
+
+exports[`EmptyState matches snapshot with action button 1`] = `
+<div>
+  <div
+    class="MuiBox-root css-1ejuk5a"
+  >
+    <h6
+      class="MuiTypography-root MuiTypography-h6 css-1miy0lu-MuiTypography-root"
+    >
+      No favourites
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body2 css-1wle3ir-MuiTypography-root"
+    >
+      You have not added any recipes yet
+    </p>
+    <div
+      class="MuiBox-root css-1kawqjx"
+    >
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-74d805-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Browse recipes
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`EmptyState matches snapshot with description and icon 1`] = `
+<div>
+  <div
+    class="MuiBox-root css-1ejuk5a"
+  >
+    <div
+      class="MuiBox-root css-1by2vg7"
+    >
+      <svg
+        aria-hidden="true"
+        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
+        data-testid="SearchOffIcon"
+        focusable="false"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3 6.08 3 3.28 5.64 3.03 9h2.02C5.3 6.75 7.18 5 9.5 5 11.99 5 14 7.01 14 9.5S11.99 14 9.5 14c-.17 0-.33-.03-.5-.05v2.02c.17.02.33.03.5.03 1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19z"
+        />
+        <path
+          d="M6.47 10.82 4 13.29l-2.47-2.47-.71.71L3.29 14 .82 16.47l.71.71L4 14.71l2.47 2.47.71-.71L4.71 14l2.47-2.47z"
+        />
+      </svg>
+    </div>
+    <h6
+      class="MuiTypography-root MuiTypography-h6 css-1miy0lu-MuiTypography-root"
+    >
+      No recipes
+    </h6>
+    <p
+      class="MuiTypography-root MuiTypography-body2 css-1wle3ir-MuiTypography-root"
+    >
+      Try adjusting your filters
+    </p>
+  </div>
+</div>
+`;

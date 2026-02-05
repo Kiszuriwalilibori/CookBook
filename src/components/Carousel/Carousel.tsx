@@ -1,10 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { EmptyState } from "@/components/EmptyState";
 import CarouselLib from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Link from "next/link";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { CarouselSkeleton, CarouselError } from "./Carousel.states";
+
+import { Section, SlideWrapper, StyledCard, AspectBox, SlideImage, Overlay } from "./Carousel.styles";
+import Typography from "@mui/material/Typography";
+import SearchOffIcon from "@mui/icons-material/SearchOff";
+import { useRouter } from "next/navigation";
 
 type Slide = {
     _id: string;
@@ -19,7 +25,6 @@ interface CarouselProps {
     initialSlides?: Slide[] | null;
 }
 
-// react-multi-carousel breakpoints
 const responsive = {
     desktop: {
         breakpoint: { max: 3000, min: 1200 },
@@ -35,14 +40,10 @@ const responsive = {
     },
 };
 
-// ZŁOTA PROPORCJA
-const GOLDEN_PADDING_TOP = "61.8%";
-
 export default function Carousel({ count = 5, intervalMs = 5000, initialSlides = null }: CarouselProps) {
     const [items, setItems] = useState<Slide[] | null>(initialSlides);
     const [error, setError] = useState<string | null>(null);
-
-    // fallback fetch (jeśli nie dostaliśmy danych z serwera)
+    const router = useRouter();
     useEffect(() => {
         if (initialSlides) return;
 
@@ -52,15 +53,12 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
             try {
                 const res = await fetch(`/api/recipes/random?count=${count}`, { cache: "no-store" });
                 const data = await res.json();
+
                 if (!mounted) return;
 
-                if (Array.isArray(data)) {
-                    setItems(data);
-                } else if (Array.isArray(data?.items)) {
-                    setItems(data.items);
-                } else {
-                    setItems([]);
-                }
+                if (Array.isArray(data)) setItems(data);
+                else if (Array.isArray(data?.items)) setItems(data.items);
+                else setItems([]);
             } catch (e) {
                 console.error(e);
                 if (mounted) {
@@ -77,81 +75,44 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
     }, [count, initialSlides]);
 
     if (items === null) {
-        return (
-            <Box sx={{ my: 4, textAlign: "center" }}>
-                <Typography variant="h6">Loading…</Typography>
-            </Box>
-        );
+        return <CarouselSkeleton />;
     }
 
     if (error) {
-        return (
-            <Box sx={{ my: 4, textAlign: "center" }}>
-                <Typography color="error">{error}</Typography>
-            </Box>
-        );
+        return <CarouselError message={error} />;
     }
 
     if (items.length === 0) {
-        return (
-            <Box sx={{ my: 4, textAlign: "center" }}>
-                <Typography>No items</Typography>
-            </Box>
-        );
+        return <EmptyState icon={<SearchOffIcon />} title="No featured recipes" description="Check back later or explore all recipes" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />;
     }
 
     return (
-        <Box component="section" sx={{ my: 4 }}>
-            <CarouselLib responsive={responsive} infinite autoPlay autoPlaySpeed={intervalMs} arrows keyBoardControl pauseOnHover containerClass="carousel-container" itemClass="carousel-item-padding-8px">
+        <Section>
+            <CarouselLib responsive={responsive} infinite autoPlay autoPlaySpeed={intervalMs} arrows keyBoardControl pauseOnHover>
                 {items.map(slide => (
-                    <Box key={slide._id} px={0.5}>
-                        <Card sx={{ borderRadius: 2, overflow: "hidden" }}>
-                            <Link href={slide.slug ? `/recipes/${slide.slug}` : `/recipes/${slide._id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                                {/* ASPECT BOX – GOLDEN RATIO */}
-                                <Box
-                                    sx={{
-                                        position: "relative",
-                                        width: "100%",
-                                        paddingTop: GOLDEN_PADDING_TOP,
-                                        backgroundColor: "#f4f4f4",
-                                    }}
-                                >
-                                    <Box
-                                        component="img"
-                                        src={slide.imageUrl || "/placeholder.png"}
-                                        alt={slide.title ?? "Recipe"}
-                                        sx={{
-                                            position: "absolute",
-                                            inset: 0,
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover",
-                                        }}
-                                    />
+                    <SlideWrapper key={slide._id}>
+                        <StyledCard>
+                            <Link
+                                href={slide.slug ? `/recipes/${slide.slug}` : `/recipes/${slide._id}`}
+                                style={{
+                                    textDecoration: "none",
+                                    color: "inherit",
+                                }}
+                            >
+                                <AspectBox>
+                                    <SlideImage src={slide.imageUrl || "/placeholder.png"} alt={slide.title ?? "Recipe"} />
 
-                                    {/* TITLE OVERLAY */}
-                                    <CardContent
-                                        sx={{
-                                            position: "absolute",
-                                            left: 0,
-                                            right: 0,
-                                            bottom: 0,
-                                            p: 1,
-                                            background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%)",
-                                            color: "common.white",
-                                            textAlign: "center",
-                                        }}
-                                    >
+                                    <Overlay>
                                         <Typography variant="subtitle1" fontWeight={700}>
                                             {slide.title ?? "Untitled"}
                                         </Typography>
-                                    </CardContent>
-                                </Box>
+                                    </Overlay>
+                                </AspectBox>
                             </Link>
-                        </Card>
-                    </Box>
+                        </StyledCard>
+                    </SlideWrapper>
                 ))}
             </CarouselLib>
-        </Box>
+        </Section>
     );
 }
