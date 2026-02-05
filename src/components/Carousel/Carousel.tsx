@@ -1,23 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { EmptyState } from "@/components/EmptyState";
-import CarouselLib from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import Link from "next/link";
-import { CarouselSkeleton, CarouselError } from "./Carousel.states";
-
-import { Section, SlideWrapper, StyledCard, AspectBox, SlideImage, Overlay } from "./Carousel.styles";
+import { useRouter } from "next/navigation";
 import Typography from "@mui/material/Typography";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
-import { useRouter } from "next/navigation";
+import CarouselLib from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
-type Slide = {
-    _id: string;
-    slug?: string | null;
-    imageUrl?: string | null;
-    title?: string | null;
-};
+import { EmptyState } from "@/components/EmptyState";
+import { CarouselSkeleton, CarouselError } from "./Carousel.states";
+import { Section, SlideWrapper, StyledCard, AspectBox, SlideImage, Overlay } from "./Carousel.styles";
+import { Slide } from "./Carousel.types";
+import SlideLink from "./SlideLink";
 
 interface CarouselProps {
     count?: number;
@@ -92,13 +86,7 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
                 {items.map(slide => (
                     <SlideWrapper key={slide._id}>
                         <StyledCard>
-                            <Link
-                                href={slide.slug ? `/recipes/${slide.slug}` : `/recipes/${slide._id}`}
-                                style={{
-                                    textDecoration: "none",
-                                    color: "inherit",
-                                }}
-                            >
+                            <SlideLink slide={slide}>
                                 <AspectBox>
                                     <SlideImage src={slide.imageUrl || "/placeholder.png"} alt={slide.title ?? "Recipe"} />
 
@@ -108,7 +96,7 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
                                         </Typography>
                                     </Overlay>
                                 </AspectBox>
-                            </Link>
+                            </SlideLink>
                         </StyledCard>
                     </SlideWrapper>
                 ))}
