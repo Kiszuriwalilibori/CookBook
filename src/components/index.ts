@@ -6,6 +6,7 @@ import PageTitle from "./PageTitle";
 import RecipeCard from "./RecipeCard";
 import RecipeFilters from "./RecipeFilters";
 import Separator from "./Common/Separator/Separator";
-import HeroCarousel from "./HeroCarousel/HeroCarousel";
+import Carousel from "./Carousel/Carousel";
 
-export { ConfirmRemoveDialog, Footer, Header, HeroCarousel,Menu, PageTitle, RecipeCard, RecipeFilters, Separator };
+
+export { ConfirmRemoveDialog, Footer, Header, Carousel,Menu, PageTitle, RecipeCard, RecipeFilters, Separator };
