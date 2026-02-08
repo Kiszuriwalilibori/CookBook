@@ -79,7 +79,6 @@ export interface Recipe {
         where?: string;
     };
 
-    
     nutrition?: {
         per100g: {
             calories: number;
@@ -87,7 +86,27 @@ export interface Recipe {
             fat: number;
             carbohydrate: number;
         };
-        totalWeight: number; 
-        calculatedAt?: string; 
+        totalWeight: number;
+        micronutrients?: {
+            vitaminA?: number;
+            vitaminC?: number;
+            vitaminD?: number;
+            vitaminE?: number;
+            vitaminK?: number;
+            thiamin?: number;
+            riboflavin?: number;
+            niacin?: number;
+            vitaminB6?: number;
+            folate?: number;
+            vitaminB12?: number;
+            calcium?: number;
+            iron?: number;
+            magnesium?: number;
+            potassium?: number;
+            sodium?: number;
+            zinc?: number;
+            selenium?: number;
+        };
+        calculatedAt?: string;
     };
 }

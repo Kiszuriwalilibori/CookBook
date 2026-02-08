@@ -12,6 +12,7 @@ import { generateRecipeSchema } from "@/utils/schema-org";
 
 import { resolveRecipeIdFromSlug } from "@/utils/resolveRecipeIdFromSlug";
 import { getRecipeById } from "@/utils/getRecipeById";
+import { RecipeNutrition } from "./parts/RecipeNutrition";
 
 interface Params {
     slug: string;
@@ -83,6 +84,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
 
                     <Box sx={styles.prepWrapper}>
                         <RecipePreparationSteps recipe={recipe} />
+                        <RecipeNutrition nutrition={recipe.nutrition} />
                     </Box>
                 </Box>
 
