@@ -61,7 +61,6 @@ export interface Recipe {
 
     // Zostaje – do czasu przełączenia aplikacji
     calories?: number;
-
     prepTime?: number;
     cookTime?: number;
     recipeYield?: number;
@@ -80,8 +79,7 @@ export interface Recipe {
         where?: string;
     };
 
-    // NOWE – wartości odżywcze NA 100 g gotowej potrawy
-    // Będzie wypełniane przez webhook
+    
     nutrition?: {
         per100g: {
             calories: number;
@@ -89,7 +87,7 @@ export interface Recipe {
             fat: number;
             carbohydrate: number;
         };
-        totalWeight: number; // całkowita waga przepisu (g)
-        calculatedAt?: string; // opcjonalnie
+        totalWeight: number; 
+        calculatedAt?: string; 
     };
 }
