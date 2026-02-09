@@ -1,8 +1,8 @@
-
 import { Recipe } from "../types/recipe";
 
 type SourceKeys = `source.${keyof NonNullable<Recipe["source"]>}`;
-type AllowedRecipeFields = keyof Recipe | SourceKeys;
+type NutritionKeys = `nutrition.${keyof NonNullable<Recipe["nutrition"]>}`;
+type AllowedRecipeFields = keyof Recipe | SourceKeys | NutritionKeys;
 
 export const fieldTranslations: Record<string, string> = {
     title: "Nazwa",
@@ -16,6 +16,7 @@ export const fieldTranslations: Record<string, string> = {
     notes: "Notatki",
     products: "Produkt",
     status: "Status",
+    "nutrition.totalWeight": "Łączna waga",
     "source.url": "Link",
     "source.book": "Tytuł książki",
     "source.title": "Tytuł książki",

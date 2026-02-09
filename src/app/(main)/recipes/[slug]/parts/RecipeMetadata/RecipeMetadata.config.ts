@@ -48,4 +48,16 @@ export const recipeMetadataConfig = [
         label: getTranslation("tags"),
         format: value => formatArray(value),
     }),
+    defineRecipeMetadata({
+        key: "calories",
+        icon: "⚡",
+        label: getTranslation("calories"),
+        format: value => value, // number
+    }),
+    // defineRecipeMetadata({
+    //     key: "totalWeight",
+    //     icon: "⚖️",
+    //     label: getTranslation("totalWeight"),
+    //     format: value => value, // number
+    // }),
 ] as const;
