@@ -1,4 +1,3 @@
-// src/components/Header/Header.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -17,13 +16,26 @@ interface HeaderProps {
 }
 
 const Header = ({ initialSummary, fetchError }: HeaderProps) => {
-    const [showFilter, setShowFilter] = useState(false);
+    const [ui, setUI] = useState({
+        mobileMenuOpen: false,
+        filterOpen: false,
+    });
+
     const { summary: options } = useRecipesSummary(initialSummary || undefined);
 
     useGoogleSignIn();
 
-    const navItems = useNavItems(initialSummary, () => setShowFilter(true));
-    useEscapeKey(showFilter, () => setShowFilter(false));
+    const openMobileMenu = () => setUI(s => ({ ...s, mobileMenuOpen: true }));
+
+    const closeMobileMenu = () => setUI(s => ({ ...s, mobileMenuOpen: false }));
+
+    const openFilters = () => setUI({ mobileMenuOpen: false, filterOpen: true });
+
+    const closeFilters = () => setUI(s => ({ ...s, filterOpen: false }));
+
+    const navItems = useNavItems(initialSummary, openFilters);
+
+    useEscapeKey(ui.filterOpen, closeFilters);
 
     useEffect(() => {
         if (fetchError) {
@@ -33,10 +45,12 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
 
     return (
         <>
-            <Menu navItems={navItems} />
+            <Menu navItems={navItems} mobileOpen={ui.mobileMenuOpen} onMobileOpen={openMobileMenu} onMobileClose={closeMobileMenu} />
+
             <GoogleSignInButton />
             <GoogleLogoutButton />
-            <RecipeFiltersModal open={showFilter} onClose={() => setShowFilter(false)} options={options} />
+
+            <RecipeFiltersModal open={ui.filterOpen} onClose={closeFilters} options={options} />
         </>
     );
 };
