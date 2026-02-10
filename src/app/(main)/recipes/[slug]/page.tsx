@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { Recipe } from "@/types";
 import { Separator } from "@/components";
 import { styles } from "./styles";
+import { mapRecipeToMetadata } from "./parts/RecipeMetadata/RecipeMetadata.utils";
 
 import RecipeMetadata, { RecipeHero, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton } from "./parts";
 
@@ -65,6 +66,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
 
     // 4️⃣ schema.org
     const jsonLd = generateRecipeSchema(recipe);
+    const metadata = mapRecipeToMetadata(recipe);
 
     return (
         <>
@@ -72,7 +74,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
 
             <Box id="RecipePage" sx={styles.root}>
                 <RecipeHero recipe={recipe} />
-                <RecipeMetadata recipe={recipe} />
+                <RecipeMetadata metadata={metadata} />
                 <RecipeDescription recipe={recipe} />
 
                 <Separator />

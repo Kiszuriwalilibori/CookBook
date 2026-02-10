@@ -1,4 +1,7 @@
 
+import { Recipe } from "@/types";
+import { RecipeMetadataFlat } from "./RecipeMetadata.types";
+
 export const formatMinutes = (minutes: number) => `${minutes} min`;
 
 export const formatYield = (yieldCount: number) => {
@@ -19,4 +22,20 @@ export function hasValue<T, K extends keyof T>(obj: T, key: K): boolean {
     if (typeof value === "string") return value.trim().length > 0;
 
     return Boolean(value); // number, boolean itp.
+}
+
+// RecipeMetadata.mapper.ts
+
+
+export function mapRecipeToMetadata(recipe: Recipe): RecipeMetadataFlat {
+    return {
+        prepTime: recipe.prepTime,
+        cookTime: recipe.cookTime,
+        recipeYield: recipe.recipeYield,
+        cuisine: recipe.cuisine,
+        dietary: recipe.dietary,
+        tags: recipe.tags,
+        calories: recipe.nutrition?.per100g?.calories,
+        totalWeight: recipe.nutrition?.totalWeight,
+    };
 }
