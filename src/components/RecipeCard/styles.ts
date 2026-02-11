@@ -52,51 +52,18 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         WebkitBoxOrient: "vertical",
         mb: 1,
     },
-    // description: {
-    //     fontFamily: "Playfair Display, serif",
-    //     fontWeight: 400,
-    //     fontSize: "16px",
-    //     fontStyle: "italic",
-    //     height: { xs: 40, sm: 60 },
-    //     color: "grey.800", // Skrócone na mobile
-    //     overflow: "hidden",
-    //     textOverflow: "ellipsis",
-    //     display: "-webkit-box",
-    //     WebkitLineClamp: 2,
-    //     WebkitBoxOrient: "vertical",
-    //     mb: 1,
-    // },
-
-    // description: {
-    //     fontFamily: "Playfair Display, serif",
-    //     fontWeight: 400,
-    //     fontSize: "16px",
-    //     fontStyle: "italic",
-    //     color: "grey.800",
-    //     overflow: "hidden",
-    //     textOverflow: "ellipsis",
-    //     display: "-webkit-box",
-    //     WebkitLineClamp: 3,
-    //     WebkitBoxOrient: "vertical",
-    //     lineHeight: 1.4,
-    //     maxHeight: "4.2em", // 1.4 * 3 lines
-    //     mb: 1,
-    // },
+    
     description: {
         fontFamily: "Playfair Display, serif",
         fontWeight: 400,
         fontSize: "16px",
         fontStyle: "italic",
         color: "grey.800",
-
-        display: "-webkit-box",
-        WebkitLineClamp: 3,
-        WebkitBoxOrient: "vertical",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        lineHeight: 1.5,
-        maxHeight: "4.5em",
-        mb: 1,
+        display: "-webkit-box", // line-clamp
+        WebkitLineClamp: 3, // ograniczenie do 3 linii
+        WebkitBoxOrient: "vertical", // potrzebne do -webkit-line-clamp
+        overflow: "hidden", // ukrywa resztę
+        textOverflow: "ellipsis", // dodaje "…"
     },
 
     details: {
