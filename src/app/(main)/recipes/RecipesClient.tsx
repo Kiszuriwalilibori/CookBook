@@ -56,7 +56,8 @@ export default function RecipesClient({ initialRecipes, initialFavorites }: Reci
             <Grid container spacing={3} justifyContent="center">
                 {displayRecipes.map(recipe => (
                     <Grid size={gridSize} key={recipe._id}>
-                        <RecipeCard recipe={recipe} isFavorite={favorites.has(recipe._id)} addFavorite={() => addFavorite(recipe._id)} removeFavorite={() => removeFavorite(recipe._id)} />
+                        <RecipeCard recipe={recipe} isFavorite={favorites.has(recipe._id)} onAddFavorite={addFavorite} onRemoveFavorite={removeFavorite} />
+                        
                     </Grid>
                 ))}
             </Grid>
