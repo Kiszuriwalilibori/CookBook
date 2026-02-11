@@ -1,18 +1,13 @@
-import { Recipe } from "@/types";
+
 import React from "react";
 
-type RecipeValue<K extends keyof Recipe> = Recipe[K];
-
-export interface RecipeMetadataConfigItem<K extends keyof Recipe> {
+export interface RecipeMetadataConfigItem<K extends keyof RecipeMetadataFlat> {
     key: K;
-    icon?: React.ReactNode;
+    icon: string;
     label?: string;
-    format?: (value: NonNullable<RecipeValue<K>>, recipe: Recipe) => React.ReactNode;
+    format?: (value: RecipeMetadataFlat[K] | undefined, metadata: RecipeMetadataFlat) => React.ReactNode;
 }
 
-
-
-// RecipeMetadata.types.ts
 export interface RecipeMetadataFlat {
     prepTime?: number;
     cookTime?: number;

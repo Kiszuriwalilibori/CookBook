@@ -1,9 +1,9 @@
-import { Recipe } from "../types/recipe";
+import { NestedRecipeKeys } from "../types/recipe";
 
-type SourceKeys = `source.${keyof NonNullable<Recipe["source"]>}`;
-type NutritionKeys = `nutrition.${keyof NonNullable<Recipe["nutrition"]>}`;
-type AllowedRecipeFields = keyof Recipe | SourceKeys | NutritionKeys;
-
+// type SourceKeys = `source.${keyof NonNullable<Recipe["source"]>}`;
+// type NutritionKeys = `nutrition.${keyof NonNullable<Recipe["nutrition"]>}`;
+// // type AllowedRecipeFields = keyof Recipe | SourceKeys | NutritionKeys;
+type AllowedRecipeFields = NestedRecipeKeys;
 export const fieldTranslations: Record<string, string> = {
     title: "Nazwa",
     calories: "Kalorie",
@@ -14,7 +14,7 @@ export const fieldTranslations: Record<string, string> = {
     cuisine: "Kuchnia",
     tags: "Etykiety",
     notes: "Notatki",
-    products: "Produkt",
+    // products: "Produkt",
     status: "Status",
     "nutrition.totalWeight": "Łączna waga",
     "source.url": "Link",

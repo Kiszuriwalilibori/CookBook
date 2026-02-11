@@ -24,8 +24,6 @@ export function hasValue<T, K extends keyof T>(obj: T, key: K): boolean {
     return Boolean(value); // number, boolean itp.
 }
 
-// RecipeMetadata.mapper.ts
-
 
 export function mapRecipeToMetadata(recipe: Recipe): RecipeMetadataFlat {
     return {

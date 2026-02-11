@@ -110,3 +110,16 @@ export interface Recipe {
         calculatedAt?: string;
     };
 }
+
+export type TranslationSafeRecipe = Pick<Recipe, "title" | "calories" | "prepTime" | "cookTime" | "recipeYield" | "dietary" | "cuisine" | "tags" | "notes" | "status" | "source" | "nutrition">;
+type IsPlainObject<T> = T extends object ? (T extends readonly unknown[] ? false : true) : false;
+type PrevDepth = [never, 0, 1, 2, 3];
+
+type NestedKeys<T, D extends number = 3> = [D] extends [never]
+    ? never
+    : {
+          [K in keyof T & string]: IsPlainObject<NonNullable<T[K]>> extends true ? K | `${K}.${NestedKeys<NonNullable<T[K]>, PrevDepth[D]>}` : K;
+      }[keyof T & string];
+
+
+export type NestedRecipeKeys = NestedKeys<TranslationSafeRecipe>;

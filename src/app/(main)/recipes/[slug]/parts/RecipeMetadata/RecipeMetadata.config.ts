@@ -1,9 +1,8 @@
 import { getTranslation } from "@/models/fieldTranslations";
-
-import { RecipeMetadataConfigItem } from "./RecipeMetadata.types";
-import { Recipe } from "@/types";
+import { RecipeMetadataConfigItem, RecipeMetadataFlat } from "./RecipeMetadata.types";
 import { formatArray, formatMinutes, formatYield } from "./RecipeMetadata.utils";
-export function defineRecipeMetadata<K extends keyof Recipe>(item: RecipeMetadataConfigItem<K>): RecipeMetadataConfigItem<K> {
+
+export function defineRecipeMetadata<K extends keyof RecipeMetadataFlat>(item: RecipeMetadataConfigItem<K>): RecipeMetadataConfigItem<K> {
     return item;
 }
 
@@ -12,53 +11,48 @@ export const recipeMetadataConfig = [
         key: "prepTime", // ✔️ istnieje w Recipe
         icon: "⏱️",
         label: getTranslation("prepTime"),
-        format: value => formatMinutes(value), // value: number
+        format: value => (value != null ? formatMinutes(value) : null), // value: number
     }),
     defineRecipeMetadata({
         key: "cookTime",
         icon: "⏲️",
         label: getTranslation("cookTime"),
-        format: value => formatMinutes(value),
+        format: value => (value != null ? formatMinutes(value) : null),
     }),
     defineRecipeMetadata({
         key: "recipeYield",
         icon: "🍽️",
-        format: value => formatYield(value),
+        format: value => (value != null ? formatYield(value) : null),
     }),
     defineRecipeMetadata({
         key: "cuisine",
         icon: "🌍",
-        format: value => formatArray(value), // string[]
+        format: value => (value != null ? formatArray(value) : null),
     }),
     defineRecipeMetadata({
         key: "calories",
         icon: "🔥",
         label: getTranslation("calories"),
-        format: value => value, // number
+
+        format: value => (value != null ? value : null),
     }),
     defineRecipeMetadata({
         key: "dietary",
         icon: "🚫",
         label: getTranslation("dietary"),
-        format: value => formatArray(value),
+        format: value => (value != null ? formatArray(value) : null),
     }),
     defineRecipeMetadata({
         key: "tags",
         icon: "🏷️",
         label: getTranslation("tags"),
-        format: value => formatArray(value),
+        format: value => (value != null ? formatArray(value) : null),
     }),
-    defineRecipeMetadata({
-        key: "calories",
-        icon: "⚡",
-        label: getTranslation("calories"),
-        format: value => value, // number
-    }),
-    // defineRecipeMetadata({
-    //     key: "totalWeight",
-    //     icon: "⚖️",
-    //     label: getTranslation("totalWeight"),
-    //     format: value => value, // number
-    // }),
-] as const;
 
+    defineRecipeMetadata({
+        key: "totalWeight",
+        icon: "⚖️",
+        label: getTranslation("totalWeight"),
+        format: value => (value != null ? value : null),
+    }),
+] as const;
