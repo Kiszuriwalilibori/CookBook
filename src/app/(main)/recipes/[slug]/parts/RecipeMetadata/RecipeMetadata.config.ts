@@ -11,7 +11,7 @@ export const recipeMetadataConfig = [
         key: "prepTime", // ✔️ istnieje w Recipe
         icon: "⏱️",
         label: getTranslation("prepTime"),
-        format: value => (value != null ? formatMinutes(value) : null), // value: number
+        format: value => (value != null ? formatMinutes(value) : null), 
     }),
     defineRecipeMetadata({
         key: "cookTime",
