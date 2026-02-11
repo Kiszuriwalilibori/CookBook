@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAdminStore, useIsUserLogged } from "@/stores/useAdminStore";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useResetFavoritesOnLogout } from "./useResetFavoritesOnLogout";
@@ -30,10 +30,12 @@ export const useFavorites = () => {
         fetchFavorites();
     }, [isUserLogged, googleToken, hydrated, setFavorites]);
     useResetFavoritesOnLogout();
-    const addFavorite = async (recipeId: string) => {
+    
+const addFavorite = useCallback(
+    async (recipeId: string) => {
         if (loading) return;
         setLoading(true);
-        add(recipeId); // optimistic
+        add(recipeId);
 
         try {
             await fetch("/api/favorites", {
@@ -43,13 +45,18 @@ export const useFavorites = () => {
                 credentials: "include",
             });
         } catch {
-            remove(recipeId); // rollback
+            remove(recipeId);
         } finally {
             setLoading(false);
         }
-    };
+    },
+    [loading, add, remove]
+);
 
-    const removeFavorite = async (recipeId: string) => {
+    
+    
+const removeFavorite = useCallback(
+    async (recipeId: string) => {
         if (loading) return;
         setLoading(true);
         remove(recipeId);
@@ -66,7 +73,9 @@ export const useFavorites = () => {
         } finally {
             setLoading(false);
         }
-    };
+    },
+    [loading, add, remove]
+);
 
     return { favorites, addFavorite, removeFavorite, loading };
 };

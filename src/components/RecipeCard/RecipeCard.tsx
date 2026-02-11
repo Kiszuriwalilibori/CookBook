@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardMedia, CardContent, Typography, Box, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -35,7 +34,7 @@ export const RecipeCard = React.memo(function RecipeCard({ recipe, isFavorite, a
     return (
         <NextLink href={`/recipes/${slug?.current}`} passHref style={{ textDecoration: "none", color: "inherit" }}>
             <Card sx={styles.card}>
-                <Box sx={{ position: "relative" }}>
+                <Box sx={styles.imageWrapper}>
                     <CardMedia component="img" height="200" image={imageUrl} alt={title} sx={styles.media} />
 
                     {isUserLogged && hydrated && (
