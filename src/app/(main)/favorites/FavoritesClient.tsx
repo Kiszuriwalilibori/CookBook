@@ -51,8 +51,8 @@ export default function FavoritesClient({ initialRecipes }: Props) {
                         <RecipeCard
                             recipe={recipe}
                             isFavorite={favorites.has(recipe._id)}
-                            addFavorite={() => addFavorite(recipe._id)}
-                            removeFavorite={() => openDialog(recipe)} // <-- otwieramy dialog
+                            onAddFavorite={() => addFavorite(recipe._id)}
+                            onRemoveFavorite={() => openDialog(recipe)} // <-- otwieramy dialog
                         />
                     </Grid>
                 ))}

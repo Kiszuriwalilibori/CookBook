@@ -7,7 +7,7 @@ import { PageTitle, RecipeCard } from "@/components";
 import { gridSize, pageContainerStyle } from "./styles";
 // import { useIsAdminLogged } from "@/stores/useAdminStore";
 import type { Recipe } from "@/types";
-import { /*useAdminRefetch,useClearQueryParams,*/ useHydrateSSR /*, useNonAdminRefetch*/ } from "./effects";
+import { /*useAdminRefetch,useClearQueryParams,*/ useHydrateSSR, useNonAdminRefetch } from "./effects";
 
 import { useFavorites } from "@/hooks/useFavorites";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
@@ -24,7 +24,7 @@ export default function RecipesClient({ initialRecipes, initialFavorites }: Reci
 
     // --- SSR recipes hydration ---
     useHydrateSSR(initialRecipes, setDisplayRecipes);
-    // useNonAdminRefetch(isAdminLogged, setDisplayRecipes);
+    useNonAdminRefetch(setDisplayRecipes);
     // useAdminRefetch(isAdminLogged, setDisplayRecipes);
     // useClearQueryParams();
 
