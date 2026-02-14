@@ -5,9 +5,9 @@ import { Grid, Box, Typography } from "@mui/material";
 
 import { PageTitle, RecipeCard } from "@/components";
 import { gridSize, pageContainerStyle } from "./styles";
-import { useIsAdminLogged } from "@/stores/useAdminStore";
+// import { useIsAdminLogged } from "@/stores/useAdminStore";
 import type { Recipe } from "@/types";
-import { useAdminRefetch, useClearQueryParams, useHydrateSSR, useNonAdminRefetch } from "./effects";
+import { /*useAdminRefetch,useClearQueryParams,*/ useHydrateSSR /*, useNonAdminRefetch*/ } from "./effects";
 
 import { useFavorites } from "@/hooks/useFavorites";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
@@ -18,15 +18,15 @@ interface RecipesClientProps {
 }
 
 export default function RecipesClient({ initialRecipes, initialFavorites }: RecipesClientProps) {
-    const isAdminLogged = useIsAdminLogged();
+    // const isAdminLogged = useIsAdminLogged();
 
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
 
     // --- SSR recipes hydration ---
     useHydrateSSR(initialRecipes, setDisplayRecipes);
-    useNonAdminRefetch(isAdminLogged, setDisplayRecipes);
-    useAdminRefetch(isAdminLogged, setDisplayRecipes);
-    useClearQueryParams();
+    // useNonAdminRefetch(isAdminLogged, setDisplayRecipes);
+    // useAdminRefetch(isAdminLogged, setDisplayRecipes);
+    // useClearQueryParams();
 
     // --- SSR favorites hydration ---
     const { hydrated, setFavorites } = useFavoritesStore();
@@ -57,7 +57,6 @@ export default function RecipesClient({ initialRecipes, initialFavorites }: Reci
                 {displayRecipes.map(recipe => (
                     <Grid size={gridSize} key={recipe._id}>
                         <RecipeCard recipe={recipe} isFavorite={favorites.has(recipe._id)} onAddFavorite={addFavorite} onRemoveFavorite={removeFavorite} />
-                        
                     </Grid>
                 ))}
             </Grid>

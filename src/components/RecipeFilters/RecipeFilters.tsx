@@ -28,7 +28,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
 
-    // New smart Apply logic
+    //New smart Apply logic
     const handleApply = useCallback(async () => {
         if (!apply()) return; // validation failed → do nothing
 
