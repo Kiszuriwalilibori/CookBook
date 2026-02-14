@@ -5,9 +5,9 @@ import { Grid, Box, Typography } from "@mui/material";
 
 import { PageTitle, RecipeCard } from "@/components";
 import { gridSize, pageContainerStyle } from "./styles";
-// import { useIsAdminLogged } from "@/stores/useAdminStore";
+
 import type { Recipe } from "@/types";
-import { /*useAdminRefetch,useClearQueryParams,*/ useHydrateSSR, useNonAdminRefetch } from "./effects";
+import { useAdminRefetch, useHydrateSSR, useNonAdminRefetch } from "./effects";
 
 import { useFavorites } from "@/hooks/useFavorites";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
@@ -18,17 +18,15 @@ interface RecipesClientProps {
 }
 
 export default function RecipesClient({ initialRecipes, initialFavorites }: RecipesClientProps) {
-    // const isAdminLogged = useIsAdminLogged();
+    
 
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
 
-    // --- SSR recipes hydration ---
     useHydrateSSR(initialRecipes, setDisplayRecipes);
     useNonAdminRefetch(setDisplayRecipes);
-    // useAdminRefetch(isAdminLogged, setDisplayRecipes);
+    useAdminRefetch(setDisplayRecipes);
     // useClearQueryParams();
 
-    // --- SSR favorites hydration ---
     const { hydrated, setFavorites } = useFavoritesStore();
 
     useEffect(() => {
