@@ -8,3 +8,4 @@ export { RecipeCopyButton } from "./RecipeCopyButton";
 export { RecipePrintButton } from "./RecipePrintButton";
 export { RecipePdfButton } from "./RecipePdfButton";
 export { RecipeKeepAwakeButton } from "./RecipeKeepAwakeButton";
+export { default as RecipeTags } from "./RecipeTags";
