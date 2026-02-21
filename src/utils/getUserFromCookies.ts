@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { verifyGoogle } from "@/utils";
 import type { User } from "@/types";
 
-export async function getUserFromCookies(): Promise<User | null> {
+export async function getUserFromCookies(): Promise<(User & { isAdmin: boolean }) | null> {
     try {
         const cookieStore = await cookies(); // <-- dodaj await!
         const token = cookieStore.get("session")?.value;
@@ -11,7 +11,9 @@ export async function getUserFromCookies(): Promise<User | null> {
         const user = await verifyGoogle(token);
         if (!user?.userId) return null;
 
-        return user;
+        const isAdmin = process.env.MY_EMAIL ? user.email.toLowerCase() === process.env.MY_EMAIL.toLowerCase() : false;
+        return { ...user, isAdmin };
+        // return user;
     } catch (err) {
         console.error("[getUserFromCookies] Error:", err);
         return null;

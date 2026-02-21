@@ -6,7 +6,7 @@ import { Separator } from "@/components";
 import { styles } from "./styles";
 import { mapRecipeToMetadata } from "./parts/RecipeMetadata/RecipeMetadata.utils";
 
-import RecipeMetadata, { RecipeHero, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton, RecipeTags } from "./parts";
+import RecipeMetadata, { RecipeHero, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton } from "./parts";
 
 import { generateRecipeMetadata } from "@/utils/generateRecipeMetadata";
 import { generateRecipeSchema } from "@/utils/schema-org";
@@ -86,7 +86,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
 
                     <Box sx={styles.prepWrapper}>
                         <RecipePreparationSteps recipe={recipe} />
-                        <RecipeTags recipe={recipe} />
+                       
                         <RecipeNutrition nutrition={recipe.nutrition} />
                     </Box>
                 </Box>

@@ -1,6 +1,8 @@
 import { getTranslation } from "@/models/fieldTranslations";
 import { RecipeMetadataConfigItem, RecipeMetadataFlat } from "./RecipeMetadata.types";
 import { formatArray, formatMinutes, formatYield } from "./RecipeMetadata.utils";
+import{ RecipeMetadataTagChips} from "./RecipeMetadataTagChips";
+
 
 export function defineRecipeMetadata<K extends keyof RecipeMetadataFlat>(item: RecipeMetadataConfigItem<K>): RecipeMetadataConfigItem<K> {
     return item;
@@ -8,10 +10,10 @@ export function defineRecipeMetadata<K extends keyof RecipeMetadataFlat>(item: R
 
 export const recipeMetadataConfig = [
     defineRecipeMetadata({
-        key: "prepTime", // ✔️ istnieje w Recipe
+        key: "prepTime", 
         icon: "⏱️",
         label: getTranslation("prepTime"),
-        format: value => (value != null ? formatMinutes(value) : null), 
+        format: value => (value != null ? formatMinutes(value) : null),
     }),
     defineRecipeMetadata({
         key: "cookTime",
@@ -42,13 +44,18 @@ export const recipeMetadataConfig = [
         label: getTranslation("dietary"),
         format: value => (value != null ? formatArray(value) : null),
     }),
+    // defineRecipeMetadata({
+    //     key: "tags",
+    //     icon: "🏷️",
+    //     label: getTranslation("tags"),
+    //     format: value => (value != null ? formatArray(value) : null),
+    // }),
     defineRecipeMetadata({
         key: "tags",
         icon: "🏷️",
         label: getTranslation("tags"),
-        format: value => (value != null ? formatArray(value) : null),
+        format: value => (value && value.length > 0 ? <RecipeMetadataTagChips tags={value} /> : null),
     }),
-
     defineRecipeMetadata({
         key: "totalWeight",
         icon: "⚖️",

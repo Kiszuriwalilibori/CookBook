@@ -55,7 +55,10 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     // --- SSR recipes ---
     let initialRecipes: Recipe[] = [];
     try {
-        initialRecipes = await getRecipesForCards(filters, false);
+        const user = await getUserFromCookies();
+        const isAdmin = Boolean(user?.isAdmin);
+        console.log("isAdmin", isAdmin);
+        initialRecipes = await getRecipesForCards(filters, isAdmin);
     } catch (error) {
         console.error("Error fetching recipes:", error);
     }
