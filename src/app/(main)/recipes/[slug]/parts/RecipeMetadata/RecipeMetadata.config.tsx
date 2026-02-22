@@ -2,6 +2,7 @@ import { getTranslation } from "@/models/fieldTranslations";
 import { RecipeMetadataConfigItem, RecipeMetadataFlat } from "./RecipeMetadata.types";
 import { formatMinutes, formatYield } from "./RecipeMetadata.utils";
 import { RecipeMetadataFilterChips } from "./RecipeMetadataFilterChips";
+import { recipeMetadataIcons } from "./RecipeMetadata.icons";
 
 export function defineRecipeMetadata<K extends keyof RecipeMetadataFlat>(item: RecipeMetadataConfigItem<K>): RecipeMetadataConfigItem<K> {
     return item;
@@ -10,53 +11,53 @@ export function defineRecipeMetadata<K extends keyof RecipeMetadataFlat>(item: R
 export const recipeMetadataConfig = [
     defineRecipeMetadata({
         key: "prepTime",
-        icon: "⏱️",
+        icon: recipeMetadataIcons.prepTime,
         label: getTranslation("prepTime"),
-        format: value => (value != null ? formatMinutes(value) : null),
+        render: value => (value != null ? formatMinutes(value) : null),
     }),
     defineRecipeMetadata({
         key: "cookTime",
-        icon: "⏲️",
+        icon: recipeMetadataIcons.cookTime,
         label: getTranslation("cookTime"),
-        format: value => (value != null ? formatMinutes(value) : null),
+        render: value => (value != null ? formatMinutes(value) : null),
     }),
     defineRecipeMetadata({
         key: "recipeYield",
-        icon: "🍽️",
-        format: value => (value != null ? formatYield(value) : null),
+        icon: recipeMetadataIcons.recipeYield,
+        render: value => (value != null ? formatYield(value) : null),
     }),
-    
+
     defineRecipeMetadata({
         key: "cuisine",
-        icon: "🌍",
+        icon: recipeMetadataIcons.cuisine,
         label: getTranslation("cuisine"),
-        format: value => (value && value.length > 0 ? <RecipeMetadataFilterChips values={value} filterKey="cuisine" /> : null),
+        render: value => (value && value.length > 0 ? <RecipeMetadataFilterChips values={value} filterKey="cuisine" /> : null),
     }),
     defineRecipeMetadata({
         key: "calories",
-        icon: "🔥",
+        icon: recipeMetadataIcons.calories,
         label: getTranslation("calories"),
 
-        format: value => (value != null ? value : null),
+        render: value => (value != null ? value : null),
     }),
-    
+
     defineRecipeMetadata({
         key: "dietary",
-        icon: "🚫",
+        icon: recipeMetadataIcons.dietary,
         label: getTranslation("dietary"),
-        format: value => (value && value.length > 0 ? <RecipeMetadataFilterChips values={value} filterKey="dietary" /> : null),
+        render: value => (value && value.length > 0 ? <RecipeMetadataFilterChips values={value} filterKey="dietary" /> : null),
     }),
-    
+
     defineRecipeMetadata({
         key: "tags",
-        icon: "🏷️",
+        icon: recipeMetadataIcons.tags,
         label: getTranslation("tags"),
-        format: value => (value && value.length > 0 ? <RecipeMetadataFilterChips values={value} filterKey="tags" /> : null),
+        render: value => (value && value.length > 0 ? <RecipeMetadataFilterChips values={value} filterKey="tags" /> : null),
     }),
     defineRecipeMetadata({
         key: "totalWeight",
-        icon: "⚖️",
+        icon: recipeMetadataIcons.totalWeight,
         label: getTranslation("totalWeight"),
-        format: value => (value != null ? value : null),
+        render: value => (value != null ? value : null),
     }),
 ] as const;

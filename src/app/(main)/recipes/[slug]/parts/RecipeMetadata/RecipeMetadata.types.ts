@@ -1,11 +1,10 @@
-
 import React from "react";
 
 export interface RecipeMetadataConfigItem<K extends keyof RecipeMetadataFlat> {
     key: K;
     icon: string;
     label?: string;
-    format?: (value: RecipeMetadataFlat[K] | undefined, metadata: RecipeMetadataFlat) => React.ReactNode;
+    render?: (value: RecipeMetadataFlat[K] | undefined, metadata: RecipeMetadataFlat) => React.ReactNode;
 }
 
 export interface RecipeMetadataFlat {

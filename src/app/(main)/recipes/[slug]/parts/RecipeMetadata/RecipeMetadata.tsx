@@ -13,7 +13,7 @@ interface RecipeMetadataProps {
 export function RecipeMetadata({ metadata }: RecipeMetadataProps) {
     return (
         <Box id="RecipeMetadata" sx={styles.metadata}>
-            {recipeMetadataConfig.map(({ key, icon, label, format }) => {
+            {recipeMetadataConfig.map(({ key, icon, label, render: format }) => {
                 if (!hasValue(metadata, key)) {
                     return null;
                 }
