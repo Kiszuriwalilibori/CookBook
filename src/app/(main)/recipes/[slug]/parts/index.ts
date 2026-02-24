@@ -1,11 +1,13 @@
-export { RecipeHero } from "./RecipeHero";
 export { default } from "./RecipeMetadata";
-export { RecipeDescription } from "./RecipeDescription";
-export { RecipeIngredients } from "./RecipeIngredients";
-export { RecipePreparationSteps } from "./RecipePreparationSteps";
-export { RecipeSource } from "./RecipeSource";
+
 export { RecipeCopyButton } from "./RecipeCopyButton";
-export { RecipePrintButton } from "./RecipePrintButton";
-export { RecipePdfButton } from "./RecipePdfButton";
+export { RecipeDescription } from "./RecipeDescription";
+export { RecipeHero } from "./RecipeHero";
+export { RecipeIngredients } from "./RecipeIngredients";
 export { RecipeKeepAwakeButton } from "./RecipeKeepAwakeButton";
+export { RecipeNotesButton } from "./RecipeNotesButton";
+export { RecipePdfButton } from "./RecipePdfButton";
+export { RecipePreparationSteps } from "./RecipePreparationSteps";
+export { RecipePrintButton } from "./RecipePrintButton";
+export { RecipeSource } from "./RecipeSource";
 
