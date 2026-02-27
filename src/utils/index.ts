@@ -13,6 +13,6 @@ import { getUserFromCookies } from "./getUserFromCookies";
 import { searchRecipeByTitle } from "./searchRecipeByTitle";
 import { verifyGoogle } from "./googleAuth";
 import { writeClient } from "./writeClient";
+import { getUserRecipeNote } from "./getUserRecipeNote";
 
-
-export { buildFilterClause, client, fetchSummary, generateRecipeMetadata, getFavoriteRecipesForSSR, getOptions, getRecipeById, getRecipeBySlug, getRecipesForCards, getSessionUser, getUserFavorites, getUserFromCookies, searchRecipeByTitle, verifyGoogle, writeClient };
+export { buildFilterClause, client, fetchSummary, getUserRecipeNote, generateRecipeMetadata, getFavoriteRecipesForSSR, getOptions, getRecipeById, getRecipeBySlug, getRecipesForCards, getSessionUser, getUserFavorites, getUserFromCookies, searchRecipeByTitle, verifyGoogle, writeClient };

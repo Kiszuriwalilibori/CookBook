@@ -6,20 +6,22 @@ import { Separator } from "@/components";
 import { styles } from "./styles";
 import { mapRecipeToMetadata } from "./parts/RecipeMetadata/RecipeMetadata.utils";
 
-import RecipeMetadata, { RecipeHero, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton, RecipeNotesButton } from "./parts";
+import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton, RecipeNotesButton } from "./parts";
 
 import { generateRecipeMetadata } from "@/utils/generateRecipeMetadata";
 import { generateRecipeSchema } from "@/utils/schema-org";
 
 import { resolveRecipeIdFromSlug } from "@/utils/resolveRecipeIdFromSlug";
 import { getRecipeById } from "@/utils/getRecipeById";
-import { RecipeNutrition } from "./parts/RecipeNutrition";
+import { RecipeNutrition } from "./parts";
+import { getUserFromCookies, getUserRecipeNote } from "@/utils";
+import { PrivateUserNotes } from "./parts/PrivateUserNotes";
 
 interface Params {
     slug: string;
 }
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 //
 // ─────────────────────────────────────────────────────────────
@@ -57,6 +59,13 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
     // 2️⃣ _id → recipe
     const recipe: Recipe | null = await getRecipeById(id);
     if (!recipe) notFound();
+    const user = await getUserFromCookies();
+
+    let initialNotes: string | undefined = undefined;
+
+    if (user) {
+        initialNotes = await getUserRecipeNote(user.email, recipe._id);
+    }
 
     // 3️⃣ SEO canonical redirect
     const canonicalSlug = recipe.slug?.current;
@@ -94,13 +103,13 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 <RecipeSource recipe={recipe} />
 
                 <Separator />
-
+                {initialNotes && <PrivateUserNotes notes={initialNotes} />}
                 <Box sx={styles.copyButtonContainer}>
                     <RecipeCopyButton recipe={recipe} />
                     <RecipePrintButton />
                     <RecipePdfButton recipe={recipe} slug={slug} />
                     <RecipeKeepAwakeButton />
-                    <RecipeNotesButton  />
+                    <RecipeNotesButton recipeId={recipe._id} userEmail={user?.email} initialNotes={initialNotes} />
                 </Box>
             </Box>
         </>
