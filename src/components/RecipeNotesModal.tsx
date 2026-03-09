@@ -1,8 +1,7 @@
-
 "use client";
 
-import { Modal, Fade, Backdrop, Box, TextField, Button, Stack } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Modal, Fade, Backdrop, Box, TextField, Button, Stack, CircularProgress } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
 import useEscapeKey from "@/hooks/useEscapeKey";
 import { modalStyles, visuallyHidden } from "./Header/Header.styles";
 import { useRouter } from "next/navigation";
@@ -22,16 +21,39 @@ interface Props {
 export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, userEmail, onSave }: Props) => {
     const [notes, setNotes] = useState(initialValue);
     const [saving, setSaving] = useState(false);
+    const textFieldRef = useRef<HTMLInputElement | null>(null);
+    const [hasOpenedOnce, setHasOpenedOnce] = useState(false);
     const router = useRouter();
     useEscapeKey(open, onClose);
 
     // reset notes przy otwarciu modala
+    // useEffect(() => {
+    //     if (open) {
+    //         setNotes(initialValue);
+    //     }
+    // }, [open, initialValue]);
     useEffect(() => {
-        if (open) {
-            setNotes(initialValue);
-        }
-    }, [open, initialValue]);
+        if (!open) return;
 
+        setNotes(initialValue);
+
+        if (!hasOpenedOnce) {
+            setHasOpenedOnce(true);
+
+            // mały delay żeby poczekać na animację i render
+            setTimeout(() => {
+                const input = textFieldRef.current;
+
+                if (input) {
+                    input.focus();
+
+                    // ustawienie kursora na końcu tekstu
+                    const length = input.value.length;
+                    input.setSelectionRange(length, length);
+                }
+            }, 100);
+        }
+    }, [open, initialValue, hasOpenedOnce]);
     const handleSave = async () => {
         if (!recipeId || !userEmail) return;
 
@@ -76,14 +98,14 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
                     </Box>
 
                     <Stack spacing={3}>
-                        <TextField label="Twoje notatki" multiline minRows={6} fullWidth value={notes} onChange={e => setNotes(e.target.value)} autoFocus />
+                        <TextField label="Twoje notatki" multiline minRows={6} fullWidth value={notes} onChange={e => setNotes(e.target.value)} inputRef={textFieldRef} />
 
                         <Stack direction="row" spacing={2} justifyContent="flex-end">
                             <Button variant="outlined" onClick={onClose} disabled={saving}>
                                 Anuluj
                             </Button>
                             <Button variant="contained" onClick={handleSave} disabled={saving}>
-                                {saving ? "Zapisywanie..." : "Zapisz"}
+                                {saving ? <CircularProgress size={20} color="inherit" /> : "Zapisz"}
                             </Button>
                         </Stack>
                     </Stack>
