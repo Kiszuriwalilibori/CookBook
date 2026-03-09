@@ -10,6 +10,7 @@ export const PrivateUserNotes = ({ notes }: PrivateUserNotesProps) => {
     const isUserLogged = useIsUserLogged();
 
     if (!isUserLogged) return null;
+    if (!notes?.trim()) return null;
 
     return (
         <Box mt={4}>
