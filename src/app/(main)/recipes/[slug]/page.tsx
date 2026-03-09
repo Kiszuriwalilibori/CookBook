@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { notFound, redirect } from "next/navigation";
 
-import { Recipe } from "@/types";
+// import { Recipe } from "@/types";
 import { Separator } from "@/components";
 import { styles } from "./styles";
 import { mapRecipeToMetadata } from "./parts/RecipeMetadata/RecipeMetadata.utils";
@@ -57,10 +57,9 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
     if (!id) notFound();
 
     // 2️⃣ _id → recipe
-    const recipe: Recipe | null = await getRecipeById(id);
-    if (!recipe) notFound();
-    const user = await getUserFromCookies();
 
+    const [recipe, user] = await Promise.all([getRecipeById(id), getUserFromCookies()]);
+    if (!recipe) notFound();
     let initialNotes: string | undefined = undefined;
 
     if (user) {
