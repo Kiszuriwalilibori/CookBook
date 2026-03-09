@@ -9,7 +9,12 @@ export default {
       name: 'userEmail',
       title: 'User Email',
       type: 'string',
-      validation: (Rule: Rule) => Rule.required(),
+      validation: (Rule: Rule) =>
+        Rule.required().custom((value, context: any) => {
+          if (!context.identity?.email) return true
+          if (value !== context.identity.email) return 'You can only set your own email'
+          return true
+        }),
     },
     {
       name: 'recipe',
