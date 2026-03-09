@@ -16,7 +16,16 @@ export const PrivateUserNotes = ({ notes }: PrivateUserNotesProps) => {
             <Typography variant="h5" align="center" gutterBottom>
                 Twoje notatki
             </Typography>
-            <Box mt={1}>{notes}</Box>
+            <Typography
+                mt={1}
+                variant="body1"
+                sx={{
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                }}
+            >
+                {notes}
+            </Typography>
         </Box>
     );
 };

@@ -57,7 +57,7 @@ export const recipeMetadataConfig = [
     defineRecipeMetadata({
         key: "totalWeight",
         icon: recipeMetadataIcons.totalWeight,
-        label: getTranslation("totalWeight"),
+        label: getTranslation("nutrition.totalWeight"),
         render: value => (value != null ? value : null),
     }),
 ] as const;
