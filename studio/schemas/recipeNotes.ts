@@ -4,6 +4,7 @@ export default {
   name: 'recipeNotes',
   title: 'Recipe Note',
   type: 'document',
+  validation: (Rule: Rule) => Rule.max(200), // np. max 2000 znaków
   fields: [
     {
       name: 'userEmail',

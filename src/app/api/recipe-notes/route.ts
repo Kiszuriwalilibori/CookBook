@@ -43,11 +43,16 @@ export async function POST(req: Request) {
     if (!recipeId) {
         return NextResponse.json({ error: "Missing recipeId" }, { status: 400 });
     }
+    const sanitizedNotes = notes?.trim().slice(0, 2000);
 
+    // 🔹 Nie zapisuj pustej notatki
+    if (!sanitizedNotes) {
+        return NextResponse.json({ error: "Notes cannot be empty" }, { status: 400 });
+    }
     const existing = await writeClient.fetch(`*[_type == "recipeNotes" && userEmail == $userEmail && recipe._ref == $recipeId][0]{ _id }`, { userEmail: user.email, recipeId });
 
     if (existing?._id) {
-        await writeClient.patch(existing._id).set({ notes }).commit();
+        await writeClient.patch(existing._id).set({ notes: sanitizedNotes }).commit();
     } else {
         await writeClient.create({
             _type: "recipeNotes",
@@ -56,7 +61,7 @@ export async function POST(req: Request) {
                 _type: "reference",
                 _ref: recipeId,
             },
-            notes,
+            notes: sanitizedNotes,
         });
     }
 
