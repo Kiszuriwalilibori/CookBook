@@ -67,3 +67,21 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
 }
+
+
+
+export async function DELETE(req: Request) {
+    const user = await getUserFromCookies();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const { searchParams } = new URL(req.url);
+    const recipeId = searchParams.get("recipeId");
+    if (!recipeId) return NextResponse.json({ error: "Missing recipeId" }, { status: 400 });
+
+    const existing = await writeClient.fetch(`*[_type == "recipeNotes" && userEmail == $userEmail && recipe._ref == $recipeId][0]{ _id }`, { userEmail: user.email, recipeId });
+
+    if (!existing?._id) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    await writeClient.delete(existing._id);
+    return NextResponse.json({ success: true });
+}

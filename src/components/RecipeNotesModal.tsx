@@ -54,8 +54,19 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
             }, 100);
         }
     }, [open, initialValue, hasOpenedOnce]);
+
+    // 🔹 Ograniczenie do 2000 znaków w stanie
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value = e.target.value.slice(0, 200); // max 2000 znaków
+        setNotes(value);
+    };
     const handleSave = async () => {
         if (!recipeId || !userEmail) return;
+        const sanitized = notes.trim();
+        if (!sanitized) {
+            alert("Notatka nie może być pusta!");
+            return;
+        }
 
         setSaving(true);
 
@@ -64,11 +75,11 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
             await fetch("/api/recipe-notes", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ recipeId, notes }),
+                body: JSON.stringify({ recipeId, notes: sanitized }),
             });
             router.refresh(); // 🔥 DODAJ TO
             // callback opcjonalny
-            onSave?.(notes);
+            onSave?.(sanitized);
         } catch (err) {
             console.error("Nie udało się zapisać notatki:", err);
             alert("Nie udało się zapisać notatki. Spróbuj ponownie.");
@@ -78,6 +89,24 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
         }
     };
 
+    const handleDelete = async () => {
+        if (!notes?.trim()) return; // nie pozwalamy na delete pustej notatki
+        const confirmDelete = confirm("Czy na pewno chcesz usunąć notatkę?");
+        if (!confirmDelete) return;
+
+        setSaving(true);
+        try {
+            await fetch(`/api/recipe-notes?recipeId=${recipeId}`, { method: "DELETE" });
+            onSave?.("");
+            router.refresh();
+            onClose();
+        } catch (err) {
+            console.error("Nie udało się usunąć notatki:", err);
+            alert("Nie udało się usunąć notatki. Spróbuj ponownie.");
+        } finally {
+            setSaving(false);
+        }
+    };
     return (
         <Modal
             open={open}
@@ -98,14 +127,27 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
                     </Box>
 
                     <Stack spacing={3}>
-                        <TextField label="Twoje notatki" multiline minRows={6} fullWidth value={notes} onChange={e => setNotes(e.target.value)} inputRef={textFieldRef} />
-
+                        <TextField label="Twoje notatki" multiline minRows={6} fullWidth value={notes} onChange={handleChange} inputRef={textFieldRef} />
+                        <Box sx={{ fontSize: "0.875rem", color: "text.secondary", textAlign: "right" }}>
+                            {notes.length} / 200 znaków (pozostało {200 - notes.length})
+                        </Box>
                         <Stack direction="row" spacing={2} justifyContent="flex-end">
                             <Button variant="outlined" onClick={onClose} disabled={saving}>
                                 Anuluj
                             </Button>
-                            <Button variant="contained" onClick={handleSave} disabled={saving}>
+                            <Box id="notes-save-status" aria-live="polite" sx={visuallyHidden}>
+                                {saving ? "Notatka jest zapisywana" : "Możesz zapisać notatkę"}
+                            </Box>
+                            <Button variant="contained" onClick={handleSave} disabled={saving} aria-describedby="notes-save-status">
                                 {saving ? <CircularProgress size={20} color="inherit" /> : "Zapisz"}
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="error"
+                                onClick={handleDelete}
+                                disabled={saving || !notes?.trim()} // opcjonalnie blokuj jeśli brak treści
+                            >
+                                Usuń
                             </Button>
                         </Stack>
                     </Stack>
@@ -116,3 +158,5 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
 };
 
 export default RecipeNotesModal;
+
+// todo: notes-save-status do stałej dla skalowalności
