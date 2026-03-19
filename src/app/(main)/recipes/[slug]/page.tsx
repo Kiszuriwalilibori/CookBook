@@ -102,7 +102,8 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 <RecipeSource recipe={recipe} />
 
                 <Separator />
-                {initialNotes && <PrivateUserNotes notes={initialNotes} />}
+                <PrivateUserNotes recipeId={recipe._id} userEmail={user?.email} initialNotes={initialNotes} />
+                {/* {initialNotes && <PrivateUserNotes notes={initialNotes} />} */}
                 <Box sx={styles.copyButtonContainer}>
                     <RecipeCopyButton recipe={recipe} />
                     <RecipePrintButton />
