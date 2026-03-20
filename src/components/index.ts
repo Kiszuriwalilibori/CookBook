@@ -8,7 +8,7 @@ import RecipeFilters from "./RecipeFilters";
 import Separator from "./Common/Separator/Separator";
 import Carousel from "./Carousel/Carousel";
 import RecipeNotesModal from "./RecipeNotesModal";
-import LatestRecipesSection from "./LatestRecipesSection";
+import LatestRecipesSection from "./LatestRecipesSection/LatestRecipesSection";
 
 
 export { ConfirmRemoveDialog, LatestRecipesSection, RecipeNotesModal, Footer, Header, Carousel,Menu, PageTitle, RecipeCard, RecipeFilters, Separator };
