@@ -18,7 +18,7 @@ interface HomeContentProps {
 
 const HomeContent: React.FC<HomeContentProps> = ({ initialSlides = null }) => {
     return (
-        <Box>   
+        <Box id="HomeContent" sx={{backgroundColor: "rgb(247, 225, 155)"}}>
             <Carousel initialSlides={initialSlides} count={5} intervalMs={5000} />
         </Box>
     );

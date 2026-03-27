@@ -15,7 +15,7 @@ export default async function Page() {
     return (
         <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
             {/* Pass server-fetched slides to the client HomeContent */}
-            <HomeContent initialSlides={slides} />
+            <HomeContent initialSlides={slides}  />
             {/* Sekcja Najnowsze */}
             <Box
                 sx={{

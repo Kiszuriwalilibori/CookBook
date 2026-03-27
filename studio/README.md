@@ -9,3 +9,9 @@ Now you can do the following things:
 - [Extend and build plugins](https://www.sanity.io/docs/content-studio/extending?utm_source=readme)
 
 token:skYm4pg8S94KopjwcImmgpzM1xp6sYLiCgvRcUFnyE81HSd9pcfLrCVtSgmsxh4O4QnhNF0yiShh1ZGb9xZ7WISDycJOqApL7jwcolgNVeChFHPfXFWn5A3IlrQiMMDg4ntjRpX4ir9D0iOTreBtDwxlVkNsUDu4HlL4HGTktiefxPnNI4cz
+
+
+
+TODO:
+
+Niepokojące, że recipe test i kilka innych, gdzie Kizia jest unset  są widoczne po przeładowaniu strony recipes, jeżeli przedtem było się zalogowanym hjako admin.
