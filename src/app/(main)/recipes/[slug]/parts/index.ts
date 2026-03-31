@@ -12,3 +12,4 @@ export { RecipePdfButton } from "./RecipePdfButton";
 export { RecipePreparationSteps } from "./RecipePreparationSteps";
 export { RecipePrintButton } from "./RecipePrintButton";
 export { RecipeSource } from "./RecipeSource";
+export { RecipeRatingSection } from "./RecipeRatingSection";

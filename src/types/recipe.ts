@@ -1,4 +1,4 @@
-import { Status } from ".";
+import { RatingSummary, RecipeRating, Status } from ".";
 
 interface PortableTextBlock {
     _key: string;
@@ -109,6 +109,8 @@ export interface Recipe {
         };
         calculatedAt?: string;
     };
+    ratings?: RecipeRating[];
+    ratingSummary?: RatingSummary;
 }
 
 export type TranslationSafeRecipe = Pick<Recipe, "title" | "calories" | "prepTime" | "cookTime" | "recipeYield" | "dietary" | "cuisine" | "tags" | "notes" | "status" | "source" | "nutrition">;

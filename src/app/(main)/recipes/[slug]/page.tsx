@@ -6,7 +6,7 @@ import { Separator } from "@/components";
 import { styles } from "./styles";
 import { mapRecipeToMetadata } from "./parts/RecipeMetadata/RecipeMetadata.utils";
 
-import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton, RecipeNotesButton } from "./parts";
+import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton, RecipeNotesButton, RecipeRatingSection } from "./parts";
 
 import { generateRecipeMetadata } from "@/utils/generateRecipeMetadata";
 import { generateRecipeSchema } from "@/utils/schema-org";
@@ -61,7 +61,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
     const [recipe, user] = await Promise.all([getRecipeById(id), getUserFromCookies()]);
     if (!recipe) notFound();
     let initialNotes: string | undefined = undefined;
-
+    console.log(recipe);
     if (user) {
         initialNotes = await getUserRecipeNote(user.email, recipe._id);
     }
@@ -102,6 +102,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 <RecipeSource recipe={recipe} />
 
                 <Separator />
+                <RecipeRatingSection recipeId={recipe._id} averageRating={recipe.ratingSummary?.average ?? null} totalRatings={recipe.ratingSummary?.count ?? 0} />
                 <PrivateUserNotes recipeId={recipe._id} userEmail={user?.email} initialNotes={initialNotes} />
                 {/* {initialNotes && <PrivateUserNotes notes={initialNotes} />} */}
                 <Box sx={styles.copyButtonContainer}>

@@ -30,6 +30,7 @@ export async function patchRecipeIngredients(recipe: RecipeIngredientsInput): Pr
         .patch(doc._id)
         .set({
             ingredients: ingredients.map(item => ({
+                _key: crypto.randomUUID(),
                 name: item.name,
                 quantity: item.quantity,
                 unit: item.unit,

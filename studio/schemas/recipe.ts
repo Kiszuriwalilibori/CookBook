@@ -1,4 +1,3 @@
-
 // recipe.js
 import cookTime from './recipe.fields/cookTime'
 import cuisine from './recipe.fields/cuisine'
@@ -18,6 +17,8 @@ import status from './recipe.fields/status'
 import title from './recipe.fields/title'
 import tags from './recipe.fields/tags'
 import recipeYield from './recipe.fields/recipeYield'
+import ratings from './recipe.fields/ratings'
+import ratingSummary from './recipe.fields/ratingSummary'
 
 export default {
   name: 'recipe',
@@ -42,6 +43,8 @@ export default {
     status,
     source,
     nutrition,
+    ratings,
+    ratingSummary,
   ],
 }
 

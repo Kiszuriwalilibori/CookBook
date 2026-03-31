@@ -71,3 +71,4 @@ export interface User {
     userId: string;
     email: string;
 }
+export type { RatingValue, RecipeRating, PatchRecipeRatingsInput, RatingSummary } from "./recipeRatings";
