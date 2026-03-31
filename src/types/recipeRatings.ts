@@ -15,3 +15,7 @@ export interface RatingSummary {
     average: number;
     count: number;
 }
+export interface RatingPayload extends Omit<RecipeRating, "_key" | "updatedAt"> {
+    recipeId: string;
+    overwrite?: boolean;
+}

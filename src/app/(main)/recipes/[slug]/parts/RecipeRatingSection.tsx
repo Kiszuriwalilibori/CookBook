@@ -9,7 +9,7 @@ interface RecipeRatingSectionProps {
 }
 
 export function RecipeRatingSection({ recipeId, averageRating, totalRatings }: RecipeRatingSectionProps) {
-    return <RecipeRatingWidget recipeId={recipeId} averageRating={averageRating} totalRatings={totalRatings} raterName="Anonimowy" />;
+    return <RecipeRatingWidget recipeId={recipeId} averageRating={averageRating} totalRatings={totalRatings} />;
 }
 
 export default RecipeRatingSection;
