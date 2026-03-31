@@ -1,3 +1,5 @@
+// import RecipeRatingWidget from "./RecipeRatingWidget";
+
 export { default } from "./RecipeMetadata";
 
 export { RecipeCopyButton } from "./RecipeCopyButton";
@@ -13,3 +15,4 @@ export { RecipePreparationSteps } from "./RecipePreparationSteps";
 export { RecipePrintButton } from "./RecipePrintButton";
 export { RecipeSource } from "./RecipeSource";
 export { RecipeRatingSection } from "./RecipeRatingSection";
+export {default as RecipeRatingWidget} from "./RecipeRatingWidget";

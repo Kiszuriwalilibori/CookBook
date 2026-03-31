@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import ReactStars from "react-rating-stars-component";
-import { generateDeviceFingerprint, hashFingerprint } from "@/utils/fingerprint";
+
 import type { RatingValue, RatingPayload } from "@/types/recipeRatings";
+import { useFingerprint } from "./useFingerprint";
+import { getRatingsText } from "./getRatingText";
 
 interface RecipeRatingWidgetProps {
     recipeId: string;
@@ -12,10 +14,10 @@ interface RecipeRatingWidgetProps {
     totalRatings: number;
 }
 
-export default function RecipeRatingWidget({ recipeId, averageRating, totalRatings }: RecipeRatingWidgetProps) {
+export function RecipeRatingWidget({ recipeId, averageRating, totalRatings }: RecipeRatingWidgetProps) {
     const [rating, setRating] = useState<RatingValue | 0>(0);
     const [isLoading, setIsLoading] = useState(false);
-    const [fingerprintHash, setFingerprintHash] = useState<string | null>(null);
+    // const [fingerprintHash, setFingerprintHash] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [showThanks, setShowThanks] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
@@ -23,12 +25,12 @@ export default function RecipeRatingWidget({ recipeId, averageRating, totalRatin
     const [showOverwriteDialog, setShowOverwriteDialog] = useState(false);
     const [existingRating, setExistingRating] = useState<{ rating: number; updatedAt: string } | null>(null);
     const [pendingRating, setPendingRating] = useState<RatingValue | null>(null);
-
-    useEffect(() => {
-        const fingerprint = generateDeviceFingerprint();
-        const hash = hashFingerprint(fingerprint);
-        setFingerprintHash(hash);
-    }, []);
+    const fingerprintHash = useFingerprint();
+    // useEffect(() => {
+    //     const fingerprint = generateDeviceFingerprint();
+    //     const hash = hashFingerprint(fingerprint);
+    //     setFingerprintHash(hash);
+    // }, []);
 
     const submitRating = async (newRating: RatingValue, overwrite = false) => {
         if (!fingerprintHash) return;
@@ -102,8 +104,7 @@ export default function RecipeRatingWidget({ recipeId, averageRating, totalRatin
         setPendingRating(null);
         setExistingRating(null);
     };
-
-    const ratingsText = totalRatings === 1 ? "ocena" : totalRatings < 5 ? "oceny" : "ocen";
+    const ratingsText = getRatingsText(totalRatings);
 
     return (
         <div className="flex flex-col gap-2 p-4 border rounded-lg bg-gray-50">
@@ -159,3 +160,5 @@ export default function RecipeRatingWidget({ recipeId, averageRating, totalRatin
         </div>
     );
 }
+
+export default RecipeRatingWidget;

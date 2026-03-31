@@ -1,6 +1,6 @@
 "use client";
 
-import RecipeRatingWidget from "./RecipeRatingWidget";
+import RecipeRatingWidget from "./RecipeRatingWidget/RecipeRatingWidget";
 
 interface RecipeRatingSectionProps {
     recipeId: string;
