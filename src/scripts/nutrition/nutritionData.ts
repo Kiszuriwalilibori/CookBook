@@ -1,5 +1,5 @@
 import { RecipeNutritionInput } from "@/types/nutrition";
-export const exampleRecipe: RecipeNutritionInput = {
+export const nutritionData: RecipeNutritionInput = {
     title: "Kurczak w sezamie po chińsku",
     totalWeight: 637.3,
     per100g: {

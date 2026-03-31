@@ -1,8 +1,8 @@
 import { patchRecipeRatings } from "./patchRecipeRating";
-import { exampleRecipeRatings } from "./RecipeRatingInput";
+import { ratings } from "./ratings";
 
 async function main() {
-    await patchRecipeRatings(exampleRecipeRatings);
+    await patchRecipeRatings(ratings);
 }
 
 main().catch(console.error);

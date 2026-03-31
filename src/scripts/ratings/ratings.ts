@@ -5,7 +5,7 @@ export interface RecipeRatingInput {
     ratings: RecipeRating[];
 }
 
-export const exampleRecipeRatings: RecipeRatingInput = {
+export const ratings:RecipeRatingInput = {
     recipeTitle: "Kurczak w sezamie po chińsku",
     ratings: [
         {

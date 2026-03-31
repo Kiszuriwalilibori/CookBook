@@ -12,16 +12,16 @@ type Slide = {
     title?: string | null;
 };
 
-interface HomeContentProps {
+interface SliderProps {
     initialSlides?: Slide[] | null;
 }
 
-const HomeContent: React.FC<HomeContentProps> = ({ initialSlides = null }) => {
+const Slider: React.FC<SliderProps> = ({ initialSlides = null }) => {
     return (
-        <Box id="HomeContent" sx={{backgroundColor: "rgb(247, 225, 155)"}}>
+        <Box id="HomeContent" sx={{ backgroundColor: "rgb(247, 225, 155)" }}>
             <Carousel initialSlides={initialSlides} count={5} intervalMs={5000} />
         </Box>
     );
 };
 
-export default HomeContent;
+export default Slider;

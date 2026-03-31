@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import HomeContent from "@/components/HomeContent";
+import Slider from "@/components/Slider";
 import PageTitle from "@/components/PageTitle";
 
 export function Home() {
@@ -7,7 +7,7 @@ export function Home() {
         <>
             <PageTitle title={"Witamy"} />
             <Box>
-                <HomeContent />
+                <Slider />
             </Box>
         </>
     );

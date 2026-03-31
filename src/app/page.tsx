@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import HomeContent from "@/components/HomeContent";
+import Slider from "@/components/Slider";
 import getRandomRecipes from "@/utils/getRandomRecipes";
 import getLatestRecipes from "@/utils/getLatestRecipes";
 import { LatestRecipesSection } from "@/components";
@@ -14,8 +14,8 @@ export default async function Page() {
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-            {/* Pass server-fetched slides to the client HomeContent */}
-            <HomeContent initialSlides={slides}  />
+            {/* Pass server-fetched slides to the client Slider*/}
+            <Slider initialSlides={slides} />
             {/* Sekcja Najnowsze */}
             <Box
                 sx={{
