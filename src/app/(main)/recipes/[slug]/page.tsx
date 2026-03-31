@@ -61,7 +61,6 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
     const [recipe, user] = await Promise.all([getRecipeById(id), getUserFromCookies()]);
     if (!recipe) notFound();
     let initialNotes: string | undefined = undefined;
-    console.log(recipe);
     if (user) {
         initialNotes = await getUserRecipeNote(user.email, recipe._id);
     }
