@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeClient } from "@/utils";
+import { client } from "@/utils";
 import type { RatingPayload, RecipeRating } from "@/types/recipeRatings";
 
 // Helper do generowania unikalnego _key
@@ -64,6 +65,33 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ status: "ok", ratingSummary, ratingSent: rating });
     } catch (err) {
         console.error("Error saving rating:", err);
+        return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
+    }
+}
+
+export async function GET(req: NextRequest) {
+    try {
+        const recipeId = req.nextUrl.searchParams.get("recipeId");
+
+        if (!recipeId) {
+            return NextResponse.json({ error: "Brak recipeId" }, { status: 400 });
+        }
+
+        const recipe = await client.fetch<{
+            ratingSummary?: { average: number; count: number };
+        }>(
+            `*[_type == "recipe" && _id == $id][0]{
+                ratingSummary
+            }`,
+            { id: recipeId }
+        );
+
+        return NextResponse.json({
+            averageRating: recipe?.ratingSummary?.average ?? null,
+            totalRatings: recipe?.ratingSummary?.count ?? 0,
+        });
+    } catch (err) {
+        console.error("Error fetching ratings:", err);
         return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
     }
 }
