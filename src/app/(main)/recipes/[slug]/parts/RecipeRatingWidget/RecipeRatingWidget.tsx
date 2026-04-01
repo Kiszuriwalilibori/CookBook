@@ -12,20 +12,22 @@
 //     recipeId: string;
 //     averageRating: number | null;
 //     totalRatings: number;
+//     onRatingUpdated?: () => void; // 🔥 NOWE
 // }
 
-// export function RecipeRatingWidget({ recipeId, averageRating, totalRatings }: RecipeRatingWidgetProps) {
+// export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRatingUpdated }: RecipeRatingWidgetProps) {
 //     const [rating, setRating] = useState<RatingValue | 0>(0);
 //     const [isLoading, setIsLoading] = useState(false);
-//     // const [fingerprintHash, setFingerprintHash] = useState<string | null>(null);
 //     const [error, setError] = useState<string | null>(null);
 //     const [showThanks, setShowThanks] = useState(false);
 //     const [message, setMessage] = useState<string | null>(null);
-//     // Modal do potwierdzenia nadpisania oceny
+
 //     const [showOverwriteDialog, setShowOverwriteDialog] = useState(false);
 //     const [existingRating, setExistingRating] = useState<{ rating: number; updatedAt: string } | null>(null);
 //     const [pendingRating, setPendingRating] = useState<RatingValue | null>(null);
+
 //     const fingerprintHash = useFingerprint();
+
 //     const submitRating = async (newRating: RatingValue, overwrite = false) => {
 //         if (!fingerprintHash) return;
 
@@ -34,6 +36,7 @@
 
 //         try {
 //             const payload: RatingPayload = { recipeId, rating: newRating, fingerprint: fingerprintHash, overwrite };
+
 //             const res = await fetch("/api/recipe-ratings", {
 //                 method: "POST",
 //                 headers: { "Content-Type": "application/json" },
@@ -43,14 +46,11 @@
 //             const data = await res.json();
 
 //             if (res.status === 409) {
-//                 // Istnieje ocena → pokaż modal z opcją nadpisania
 //                 setExistingRating(data.existingRating);
 //                 setPendingRating(newRating);
 //                 setShowOverwriteDialog(true);
 //                 return;
 //             }
-
-//             // Obsługa "nowa ocena = stara ocena"
 
 //             if (data.status === "noChange") {
 //                 setMessage("Nie zmieniono oceny");
@@ -61,7 +61,9 @@
 //                 }, 3000);
 //                 return;
 //             }
-//             // Aktualizacja stanu po udanej zmianie lub nowej ocenie
+
+//             // ✅ tylko tutaj odświeżamy
+//             onRatingUpdated?.();
 
 //             setMessage("Dziękuję za ocenę!");
 //             setShowThanks(true);
@@ -84,12 +86,11 @@
 //     const handleOverwriteConfirm = () => {
 //         if (pendingRating !== null) {
 //             submitRating(pendingRating, true);
+
 //             setShowOverwriteDialog(false);
 //             setPendingRating(null);
 //             setExistingRating(null);
 //             setRating(pendingRating);
-//             setShowThanks(true);
-//             setTimeout(() => setShowThanks(false), 3000);
 //         }
 //     };
 
@@ -98,11 +99,11 @@
 //         setPendingRating(null);
 //         setExistingRating(null);
 //     };
+
 //     const ratingsText = getRatingsText(totalRatings);
 
 //     return (
 //         <div className="flex flex-col gap-2 p-4 border rounded-lg bg-gray-50">
-//             {/* Średnia ocena */}
 //             <div className="text-sm text-gray-600">
 //                 {averageRating !== null ? (
 //                     <span>
@@ -116,7 +117,6 @@
 //                 )}
 //             </div>
 
-//             {/* Gwiazdki */}
 //             <div className="flex items-center gap-4">
 //                 <ReactStars
 //                     count={5}
@@ -131,12 +131,12 @@
 //                     halfIcon={<span className="text-2xl">★</span>}
 //                     filledIcon={<span className="text-2xl">★</span>}
 //                 />
+
 //                 {isLoading && <span className="text-xs text-blue-600">Zapisywanie...</span>}
 //                 {error && <span className="text-xs text-red-600">{error}</span>}
 //                 {showThanks && <span className="text-xs text-green-600 font-medium">✓ {message}</span>}
 //             </div>
 
-//             {/* Modal nadpisania */}
 //             <Dialog open={showOverwriteDialog} onClose={handleOverwriteCancel}>
 //                 <DialogTitle>Już oceniałeś ten przepis</DialogTitle>
 //                 <DialogContent>
@@ -156,21 +156,24 @@
 // }
 
 // export default RecipeRatingWidget;
+
 "use client";
 
 import { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Box, Typography } from "@mui/material";
 import ReactStars from "react-rating-stars-component";
 
 import type { RatingValue, RatingPayload } from "@/types/recipeRatings";
 import { useFingerprint } from "./useFingerprint";
 import { getRatingsText } from "./getRatingText";
 
+import { containerSx, textSx, averageSx, countSx, loadingSx, errorSx, successSx } from "./recipeRatingWidget.styles";
+
 interface RecipeRatingWidgetProps {
     recipeId: string;
     averageRating: number | null;
     totalRatings: number;
-    onRatingUpdated?: () => void; // 🔥 NOWE
+    onRatingUpdated?: () => void;
 }
 
 export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRatingUpdated }: RecipeRatingWidgetProps) {
@@ -193,7 +196,12 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
         setError(null);
 
         try {
-            const payload: RatingPayload = { recipeId, rating: newRating, fingerprint: fingerprintHash, overwrite };
+            const payload: RatingPayload = {
+                recipeId,
+                rating: newRating,
+                fingerprint: fingerprintHash,
+                overwrite,
+            };
 
             const res = await fetch("/api/recipe-ratings", {
                 method: "POST",
@@ -220,7 +228,6 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                 return;
             }
 
-            // ✅ tylko tutaj odświeżamy
             onRatingUpdated?.();
 
             setMessage("Dziękuję za ocenę!");
@@ -261,39 +268,41 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
     const ratingsText = getRatingsText(totalRatings);
 
     return (
-        <div className="flex flex-col gap-2 p-4 border rounded-lg bg-gray-50">
-            <div className="text-sm text-gray-600">
+        <Box sx={containerSx}>
+            <Typography sx={textSx}>
                 {averageRating !== null ? (
-                    <span>
-                        Średnia <strong className="text-lg text-gray-900">{averageRating}</strong> / 5{" "}
-                        <strong className="text-gray-700">
+                    <>
+                        Średnia{" "}
+                        <Box component="span" sx={averageSx}>
+                            {averageRating}
+                        </Box>{" "}
+                        / 5{" "}
+                        <Box component="span" sx={countSx}>
                             ({totalRatings} {ratingsText})
-                        </strong>
-                    </span>
+                        </Box>
+                    </>
                 ) : (
-                    <span>Brak ocen - bądź pierwszy!</span>
+                    "Brak ocen - bądź pierwszy!"
                 )}
-            </div>
+            </Typography>
 
-            <div className="flex items-center gap-4">
-                <ReactStars
-                    count={5}
-                    onChange={handleRatingChange}
-                    size={32}
-                    activeColor="#fbbf24"
-                    color="#e5e7eb"
-                    value={rating}
-                    edit={true}
-                    isHalf={false}
-                    emptyIcon={<span className="text-2xl">★</span>}
-                    halfIcon={<span className="text-2xl">★</span>}
-                    filledIcon={<span className="text-2xl">★</span>}
-                />
+            <ReactStars
+                count={5}
+                onChange={handleRatingChange}
+                size={32}
+                activeColor="#fbbf24"
+                color="#e5e7eb"
+                value={rating}
+                edit={true}
+                isHalf={false}
+                emptyIcon={<span style={{ fontSize: 24 }}>★</span>}
+                halfIcon={<span style={{ fontSize: 24 }}>★</span>}
+                filledIcon={<span style={{ fontSize: 24 }}>★</span>}
+            />
 
-                {isLoading && <span className="text-xs text-blue-600">Zapisywanie...</span>}
-                {error && <span className="text-xs text-red-600">{error}</span>}
-                {showThanks && <span className="text-xs text-green-600 font-medium">✓ {message}</span>}
-            </div>
+            {isLoading && <Typography sx={loadingSx}>Zapisywanie...</Typography>}
+            {error && <Typography sx={errorSx}>{error}</Typography>}
+            {showThanks && <Typography sx={successSx}>✓ {message}</Typography>}
 
             <Dialog open={showOverwriteDialog} onClose={handleOverwriteCancel}>
                 <DialogTitle>Już oceniałeś ten przepis</DialogTitle>
@@ -309,7 +318,7 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </Box>
     );
 }
 
