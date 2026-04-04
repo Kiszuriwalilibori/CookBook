@@ -1,0 +1,109 @@
+// type Rating = { rating: number; fingerprint: string; updatedAt: string };
+// type RecipeRatingInput = { recipeTitle: string; ratings: Rating[] };
+
+// function randomInt(min: number, max: number) {
+//     return Math.floor(Math.random() * (max - min + 1)) + min;
+// }
+
+// function randomDate(start: Date, end: Date) {
+//     return new Date(randomInt(start.getTime(), end.getTime()));
+// }
+
+// function generateRatings(recipeTitle: string, minAvg = 4, maxAvg = 5): RecipeRatingInput {
+//     const count = randomInt(40, 200);
+//     const ratings: Rating[] = [];
+
+//     const startDate = new Date("2026-01-01T00:00:00Z");
+//     const now = new Date();
+
+//     // 🔥 Tworzymy 3 "bursty" (okna czasowe)
+//     const bursts = [
+//         { start: new Date("2026-01-05"), end: new Date("2026-01-20"), weight: 0.3 },
+//         { start: new Date("2026-02-10"), end: new Date("2026-02-25"), weight: 0.3 },
+//         { start: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000), end: now, weight: 0.4 },
+//     ];
+
+//     function pickBurstDate() {
+//         const r = Math.random();
+//         let acc = 0;
+
+//         for (const b of bursts) {
+//             acc += b.weight;
+//             if (r <= acc) {
+//                 return randomDate(b.start, b.end);
+//             }
+//         }
+//         return randomDate(startDate, now);
+//     }
+
+//     for (let i = 1; i <= count; i++) {
+//         ratings.push({
+//             rating: randomInt(4, 5),
+//             fingerprint: `fp_${recipeTitle[0].toLowerCase()}_${i}`,
+//             updatedAt: pickBurstDate().toISOString(),
+//         });
+//     }
+
+//     // ~10% niższych ocen
+//     const lowerCount = Math.floor(count * 0.1);
+//     for (let i = 0; i < lowerCount; i++) {
+//         const idx = randomInt(0, count - 1);
+//         ratings[idx].rating = randomInt(1, 3);
+//     }
+
+//     // korekta średniej
+//     let avg = ratings.reduce((sum, r) => sum + r.rating, 0) / count;
+
+//     if (avg < minAvg || avg > maxAvg) {
+//         const factor = (minAvg + maxAvg) / 2 / avg;
+
+//         ratings.forEach(r => {
+//             let newRating = Math.round(r.rating * factor);
+//             r.rating = Math.min(5, Math.max(1, newRating));
+//         });
+//     }
+
+//     return { recipeTitle, ratings };
+// }
+
+type Rating = { rating: number; fingerprint: string; updatedAt: string };
+type RecipeRatingInput = { recipeTitle: string; ratings: Rating[] };
+
+function randomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomDate(start: Date, end: Date): string {
+    const timestamp = randomInt(start.getTime(), end.getTime());
+    return new Date(timestamp).toISOString();
+}
+
+function generateRatings(recipeTitle: string, minAvg = 4, maxAvg = 5): RecipeRatingInput {
+    const count = randomInt(40, 200); // Prawdziwie losowa liczba ocen
+    const ratings: Rating[] = [];
+    const startDate = new Date("2026-01-01T00:00:00Z");
+    const endDate = new Date(); // teraz
+
+    for (let i = 1; i <= count; i++) {
+        // Burst: większość 4-5
+        let rating = Math.random() < 0.9 ? randomInt(4, 5) : randomInt(1, 3);
+
+        ratings.push({
+            rating,
+            fingerprint: `fp_${recipeTitle.slice(0, 2).toLowerCase()}_${i}_${Math.random().toString(36).slice(2, 8)}`,
+            updatedAt: randomDate(startDate, endDate),
+        });
+    }
+
+    // Korekta średniej, żeby była w zadanym przedziale
+    const avg = ratings.reduce((sum, r) => sum + r.rating, 0) / count;
+    if (avg < minAvg || avg > maxAvg) {
+        const factor = (minAvg + maxAvg) / 2 / avg;
+        ratings.forEach(r => {
+            let newRating = Math.round(r.rating * factor);
+            r.rating = Math.min(5, Math.max(1, newRating));
+        });
+    }
+
+    return { recipeTitle, ratings };
+}

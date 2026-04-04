@@ -12,7 +12,7 @@ export const writeClient = createClient({
 /**
  * Calculates rating summary from array of ratings
  */
-function calculateRatingSummary(ratings: RecipeRating[]): RatingSummary {
+export function calculateRatingSummary(ratings: RecipeRating[]): RatingSummary {
     if (ratings.length === 0) {
         return { average: 0, count: 0 };
     }
@@ -31,18 +31,17 @@ function calculateRatingSummary(ratings: RecipeRating[]): RatingSummary {
  * Returns merged array with updated timestamps
  */
 
-
 function generateKey(): string {
     return crypto.randomUUID();
 }
 
-function mergeRatings(existingRatings: RecipeRating[], newRatings: RecipeRating[]): RecipeRating[] {
+export function mergeRatings(existingRatings: RecipeRating[], newRatings: RecipeRating[]): RecipeRating[] {
     const ratingsMap = new Map(existingRatings.map(r => [r.fingerprint, r]));
 
     newRatings.forEach(newRating => {
         ratingsMap.set(newRating.fingerprint, {
             ...newRating,
-            _key: generateKey(), 
+            _key: generateKey(),
         });
     });
 
