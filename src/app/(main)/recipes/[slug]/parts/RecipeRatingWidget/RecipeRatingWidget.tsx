@@ -1,15 +1,14 @@
-
 "use client";
 
 import { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Box, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Box, Typography, CircularProgress } from "@mui/material";
 import ReactStars from "react-rating-stars-component";
 
 import type { RatingValue, RatingPayload } from "@/types/recipeRatings";
 import { useFingerprint } from "./useFingerprint";
 import { getRatingsText } from "./getRatingText";
 
-import { containerSx, textSx, averageSx, countSx, loadingSx, errorSx, successSx } from "./recipeRatingWidget.styles";
+import { containerSx, textSx, averageSx, countSx, errorSx, successSx } from "./recipeRatingWidget.styles";
 
 interface RecipeRatingWidgetProps {
     recipeId: string;
@@ -24,7 +23,7 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
     const [error, setError] = useState<string | null>(null);
     const [showThanks, setShowThanks] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
-
+    const [hasInteracted, setHasInteracted] = useState(false);
     const [showOverwriteDialog, setShowOverwriteDialog] = useState(false);
     const [existingRating, setExistingRating] = useState<{ rating: number; updatedAt: string } | null>(null);
     const [pendingRating, setPendingRating] = useState<RatingValue | null>(null);
@@ -87,6 +86,7 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
     };
 
     const handleRatingChange = (newRating: number) => {
+        setHasInteracted(true);
         submitRating(newRating as RatingValue);
     };
 
@@ -107,6 +107,7 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
     };
 
     const ratingsText = getRatingsText(totalRatings);
+    const hasRated = !!existingRating || hasInteracted;
 
     return (
         <Box sx={containerSx}>
@@ -134,14 +135,20 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                 activeColor="#fbbf24"
                 color="#e5e7eb"
                 value={rating}
-                edit={true}
+                edit={!isLoading}
                 isHalf={false}
                 emptyIcon={<span style={{ fontSize: 24 }}>★</span>}
                 halfIcon={<span style={{ fontSize: 24 }}>★</span>}
                 filledIcon={<span style={{ fontSize: 24 }}>★</span>}
             />
 
-            {isLoading && <Typography sx={loadingSx}>Zapisywanie...</Typography>}
+            {!hasRated && <Typography sx={textSx}>Oceń</Typography>}
+            {isLoading && (
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 1 }}>
+                    <CircularProgress size={20} color="primary" />
+                </Box>
+            )}
+            {/* {isLoading && <Typography sx={loadingSx}>Zapisywanie...</Typography>} */}
             {error && <Typography sx={errorSx}>{error}</Typography>}
             {showThanks && <Typography sx={successSx}>✓ {message}</Typography>}
 

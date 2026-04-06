@@ -1,74 +1,64 @@
 import { SxProps, Theme } from "@mui/material";
 
+// ------------------------
+// Stała bazowa dla tekstów
+// ------------------------
+export const baseTextSx: SxProps<Theme> = (theme: Theme) => ({
+    fontFamily: "Inter, sans-serif",
+    color: theme.palette.text.primary,
+    textAlign: "center",
+    fontWeight: 400,
+    fontSize: {
+        xs: "16px",
+        sm: "17px",
+        md: "18px",
+    },
+});
+
+// ------------------------
+// Kontener widgetu
+// ------------------------
 export const containerSx: SxProps<Theme> = {
     display: "flex",
-    flexDirection: "row",
-    alignItems: "center", // wyśrodkowanie poziome
+    flexDirection: "row", // poziomo
+    alignItems: "center",
     justifyContent: "center",
-    gap: 1,
-    p: 0, // usuń padding
-    border: "none", // usuń obramowanie
-    bgcolor: "transparent", // usuń tło
-    flexWrap: "wrap", // opcjonalnie na małych ekranach
+    gap: 1.5,
+    flexWrap: "wrap",
+    p: 0,
+    border: "none",
+    bgcolor: "transparent",
 };
+
+// ------------------------
+// Teksty w widgetcie
+// ------------------------
 export const textSx: SxProps<Theme> = {
-    fontFamily: "Inter, sans-serif",
-    color: "#000",
-    textAlign: "center",
-    fontWeight: 400, // wszędzie ta sama waga
-    fontSize: {
-        xs: "16px", // 0+
-        sm: "17px", // 600+
-        md: "18px", // 900+
-    },
+    ...baseTextSx,
 };
+
 export const averageSx: SxProps<Theme> = {
-    fontFamily: "Inter, sans-serif",
-    color: "#000",
-    textAlign: "center",
-    fontWeight: 400, // ta sama waga
-    fontSize: {
-        xs: "16px",
-        sm: "17px",
-        md: "18px",
-    },
+    ...baseTextSx,
 };
+
 export const countSx: SxProps<Theme> = {
-    fontFamily: "Inter, sans-serif",
-    color: "#000",
-    textAlign: "center",
-    fontWeight: 400,
-    fontSize: {
-        xs: "16px",
-        sm: "17px",
-        md: "18px",
-    },
+    ...baseTextSx,
 };
 
-export const statusTextSx: SxProps<Theme> = {
-    fontFamily: "Inter, sans-serif",
-    color: "#000",
-    textAlign: "center",
-    fontWeight: 400,
-    fontSize: {
-        xs: "16px",
-        sm: "17px",
-        md: "18px",
-    },
-};
-
-export const loadingSx: SxProps<Theme> = {
-    ...statusTextSx,
-    color: "primary.main",
+// ------------------------
+// Status messages
+// ------------------------
+const statusTextSx: SxProps<Theme> = {
+    ...baseTextSx,
 };
 
 export const errorSx: SxProps<Theme> = {
     ...statusTextSx,
-    color: "error.main",
+    color: theme => theme.palette.error.main,
 };
-
 export const successSx: SxProps<Theme> = {
-    ...statusTextSx,
-    color: "success.main",
+    ...baseTextSx,
+
+    color: theme => theme.palette.success.main,
     fontWeight: 500,
 };
