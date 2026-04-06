@@ -9,6 +9,6 @@ import Separator from "./Common/Separator/Separator";
 import Carousel from "./Carousel/Carousel";
 import RecipeNotesModal from "./RecipeNotesModal";
 import LatestRecipesSection from "./LatestRecipesSection/LatestRecipesSection";
+import TopRatedRecipesSection from "./TopRatedRecipesSection";
 
-
-export { ConfirmRemoveDialog, LatestRecipesSection, RecipeNotesModal, Footer, Header, Carousel,Menu, PageTitle, RecipeCard, RecipeFilters, Separator };
+export { ConfirmRemoveDialog, TopRatedRecipesSection, LatestRecipesSection, RecipeNotesModal, Footer, Header, Carousel,Menu, PageTitle, RecipeCard, RecipeFilters, Separator };
