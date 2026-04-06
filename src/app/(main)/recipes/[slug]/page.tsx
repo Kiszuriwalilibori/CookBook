@@ -85,7 +85,8 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 <RecipeDescription recipe={recipe} />
 
                 <Separator />
-
+                <RecipeRatingSection recipeId={recipe._id} averageRating={recipe.ratingSummary?.average ?? null} totalRatings={recipe.ratingSummary?.count ?? 0} />
+                <Separator />
                 <Box sx={styles.ingredientsPrepWrapper}>
                     <Box sx={styles.ingredientsWrapper}>
                         <RecipeIngredients recipe={recipe} />
@@ -101,7 +102,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 <RecipeSource recipe={recipe} />
 
                 <Separator />
-                <RecipeRatingSection recipeId={recipe._id} averageRating={recipe.ratingSummary?.average ?? null} totalRatings={recipe.ratingSummary?.count ?? 0} />
+
                 <PrivateUserNotes recipeId={recipe._id} userEmail={user?.email} initialNotes={initialNotes} />
                 {/* {initialNotes && <PrivateUserNotes notes={initialNotes} />} */}
                 <Box sx={styles.copyButtonContainer}>

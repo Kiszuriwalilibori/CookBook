@@ -93,7 +93,6 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
     const handleOverwriteConfirm = () => {
         if (pendingRating !== null) {
             submitRating(pendingRating, true);
-
             setShowOverwriteDialog(false);
             setPendingRating(null);
             setExistingRating(null);

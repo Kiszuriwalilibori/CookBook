@@ -2,33 +2,59 @@ import { SxProps, Theme } from "@mui/material";
 
 export const containerSx: SxProps<Theme> = {
     display: "flex",
-    alignItems: "center",
-    gap: 2,
-    p: 2,
-    border: "1px solid",
-    borderColor: "grey.300",
-    borderRadius: 2,
-    bgcolor: "grey.50",
+    flexDirection: "row",
+    alignItems: "center", // wyśrodkowanie poziome
+    justifyContent: "center",
+    gap: 1,
+    p: 0, // usuń padding
+    border: "none", // usuń obramowanie
+    bgcolor: "transparent", // usuń tło
+    flexWrap: "wrap", // opcjonalnie na małych ekranach
 };
-
 export const textSx: SxProps<Theme> = {
-    fontSize: "0.875rem",
-    color: "text.secondary",
+    fontFamily: "Inter, sans-serif",
+    color: "#000",
+    textAlign: "center",
+    fontWeight: 400, // wszędzie ta sama waga
+    fontSize: {
+        xs: "16px", // 0+
+        sm: "17px", // 600+
+        md: "18px", // 900+
+    },
 };
-
 export const averageSx: SxProps<Theme> = {
-    fontSize: "1.125rem",
-    color: "text.primary",
-    fontWeight: 600,
+    fontFamily: "Inter, sans-serif",
+    color: "#000",
+    textAlign: "center",
+    fontWeight: 400, // ta sama waga
+    fontSize: {
+        xs: "16px",
+        sm: "17px",
+        md: "18px",
+    },
 };
-
 export const countSx: SxProps<Theme> = {
-    color: "text.secondary",
-    fontWeight: 500,
+    fontFamily: "Inter, sans-serif",
+    color: "#000",
+    textAlign: "center",
+    fontWeight: 400,
+    fontSize: {
+        xs: "16px",
+        sm: "17px",
+        md: "18px",
+    },
 };
 
 export const statusTextSx: SxProps<Theme> = {
-    fontSize: "0.75rem",
+    fontFamily: "Inter, sans-serif",
+    color: "#000",
+    textAlign: "center",
+    fontWeight: 400,
+    fontSize: {
+        xs: "16px",
+        sm: "17px",
+        md: "18px",
+    },
 };
 
 export const loadingSx: SxProps<Theme> = {
