@@ -30,17 +30,17 @@ const responsive = {
 export default function Carousel({ count = 5, intervalMs = 5000, initialSlides = null }: CarouselProps) {
     const [items, setItems] = useState<Slide[] | null>(initialSlides);
     const [error, setError] = useState<string | null>(null);
-    const [initialRenderReady, setInitialRenderReady] = useState(false);
+    // const [initialRenderReady, setInitialRenderReady] = useState(false);
     const router = useRouter();
 
     // Helper: minimalna liczba obrazków dla aktualnego ekranu
-    const getVisibleCount = () => {
-        if (typeof window === "undefined") return 1; // SSR fallback
-        const width = window.innerWidth;
-        if (width >= 1200) return 3;
-        if (width >= 900) return 2;
-        return 1;
-    };
+    // const getVisibleCount = () => {
+    //     if (typeof window === "undefined") return 1; // SSR fallback
+    //     const width = window.innerWidth;
+    //     if (width >= 1200) return 3;
+    //     if (width >= 900) return 2;
+    //     return 1;
+    // };
 
     // Fetch slides
     useEffect(() => {
@@ -73,40 +73,40 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
         };
     }, [count, initialSlides]);
 
-    // Load images i minimalna liczba do pierwszego renderu
-    useEffect(() => {
-        if (!items || items.length === 0) {
-            setInitialRenderReady(true);
-            return;
-        }
+    // // Load images i minimalna liczba do pierwszego renderu
+    // useEffect(() => {
+    //     if (!items || items.length === 0) {
+    //         setInitialRenderReady(true);
+    //         return;
+    //     }
 
-        const visibleCount = getVisibleCount();
-        let mounted = true;
-        let loadedCount = 0;
+    //     const visibleCount = getVisibleCount();
+    //     let mounted = true;
+    //     let loadedCount = 0;
 
-        setInitialRenderReady(false);
+    //     setInitialRenderReady(false);
 
-        items.forEach(slide => {
-            const img = new Image();
-            img.src = slide.imageUrl || "/placeholder.png";
-            img.onload = img.onerror = () => {
-                if (!mounted) return;
-                loadedCount += 1;
+    //     items.forEach(slide => {
+    //         const img = new Image();
+    //         img.src = slide.imageUrl || "/placeholder.png";
+    //         img.onload = img.onerror = () => {
+    //             if (!mounted) return;
+    //             loadedCount += 1;
 
-                // Minimalna liczba obrazków gotowa → render karuzeli
-                if (loadedCount >= visibleCount) {
-                    setInitialRenderReady(true);
-                }
-            };
-        });
+    //             // Minimalna liczba obrazków gotowa → render karuzeli
+    //             if (loadedCount >= visibleCount) {
+    //                 setInitialRenderReady(true);
+    //             }
+    //         };
+    //     });
 
-        return () => {
-            mounted = false;
-        };
-    }, [items]);
+    //     return () => {
+    //         mounted = false;
+    //     };
+    // }, [items]);
 
     // Spinner dopóki minimalna liczba obrazków się nie załaduje
-    if (!items || !initialRenderReady) {
+    if (!items /*|| !initialRenderReady*/) {
         return <CarouselLoader />;
     }
 

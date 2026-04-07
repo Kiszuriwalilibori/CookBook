@@ -8,7 +8,7 @@ import type { RatingValue, RatingPayload } from "@/types/recipeRatings";
 import { useFingerprint } from "./useFingerprint";
 import { getRatingsText } from "./getRatingText";
 
-import { containerSx, textSx, averageSx, countSx, errorSx, successSx } from "./recipeRatingWidget.styles";
+import { containerSx, textSx, averageSx, countSx, errorSx, successSx, loaderContainerSx } from "./recipeRatingWidget.styles";
 
 interface RecipeRatingWidgetProps {
     recipeId: string;
@@ -134,7 +134,7 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                 size={32}
                 activeColor="#fbbf24"
                 color="#e5e7eb"
-                value={rating}
+                value={hasInteracted ? rating : (averageRating ?? 0)}
                 edit={!isLoading}
                 isHalf={false}
                 emptyIcon={<span style={{ fontSize: 24 }}>★</span>}
@@ -144,11 +144,11 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
 
             {!hasRated && <Typography sx={textSx}>Oceń</Typography>}
             {isLoading && (
-                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 1 }}>
+                <Box sx={loaderContainerSx}>
                     <CircularProgress size={20} color="primary" />
                 </Box>
             )}
-            {/* {isLoading && <Typography sx={loadingSx}>Zapisywanie...</Typography>} */}
+
             {error && <Typography sx={errorSx}>{error}</Typography>}
             {showThanks && <Typography sx={successSx}>✓ {message}</Typography>}
 

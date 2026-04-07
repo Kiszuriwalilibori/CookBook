@@ -62,3 +62,10 @@ export const successSx: SxProps<Theme> = {
     color: theme => theme.palette.success.main,
     fontWeight: 500,
 };
+
+export const loaderContainerSx: SxProps<Theme> = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    mt: 1,
+};
