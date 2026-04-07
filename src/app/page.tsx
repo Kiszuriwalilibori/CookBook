@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import Slider from "@/components/Slider";
+import Slider from "@/components/Slider/Slider";
 import getRandomRecipes from "@/utils/getRandomRecipes";
 import getLatestRecipes from "@/utils/getLatestRecipes";
 import { LatestRecipesSection, TopRatedRecipesSection } from "@/components";

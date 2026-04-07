@@ -3,7 +3,8 @@
 import React from "react";
 import { Box } from "@mui/material";
 
-import Carousel from "./Carousel/Carousel";
+import Carousel from "../Carousel/Carousel";
+import { styles } from "./slider.styles";
 
 type Slide = {
     _id: string;
@@ -18,7 +19,7 @@ interface SliderProps {
 
 const Slider: React.FC<SliderProps> = ({ initialSlides = null }) => {
     return (
-        <Box id="HomeContent" sx={{ backgroundColor: "rgb(247, 225, 155)" }}>
+        <Box id="HomeContent" sx={styles.root}>
             <Carousel initialSlides={initialSlides} count={5} intervalMs={5000} />
         </Box>
     );

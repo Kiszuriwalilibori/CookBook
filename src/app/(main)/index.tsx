@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import Slider from "@/components/Slider";
+import Slider from "@/components/Slider/Slider";
 import PageTitle from "@/components/PageTitle";
 
 export function Home() {

@@ -16,7 +16,9 @@ export const styles = {
         width: "100%",
         textAlign: "center",
     } as SxProps<Theme>,
-
+    headerText: {
+        fontWeight: 600,
+    } as SxProps<Theme>,
     gridContainer: {
         p: 2,
         display: "grid",

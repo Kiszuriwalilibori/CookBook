@@ -3,8 +3,9 @@
 import { Modal, Fade, Backdrop, Box, TextField, Button, Stack, CircularProgress } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import useEscapeKey from "@/hooks/useEscapeKey";
-import { modalStyles, visuallyHidden } from "./Header/Header.styles";
+import { modalStyles, visuallyHidden } from "../Header/Header.styles";
 import { useRouter } from "next/navigation";
+import { recipeNotesModalStyles } from "./RecipeNotesModal.styles";
 
 interface Props {
     open: boolean;
@@ -18,6 +19,9 @@ interface Props {
     onSave?: (value: string) => void; // opcjonalny callback
 }
 
+export const NOTES_SAVE_STATUS_ID = "notes-save-status";
+const MAX_LENGTH = 200;
+
 export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, userEmail, onSave }: Props) => {
     const [notes, setNotes] = useState(initialValue);
     const [saving, setSaving] = useState(false);
@@ -26,12 +30,6 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
     const router = useRouter();
     useEscapeKey(open, onClose);
 
-    // reset notes przy otwarciu modala
-    // useEffect(() => {
-    //     if (open) {
-    //         setNotes(initialValue);
-    //     }
-    // }, [open, initialValue]);
     useEffect(() => {
         if (!open) return;
 
@@ -55,9 +53,9 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
         }
     }, [open, initialValue, hasOpenedOnce]);
 
-    // 🔹 Ograniczenie do 2000 znaków w stanie
+    // 🔹 Ograniczenie do 200 znaków w stanie
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const value = e.target.value.slice(0, 200); // max 2000 znaków
+        const value = e.target.value.slice(0, MAX_LENGTH);
         setNotes(value);
     };
     const handleSave = async () => {
@@ -116,7 +114,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
             slotProps={{
                 backdrop: {
                     timeout: 600,
-                    sx: { bgcolor: "rgba(0,0,0,0.5)" },
+                    sx: recipeNotesModalStyles.backdrop,
                 },
             }}
         >
@@ -128,17 +126,17 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
 
                     <Stack spacing={3}>
                         <TextField label="Twoje notatki" multiline minRows={6} fullWidth value={notes} onChange={handleChange} inputRef={textFieldRef} />
-                        <Box sx={{ fontSize: "0.875rem", color: "text.secondary", textAlign: "right" }}>
-                            {notes.length} / 200 znaków (pozostało {200 - notes.length})
+                        <Box sx={recipeNotesModalStyles.counterText}>
+                            {notes.length} /{MAX_LENGTH} znaków (pozostało {MAX_LENGTH - notes.length})
                         </Box>
                         <Stack direction="row" spacing={2} justifyContent="flex-end">
                             <Button variant="outlined" onClick={onClose} disabled={saving}>
                                 Anuluj
                             </Button>
-                            <Box id="notes-save-status" aria-live="polite" sx={visuallyHidden}>
+                            <Box id={NOTES_SAVE_STATUS_ID} aria-live="polite" sx={visuallyHidden}>
                                 {saving ? "Notatka jest zapisywana" : "Możesz zapisać notatkę"}
                             </Box>
-                            <Button variant="contained" onClick={handleSave} disabled={saving} aria-describedby="notes-save-status">
+                            <Button variant="contained" onClick={handleSave} disabled={saving} aria-describedby={NOTES_SAVE_STATUS_ID}>
                                 {saving ? <CircularProgress size={20} color="inherit" /> : "Zapisz"}
                             </Button>
                             <Button
@@ -158,5 +156,3 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
 };
 
 export default RecipeNotesModal;
-
-// todo: notes-save-status do stałej dla skalowalności

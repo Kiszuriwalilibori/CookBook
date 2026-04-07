@@ -6,7 +6,6 @@ import RecipeCard from "@/components/RecipeCard";
 import type { Recipe } from "@/types";
 import { styles } from "./TopRatedRecipesSection.styles";
 
-
 interface Props {
     recipes: Recipe[];
 }
@@ -17,7 +16,7 @@ export default function TopRatedRecipesSection({ recipes }: Props) {
     return (
         <Box sx={styles.container}>
             <Box sx={styles.headerBox}>
-                <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                <Typography variant="h5" sx={styles.headerText}>
                     Najwyżej oceniane
                 </Typography>
             </Box>
