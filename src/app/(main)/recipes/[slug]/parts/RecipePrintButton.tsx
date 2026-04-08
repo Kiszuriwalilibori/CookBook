@@ -12,7 +12,7 @@ export function RecipePrintButton() {
     return (
         <Tooltip title="Drukuj przepis" placement="top">
             <IconButton id="RecipePrintButton" onClick={handlePrint} sx={styles.recipeButton}>
-                <PrintIcon sx={{ fontSize: "48px" }} /> {/* Twice bigger icon (default 24px → 48px) */}
+                <PrintIcon sx={styles.recipeButtonIcon} /> {/* Twice bigger icon (default 24px → 48px) */}
             </IconButton>
         </Tooltip>
     );

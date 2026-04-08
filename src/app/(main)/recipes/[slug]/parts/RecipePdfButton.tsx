@@ -142,8 +142,9 @@ export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
     return (
         <Tooltip title="Eksportuj do PDF" placement="top">
             <IconButton id="RecipePdfButton" onClick={handlePdfExport} sx={styles.recipeButton}>
-                <PictureAsPdfIcon sx={{ fontSize: "48px" }} />
+                <PictureAsPdfIcon sx={styles.recipeButtonIcon} />
             </IconButton>
         </Tooltip>
     );
 }
+//todo tu krzyczy o błędzie z undefined

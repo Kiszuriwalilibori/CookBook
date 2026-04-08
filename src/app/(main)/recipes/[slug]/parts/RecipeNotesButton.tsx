@@ -26,7 +26,7 @@ export function RecipeNotesButton({ recipeId, userEmail, initialNotes = "" }: Pr
         <>
             <Tooltip title="Edytuj swoje notatki do przepisu" placement="top">
                 <IconButton id="RecipeNotesButton" onClick={() => setOpen(true)} sx={styles.recipeButton}>
-                    <NotesIcon sx={{ fontSize: "48px" }} />
+                    <NotesIcon sx={styles.recipeButtonIcon} />
                 </IconButton>
             </Tooltip>
 

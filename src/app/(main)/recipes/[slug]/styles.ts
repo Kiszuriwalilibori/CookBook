@@ -265,7 +265,9 @@ export const styles: { [key: string]: SxProps<Theme> } = {
             borderRadius: theme => `${theme.shape.borderRadius}px`,
         },
     },
-
+    recipeButtonIcon: {
+        fontSize: "48px",
+    },
     ingredientsQuantity: {
         fontSize: FONT_SIZE,
         textAlign: "right",

@@ -70,7 +70,7 @@ export function RecipeCopyButton({ recipe }: RecipeCopyButtonProps) {
                     sx={styles.recipeButton}
                     
                 >
-                    <CopyAllIcon sx={{ fontSize: "48px" }} />
+                    <CopyAllIcon sx={styles.recipeButtonIcon} />
                 </IconButton>
             </Tooltip>
 
