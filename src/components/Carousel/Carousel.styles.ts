@@ -1,3 +1,5 @@
+import { SxProps, Theme } from "@mui/material";
+
 import { Box, Card, CardContent } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -41,3 +43,14 @@ export const Overlay = styled(CardContent)(({ theme }) => ({
     color: theme.palette.common.white,
     textAlign: "center",
 }));
+
+export const skeletonContainerStyles: SxProps<Theme> = {
+    display: "flex",
+    gap: 1,
+    overflow: "hidden",
+};
+
+export const skeletonStyles: SxProps<Theme> = {
+    position: "absolute",
+    inset: 0,
+};
