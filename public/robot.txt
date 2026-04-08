@@ -1,0 +1,13 @@
+# Zezwal wszystkim bot'om
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://cookbook.example.com/sitemap.xml
+
+# Disallow admin routes
+Disallow: /admin/
+Disallow: /api/
+
+# Crawl delay (opcjonalnie)
+Crawl-delay: 1
