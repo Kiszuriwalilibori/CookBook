@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { useIsUserLogged, useLoginStatus } from "@/stores/useAdminStore";
+import { containerStyles, textStyles } from "./PrivateUserNotes.styles";
 
 interface PrivateUserNotesProps {
     recipeId: string;
@@ -40,12 +41,12 @@ export const PrivateUserNotes = ({ recipeId, userEmail, initialNotes }: PrivateU
     if (!notes?.trim() && !loading) return null;
 
     return (
-        <Box mt={4}>
+        <Box sx={containerStyles}>
             <Typography variant="h5" align="center" gutterBottom>
                 Twoje notatki
             </Typography>
 
-            <Typography mt={1} variant="body1" sx={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+            <Typography variant="body1" sx={textStyles}>
                 {loading ? "Ładowanie…" : notes}
             </Typography>
         </Box>
