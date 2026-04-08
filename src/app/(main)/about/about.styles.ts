@@ -11,4 +11,11 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         backgroundColor: "secondary.light",
         height: "100%",
     },
+    paragraph: {
+        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontSize: "clamp(15px, 1.1vw, 18px)",
+        lineHeight: 1.7,
+        textAlign: "justify",
+        marginBottom: "1.2em",
+    } as SxProps<Theme>,
 };

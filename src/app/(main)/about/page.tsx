@@ -13,17 +13,7 @@ export default function About(): JSX.Element {
                 <AuthorImage />
 
                 {content.map((paragraph: string, index: number) => (
-                    <Typography
-                        key={index}
-                        component="p"
-                        sx={{
-                            fontFamily: "Georgia, 'Times New Roman', serif",
-                            fontSize: "clamp(15px, 1.1vw, 18px)",
-                            lineHeight: 1.7,
-                            textAlign: "justify",
-                            marginBottom: "1.2em",
-                        }}
-                    >
+                    <Typography key={index} component="p" sx={styles.paragraph}>
                         {paragraph}
                     </Typography>
                 ))}
