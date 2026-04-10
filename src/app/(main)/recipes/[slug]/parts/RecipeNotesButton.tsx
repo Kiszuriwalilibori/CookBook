@@ -15,9 +15,6 @@ interface Props {
 export function RecipeNotesButton({ recipeId, userEmail, initialNotes = "" }: Props) {
     const [open, setOpen] = useState(false);
     const isUserLogged = useIsUserLogged();
-
-    console.log(userEmail, "useremail");
-    console.log(isUserLogged, "isUserLogged");
     // jeśli nie ma usera → nie renderuj
     if (!isUserLogged) return null;
     if (!userEmail) return null;

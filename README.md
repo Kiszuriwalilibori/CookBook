@@ -128,3 +128,19 @@ email użytkownika
 rolę (admin / user)
 
 datę wygaśnięcia
+
+
+Jeśli chcesz następny krok
+
+Mogę Ci pomóc zrobić:
+
+🔽 
+zwijanie wątków (collapse threads)
+⚡ 
+optimistic replies (bez refetch)
+🧠 
+sortowanie "top comments"
+🔥 
+real-time comments (SSE / WebSocket)
+
+Ale na teraz — jesteś dosłownie 1 linijkę od działającego drzewa 👍
