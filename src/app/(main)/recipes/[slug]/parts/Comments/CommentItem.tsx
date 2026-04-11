@@ -58,7 +58,7 @@ export default function CommentItem({
 
   return (
     <Box ml={depth * 3}>
-      <Box border="1px solid #ddd" borderRadius={2} p={2} bgcolor="#fafafa">
+      <Box border="1px solid #ddd" borderRadius={2} p={2} >
         {/* HEADER */}
         <Box display="flex" justifyContent="space-between" mb={0.5}>
           <Typography variant="subtitle2">{comment.author}</Typography>

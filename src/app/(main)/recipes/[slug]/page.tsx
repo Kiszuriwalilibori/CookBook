@@ -16,7 +16,7 @@ import { getRecipeById } from "@/utils/getRecipeById";
 import { RecipeNutrition } from "./parts";
 import { getUserFromCookies, getUserRecipeNote } from "@/utils";
 import { PrivateUserNotes } from "./parts/PrivateUserNotes";
-import Comments from "./parts/Comments/Comments";
+import Comments from "./parts/Comments";
 
 interface Params {
     slug: string;
@@ -114,7 +114,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                     <RecipeNotesButton recipeId={recipe._id} userEmail={user?.email} initialNotes={initialNotes} />
                 </Box>
                 <Separator />
-                {/* <Comments recipeId={recipe._id} /> */}
+                <Comments recipeId={recipe._id} />
             </Box>
         </>
     );
