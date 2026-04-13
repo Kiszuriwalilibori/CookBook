@@ -15,6 +15,7 @@ export const fieldTranslations: Record<string, string> = {
     tags: "Etykiety",
     notes: "Notatki",
     status: "Status",
+    products:"Produkty",
     "nutrition.totalWeight": "Łączna waga potrawy",
     "source.url": "Link",
     "source.book": "Tytuł książki",

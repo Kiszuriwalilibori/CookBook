@@ -18,7 +18,6 @@ interface PortableTextBlock {
     }>; // Expand for other annotations as needed
 }
 
-
 export interface Recipe {
     _id: string;
     title: string;
@@ -113,7 +112,7 @@ export interface Recipe {
     ratingSummary?: RatingSummary;
 }
 
-export type TranslationSafeRecipe = Pick<Recipe, "title" | "calories" | "prepTime" | "cookTime" | "recipeYield" | "dietary" | "cuisine" | "tags" | "notes" | "status" | "source" | "nutrition">;
+export type TranslationSafeRecipe = Pick<Recipe, "title" | "calories" | "prepTime" | "cookTime" | "recipeYield" | "dietary" | "cuisine" | "tags" | "notes" | "status" | "source" | "nutrition" | "products">;
 type IsPlainObject<T> = T extends object ? (T extends readonly unknown[] ? false : true) : false;
 type PrevDepth = [never, 0, 1, 2, 3];
 
@@ -122,6 +121,5 @@ type NestedKeys<T, D extends number = 3> = [D] extends [never]
     : {
           [K in keyof T & string]: IsPlainObject<NonNullable<T[K]>> extends true ? K | `${K}.${NestedKeys<NonNullable<T[K]>, PrevDepth[D]>}` : K;
       }[keyof T & string];
-
 
 export type NestedRecipeKeys = NestedKeys<TranslationSafeRecipe>;
