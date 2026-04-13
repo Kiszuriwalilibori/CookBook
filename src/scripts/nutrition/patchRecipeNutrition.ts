@@ -1,4 +1,3 @@
-
 import type { RecipeNutritionInput } from "../../types/nutrition";
 import { createClient } from "@sanity/client";
 
@@ -24,12 +23,15 @@ export async function patchRecipeNutrition(recipe: RecipeNutritionInput): Promis
     if (!doc?._id) {
         throw new Error(`❌ Nie znaleziono przepisu: "${title}"`);
     }
-
+    const normalizedPer100g = {
+        ...per100g,
+        calories: per100g.calories ? Math.round(per100g.calories) : per100g.calories,
+    };
     await client
         .patch(doc._id)
         .set({
             nutrition: {
-                per100g,
+                per100g: normalizedPer100g,
                 totalWeight,
                 micronutrients,
                 calculatedAt: new Date().toISOString(),
