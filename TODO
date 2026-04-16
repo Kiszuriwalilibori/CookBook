@@ -1,9 +1,17 @@
-Commentarze:
+// Commentarze:
 
-Jeśli chcesz kolejny krok „pro level”, mogę Ci zrobić:
+// Jeśli chcesz kolejny krok „pro level”, mogę Ci zrobić:
 
-✨ optimistic updates (bez refetch)
-✨ normalizację komentarzy jak w Redux Toolkit
-✨ albo lazy loading replies (jak Reddit / YouTube)
+// ✨ optimistic updates (bez refetch)
+// ✨ normalizację komentarzy jak w Redux Toolkit
+// ✨ albo lazy loading replies (jak Reddit / YouTube)
 
-To już będzie poziom „skalowalnego systemu komentarzy”.
+// To już będzie poziom „skalowalnego systemu komentarzy”.
+
+// ---
+
+// Jeśli chcesz, mogę Ci to jeszcze rozwinąć o:
+
+// * cache wyników moderacji (Redis / in-memory)
+// * batch moderation (tańsze API calls)
+// * albo „shadow moderation” (najpierw zapis, potem usuwanie jeśli toxic)
