@@ -143,6 +143,18 @@ const baseTheme = createTheme({
                 },
             },
         },
+        MuiTooltip: {
+            styleOverrides: {
+                tooltip: {
+                    backgroundColor: "#A8BBA3", // secondary.main
+                    color: "#000",
+                    fontSize: "0.75rem",
+                },
+                arrow: {
+                    color: "#A8BBA3",
+                },
+            },
+        },
         MuiDivider: {
             styleOverrides: {
                 root: {
