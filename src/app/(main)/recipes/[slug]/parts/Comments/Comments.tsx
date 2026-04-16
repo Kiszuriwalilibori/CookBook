@@ -5,11 +5,12 @@ import { Box, TextField, Button, Typography, Accordion, AccordionSummary, Accord
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import CommentItem from "./CommentItem";
-import { buildCommentTree } from "@/utils/buildCommentTree";
+import { buildCommentTree} from "@/utils/buildCommentTree";
 import type { RecipeComment } from "@/types";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
+    
     const [newComment, setNewComment] = useState("");
     const [author, setAuthor] = useState("");
     const [formOpen, setFormOpen] = useState(false);
@@ -51,7 +52,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     }
 
     const isLoading = comments === null;
-    const tree = buildCommentTree(comments || []);
+    const commentTree = buildCommentTree(comments || []);
     const commentCount = comments?.length ?? null;
 
     return (
@@ -65,7 +66,6 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 },
             }}
         >
-            {/* HEADER */}
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="h5">
                     Komentarze
@@ -74,12 +74,10 @@ export default function Comments({ recipeId }: { recipeId: string }) {
             </AccordionSummary>
 
             <AccordionDetails>
-                {/* ADD COMMENT BUTTON */}
                 <Button variant="text" size="small" onClick={() => setFormOpen(!formOpen)} sx={{ mb: 2 }}>
                     {formOpen ? "Anuluj" : "Dodaj komentarz"}
                 </Button>
 
-                {/* FORM */}
                 {formOpen && (
                     <>
                         {error && (
@@ -122,7 +120,6 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     </>
                 )}
 
-                {/* COMMENTS */}
                 {isLoading ? (
                     <Box display="flex" flexDirection="column" gap={2}>
                         {[1, 2, 3].map(i => (
@@ -134,8 +131,8 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     </Box>
                 ) : (
                     <Box display="flex" flexDirection="column" gap={2}>
-                        {tree.map(c => (
-                            <CommentItem key={c._id} comment={c} recipeId={recipeId} refresh={fetchComments} />
+                        {commentTree.map(commentNode => (
+                            <CommentItem key={commentNode._id} comment={commentNode} recipeId={recipeId} refresh={fetchComments} />
                         ))}
                     </Box>
                 )}

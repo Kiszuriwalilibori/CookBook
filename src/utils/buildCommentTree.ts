@@ -1,23 +1,30 @@
 import { RecipeComment } from "@/types";
 
-export function buildCommentTree(comments: RecipeComment[]) {
-    const map = new Map<string, RecipeComment & { replies: RecipeComment[] }>();
-    const roots: (RecipeComment & { replies: RecipeComment[] })[] = [];
+export type CommentNode = RecipeComment & {
+    replies: CommentNode[];
+};
 
-    for (const c of comments) {
-        map.set(c._id, { ...c, replies: [] });
+export function buildCommentTree(comments: RecipeComment[]): CommentNode[] {
+    const commentMap = new Map<string, CommentNode>();
+    const rootComments: CommentNode[] = [];
+
+    for (const comment of comments) {
+        commentMap.set(comment._id, {
+            ...comment,
+            replies: [],
+        });
     }
 
-    for (const c of comments) {
-        const node = map.get(c._id)!;
+    for (const comment of comments) {
+        const currentNode = commentMap.get(comment._id)!;
 
-        if (c.parentId) {
-            const parent = map.get(c.parentId);
-            parent?.replies.push(node);
+        if (comment.parentId) {
+            const parentNode = commentMap.get(comment.parentId);
+            parentNode?.replies.push(currentNode);
         } else {
-            roots.push(node);
+            rootComments.push(currentNode);
         }
     }
 
-    return roots;
+    return rootComments;
 }
