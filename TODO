@@ -15,3 +15,30 @@
 // * cache wyników moderacji (Redis / in-memory)
 // * batch moderation (tańsze API calls)
 // * albo „shadow moderation” (najpierw zapis, potem usuwanie jeśli toxic)
+
+// Możemy teraz zrobić:
+
+// 👉 
+// optimistic UI (komentarz pojawia się natychmiast bez czekania na backend)
+// 👉 albo 
+// ultra-opt: update tylko jednego komentarza zamiast fetch całej listy
+
+// To już są rzeczy typu „UX jak w Messengerze / Slacku”.
+
+// Mogę Ci zrobić wersję, gdzie:
+
+// 👉 w ogóle NIE robisz fetchComments() po listen
+// 👉 tylko patchujesz lokalny state (0 requestów do API)
+
+// Mogę Ci zrobić wersję:
+
+// 👉 
+// bez GET refresh po like
+// 👉 
+// tylko optimistic update w UI (0 latency feeling)
+// 👉 
+// synchronizacja przez listen()
+
+// To daje efekt jak:
+
+// Instagram / TikTok / Reddit (instant feedback)

@@ -5,25 +5,62 @@ import { Box, TextField, Button, Typography, Accordion, AccordionSummary, Accord
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import CommentItem from "./CommentItem";
-import { buildCommentTree} from "@/utils/buildCommentTree";
+import { buildCommentTree } from "@/utils/buildCommentTree";
 import type { RecipeComment } from "@/types";
+
+// 🔥 SANITY LISTEN
+import { createClient } from "@sanity/client";
+
+const client = createClient({
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+    apiVersion: "2024-10-14",
+    useCdn: false,
+});
 
 export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
-    
+
     const [newComment, setNewComment] = useState("");
     const [author, setAuthor] = useState("");
     const [formOpen, setFormOpen] = useState(false);
     const [error, setError] = useState("");
 
     async function fetchComments() {
-        const res = await fetch(`/api/comments?recipeId=${recipeId}`);
-        const data = await res.json();
-        setComments(data.comments || []);
+        try {
+            const res = await fetch(`/api/comments?recipeId=${recipeId}`);
+            const data = await res.json();
+
+            const safeComments: RecipeComment[] = Array.isArray(data.comments) ? data.comments.filter(Boolean) : [];
+
+            setComments(safeComments);
+        } catch (err) {
+            console.error("[COMMENTS] fetch error", err);
+            setComments([]);
+        }
     }
 
     useEffect(() => {
         fetchComments();
+    }, [recipeId]);
+
+    // 🔥 REALTIME SYNC
+    useEffect(() => {
+        if (!recipeId) return;
+
+        const query = `*[_type=="recipeComment" && recipeId==$recipeId]`;
+        const params = { recipeId };
+
+        const subscription = client.listen(query, params, { includeResult: true }).subscribe(update => {
+            console.log("[SANITY LISTEN]", update);
+
+            // 🔥 zawsze sync z backendem
+            fetchComments();
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        };
     }, [recipeId]);
 
     async function handleAddComment() {
@@ -48,12 +85,14 @@ export default function Comments({ recipeId }: { recipeId: string }) {
         setNewComment("");
         setAuthor("");
         setFormOpen(false);
-        fetchComments();
+
+        // ❗ brak timeoutów / pollingu — listen ogarnia wszystko
     }
 
     const isLoading = comments === null;
-    const commentTree = buildCommentTree(comments || []);
-    const commentCount = comments?.length ?? null;
+
+    const safeFlatComments = (comments ?? []).filter(Boolean);
+    const commentTree = buildCommentTree(safeFlatComments);
 
     return (
         <Accordion
@@ -61,16 +100,11 @@ export default function Comments({ recipeId }: { recipeId: string }) {
             elevation={0}
             sx={{
                 border: "none",
-                "&:before": {
-                    display: "none",
-                },
+                "&:before": { display: "none" },
             }}
         >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="h5">
-                    Komentarze
-                    {commentCount !== null ? ` (${commentCount})` : ""}
-                </Typography>
+                <Typography variant="h5">Komentarze ({safeFlatComments.length})</Typography>
             </AccordionSummary>
 
             <AccordionDetails>
@@ -95,7 +129,6 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                                 setAuthor(e.target.value);
                                 setError("");
                             }}
-                            error={!author.trim() && !!error}
                             sx={{ mb: 2 }}
                         />
 
@@ -108,7 +141,8 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                                 setNewComment(e.target.value);
                                 setError("");
                             }}
-                            error={!newComment.trim() && !!error}
+                            multiline
+                            minRows={3}
                             sx={{ mb: 2 }}
                         />
 

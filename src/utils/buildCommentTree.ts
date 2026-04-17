@@ -5,26 +5,45 @@ export type CommentNode = RecipeComment & {
 };
 
 export function buildCommentTree(comments: RecipeComment[]): CommentNode[] {
+    if (!Array.isArray(comments)) return [];
+
     const commentMap = new Map<string, CommentNode>();
     const rootComments: CommentNode[] = [];
 
+    // 🔥 1. tworzymy bezpieczne węzły
     for (const comment of comments) {
+        if (!comment?._id) continue;
+
         commentMap.set(comment._id, {
             ...comment,
             replies: [],
         });
     }
 
+    // 🔥 2. budujemy drzewo
     for (const comment of comments) {
-        const currentNode = commentMap.get(comment._id)!;
+        if (!comment?._id) continue;
+
+        const currentNode = commentMap.get(comment._id);
+
+        // 🧨 safety: jeśli node nie istnieje → pomijamy
+        if (!currentNode) continue;
 
         if (comment.parentId) {
             const parentNode = commentMap.get(comment.parentId);
-            parentNode?.replies.push(currentNode);
+
+            // 🔥 jeśli parent istnieje → podpinamy
+            if (parentNode) {
+                parentNode.replies.push(currentNode);
+            } else {
+                // 🔥 orphan → traktujemy jako root (NIE gubimy danych)
+                rootComments.push(currentNode);
+            }
         } else {
             rootComments.push(currentNode);
         }
     }
 
-    return rootComments;
+    // 🔥 3. final safety pass (usuwa ewentualne dziury)
+    return rootComments.filter(Boolean);
 }

@@ -15,7 +15,9 @@ export interface RecipeComment {
     createdAt: string;
 
     fingerprint: string;
-
+    status: "pending" | "approved" | "rejected";
+    moderationScore?: number;
+    moderationReason?: string;
     likesCount: number;
     likes: RecipeCommentLike[];
 

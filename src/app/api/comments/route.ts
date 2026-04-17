@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
 import { writeClient } from "@/utils";
 import { nanoid } from "nanoid";
-import { RecipeCommentLike } from "@/types";
+import { queueModeration } from "@/utils/moderationQueue";
 
-//
-// 📥 GET - wszystkie komentarze dla przepisu (FLAT)
-//
 export async function GET(req: Request) {
     try {
         const { searchParams } = new URL(req.url);
@@ -15,18 +12,15 @@ export async function GET(req: Request) {
             return NextResponse.json({ error: "Missing recipeId" }, { status: 400 });
         }
 
-        const comments = await writeClient.fetch(`*[_type=="recipeComment" && recipeId==$recipeId] | order(createdAt asc)`, { recipeId });
+        const comments = await writeClient.fetch(`*[_type=="recipeComment" && recipeId==$recipeId && status=="approved"] | order(createdAt asc)`, { recipeId });
 
         return NextResponse.json({ comments });
     } catch (err) {
-        console.error("[comments][GET]", err);
+        console.error("[COMMENTS][GET]", err);
         return NextResponse.json({ error: "Failed to fetch comments" }, { status: 500 });
     }
 }
 
-//
-// ✍️ POST - dodanie komentarza lub reply (FLAT)
-//
 export async function POST(req: Request) {
     try {
         const { recipeId, content, author, fingerprint, parentId } = await req.json();
@@ -35,9 +29,13 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
+        const id = `comment-${nanoid()}`;
+
+        console.log(`[COMMENTS] new comment: ${id}`);
+
         const comment = {
             _type: "recipeComment",
-            _id: `comment-${nanoid()}`,
+            _id: id,
 
             recipeId,
             parentId: parentId || null,
@@ -50,20 +48,24 @@ export async function POST(req: Request) {
 
             likesCount: 0,
             likes: [],
+
+            status: "pending",
         };
 
         await writeClient.create(comment);
 
+        // 🔥 async moderation
+        queueModeration(id, comment.content);
+
         return NextResponse.json({ ok: true, comment });
     } catch (err) {
-        console.error("[comments][POST]", err);
+        console.error("[COMMENTS][POST]", err);
         return NextResponse.json({ error: "Failed to create comment" }, { status: 500 });
     }
 }
 
-//
-// ❤️ PATCH - like / unlike (flat, bez rekurencji)
-//
+import type { RecipeCommentLike } from "@/types";
+
 export async function PATCH(req: Request) {
     try {
         const { commentId, author, fingerprint } = await req.json();
@@ -77,6 +79,7 @@ export async function PATCH(req: Request) {
         if (!comment) {
             return NextResponse.json({ error: "Comment not found" }, { status: 404 });
         }
+
         const likes = (comment.likes || []) as RecipeCommentLike[];
 
         const alreadyLiked = likes.some(l => l.fingerprint === fingerprint);
@@ -84,11 +87,23 @@ export async function PATCH(req: Request) {
         let patch = writeClient.patch(commentId);
 
         if (alreadyLiked) {
-            patch = patch.dec({ likesCount: 1 }).set({
-                likes: likes.filter((l: RecipeCommentLike) => l.fingerprint !== fingerprint),
+            // 🔥 unlike
+            patch = patch.set({
+                likes: likes.filter(l => l.fingerprint !== fingerprint),
+                likesCount: Math.max(0, (comment.likesCount || 1) - 1),
             });
         } else {
-            patch = patch.inc({ likesCount: 1 }).append("likes", [{ author, fingerprint }]);
+            // 🔥 like
+            patch = patch.set({
+                likes: [
+                    ...likes,
+                    {
+                        author: author || "Anon",
+                        fingerprint,
+                    },
+                ],
+                likesCount: (comment.likesCount || 0) + 1,
+            });
         }
 
         await patch.commit();

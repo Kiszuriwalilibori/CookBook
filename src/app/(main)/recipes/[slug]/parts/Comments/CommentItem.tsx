@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -16,8 +15,14 @@ function formatDate(date: string) {
 }
 
 export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: { comment: RecipeComment; recipeId: string; refresh: () => void; depth?: number }) {
+    // ✅ HOOKS ZAWSZE NA GÓRZE
     const [replyOpen, setReplyOpen] = useState(false);
     const [replyText, setReplyText] = useState("");
+
+    // 🧠 guard PO hookach
+    if (!comment) return null;
+
+    const isPending = comment.status === "pending";
 
     async function handleReply() {
         if (!replyText.trim()) return;
@@ -64,6 +69,12 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
                     {comment.content}
                 </Typography>
 
+                {isPending && (
+                    <Typography variant="caption" color="warning.main">
+                        Oczekuje na moderację...
+                    </Typography>
+                )}
+
                 <Box display="flex" alignItems="center" gap={1}>
                     <Tooltip title="Polub komentarz" arrow>
                         <IconButton
@@ -109,7 +120,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
             </Box>
 
             <Box mt={1} display="flex" flexDirection="column" gap={1}>
-                {comment.replies?.map(reply => (
+                {(comment.replies ?? []).filter(Boolean).map(reply => (
                     <CommentItem key={reply._id} comment={reply} recipeId={recipeId} refresh={refresh} depth={depth + 1} />
                 ))}
             </Box>
