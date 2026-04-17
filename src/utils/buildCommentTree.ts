@@ -1,4 +1,4 @@
-import { RecipeComment } from "@/types";
+import type { RecipeComment } from "@/types";
 
 export type CommentNode = RecipeComment & {
     replies: CommentNode[];
@@ -10,7 +10,6 @@ export function buildCommentTree(comments: RecipeComment[]): CommentNode[] {
     const commentMap = new Map<string, CommentNode>();
     const rootComments: CommentNode[] = [];
 
-    // 🔥 1. tworzymy bezpieczne węzły
     for (const comment of comments) {
         if (!comment?._id) continue;
 
@@ -20,23 +19,18 @@ export function buildCommentTree(comments: RecipeComment[]): CommentNode[] {
         });
     }
 
-    // 🔥 2. budujemy drzewo
     for (const comment of comments) {
         if (!comment?._id) continue;
 
         const currentNode = commentMap.get(comment._id);
-
-        // 🧨 safety: jeśli node nie istnieje → pomijamy
         if (!currentNode) continue;
 
         if (comment.parentId) {
             const parentNode = commentMap.get(comment.parentId);
 
-            // 🔥 jeśli parent istnieje → podpinamy
             if (parentNode) {
                 parentNode.replies.push(currentNode);
             } else {
-                // 🔥 orphan → traktujemy jako root (NIE gubimy danych)
                 rootComments.push(currentNode);
             }
         } else {
@@ -44,6 +38,5 @@ export function buildCommentTree(comments: RecipeComment[]): CommentNode[] {
         }
     }
 
-    // 🔥 3. final safety pass (usuwa ewentualne dziury)
     return rootComments.filter(Boolean);
 }
