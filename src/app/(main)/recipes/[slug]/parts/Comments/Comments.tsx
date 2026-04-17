@@ -108,7 +108,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
             if (!data.ok) {
                 throw new Error("Rejected");
             }
-
+            await fetchComments();
             const realComment: OptimisticComment = data.comment;
 
             // 🔥 REPLACE TEMP → REAL
