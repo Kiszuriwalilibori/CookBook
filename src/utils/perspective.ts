@@ -1,6 +1,6 @@
 // // utils/perspective.ts
 
-const API_URL = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`;
+const API_URL = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${process.env.PERSPECTIVE_COMMENT_ANALYZER_API_KEY}`;
 
 const CONFIG = {
     languages: ["en"],
