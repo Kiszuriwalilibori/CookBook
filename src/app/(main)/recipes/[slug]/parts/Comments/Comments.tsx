@@ -8,9 +8,6 @@ import CommentItem from "./CommentItem";
 import { buildCommentTree } from "@/utils/buildCommentTree";
 import type { RecipeComment } from "@/types";
 
-/**
- * 🔥 Optimistic type
- */
 type OptimisticComment = RecipeComment & {
     _temp?: boolean;
 };
@@ -42,9 +39,6 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const [formOpen, setFormOpen] = useState(false);
     const [error, setError] = useState("");
 
-    /**
-     * 🔥 Initial fetch only (source of truth)
-     */
     const fetchComments = useCallback(async () => {
         try {
             const res = await fetch(`/api/comments?recipeId=${recipeId}`);
@@ -81,7 +75,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
             recipeId,
         });
 
-        // 🔥 OPTIMISTIC INSERT
+        // 🔥 optimistic insert
         setComments(prev => {
             const safe = prev ?? [];
             return [tempComment, ...safe];
@@ -113,10 +107,10 @@ export default function Comments({ recipeId }: { recipeId: string }) {
 
             const realComment: OptimisticComment = data.comment;
 
-            // 🔥 REPLACE TEMP → REAL (NO REFETCH)
+            // 🔥 replace temp → real
             setComments(prev => (prev ?? []).map(c => (c._id === tempComment._id ? realComment : c)));
         } catch {
-            // 🔥 ROLLBACK (REMOVE TEMP)
+            // 🔥 rollback (usunie optimistic)
             setComments(prev => (prev ?? []).filter(c => c._id !== tempComment._id));
 
             setError("Komentarz został odrzucony przez moderację.");
