@@ -42,3 +42,15 @@
 // To daje efekt jak:
 
 // Instagram / TikTok / Reddit (instant feedback)
+
+
+Co dalej (kolejny krok)
+
+Jak będziesz gotowy, możemy zrobić:
+
+🔥 centralny error system
+toasty zamiast inline errorów
+logger (Sentry / własny endpoint)
+klasy błędów (user vs system vs spam)
+
+To już robi ogromną różnicę w jakości aplikacji.
