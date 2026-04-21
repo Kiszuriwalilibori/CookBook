@@ -1,4 +1,13 @@
 // src/utils/fingerprint.ts
+
+// todo taki błąd czasami wyskakuje ReferenceError: window is not defined
+//     at generateDeviceFingerprint (src\utils\fingerprint.ts:41:20)
+//     at getFingerprint (src\stores\useFingerprintsStore.ts:84:54)    at useFingerprint (src\hooks\useFingerprint.ts:6:12)
+//     at RecipeRatingWidget (src\app\(main)\recipes\[slug]\parts\RecipeRatingWidget\RecipeRatingWidget.tsx:31:43)
+//   39 |         hardwareConcurrency: nav.hardwareConcurrency,
+//   40 |         screen: {
+// > 41 |             width: window.screen.width,
+
 import sha256 from "crypto-js/sha256";
 
 /**
