@@ -54,3 +54,163 @@ logger (Sentry / własny endpoint)
 klasy błędów (user vs system vs spam)
 
 To już robi ogromną różnicę w jakości aplikacji.
+
+Mogę Ci zrobić:
+
+optimistic like (zero fetch)
+debounce
+zabezpieczenie przed spam like
+animacje (💥 UX boost)
+
+Jeśli chcesz, następny krok to:
+
+👉 
+instant like (optimistic UI bez refresh)
+To daje bardzo przyjemny UX i jest prosty do dorzucenia na tym etapie.
+
+Nie ma jednego “magicznego” zabezpieczenia. Skuteczny system to:
+
+lekka blokada + heurystyka + fallback (captcha)
+
+czyli warstwowa obrona.
+
+🟢 1. Rate limiting (NAJWAŻNIEJSZE)
+
+To daje największy efekt przy najmniejszym koszcie UX.
+
+✔ co zrobić
+
+Na backendzie (Twoje /api/comments):
+
+limit per fingerprint / IP:
+np. 1 komentarz / 10–20 sekund
+max 5 komentarzy / minutę
+✔ efekt
+boty odpadają natychmiast
+normalny user nic nie zauważa
+🧠 Jak to zrobić
+
+Najprościej:
+
+pamięć (Map) → działa lokalnie
+lepiej: Redis / KV (Vercel KV)
+🟢 2. Honeypot (niewidzialne pole)
+
+To jest genialnie proste i bardzo skuteczne.
+
+✔ frontend
+
+dodajesz ukryte pole:
+
+<input name="website" style="display:none" />
+✔ backend
+if (body.website) {
+    return reject();
+}
+✔ efekt
+boty wypełniają wszystko → wpadają w pułapkę
+człowiek nawet nie widzi pola
+🟢 3. CAPTCHA (ale mądrze)
+
+Nie dawaj CAPTCHA zawsze. To zabija UX.
+
+✔ najlepsza opcja:
+
+👉 Cloudflare Turnstile
+
+Dlaczego:
+
+brak obrazków typu “zaznacz rowery”
+prawie niewidoczny
+działa pasywnie
+🟡 kiedy go używać
+
+Nie zawsze — tylko gdy coś wygląda podejrzanie:
+
+dużo komentarzy z jednego fingerprintu
+wysoki toxicity score
+bardzo szybkie wysyłanie
+🟢 4. Prosta heurystyka anty-spam
+
+Dodaj szybkie checki przed moderation:
+
+const isSpam =
+    content.length < 3 ||
+    content.length > 1000 ||
+    /(https?:\/\/)/gi.test(content) ||
+    content.split(" ").length < 2;
+
+Możesz:
+
+blokować
+albo zwiększyć próg moderacji
+🟢 5. Opóźnienie (bot killer)
+
+Boty działają natychmiast.
+
+Dodaj:
+
+const timeSincePageLoad = Date.now() - clientTimestamp;
+if (timeSincePageLoad < 2000) reject();
+
+👉 człowiek potrzebuje >2s
+👉 bot → 0ms
+
+🟢 6. Fingerprint (już masz 👍)
+
+Ale ważne:
+
+👉 crypto.randomUUID() NIE wystarcza jako identyfikator użytkownika, mimo wszystko sprawdzić czy nie trzeba sprawdzać pod kątem identyczności
+
+Lepsze:
+
+localStorage fingerprint
+albo lekki browser fingerprint
+🟢 7. Shadow banning (pro level)
+
+Zamiast blokować:
+
+👉 przyjmujesz komentarz
+👉 ale go NIE pokazujesz innym
+
+Efekt:
+
+spammer myśli, że działa
+przestaje próbować obejść system
+🔴 czego NIE robić
+
+❌ CAPTCHA dla każdego
+❌ blokowanie po słowach (fałszywe pozytywy)
+❌ tylko moderacja AI (za wolne i za drogie)
+
+💥 REKOMENDOWANY STACK (dla Ciebie)
+
+Najlepszy balans:
+
+🔥 MUST HAVE
+
+✔ rate limit
+✔ honeypot
+✔ moderation (już masz)
+
+🔥 VERY GOOD
+
+✔ Turnstile (tylko gdy podejrzane)
+
+🔥 OPTIONAL
+
+✔ shadow ban
+✔ link detection
+
+🧠 TL;DR
+
+Największy efekt:
+
+rate limit
+honeypot
+conditional captcha
+
+Reszta to dodatki.
+
+
+powinno być gram za masą potrawy a nie ma

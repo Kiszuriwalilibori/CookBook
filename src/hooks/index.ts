@@ -9,17 +9,5 @@ import { useNavItems } from "./useNavItems";
 import { useRecipesSummary } from "./useRecipesSummary";
 import { useResetFavoritesOnLogout } from "./useResetFavoritesOnLogout";
 import { useSyncRecipesStore } from "./useSyncRecipesStore";
-
-export {
-  useConfirmDialog,
-  useCreateRecipeFilterFields,
-  useDebouncedCallback,
-  useEscapeKey,
-  useFavorites,
-  useFilters,
-  useGoogleSignIn,
-  useNavItems,
-  useRecipesSummary,
-  useResetFavoritesOnLogout,
-  useSyncRecipesStore
-};;
+import { useFingerprint } from "./useFingerprint";
+export { useConfirmDialog, useCreateRecipeFilterFields, useDebouncedCallback, useEscapeKey, useFavorites, useFilters, useFingerprint, useGoogleSignIn, useNavItems, useRecipesSummary, useResetFavoritesOnLogout, useSyncRecipesStore };

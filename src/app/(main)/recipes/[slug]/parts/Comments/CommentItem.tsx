@@ -1,3 +1,7 @@
+// TODO Jeśli chcesz, mogę dorzucić jeszcze:
+// 👉
+// prosty backend guard typu „1 like per fingerprint” (Mongo / Prisma)
+
 "use client";
 
 import { useState } from "react";
@@ -6,7 +10,7 @@ import { Box, Typography, Button, TextField, IconButton, Tooltip } from "@mui/ma
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { RecipeComment } from "@/types";
-
+import { useFingerprint } from "@/hooks";
 function formatDate(date: string) {
     return new Intl.DateTimeFormat("pl-PL", {
         dateStyle: "short",
@@ -18,6 +22,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
     // ✅ HOOKS ZAWSZE NA GÓRZE
     const [replyOpen, setReplyOpen] = useState(false);
     const [replyText, setReplyText] = useState("");
+    const fingerprint = useFingerprint();
 
     // 🧠 guard PO hookach
     if (!comment) return null;
@@ -35,7 +40,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
                 parentId: comment._id,
                 content: replyText,
                 author: "Anon",
-                fingerprint: crypto.randomUUID(),
+                fingerprint,
             }),
         });
 
@@ -51,7 +56,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
             body: JSON.stringify({
                 commentId: comment._id,
                 author: "Anon",
-                fingerprint: crypto.randomUUID(),
+                fingerprint,
             }),
         });
 

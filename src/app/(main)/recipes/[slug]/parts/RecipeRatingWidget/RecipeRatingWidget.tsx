@@ -5,7 +5,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import ReactStars from "react-rating-stars-component";
 
 import type { RatingValue, RatingPayload } from "@/types/recipeRatings";
-import { useFingerprint } from "./useFingerprint";
+import { useFingerprint } from "@/hooks";
 import { getRatingsText } from "./getRatingText";
 
 import { containerSx, textSx, averageSx, countSx, errorSx, successSx, loaderContainerSx } from "./recipeRatingWidget.styles";
