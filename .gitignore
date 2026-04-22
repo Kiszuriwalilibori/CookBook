@@ -42,5 +42,7 @@ next-env.d.ts
 
 src/scripts/patchRecipeNutrition/*
 src/scripts/patchRecipeIngredients/*
+src/scripts/patchRecipeRatings
+src/scripts/*.ts
 
 *prompt*
