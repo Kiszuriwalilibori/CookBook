@@ -25,6 +25,30 @@
 // albo
 // dorzucić walidację + UX typu „disabled + loading + error inline”
 
+
+
+
+//todo Jeśli chcesz, mogę Ci dorzucić wersję z optimistic updates pod Twój konkretny stan komentarzy.Ta uwaga dotyczy useDebounceCallback.
+
+// TODO:Opcjonalne ulepszenie (polecane)
+
+// Jeśli chcesz UX na poziomie „pro”:
+
+// Optimistic update + debounce request
+
+// Czyli:
+
+// natychmiast zwiększasz licznik w UI
+// debounce wysyła request
+// w razie błędu rollback
+
+// To eliminuje „lag kliknięcia”. komentarze od todo dotyczą sytuacji po wstawieniu debounced
+//todo: Jeśli chcesz, 
+// mogę Ci jeszcze pokazać upgrade, który rozwiązuje większy problem architektoniczny tutaj:
+
+// 👉 
+// debounce + optimistic update + refresh bez race condition
+// bo przy like/unlike w React + fetch możesz mieć subtelne bugi przy szybkich klikach.
 "use client";
 
 import { useState } from "react";
@@ -36,6 +60,7 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { RecipeComment } from "@/types";
 import { useFingerprint } from "@/hooks";
 import CommentForm from "./CommentForm";
+import { useDebouncedCallback } from "@/hooks/useDebounceCallback";
 
 function formatDate(date: string) {
     return new Intl.DateTimeFormat("pl-PL", {
@@ -47,6 +72,10 @@ function formatDate(date: string) {
 export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: { comment: RecipeComment; recipeId: string; refresh: () => void; depth?: number }) {
     const [replyOpen, setReplyOpen] = useState(false);
     const fingerprint = useFingerprint();
+    const { callback: debouncedLike } = useDebouncedCallback(handleLike, {
+        delay: 400,
+        leading: false, // lub true jeśli chcesz natychmiastowy efekt
+    });
 
     if (!comment) return null;
 
@@ -89,7 +118,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
                             size="small"
                             color="primary"
                             disableRipple
-                            onClick={handleLike}
+                            onClick={debouncedLike}
                             sx={theme => ({
                                 "&:hover": {
                                     backgroundColor: alpha(theme.palette.primary.light, 0.2),
