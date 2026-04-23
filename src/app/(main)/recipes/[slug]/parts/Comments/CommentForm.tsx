@@ -5,12 +5,7 @@
 import { useState, useEffect } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import { useIsAdminLogged } from "@/stores";
-import errorMessages from "./utils/errorMessages";
-import validateComment from "./validateComment";
-
-/* ------------------ VALIDATION ------------------ */
-
-
+import { errorMessages, validateComment } from "./utils";
 
 /* ------------------ COMPONENT ------------------ */
 
