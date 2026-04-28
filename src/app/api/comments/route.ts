@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { writeClient } from "@/utils";
 import { nanoid } from "nanoid";
@@ -14,7 +13,7 @@ export async function GET(req: Request) {
             return NextResponse.json({ error: "Missing recipeId" }, { status: 400 });
         }
 
-        const comments = await writeClient.fetch(`*[_type=="recipeComment" && recipeId==$recipeId && status=="approved"] | order(createdAt asc)`, { recipeId });
+        const comments = await writeClient.fetch(`*[_type=="recipeComment" && recipeId==$recipeId && status=="approved"] | order(createdAt desc)`, { recipeId });
 
         return NextResponse.json({ comments });
     } catch (err) {

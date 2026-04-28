@@ -1,3 +1,5 @@
+"use client";
+
 import { generateDeviceFingerprint, hashFingerprint } from "@/utils/fingerprint";
 import { useEffect, useState } from "react";
 
