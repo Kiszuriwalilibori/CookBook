@@ -68,11 +68,12 @@ function formatDate(date: string) {
 
 export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: { comment: RecipeComment; recipeId: string; refresh: () => void; depth?: number }) {
     const [replyOpen, setReplyOpen] = useState(false);
-    const [likesCount, setLikesCount] = useState(comment.likesCount);
+    const [likesCount, setLikesCount] = useState(comment.likes.length);
+    console.log("comment.likes", comment.likes);
 
     useEffect(() => {
-        setLikesCount(comment.likesCount);
-    }, [comment.likesCount]);
+        setLikesCount(comment.likes.length);
+    }, [comment.likes.length]);
 
     const fingerprint = useFingerprint();
     const { callback: debouncedLike } = useDebouncedCallback(handleLike, {
@@ -87,6 +88,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
     async function handleLike() {
         const alreadyLiked = comment.likes.some(like => like.fingerprint === fingerprint);
         // 🔥 optimistic update
+        console.log("alreadyLiked", alreadyLiked);
         setLikesCount(prev => (alreadyLiked ? prev - 1 : prev + 1));
 
         try {
