@@ -70,10 +70,10 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
     const [replyOpen, setReplyOpen] = useState(false);
     const [likesCount, setLikesCount] = useState(comment.likes.length);
     console.log("comment.likes fresh from CommentItem as prop", comment.likes);
-
+    const likes = comment.likes;
     useEffect(() => {
-        setLikesCount(comment.likes.length);
-    }, [comment.likes.length]);
+        setLikesCount(likes.length);
+    }, [JSON.stringify(likes)]);
 
     const fingerprint = useFingerprint();
     const { callback: debouncedLike } = useDebouncedCallback(handleLike, {
