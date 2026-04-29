@@ -104,7 +104,7 @@ export async function PATCH(req: Request) {
             // 🔥 unlike
             patch = patch.set({
                 likes: likes.filter(l => l.fingerprint !== fingerprint),
-                likesCount: Math.max(0, (comment.likesCount || 1) - 1),
+                // likesCount: Math.max(0, (comment.likesCount || 1) - 1),
             });
         } else {
             // 🔥 like
@@ -116,7 +116,7 @@ export async function PATCH(req: Request) {
                         fingerprint,
                     },
                 ],
-                likesCount: (comment.likesCount || 0) + 1,
+                // likesCount: (comment.likesCount || 0) + 1,
             });
         }
 

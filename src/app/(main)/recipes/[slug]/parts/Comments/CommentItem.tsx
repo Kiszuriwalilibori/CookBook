@@ -69,7 +69,7 @@ function formatDate(date: string) {
 export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: { comment: RecipeComment; recipeId: string; refresh: () => void; depth?: number }) {
     const [replyOpen, setReplyOpen] = useState(false);
     const [likesCount, setLikesCount] = useState(comment.likes.length);
-    console.log("comment.likes", comment.likes);
+    console.log("comment.likes fresh from CommentItem as prop", comment.likes);
 
     useEffect(() => {
         setLikesCount(comment.likes.length);
@@ -89,8 +89,8 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
         const alreadyLiked = comment.likes.some(like => like.fingerprint === fingerprint);
         // 🔥 optimistic update
         console.log("alreadyLiked", alreadyLiked);
-        setLikesCount(prev => (alreadyLiked ? prev - 1 : prev + 1));
-
+        // setLikesCount(prev => (alreadyLiked ? prev - 1 : prev + 1));
+        setLikesCount(prev => (alreadyLiked ? comment.likes.length - 1 : comment.likes.length + 1));
         try {
             await fetch("/api/comments", {
                 method: "PATCH",
