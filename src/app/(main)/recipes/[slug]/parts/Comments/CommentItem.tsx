@@ -25,9 +25,6 @@
 // albo
 // dorzucić walidację + UX typu „disabled + loading + error inline”
 
-
-
-
 //todo Jeśli chcesz, mogę Ci dorzucić wersję z optimistic updates pod Twój konkretny stan komentarzy.Ta uwaga dotyczy useDebounceCallback.
 
 // TODO:Opcjonalne ulepszenie (polecane)
@@ -43,15 +40,15 @@
 // w razie błędu rollback
 
 // To eliminuje „lag kliknięcia”. komentarze od todo dotyczą sytuacji po wstawieniu debounced
-//todo: Jeśli chcesz, 
+//todo: Jeśli chcesz,
 // mogę Ci jeszcze pokazać upgrade, który rozwiązuje większy problem architektoniczny tutaj:
 
-// 👉 
+// 👉
 // debounce + optimistic update + refresh bez race condition
 // bo przy like/unlike w React + fetch możesz mieć subtelne bugi przy szybkich klikach.
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { alpha } from "@mui/material/styles";
 import { Box, Typography, IconButton, Tooltip } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -71,6 +68,12 @@ function formatDate(date: string) {
 
 export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: { comment: RecipeComment; recipeId: string; refresh: () => void; depth?: number }) {
     const [replyOpen, setReplyOpen] = useState(false);
+    const [likesCount, setLikesCount] = useState(comment.likesCount);
+
+    useEffect(() => {
+        setLikesCount(comment.likesCount);
+    }, [comment.likesCount]);
+
     const fingerprint = useFingerprint();
     const { callback: debouncedLike } = useDebouncedCallback(handleLike, {
         delay: 400,
@@ -82,17 +85,28 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
     const isPending = comment.status === "pending";
 
     async function handleLike() {
-        await fetch("/api/comments", {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                commentId: comment._id,
-                author: "Anon",
-                fingerprint,
-            }),
-        });
+        const alreadyLiked = comment.likes.some(like => like.fingerprint === fingerprint);
+        // 🔥 optimistic update
+        setLikesCount(prev => (alreadyLiked ? prev - 1 : prev + 1));
 
-        refresh();
+        try {
+            await fetch("/api/comments", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    commentId: comment._id,
+                    author: "Anon",
+                    fingerprint,
+                }),
+            });
+
+            refresh();
+        } catch (err) {
+            console.error("[LIKE][ERROR]", err);
+
+            // rollback (minimalny)
+            setLikesCount(prev => (alreadyLiked ? prev + 1 : prev - 1));
+        }
     }
 
     return (
@@ -129,7 +143,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
                         </IconButton>
                     </Tooltip>
 
-                    <Typography variant="caption">{comment.likesCount}</Typography>
+                    <Typography variant="caption">{likesCount}</Typography>
 
                     <Tooltip title="Odpowiedz na komentarz" arrow>
                         <IconButton
