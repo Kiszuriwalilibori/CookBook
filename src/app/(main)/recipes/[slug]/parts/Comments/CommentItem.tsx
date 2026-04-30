@@ -57,7 +57,6 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { RecipeComment } from "@/types";
 import { useFingerprint } from "@/hooks";
 import CommentForm from "./CommentForm";
-// import { useDebouncedCallback } from "@/hooks/useDebounceCallback";
 
 function formatDate(date: string) {
     return new Intl.DateTimeFormat("pl-PL", {
