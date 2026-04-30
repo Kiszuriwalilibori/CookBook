@@ -99,7 +99,6 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     commentId: comment._id,
-                    author: "Anon",
                     fingerprint,
                 }),
             });

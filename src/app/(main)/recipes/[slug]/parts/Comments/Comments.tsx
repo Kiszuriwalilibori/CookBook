@@ -39,10 +39,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
 
     const isLoading = comments === null;
 
-    // ❌ usunięty filtr _temp (clean model)
     const safeFlatComments = comments ?? [];
-
-    console.log("safeflatcomments", safeFlatComments);
 
     const commentTree = buildCommentTree(safeFlatComments);
 

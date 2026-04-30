@@ -94,24 +94,18 @@ export async function PATCH(req: Request) {
         }
 
         const likes = (comment.likes || []) as string[];
-
         const alreadyLiked = likes.includes(fingerprint);
 
-        let patch = writeClient.patch(commentId);
-
         if (alreadyLiked) {
-            // 🔥 unlike
-            patch = patch.set({
-                likes: likes.filter(f => f !== fingerprint),
-            });
+            await writeClient
+                .patch(commentId)
+                .set({
+                    likes: likes.filter(f => f !== fingerprint),
+                })
+                .commit();
         } else {
-            // 🔥 like
-            patch = patch.set({
-                likes: [...likes, fingerprint],
-            });
+            await writeClient.patch(commentId).setIfMissing({ likes: [] }).append("likes", [fingerprint]).commit();
         }
-
-        await patch.commit();
 
         return NextResponse.json({ ok: true });
     } catch (err) {
