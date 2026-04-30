@@ -1,4 +1,3 @@
-
 import type {Rule} from 'sanity'
 
 export default {
@@ -45,23 +44,9 @@ export default {
     },
 
     {
-      name: 'likesCount',
-      type: 'number',
-      initialValue: 0,
-    },
-
-    {
       name: 'likes',
       type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            {name: 'author', type: 'string'},
-            {name: 'fingerprint', type: 'string'},
-          ],
-        },
-      ],
+      of: [{type: 'string'}], // 👈 fingerprint only
       initialValue: [],
     },
 

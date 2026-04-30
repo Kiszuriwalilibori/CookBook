@@ -1,8 +1,3 @@
-export interface RecipeCommentLike {
-    author: string;
-    fingerprint: string;
-}
-
 export interface RecipeComment {
     _id: string;
 
@@ -18,8 +13,8 @@ export interface RecipeComment {
     status: "pending" | "approved" | "rejected";
     moderationScore?: number;
     moderationReason?: string;
-    likesCount: number;
-    likes: RecipeCommentLike[];
+
+    likes: string[];
 
     replies?: RecipeComment[]; // 🔥 tylko frontend (computed)
 }

@@ -73,7 +73,6 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                                 fingerprint: "",
                                 status: "approved",
                                 likes: [],
-                                likesCount: 0,
                             };
 
                             // 🔥 optimistic insert

@@ -48,7 +48,7 @@
 // bo przy like/unlike w React + fetch możesz mieć subtelne bugi przy szybkich klikach.
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { alpha } from "@mui/material/styles";
 import { Box, Typography, IconButton, Tooltip } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -71,9 +71,10 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
     const [likesCount, setLikesCount] = useState(comment.likes.length);
     console.log("comment.likes fresh from CommentItem as prop", comment.likes);
     const likes = comment.likes;
+
     useEffect(() => {
-        setLikesCount(likes.length);
-    }, [JSON.stringify(likes)]);
+        setLikesCount(comment.likes.length);
+    }, [comment.likes]);
 
     const fingerprint = useFingerprint();
     const { callback: debouncedLike } = useDebouncedCallback(handleLike, {
@@ -86,11 +87,12 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
     const isPending = comment.status === "pending";
 
     async function handleLike() {
-        const alreadyLiked = comment.likes.some(like => like.fingerprint === fingerprint);
+        console.log("comment.likes ", comment.likes, "fingerprint ", fingerprint);
+        const alreadyLiked = likes.includes(fingerprint);
         // 🔥 optimistic update
         console.log("alreadyLiked", alreadyLiked);
-        // setLikesCount(prev => (alreadyLiked ? prev - 1 : prev + 1));
-        setLikesCount(prev => (alreadyLiked ? comment.likes.length - 1 : comment.likes.length + 1));
+
+        setLikesCount(prev => (alreadyLiked ? prev - 1 : prev + 1));
         try {
             await fetch("/api/comments", {
                 method: "PATCH",

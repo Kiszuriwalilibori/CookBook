@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { writeClient } from "@/utils";
 import { nanoid } from "nanoid";
 import { analyzeComment } from "@/utils/perspective";
-import type { RecipeCommentLike } from "@/types";
 
 export async function GET(req: Request) {
     try {
@@ -82,7 +81,7 @@ export async function POST(req: Request) {
 
 export async function PATCH(req: Request) {
     try {
-        const { commentId, author, fingerprint } = await req.json();
+        const { commentId, fingerprint } = await req.json();
 
         if (!commentId || !fingerprint) {
             return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -94,29 +93,21 @@ export async function PATCH(req: Request) {
             return NextResponse.json({ error: "Comment not found" }, { status: 404 });
         }
 
-        const likes = (comment.likes || []) as RecipeCommentLike[];
+        const likes = (comment.likes || []) as string[];
 
-        const alreadyLiked = likes.some(l => l.fingerprint === fingerprint);
+        const alreadyLiked = likes.includes(fingerprint);
 
         let patch = writeClient.patch(commentId);
 
         if (alreadyLiked) {
             // 🔥 unlike
             patch = patch.set({
-                likes: likes.filter(l => l.fingerprint !== fingerprint),
-                // likesCount: Math.max(0, (comment.likesCount || 1) - 1),
+                likes: likes.filter(f => f !== fingerprint),
             });
         } else {
             // 🔥 like
             patch = patch.set({
-                likes: [
-                    ...likes,
-                    {
-                        author: author || "Anon",
-                        fingerprint,
-                    },
-                ],
-                // likesCount: (comment.likesCount || 0) + 1,
+                likes: [...likes, fingerprint],
             });
         }
 
