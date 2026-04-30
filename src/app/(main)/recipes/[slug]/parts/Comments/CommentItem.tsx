@@ -48,7 +48,7 @@
 // bo przy like/unlike w React + fetch możesz mieć subtelne bugi przy szybkich klikach.
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { alpha } from "@mui/material/styles";
 import { Box, Typography, IconButton, Tooltip } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -57,7 +57,7 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { RecipeComment } from "@/types";
 import { useFingerprint } from "@/hooks";
 import CommentForm from "./CommentForm";
-import { useDebouncedCallback } from "@/hooks/useDebounceCallback";
+// import { useDebouncedCallback } from "@/hooks/useDebounceCallback";
 
 function formatDate(date: string) {
     return new Intl.DateTimeFormat("pl-PL", {
@@ -68,31 +68,27 @@ function formatDate(date: string) {
 
 export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: { comment: RecipeComment; recipeId: string; refresh: () => void; depth?: number }) {
     const [replyOpen, setReplyOpen] = useState(false);
-    const [likesCount, setLikesCount] = useState(comment.likes.length);
-    console.log("comment.likes fresh from CommentItem as prop", comment.likes);
-    const likes = comment.likes;
-
-    useEffect(() => {
-        setLikesCount(comment.likes.length);
-    }, [comment.likes]);
+    const [likes, setLikes] = useState<string[]>(comment.likes);
+    const [isLiking, setIsLiking] = useState(false);
 
     const fingerprint = useFingerprint();
-    const { callback: debouncedLike } = useDebouncedCallback(handleLike, {
-        delay: 400,
-        leading: false, // lub true jeśli chcesz natychmiastowy efekt
-    });
 
     if (!comment) return null;
 
     const isPending = comment.status === "pending";
+    const alreadyLiked = likes.includes(fingerprint);
 
     async function handleLike() {
-        console.log("comment.likes ", comment.likes, "fingerprint ", fingerprint);
-        const alreadyLiked = likes.includes(fingerprint);
-        // 🔥 optimistic update
-        console.log("alreadyLiked", alreadyLiked);
+        if (isLiking || !fingerprint) return;
 
-        setLikesCount(prev => (alreadyLiked ? prev - 1 : prev + 1));
+        setIsLiking(true);
+
+        const prevLikes = likes;
+        const wasLiked = alreadyLiked;
+
+        // optimistic update
+        setLikes(prev => (wasLiked ? prev.filter(id => id !== fingerprint) : [...prev, fingerprint]));
+
         try {
             await fetch("/api/comments", {
                 method: "PATCH",
@@ -102,16 +98,16 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
                     fingerprint,
                 }),
             });
-
             refresh();
         } catch (err) {
             console.error("[LIKE][ERROR]", err);
 
-            // rollback (minimalny)
-            setLikesCount(prev => (alreadyLiked ? prev + 1 : prev - 1));
+            // rollback
+            setLikes(prevLikes);
+        } finally {
+            setIsLiking(false);
         }
     }
-
     return (
         <Box ml={depth * 3}>
             <Box p={1}>
@@ -135,7 +131,8 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
                             size="small"
                             color="primary"
                             disableRipple
-                            onClick={debouncedLike}
+                            onClick={handleLike}
+                            disabled={isLiking}
                             sx={theme => ({
                                 "&:hover": {
                                     backgroundColor: alpha(theme.palette.primary.light, 0.2),
@@ -146,7 +143,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
                         </IconButton>
                     </Tooltip>
 
-                    <Typography variant="caption">{likesCount}</Typography>
+                    <Typography variant="caption">{likes.length}</Typography>
 
                     <Tooltip title="Odpowiedz na komentarz" arrow>
                         <IconButton
