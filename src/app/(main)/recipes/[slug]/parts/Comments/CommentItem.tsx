@@ -50,7 +50,7 @@
 
 import { useState } from "react";
 import { alpha } from "@mui/material/styles";
-import { Box, Typography, IconButton, Tooltip } from "@mui/material";
+import { Box, Typography, IconButton, Tooltip, Collapse } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 
@@ -178,8 +178,16 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
                     </Tooltip>
                 </Box>
 
-                {replyOpen && (
-                    <Box mt={1}>
+                <Collapse
+                    in={replyOpen}
+                    timeout={400}
+                    sx={{ mt: 1 }}
+                    easing={{
+                        enter: "cubic-bezier(0.22, 1, 0.36, 1)",
+                        exit: "cubic-bezier(0.4, 0, 1, 1)",
+                    }}
+                >
+                    <Box>
                         <CommentForm
                             submitLabel="Odpowiedz"
                             onSubmit={async ({ author, content }) => {
@@ -202,7 +210,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
                             }}
                         />
                     </Box>
-                )}
+                </Collapse>
             </Box>
 
             <Box mt={1} display="flex" flexDirection="column" gap={1}>

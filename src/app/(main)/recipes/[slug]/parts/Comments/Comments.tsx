@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails, Skeleton } from "@mui/material";
+import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails, Skeleton, Collapse } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import CommentItem from "./CommentItem";
@@ -54,7 +54,15 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     {formOpen ? "Anuluj" : "Dodaj komentarz"}
                 </Button>
 
-                {formOpen && (
+                <Collapse
+                    in={formOpen}
+                    timeout={400}
+                    sx={{ mt: 1 }}
+                    easing={{
+                        enter: "cubic-bezier(0.22, 1, 0.36, 1)",
+                        exit: "cubic-bezier(0.4, 0, 1, 1)",
+                    }}
+                >
                     <CommentForm
                         submitLabel="Dodaj"
                         onSubmit={async ({ author, content }) => {
@@ -109,7 +117,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                             }
                         }}
                     />
-                )}
+                </Collapse>
 
                 {isLoading ? (
                     <Box>
