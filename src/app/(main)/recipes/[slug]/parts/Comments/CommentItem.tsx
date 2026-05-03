@@ -69,7 +69,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
     const [replyOpen, setReplyOpen] = useState(false);
     const [likes, setLikes] = useState<string[]>(comment.likes);
     const [isLiking, setIsLiking] = useState(false);
-
+    const [animateLike, setAnimateLike] = useState(false);
     const fingerprint = useFingerprint();
 
     if (!comment) return null;
@@ -84,6 +84,10 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
 
         const prevLikes = likes;
         const wasLiked = alreadyLiked;
+        if (!wasLiked) {
+            setAnimateLike(true);
+            setTimeout(() => setAnimateLike(false), 300);
+        }
 
         // optimistic update
         setLikes(prev => (wasLiked ? prev.filter(id => id !== fingerprint) : [...prev, fingerprint]));
@@ -138,7 +142,20 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
                                 },
                             })}
                         >
-                            <ThumbUpIcon fontSize="small" />
+                            <ThumbUpIcon
+                                fontSize="small"
+                                sx={{
+                                    color: alreadyLiked ? "success.main" : "action.active",
+                                    transform: animateLike ? "scale(1.3)" : "scale(1)",
+                                    transition: "transform 0.2s ease, color 0.2s ease",
+                                    "@keyframes pop": {
+                                        "0%": { transform: "scale(1)" },
+                                        "50%": { transform: "scale(1.4)" },
+                                        "100%": { transform: "scale(1)" },
+                                    },
+                                    animation: animateLike ? "pop 0.3s ease" : "none",
+                                }}
+                            />
                         </IconButton>
                     </Tooltip>
 
