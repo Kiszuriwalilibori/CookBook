@@ -49,14 +49,15 @@
 "use client";
 
 import { useState } from "react";
-import { alpha } from "@mui/material/styles";
-import { Box, Typography, IconButton, Tooltip, Collapse } from "@mui/material";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+
+import { Box, Typography } from "@mui/material";
 
 import { RecipeComment } from "@/types";
 import { useFingerprint } from "@/hooks";
 import CommentForm from "./CommentForm";
+import { LikeButton } from "./likeButton";
+import { ReplyButton } from "./replyButton";
+import ReplyCollapse from "./ReplyCollapse";
 
 function formatDate(date: string) {
     return new Intl.DateTimeFormat("pl-PL", {
@@ -76,6 +77,23 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
 
     const isPending = comment.status === "pending";
     const alreadyLiked = likes.includes(fingerprint);
+
+    const handleReplySubmit = async ({ author, content }: { author: string; content: string }) => {
+        await fetch("/api/comments", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                recipeId,
+                parentId: comment._id,
+                content,
+                author,
+                fingerprint,
+            }),
+        });
+
+        setReplyOpen(false);
+        refresh();
+    };
 
     async function handleLike() {
         if (isLiking || !fingerprint) return;
@@ -129,88 +147,18 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
                 )}
 
                 <Box display="flex" alignItems="center" gap={1}>
-                    <Tooltip title="Polub komentarz" arrow>
-                        <IconButton
-                            size="small"
-                            color="primary"
-                            disableRipple
-                            onClick={handleLike}
-                            disabled={isLiking}
-                            sx={theme => ({
-                                "&:hover": {
-                                    backgroundColor: alpha(theme.palette.primary.light, 0.2),
-                                },
-                            })}
-                        >
-                            <ThumbUpIcon
-                                fontSize="small"
-                                sx={{
-                                    color: alreadyLiked ? "success.main" : "action.active",
-                                    transform: animateLike ? "scale(1.3)" : "scale(1)",
-                                    transition: "transform 0.2s ease, color 0.2s ease",
-                                    "@keyframes pop": {
-                                        "0%": { transform: "scale(1)" },
-                                        "50%": { transform: "scale(1.4)" },
-                                        "100%": { transform: "scale(1)" },
-                                    },
-                                    animation: animateLike ? "pop 0.3s ease" : "none",
-                                }}
-                            />
-                        </IconButton>
-                    </Tooltip>
+                    <LikeButton alreadyLiked={alreadyLiked} likesCount={likes.length} isLiking={isLiking} animate={animateLike} onLike={handleLike} />
 
                     <Typography variant="caption">{likes.length}</Typography>
 
-                    <Tooltip title="Odpowiedz na komentarz" arrow>
-                        <IconButton
-                            size="small"
-                            color="primary"
-                            disableRipple
-                            onClick={() => setReplyOpen(v => !v)}
-                            sx={theme => ({
-                                "&:hover": {
-                                    backgroundColor: alpha(theme.palette.primary.light, 0.2),
-                                },
-                            })}
-                        >
-                            <ChatBubbleOutlineIcon fontSize="small" />
-                        </IconButton>
-                    </Tooltip>
+                    <ReplyButton onToggle={() => setReplyOpen(v => !v)} />
                 </Box>
 
-                <Collapse
-                    in={replyOpen}
-                    timeout={400}
-                    sx={{ mt: 1 }}
-                    easing={{
-                        enter: "cubic-bezier(0.22, 1, 0.36, 1)",
-                        exit: "cubic-bezier(0.4, 0, 1, 1)",
-                    }}
-                >
+                <ReplyCollapse open={replyOpen}>
                     <Box>
-                        <CommentForm
-                            submitLabel="Odpowiedz"
-                            onSubmit={async ({ author, content }) => {
-                                await fetch("/api/comments", {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                    },
-                                    body: JSON.stringify({
-                                        recipeId,
-                                        parentId: comment._id,
-                                        content,
-                                        author,
-                                        fingerprint,
-                                    }),
-                                });
-
-                                setReplyOpen(false);
-                                refresh();
-                            }}
-                        />
+                        <CommentForm submitLabel="Odpowiedz" onSubmit={handleReplySubmit} />
                     </Box>
-                </Collapse>
+                </ReplyCollapse>
             </Box>
 
             <Box mt={1} display="flex" flexDirection="column" gap={1}>
