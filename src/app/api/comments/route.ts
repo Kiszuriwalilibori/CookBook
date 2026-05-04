@@ -38,18 +38,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
-        // const now = new Date();
-        // const cutoffTime = new Date(now.getTime() - COMMENT_COOLDOWN_MINUTES * 60000).toISOString();
-
-        // const lastCommentQuery = `*[_type=="recipeComment" && recipeId==$recipeId && fingerprint==$fingerprint] | order(createdAt desc)[0]`;
-        // const lastComment = await writeClient.fetch(lastCommentQuery, { recipeId, fingerprint });
-
-        // if (lastComment && lastComment.createdAt > cutoffTime) {
-        //     // Użytkownik komentował niedawno - odrzucamy
-        //     return NextResponse.json({ ok: false, reason: "Too soon" }, { status: 429 });
-        // }
-
-        const { allowed } = await checkCommentCooldown({ recipeId, fingerprint });
+        const { allowed } = await checkCommentCooldown({ recipeId, fingerprint, parentId: parentId ?? null });
 
         if (!allowed) {
             return NextResponse.json({ ok: false, reason: "Too soon" }, { status: 429 });
