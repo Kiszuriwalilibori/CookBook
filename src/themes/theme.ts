@@ -49,7 +49,7 @@ const baseTheme = createTheme({
         secondary: {
             main: "#A8BBA3",
             light: "#EAF0E1",
-            dark: "#7b1fa2",
+            dark: "#5A7257",
         },
         background: {
             default: "#f5f5f5",
