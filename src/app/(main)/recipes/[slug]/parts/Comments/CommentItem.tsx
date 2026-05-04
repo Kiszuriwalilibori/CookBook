@@ -168,6 +168,7 @@ export default function CommentItem({
                 <ReplyCollapse open={replyOpen}>
                     <Box>
                         <CommentForm
+                            key={replyOpen ? "open" : "closed"}
                             submitLabel="Odpowiedz"
                             onSubmit={async data => {
                                 setReplyOpen(false);

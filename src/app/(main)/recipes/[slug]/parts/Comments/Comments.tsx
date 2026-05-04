@@ -121,10 +121,10 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     }}
                 >
                     <CommentForm
+                        key={formOpen ? "open" : "closed"}
                         submitLabel="Dodaj"
                         onSubmit={async data => {
                             setFormOpen(false);
-
                             await handleAddComment(data);
                         }}
                     />

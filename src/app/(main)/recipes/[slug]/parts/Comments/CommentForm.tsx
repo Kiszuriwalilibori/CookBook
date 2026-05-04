@@ -77,9 +77,9 @@ export default function CommentForm({ onSubmit, submitLabel = "Dodaj" }: { onSub
             <Box sx={{ position: "relative" }}>
                 {/* 🟢 honeypot – NIE RUSZAMY */}
                 <Honeypot />
-                {!isAdminLogged && <TextField fullWidth size="small" label="Przedstaw się" value={author} onChange={e => setAuthor(e.target.value)} color="secondary" sx={textFieldSx} />}
+                {!isAdminLogged && <TextField autoComplete="off" fullWidth size="small" label="Przedstaw się" value={author} onChange={e => setAuthor(e.target.value)} color="secondary" sx={textFieldSx} />}
 
-                <TextField fullWidth multiline minRows={3} size="small" label="Komentarz" value={content} onChange={e => setContent(e.target.value)} color="secondary" sx={textFieldSx} />
+                <TextField fullWidth multiline autoComplete="off" minRows={3} size="small" label="Komentarz" value={content} onChange={e => setContent(e.target.value)} color="secondary" sx={textFieldSx} />
 
                 <Button variant="contained" onClick={handleSubmit} disabled={baseDisabled || validationFailed} sx={submitButtonSx}>
                     {submitLabel}
