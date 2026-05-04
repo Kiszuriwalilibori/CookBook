@@ -15,6 +15,66 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const [formOpen, setFormOpen] = useState(false);
     const fingerprint = useFingerprint();
 
+    const handleAddComment = useCallback(
+        async (
+            { author, content, parentId }: { author: string; content: string; parentId?: string | null },
+            options?: {
+                onSuccess?: () => void;
+                onError?: () => void;
+            }
+        ) => {
+            const tempId = crypto.randomUUID();
+
+            const optimisticComment: RecipeComment = {
+                _id: tempId,
+                recipeId,
+                content,
+                author,
+                parentId: parentId ?? null,
+                createdAt: new Date().toISOString(),
+                fingerprint: "",
+                status: "approved",
+                likes: [],
+            };
+            options?.onSuccess?.();
+            // optimistic insert
+            setComments(prev => [optimisticComment, ...(prev ?? [])]);
+            console.log("ADDING COMMENT", { author, content, parentId });
+            try {
+                const res = await fetch("/api/comments", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        recipeId,
+                        content,
+                        author,
+                        parentId: parentId ?? null,
+                        fingerprint,
+                        website: "",
+                    }),
+                });
+
+                const data = await res.json();
+
+                if (!data.ok) {
+                    throw new Error();
+                }
+
+                // replace temp → real
+                setComments(prev => (prev ?? []).map(c => (c._id === tempId ? data.comment : c)));
+            } catch (err) {
+                console.error("[COMMENTS][POST]", err);
+
+                // rollback
+                setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
+
+                options?.onError?.();
+            }
+        },
+        [recipeId, fingerprint]
+    );
     const fetchComments = useCallback(async () => {
         try {
             const res = await fetch(`/api/comments?recipeId=${recipeId}`);
@@ -65,56 +125,10 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 >
                     <CommentForm
                         submitLabel="Dodaj"
-                        onSubmit={async ({ author, content }) => {
-                            const tempId = crypto.randomUUID();
-
-                            const optimisticComment: RecipeComment = {
-                                _id: tempId,
-                                recipeId,
-                                content,
-                                author,
-                                parentId: null,
-                                createdAt: new Date().toISOString(),
-                                fingerprint: "",
-                                status: "approved",
-                                likes: [],
-                            };
-
-                            // 🔥 optimistic insert
-                            setComments(prev => [optimisticComment, ...(prev ?? [])]);
-
+                        onSubmit={async data => {
                             setFormOpen(false);
 
-                            try {
-                                const res = await fetch("/api/comments", {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                    },
-                                    body: JSON.stringify({
-                                        recipeId,
-                                        content,
-                                        author,
-                                        fingerprint,
-                                        website: "",
-                                    }),
-                                });
-
-                                const data = await res.json();
-                                console.log("data from form", data);
-
-                                if (!data.ok) {
-                                    throw new Error();
-                                }
-
-                                // 🔥 replace temp → real
-                                setComments(prev => (prev ?? []).map(c => (c._id === tempId ? data.comment : c)));
-                            } catch (err) {
-                                console.error("[COMMENTS][POST]", err);
-
-                                // 🔥 rollback
-                                setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
-                            }
+                            await handleAddComment(data);
                         }}
                     />
                 </Collapse>
@@ -128,7 +142,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 ) : (
                     <Box display="flex" flexDirection="column" gap={2}>
                         {commentTree.map(comment => (
-                            <CommentItem key={comment._id} comment={comment} recipeId={recipeId} refresh={fetchComments} />
+                            <CommentItem key={comment._id} comment={comment} recipeId={recipeId} refresh={fetchComments} handleAddComment={handleAddComment} />
                         ))}
                     </Box>
                 )}

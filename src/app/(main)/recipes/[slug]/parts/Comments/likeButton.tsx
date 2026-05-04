@@ -1,4 +1,4 @@
-import { IconButton, Tooltip, Typography } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { alpha } from "@mui/material/styles";
 
@@ -43,7 +43,7 @@ export function LikeButton({ alreadyLiked, likesCount, isLiking, animate, onLike
                 </IconButton>
             </Tooltip>
 
-            <Typography variant="caption">{likesCount}</Typography>
+            {/* <Typography variant="caption">{likesCount}</Typography> */}
         </>
     );
 }

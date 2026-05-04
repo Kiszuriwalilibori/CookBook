@@ -66,7 +66,35 @@ function formatDate(date: string) {
     }).format(new Date(date));
 }
 
-export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: { comment: RecipeComment; recipeId: string; refresh: () => void; depth?: number }) {
+export default function CommentItem({
+    comment,
+    recipeId,
+    refresh,
+    depth = 0,
+    handleAddComment,
+}: {
+    comment: RecipeComment;
+    recipeId: string;
+    refresh: () => void;
+    depth?: number;
+    handleAddComment: (
+        {
+            author,
+            content,
+            parentId,
+        }: {
+            author: string;
+            content: string;
+            parentId?: string | null;
+        },
+        options?:
+            | {
+                  onSuccess?: (() => void) | undefined;
+                  onError?: (() => void) | undefined;
+              }
+            | undefined
+    ) => Promise<void>;
+}) {
     const [replyOpen, setReplyOpen] = useState(false);
     const [likes, setLikes] = useState<string[]>(comment.likes);
     const [isLiking, setIsLiking] = useState(false);
@@ -77,23 +105,6 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
 
     const isPending = comment.status === "pending";
     const alreadyLiked = likes.includes(fingerprint);
-
-    const handleReplySubmit = async ({ author, content }: { author: string; content: string }) => {
-        await fetch("/api/comments", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                recipeId,
-                parentId: comment._id,
-                content,
-                author,
-                fingerprint,
-            }),
-        });
-
-        setReplyOpen(false);
-        refresh();
-    };
 
     async function handleLike() {
         if (isLiking || !fingerprint) return;
@@ -156,14 +167,23 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0 }: {
 
                 <ReplyCollapse open={replyOpen}>
                     <Box>
-                        <CommentForm submitLabel="Odpowiedz" onSubmit={handleReplySubmit} />
+                        <CommentForm
+                            submitLabel="Odpowiedz"
+                            onSubmit={async data => {
+                                setReplyOpen(false);
+                                await handleAddComment({
+                                    ...data,
+                                    parentId: comment._id,
+                                });
+                            }}
+                        />
                     </Box>
                 </ReplyCollapse>
             </Box>
 
             <Box mt={1} display="flex" flexDirection="column" gap={1}>
                 {(comment.replies ?? []).filter(Boolean).map(reply => (
-                    <CommentItem key={reply._id} comment={reply} recipeId={recipeId} refresh={refresh} depth={depth + 1} />
+                    <CommentItem key={reply._id} comment={reply} recipeId={recipeId} refresh={refresh} depth={depth + 1} handleAddComment={handleAddComment} />
                 ))}
             </Box>
         </Box>
