@@ -9,6 +9,7 @@ import CommentForm from "./CommentForm";
 import { buildCommentTree } from "@/utils/buildCommentTree";
 import { useFingerprint } from "@/hooks";
 import type { RecipeComment } from "@/types";
+import { collapseSx } from "./commentStyles";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
@@ -80,11 +81,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
             const res = await fetch(`/api/comments?recipeId=${recipeId}`);
             const data = await res.json();
 
-            console.log("data from fetchcomments", data);
-
             const safeComments: RecipeComment[] = Array.isArray(data.comments) ? data.comments.filter(Boolean) : [];
-
-            console.log("safeComments from fetchcomments", safeComments);
 
             setComments(safeComments);
         } catch (err) {
@@ -117,7 +114,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 <Collapse
                     in={formOpen}
                     timeout={400}
-                    sx={{ mt: 1 }}
+                    sx={collapseSx}
                     easing={{
                         enter: "cubic-bezier(0.22, 1, 0.36, 1)",
                         exit: "cubic-bezier(0.4, 0, 1, 1)",
