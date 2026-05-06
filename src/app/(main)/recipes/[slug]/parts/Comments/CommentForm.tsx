@@ -10,7 +10,7 @@ import { paperSx, textFieldSx, submitButtonSx } from "./commentStyles";
 import { Honeypot } from "./Honeypot";
 /* ------------------ COMPONENT ------------------ */
 
-export default function CommentForm({ onSubmit, submitLabel = "Dodaj" }: { onSubmit: (data: { author: string; content: string }) => Promise<void>; submitLabel?: string }) {
+export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel }: { onSubmit: (data: { author: string; content: string }) => Promise<void>; submitLabel?: string; onCancel?: () => void }) {
     const [author, setAuthor] = useState("");
     const [content, setContent] = useState("");
     const [errors, setErrors] = useState<string[]>([]);
@@ -80,10 +80,25 @@ export default function CommentForm({ onSubmit, submitLabel = "Dodaj" }: { onSub
                 {!isAdminLogged && <TextField autoComplete="off" fullWidth size="small" label="Przedstaw się" value={author} onChange={e => setAuthor(e.target.value)} color="secondary" sx={textFieldSx} />}
 
                 <TextField fullWidth multiline autoComplete="off" minRows={3} size="small" label="Komentarz" value={content} onChange={e => setContent(e.target.value)} color="secondary" sx={textFieldSx} />
-
-                <Button variant="contained" onClick={handleSubmit} disabled={baseDisabled || validationFailed} sx={submitButtonSx}>
-                    {submitLabel}
-                </Button>
+                <Box display="flex" flexDirection={{ xs: "column-reverse", sm: "row" }} justifyContent={{ xs: "stretch", sm: "space-evenly" }} alignItems="center" gap={1} mt={1}>
+                    <Button fullWidth variant="contained" onClick={handleSubmit} disabled={baseDisabled || validationFailed} sx={submitButtonSx}>
+                        {submitLabel}
+                    </Button>
+                    {onCancel && (
+                        <Button
+                            variant="contained"
+                            color="warning"
+                            onClick={onCancel}
+                            fullWidth
+                            sx={{
+                                flex: { sm: 1 },
+                                minWidth: { sm: 140 },
+                            }}
+                        >
+                            Anuluj
+                        </Button>
+                    )}
+                </Box>
             </Box>
         </Paper>
     );

@@ -95,7 +95,7 @@ export default function CommentItem({
             | undefined
     ) => Promise<void>;
 }) {
-    const [replyOpen, setReplyOpen] = useState(false);
+    const [formOpen, setFormOpen] = useState(false);
     const [likes, setLikes] = useState<string[]>(comment.likes);
     const [isLiking, setIsLiking] = useState(false);
     const [animateLike, setAnimateLike] = useState(false);
@@ -162,21 +162,22 @@ export default function CommentItem({
 
                     <Typography variant="caption">{likes.length}</Typography>
 
-                    <ReplyButton onToggle={() => setReplyOpen(v => !v)} />
+                    <ReplyButton onToggle={() => setFormOpen(v => !v)} />
                 </Box>
 
-                <ReplyCollapse open={replyOpen}>
+                <ReplyCollapse open={formOpen}>
                     <Box>
                         <CommentForm
-                            key={replyOpen ? "open" : "closed"}
+                            key={formOpen ? "open" : "closed"}
                             submitLabel="Odpowiedz"
                             onSubmit={async data => {
-                                setReplyOpen(false);
+                                setFormOpen(false);
                                 await handleAddComment({
                                     ...data,
                                     parentId: comment._id,
                                 });
                             }}
+                            onCancel={() => setFormOpen(false)}
                         />
                     </Box>
                 </ReplyCollapse>

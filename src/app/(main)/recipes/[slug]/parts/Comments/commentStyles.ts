@@ -49,6 +49,8 @@ export const textFieldSx = (theme: Theme) => ({
 
 export const submitButtonSx = (theme: Theme) => ({
     backgroundColor: theme.palette.secondary.dark,
+    flex: { sm: 1 },
+    minWidth: { sm: 140 },
     color: "#fff",
     "&:hover": {
         backgroundColor: darken(theme.palette.secondary.dark, 0.15),

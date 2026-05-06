@@ -107,7 +107,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
             </AccordionSummary>
 
             <AccordionDetails>
-                <Button onClick={() => setFormOpen(v => !v)} sx={{ mb: 2 }}>
+                <Button onClick={() => setFormOpen(true)} sx={{ mb: 2, visibility: formOpen ? "hidden" : "visible" }}>
                     {formOpen ? "Anuluj" : "Dodaj komentarz"}
                 </Button>
 
@@ -127,6 +127,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                             setFormOpen(false);
                             await handleAddComment(data);
                         }}
+                        onCancel={() => setFormOpen(false)}
                     />
                 </Collapse>
 
