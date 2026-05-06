@@ -11,13 +11,11 @@ import { buildCommentTree } from "@/utils/buildCommentTree";
 import { useFingerprint } from "@/hooks";
 import type { RecipeComment } from "@/types";
 import { collapseSx } from "./commentStyles";
+import { useCommentsVisibility } from "./utils/useCommentsVisibility";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
     const [formOpen, setFormOpen] = useState(false);
-    type ViewMode = "preview" | "expanded" | "collapsed";
-
-    const [viewMode, setViewMode] = useState<ViewMode>("preview");
 
     const formRef = useRef<HTMLDivElement | null>(null);
 
@@ -106,21 +104,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const isLoading = comments === null;
     const safeFlatComments = comments ?? [];
     const commentTree = buildCommentTree(safeFlatComments);
-    const visibleComments = viewMode === "expanded" ? commentTree : viewMode === "preview" ? commentTree.slice(0, 3) : [];
-    const hiddenCount = Math.max(commentTree.length - 3, 0);
-    function handleToggle() {
-        setViewMode(prev => {
-            const next = prev === "preview" ? "expanded" : prev === "expanded" ? "collapsed" : "expanded";
-
-            if (prev === "expanded") {
-                document.getElementById("comments")?.scrollIntoView({
-                    behavior: "smooth",
-                });
-            }
-
-            return next;
-        });
-    }
+    const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny } = useCommentsVisibility(commentTree, 3);
 
     return (
         <>
@@ -154,23 +138,16 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                         ) : (
                             <Box display="flex" flexDirection="column" gap={2}>
                                 {/* FIRST COMMENTS */}
-                                <Box display="flex" flexDirection="column" gap={2}>
-                                    {visibleComments.map(comment => (
+                                <Box key={viewMode} display="flex" flexDirection="column" gap={2}>
+                                    {visibleItems.map(comment => (
                                         <CommentItem key={comment._id} comment={comment} recipeId={recipeId} refresh={fetchComments} handleAddComment={handleAddComment} />
                                     ))}
                                 </Box>
 
                                 {/* MORE BUTTON */}
-                                {commentTree.length > 0 && (
+                                {hasAny && (
                                     <Box textAlign="center">
-                                        <Button onClick={handleToggle}>
-                                            {viewMode === "preview" && hiddenCount > 0 && `Pokaż więcej (${hiddenCount})`}
-                                            {viewMode === "preview" && hiddenCount === 0 && "Pokaż komentarze"}
-
-                                            {viewMode === "expanded" && "Zwiń komentarze"}
-
-                                            {viewMode === "collapsed" && "Pokaż komentarze"}
-                                        </Button>
+                                        <Button onClick={toggleCommentsVisibility}>{buttonLabel}</Button>
                                     </Box>
                                 )}
                             </Box>
