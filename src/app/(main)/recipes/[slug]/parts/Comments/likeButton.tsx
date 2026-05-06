@@ -91,6 +91,17 @@ export function LikeButton({ alreadyLiked, likesCount, isLiking, animate, onLike
                     onClick={onLike}
                     disabled={isLiking}
                     sx={{
+                        width: 40,
+                        height: 40,
+
+                        minWidth: 44,
+                        minHeight: 44,
+
+                        boxSizing: "border-box",
+
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                         "&:hover": {
                             backgroundColor: "rgba(15, 20, 25, 0.08)",
                         },
