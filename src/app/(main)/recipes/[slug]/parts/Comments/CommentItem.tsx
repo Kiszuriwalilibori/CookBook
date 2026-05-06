@@ -141,50 +141,93 @@ export default function CommentItem({
         }
     }
     return (
-        <Box ml={depth * 3}>
-            <Box p={1}>
-                <Typography variant="body2" mb={1}>
-                    <strong>{comment.author}</strong> w dniu {formatDate(comment.createdAt)} napisał:
-                </Typography>
+        <Box
+            sx={{
+                position: "relative",
+                display: "flex",
+                ml: depth > 0 ? 2 : 0,
+            }}
+        >
+            {/* 🌲 vertical thread line */}
+            {depth > 0 && (
+                <Box
+                    sx={{
+                        position: "absolute",
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: "2px",
+                        bgcolor: "divider",
+                        borderRadius: 1,
+                    }}
+                />
+            )}
 
-                <Typography variant="body2" mb={1}>
-                    {comment.content}
-                </Typography>
+            {/* 📦 content wrapper */}
+            <Box
+                sx={{
+                    flex: 1,
+                    pl: depth > 0 ? 2 : 0,
+                }}
+            >
+                {/* 🧱 card */}
+                <Box
+                    sx={{
+                        p: 1.5,
+                        borderRadius: 2,
+                        border: "1px solid",
+                        borderColor: "divider",
+                        backgroundColor: depth === 0 ? "background.paper" : "action.hover",
+                        transition: "background 0.2s ease",
+                        position: "relative",
+                    }}
+                >
+                    {/* 👇 TWOJA ORYGINALNA ZAWARTOŚĆ (bez zmian) */}
 
-                {isPending && (
-                    <Typography variant="caption" color="warning.main">
-                        Oczekuje na moderację...
+                    <Typography variant="body2" mb={1}>
+                        <strong>{comment.author}</strong> w dniu {formatDate(comment.createdAt)} napisał:
                     </Typography>
-                )}
 
-                <Box display="flex" alignItems="center" gap={1}>
-                    <LikeButton alreadyLiked={alreadyLiked} likesCount={likes.length} isLiking={isLiking} animate={animateLike} onLike={handleLike} />
+                    <Typography variant="body2" mb={1}>
+                        {comment.content}
+                    </Typography>
 
-                    <ReplyButton onToggle={() => setFormOpen(v => !v)} />
-                </Box>
+                    {isPending && (
+                        <Typography variant="caption" color="warning.main">
+                            Oczekuje na moderację...
+                        </Typography>
+                    )}
 
-                <ReplyCollapse open={formOpen}>
-                    <Box>
-                        <CommentForm
-                            key={formOpen ? "open" : "closed"}
-                            submitLabel="Odpowiedz"
-                            onSubmit={async data => {
-                                setFormOpen(false);
-                                await handleAddComment({
-                                    ...data,
-                                    parentId: comment._id,
-                                });
-                            }}
-                            onCancel={() => setFormOpen(false)}
-                        />
+                    <Box display="flex" alignItems="center" gap={1}>
+                        <LikeButton alreadyLiked={alreadyLiked} likesCount={likes.length} isLiking={isLiking} animate={animateLike} onLike={handleLike} />
+
+                        <ReplyButton onToggle={() => setFormOpen(v => !v)} />
                     </Box>
-                </ReplyCollapse>
-            </Box>
 
-            <Box mt={1} display="flex" flexDirection="column" gap={1}>
-                {(comment.replies ?? []).filter(Boolean).map(reply => (
-                    <CommentItem key={reply._id} comment={reply} recipeId={recipeId} refresh={refresh} depth={depth + 1} handleAddComment={handleAddComment} />
-                ))}
+                    <ReplyCollapse open={formOpen}>
+                        <Box>
+                            <CommentForm
+                                key={formOpen ? "open" : "closed"}
+                                submitLabel="Odpowiedz"
+                                onSubmit={async data => {
+                                    setFormOpen(false);
+                                    await handleAddComment({
+                                        ...data,
+                                        parentId: comment._id,
+                                    });
+                                }}
+                                onCancel={() => setFormOpen(false)}
+                            />
+                        </Box>
+                    </ReplyCollapse>
+
+                    {/* 👇 REPLIES */}
+                    <Box mt={1} display="flex" flexDirection="column" gap={1}>
+                        {(comment.replies ?? []).filter(Boolean).map(reply => (
+                            <CommentItem key={reply._id} comment={reply} recipeId={recipeId} refresh={refresh} depth={depth + 1} handleAddComment={handleAddComment} />
+                        ))}
+                    </Box>
+                </Box>
             </Box>
         </Box>
     );
