@@ -1,6 +1,5 @@
-import { IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { alpha } from "@mui/material/styles";
 
 type LikeButtonProps = {
     alreadyLiked: boolean;
@@ -12,19 +11,19 @@ type LikeButtonProps = {
 
 export function LikeButton({ alreadyLiked, likesCount, isLiking, animate, onLike }: LikeButtonProps) {
     return (
-        <>
-            <Tooltip title="Polub komentarz" arrow>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Tooltip title={alreadyLiked ? "Cofnij polubienie" : "Polub komentarz"} arrow>
                 <IconButton
-                    size="small"
+                    size="medium"
                     color="primary"
                     disableRipple
                     onClick={onLike}
                     disabled={isLiking}
-                    sx={theme => ({
+                    sx={{
                         "&:hover": {
-                            backgroundColor: alpha(theme.palette.primary.light, 0.2),
+                            backgroundColor: "rgba(15, 20, 25, 0.08)",
                         },
-                    })}
+                    }}
                 >
                     <ThumbUpIcon
                         fontSize="small"
@@ -43,7 +42,18 @@ export function LikeButton({ alreadyLiked, likesCount, isLiking, animate, onLike
                 </IconButton>
             </Tooltip>
 
-            {/* <Typography variant="caption">{likesCount}</Typography> */}
-        </>
+            <Typography
+                variant="caption"
+                sx={{
+                    ml: 1,
+                    color: "text.secondary",
+                    userSelect: "none",
+                    minWidth: 18,
+                    textAlign: "left",
+                }}
+            >
+                {likesCount}
+            </Typography>
+        </Box>
     );
 }

@@ -160,8 +160,6 @@ export default function CommentItem({
                 <Box display="flex" alignItems="center" gap={1}>
                     <LikeButton alreadyLiked={alreadyLiked} likesCount={likes.length} isLiking={isLiking} animate={animateLike} onLike={handleLike} />
 
-                    <Typography variant="caption">{likes.length}</Typography>
-
                     <ReplyButton onToggle={() => setFormOpen(v => !v)} />
                 </Box>
 
