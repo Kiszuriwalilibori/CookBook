@@ -15,6 +15,9 @@ import { collapseSx } from "./commentStyles";
 export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
     const [formOpen, setFormOpen] = useState(false);
+    type ViewMode = "preview" | "expanded" | "collapsed";
+
+    const [viewMode, setViewMode] = useState<ViewMode>("preview");
 
     const formRef = useRef<HTMLDivElement | null>(null);
 
@@ -103,8 +106,21 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const isLoading = comments === null;
     const safeFlatComments = comments ?? [];
     const commentTree = buildCommentTree(safeFlatComments);
+    const visibleComments = viewMode === "expanded" ? commentTree : viewMode === "preview" ? commentTree.slice(0, 3) : [];
+    const hiddenCount = Math.max(commentTree.length - 3, 0);
+    function handleToggle() {
+        setViewMode(prev => {
+            const next = prev === "preview" ? "expanded" : prev === "expanded" ? "collapsed" : "expanded";
 
-    const hasMore = commentTree.length > 3;
+            if (prev === "expanded") {
+                document.getElementById("comments")?.scrollIntoView({
+                    behavior: "smooth",
+                });
+            }
+
+            return next;
+        });
+    }
 
     return (
         <>
@@ -137,25 +153,23 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                             </Box>
                         ) : (
                             <Box display="flex" flexDirection="column" gap={2}>
-                                {/* ENTRY CTA (desktop fallback inside section) */}
-                                {!formOpen && (
-                                    <Button variant="contained" color="primary" startIcon={<ChatBubbleOutlineIcon />} onClick={() => setFormOpen(true)}>
-                                        Dodaj komentarz
-                                    </Button>
-                                )}
-
                                 {/* FIRST COMMENTS */}
                                 <Box display="flex" flexDirection="column" gap={2}>
-                                    {commentTree.slice(0, 3).map(comment => (
+                                    {visibleComments.map(comment => (
                                         <CommentItem key={comment._id} comment={comment} recipeId={recipeId} refresh={fetchComments} handleAddComment={handleAddComment} />
                                     ))}
                                 </Box>
 
                                 {/* MORE BUTTON */}
-                                {hasMore && (
+                                {commentTree.length > 0 && (
                                     <Box textAlign="center">
-                                        <Button variant="contained" size="small">
-                                            Pokaż więcej
+                                        <Button onClick={handleToggle}>
+                                            {viewMode === "preview" && hiddenCount > 0 && `Pokaż więcej (${hiddenCount})`}
+                                            {viewMode === "preview" && hiddenCount === 0 && "Pokaż komentarze"}
+
+                                            {viewMode === "expanded" && "Zwiń komentarze"}
+
+                                            {viewMode === "collapsed" && "Pokaż komentarze"}
                                         </Button>
                                     </Box>
                                 )}
