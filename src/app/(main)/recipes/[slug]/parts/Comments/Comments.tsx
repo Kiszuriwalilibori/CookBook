@@ -14,16 +14,14 @@ import { collapseSx } from "./commentStyles";
 export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
     const [formOpen, setFormOpen] = useState(false);
+
+    const [expanded, setExpanded] = useState(false);
+    const [hasExpandedOnce, setHasExpandedOnce] = useState(false);
+
     const fingerprint = useFingerprint();
 
     const handleAddComment = useCallback(
-        async (
-            { author, content, parentId }: { author: string; content: string; parentId?: string | null },
-            options?: {
-                onSuccess?: () => void;
-                onError?: () => void;
-            }
-        ) => {
+        async ({ author, content, parentId }: { author: string; content: string; parentId?: string | null }, options?: { onSuccess?: () => void; onError?: () => void }) => {
             const tempId = crypto.randomUUID();
 
             const optimisticComment: RecipeComment = {
@@ -37,16 +35,14 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 status: "approved",
                 likes: [],
             };
+
             options?.onSuccess?.();
-            // optimistic insert
             setComments(prev => [optimisticComment, ...(prev ?? [])]);
-            console.log("ADDING COMMENT", { author, content, parentId });
+
             try {
                 const res = await fetch("/api/comments", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         recipeId,
                         content,
@@ -58,24 +54,18 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 });
 
                 const data = await res.json();
+                if (!data.ok) throw new Error();
 
-                if (!data.ok) {
-                    throw new Error();
-                }
-
-                // replace temp → real
                 setComments(prev => (prev ?? []).map(c => (c._id === tempId ? data.comment : c)));
             } catch (err) {
                 console.error("[COMMENTS][POST]", err);
-
-                // rollback
                 setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
-
                 options?.onError?.();
             }
         },
         [recipeId, fingerprint]
     );
+
     const fetchComments = useCallback(async () => {
         try {
             const res = await fetch(`/api/comments?recipeId=${recipeId}`);
@@ -95,13 +85,13 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     }, [fetchComments]);
 
     const isLoading = comments === null;
-
     const safeFlatComments = comments ?? [];
-
     const commentTree = buildCommentTree(safeFlatComments);
 
+    const hasMore = commentTree.length > 3;
+
     return (
-        <Accordion defaultExpanded={false} elevation={0}>
+        <Accordion defaultExpanded elevation={0}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="h5">Komentarze ({safeFlatComments.length})</Typography>
             </AccordionSummary>
@@ -111,15 +101,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     {formOpen ? "Anuluj" : "Dodaj komentarz"}
                 </Button>
 
-                <Collapse
-                    in={formOpen}
-                    timeout={400}
-                    sx={collapseSx}
-                    easing={{
-                        enter: "cubic-bezier(0.22, 1, 0.36, 1)",
-                        exit: "cubic-bezier(0.4, 0, 1, 1)",
-                    }}
-                >
+                <Collapse in={formOpen} timeout={400} sx={collapseSx}>
                     <CommentForm
                         key={formOpen ? "open" : "closed"}
                         submitLabel="Dodaj"
@@ -139,9 +121,44 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     </Box>
                 ) : (
                     <Box display="flex" flexDirection="column" gap={2}>
-                        {commentTree.map(comment => (
-                            <CommentItem key={comment._id} comment={comment} recipeId={recipeId} refresh={fetchComments} handleAddComment={handleAddComment} />
-                        ))}
+                        {/* 🔹 pierwsze 3 tylko na starcie */}
+                        <Collapse in={!expanded && !hasExpandedOnce}>
+                            <Box display="flex" flexDirection="column" gap={2}>
+                                {commentTree.slice(0, 3).map(comment => (
+                                    <CommentItem key={comment._id} comment={comment} recipeId={recipeId} refresh={fetchComments} handleAddComment={handleAddComment} />
+                                ))}
+                            </Box>
+                        </Collapse>
+
+                        {/* 🔹 wszystkie */}
+                        <Collapse in={expanded}>
+                            <Box display="flex" flexDirection="column" gap={2}>
+                                {commentTree.map(comment => (
+                                    <CommentItem key={comment._id} comment={comment} recipeId={recipeId} refresh={fetchComments} handleAddComment={handleAddComment} />
+                                ))}
+                            </Box>
+                        </Collapse>
+
+                        {/* 🔹 button */}
+                        {hasMore && (
+                            <Box textAlign="center">
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    size="small"
+                                    onClick={() => {
+                                        if (!expanded) {
+                                            setExpanded(true);
+                                            setHasExpandedOnce(true);
+                                        } else {
+                                            setExpanded(false);
+                                        }
+                                    }}
+                                >
+                                    {expanded ? "Zwiń komentarze" : hasExpandedOnce ? "Pokaż wszystkie" : `Pokaż więcej (${commentTree.length - 3})`}
+                                </Button>
+                            </Box>
+                        )}
                     </Box>
                 )}
             </AccordionDetails>
