@@ -37,12 +37,10 @@ export default function CommentItem({
             author,
             content,
             parentId,
-            isAuthor,
         }: {
             author: string;
             content: string;
             parentId?: string | null;
-            isAuthor: boolean;
         },
         options?:
             | {
@@ -60,7 +58,7 @@ export default function CommentItem({
     const isAuthorComment = comment.isAuthor === true;
 
     if (!comment) return null;
-    console.log("commentisauthor", comment.isAuthor, "/images/author.jpg");
+
     const isPending = comment.status === "pending";
     const alreadyLiked = likes.includes(fingerprint);
 

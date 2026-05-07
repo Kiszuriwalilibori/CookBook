@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { google } from "googleapis";
 import { analyzeComment, writeClient, checkCommentCooldown } from "@/utils";
 
 import { nanoid } from "nanoid";
@@ -25,7 +27,7 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
 
-        const { recipeId, content, author, fingerprint, parentId, website, isAuthor } = body;
+        const { recipeId, content, author, fingerprint, parentId, website } = body;
 
         // 🟢 HONEYPOT
         if (website) {
@@ -42,7 +44,18 @@ export async function POST(req: Request) {
         if (!allowed) {
             return NextResponse.json({ ok: false, reason: "Too soon" }, { status: 429 });
         }
+        const cookieStore = await cookies();
+        const token = cookieStore.get("session")?.value;
 
+        const isAdmin =
+            !!token &&
+            (await new google.auth.OAuth2()
+                .verifyIdToken({
+                    idToken: token,
+                    audience: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+                })
+                .then(t => t.getPayload()?.email?.toLowerCase() === process.env.MY_EMAIL)
+                .catch(() => false));
         const id = `comment-${nanoid()}`;
 
         // 🔥 MODERATION
@@ -62,7 +75,7 @@ export async function POST(req: Request) {
 
             content: content.trim(),
             author,
-            isAuthor,
+            isAuthor: isAdmin,
 
             createdAt: new Date().toISOString(),
             fingerprint,
@@ -73,7 +86,7 @@ export async function POST(req: Request) {
             status: "approved",
             moderationScore: result.score,
         };
-
+        console.log("isAdmin", isAdmin);
         await writeClient.create(comment);
 
         return NextResponse.json({

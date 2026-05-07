@@ -22,7 +22,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const fingerprint = useFingerprint();
 
     const handleAddComment = useCallback(
-        async ({ author, content, parentId, isAuthor }: { isAuthor: boolean; author: string; content: string; parentId?: string | null }, options?: { onSuccess?: () => void; onError?: () => void }) => {
+        async ({ author, content, parentId }: { author: string; content: string; parentId?: string | null }, options?: { onSuccess?: () => void; onError?: () => void }) => {
             const tempId = crypto.randomUUID();
 
             const optimisticComment: RecipeComment = {
@@ -30,7 +30,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 recipeId,
                 content,
                 author,
-                isAuthor,
+
                 parentId: parentId ?? null,
                 createdAt: new Date().toISOString(),
                 fingerprint: "",
@@ -49,7 +49,6 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                         recipeId,
                         content,
                         author,
-                        isAuthor,
                         parentId: parentId ?? null,
                         fingerprint,
                         website: "",

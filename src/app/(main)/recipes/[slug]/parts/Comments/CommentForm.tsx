@@ -11,7 +11,7 @@ import { Honeypot } from "./Honeypot";
 
 /* ------------------ COMPONENT ------------------ */
 
-export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel }: { onSubmit: (data: { author: string; content: string; isAuthor: boolean }) => Promise<void>; submitLabel?: string; onCancel?: () => void }) {
+export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel }: { onSubmit: (data: { author: string; content: string /*isAuthor: boolean*/ }) => Promise<void>; submitLabel?: string; onCancel?: () => void }) {
     const [author, setAuthor] = useState("");
     const [content, setContent] = useState("");
     const [errors, setErrors] = useState<string[]>([]);
@@ -64,7 +64,6 @@ export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel 
         await onSubmit({
             author: finalAuthor,
             content,
-            isAuthor,
         });
 
         setAuthor("");

@@ -11,7 +11,9 @@ export const GoogleLogoutButton = () => {
     const router = useRouter();
     const pathname = usePathname();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        // 0. Usunięcie cookie
+        await fetch("/api/logout", { method: "POST" });
         // 1. Wylogowanie
         setLoginStatus("not_logged", "wylogowanie ręczne");
 
@@ -25,14 +27,7 @@ export const GoogleLogoutButton = () => {
     if (loginStatus === "not_logged") return null;
 
     return (
-        <Button 
-            sx={logoutButtonWrapper} 
-            variant="contained" 
-            color="error" 
-            size="small" 
-            startIcon={<LogoutIcon />} 
-            onClick={handleLogout}
-        >
+        <Button sx={logoutButtonWrapper} variant="contained" color="error" size="small" startIcon={<LogoutIcon />} onClick={handleLogout}>
             Wyloguj
         </Button>
     );
