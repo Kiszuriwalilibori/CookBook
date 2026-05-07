@@ -10,7 +10,7 @@ import CommentForm from "./CommentForm";
 import { buildCommentTree } from "@/utils/buildCommentTree";
 import { useFingerprint } from "@/hooks";
 import type { RecipeComment } from "@/types";
-import { collapseSx } from "./commentStyles";
+import { collapseSx, commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
 import { useCommentsVisibility } from "./utils/useCommentsVisibility";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
@@ -138,9 +138,9 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                                 ))}
                             </Box>
                         ) : (
-                            <Box display="flex" flexDirection="column" gap={2}>
+                            <Box sx={commentsContainerSx}>
                                 {/* FIRST COMMENTS */}
-                                <Box key={viewMode} display="flex" flexDirection="column" gap={2}>
+                                <Box key={viewMode} sx={commentsListSx}>
                                     {visibleItems.map(comment => (
                                         <CommentItem key={comment._id} comment={comment} recipeId={recipeId} refresh={fetchComments} handleAddComment={handleAddComment} />
                                     ))}
@@ -148,7 +148,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
 
                                 {/* MORE BUTTON */}
                                 {hasAny && (
-                                    <Box textAlign="center">
+                                    <Box sx={showMoreButtonWrapperSx}>
                                         <Button onClick={toggleCommentsVisibility}>{buttonLabel}</Button>
                                     </Box>
                                 )}
@@ -159,32 +159,14 @@ export default function Comments({ recipeId }: { recipeId: string }) {
             </Box>
 
             {/* 🔥 MOBILE STICKY CTA */}
-            <Box
-                sx={{
-                    position: "fixed",
-                    bottom: 16,
-                    left: 0,
-                    right: 0,
-                    display: { xs: "flex", md: "none" },
-                    justifyContent: "center",
-                    zIndex: 1300,
-                }}
-            >
+            <Box sx={mobileCommentButtonWrapperSx}>
                 <Button variant="contained" color="primary" onClick={() => setFormOpen(true)}>
                     Dodaj komentarz
                 </Button>
             </Box>
 
             {/* 🔥 DESKTOP FLOATING CTA */}
-            <Box
-                sx={{
-                    position: "fixed",
-                    right: 24,
-                    bottom: 24,
-                    display: { xs: "none", md: "flex" },
-                    zIndex: 1300,
-                }}
-            >
+            <Box sx={desktopCommentButtonWrapperSx}>
                 <Button variant="contained" color="primary" startIcon={<ChatBubbleOutlineIcon />} onClick={() => setFormOpen(true)}>
                     Skomentuj
                 </Button>

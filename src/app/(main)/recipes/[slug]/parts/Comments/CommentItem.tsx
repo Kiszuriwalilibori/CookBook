@@ -12,6 +12,7 @@ import { ReplyButton } from "./replyButton";
 import ReplyCollapse from "./ReplyCollapse";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
+import { authorAvatarSx, authorChipSx, commentActionsSx, commentCardSx, commentContentWrapperSx, commentDateSx, commentHeaderSx, commentWrapperSx, repliesContainerSx, threadLineSx } from "./commentStyles";
 
 function formatDate(date: string) {
     return new Intl.DateTimeFormat("pl-PL", {
@@ -98,62 +99,24 @@ export default function CommentItem({
         }
     }
     return (
-        <Box
-            sx={{
-                position: "relative",
-                display: "flex",
-                ml: depth > 0 ? 2 : 0,
-            }}
-        >
+        <Box sx={commentWrapperSx(depth)}>
             {/* 🌲 vertical thread line */}
-            {depth > 0 && (
-                <Box
-                    sx={{
-                        position: "absolute",
-                        left: 0,
-                        top: 0,
-                        bottom: 0,
-                        width: "2px",
-                        bgcolor: "divider",
-                        borderRadius: 1,
-                    }}
-                />
-            )}
+            {depth > 0 && <Box sx={threadLineSx} />}
 
             {/* 📦 content wrapper */}
-            <Box
-                sx={{
-                    flex: 1,
-                    pl: depth > 0 ? 2 : 0,
-                }}
-            >
+            <Box sx={commentContentWrapperSx(depth)}>
                 {/* 🧱 card */}
-                <Box
-                    sx={{
-                        p: 1.5,
-                        borderRadius: 2,
-                        border: "1px solid",
-                        borderColor: "divider",
-                        backgroundColor: depth === 0 ? "background.paper" : "action.hover",
-                        transition: "background 0.2s ease",
-                        position: "relative",
-                    }}
-                >
-                    {/* 👇 TWOJA ORYGINALNA ZAWARTOŚĆ (bez zmian) */}
-
-                    {/* <Typography variant="body2" mb={1}>
-                        <strong>{comment.author}</strong> w dniu {formatDate(comment.createdAt)} napisał:
-                    </Typography> */}
-                    <Box display="flex" alignItems="center" gap={1} mb={1}>
-                        {isAuthorComment && <Avatar src="/images/author.jpg" alt="Piotr" sx={{ width: 28, height: 28 }} />}
+                <Box sx={commentCardSx(depth)}>
+                    <Box sx={commentHeaderSx}>
+                        {isAuthorComment && <Avatar src="/images/author.jpg" alt="Piotr" sx={authorAvatarSx} />}
 
                         <Typography variant="body2">
                             <strong>{comment.author}</strong>
                         </Typography>
 
-                        {isAuthorComment && <Chip label="Autor" size="small" color="primary" sx={{ height: 20, fontSize: 11 }} />}
+                        {isAuthorComment && <Chip label="Autor" size="small" color="primary" sx={authorChipSx} />}
 
-                        <Typography variant="caption" sx={{ ml: 0.5 }}>
+                        <Typography variant="caption" sx={commentDateSx}>
                             {formatDate(comment.createdAt)}
                         </Typography>
                     </Box>
@@ -167,7 +130,7 @@ export default function CommentItem({
                         </Typography>
                     )}
 
-                    <Box display="flex" alignItems="center" gap={1}>
+                    <Box sx={commentActionsSx}>
                         <LikeButton alreadyLiked={alreadyLiked} likesCount={likes.length} isLiking={isLiking} animate={animateLike} onLike={handleLike} />
 
                         <ReplyButton onToggle={() => setFormOpen(v => !v)} />
@@ -191,7 +154,7 @@ export default function CommentItem({
                     </ReplyCollapse>
 
                     {/* 👇 REPLIES */}
-                    <Box mt={1} display="flex" flexDirection="column" gap={1}>
+                    <Box sx={repliesContainerSx}>
                         {(comment.replies ?? []).filter(Boolean).map(reply => (
                             <CommentItem key={reply._id} comment={reply} recipeId={recipeId} refresh={refresh} depth={depth + 1} handleAddComment={handleAddComment} />
                         ))}
