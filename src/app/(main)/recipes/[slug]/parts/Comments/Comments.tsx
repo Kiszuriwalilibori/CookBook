@@ -8,7 +8,7 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import CommentItem from "./CommentItem";
 import CommentForm from "./CommentForm";
 import { buildCommentTree } from "@/utils/buildCommentTree";
-import { useFingerprint } from "@/hooks";
+import { useFingerprint, useMessage } from "@/hooks";
 import type { RecipeComment } from "@/types";
 import { collapseSx, commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
 import { useCommentsVisibility } from "./utils/useCommentsVisibility";
@@ -16,6 +16,7 @@ import { useCommentsVisibility } from "./utils/useCommentsVisibility";
 export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
     const [formOpen, setFormOpen] = useState(false);
+    const showMessage = useMessage();
 
     const formRef = useRef<HTMLDivElement | null>(null);
 
@@ -56,6 +57,13 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 });
 
                 const data = await res.json();
+                // 🔥 NOWE: zbyt szybkie próby
+                if (res.status === 429 || data?.reason === "Too soon") {
+                    showMessage.warning("Dodajesz komentarze zbyt szybko. Spróbuj ponownie za chwilę.");
+                    setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
+                    options?.onError?.();
+                    return;
+                }
                 if (!data.ok) throw new Error();
 
                 setComments(prev => (prev ?? []).map(c => (c._id === tempId ? data.comment : c)));
