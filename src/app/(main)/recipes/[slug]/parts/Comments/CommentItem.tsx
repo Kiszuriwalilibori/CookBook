@@ -21,35 +21,28 @@ function formatDate(date: string) {
     }).format(new Date(date));
 }
 
-export default function CommentItem({
-    comment,
-    recipeId,
-    refresh,
-    depth = 0,
-    handleAddComment,
-}: {
+type AddCommentPayload = {
+    author: string;
+    content: string;
+    parentId?: string | null;
+};
+
+type AddCommentOptions = {
+    onSuccess?: () => void;
+    onError?: () => void;
+};
+
+type HandleAddComment = (payload: AddCommentPayload, options?: AddCommentOptions) => Promise<void>;
+
+interface CommentItemProps {
     comment: RecipeComment;
     recipeId: string;
     refresh: () => void;
     depth?: number;
-    handleAddComment: (
-        {
-            author,
-            content,
-            parentId,
-        }: {
-            author: string;
-            content: string;
-            parentId?: string | null;
-        },
-        options?:
-            | {
-                  onSuccess?: (() => void) | undefined;
-                  onError?: (() => void) | undefined;
-              }
-            | undefined
-    ) => Promise<void>;
-}) {
+    handleAddComment: HandleAddComment;
+}
+
+export default function CommentItem({ comment, recipeId, refresh, depth = 0, handleAddComment }: CommentItemProps) {
     const [formOpen, setFormOpen] = useState(false);
     const [likes, setLikes] = useState<string[]>(comment.likes);
     const [isLiking, setIsLiking] = useState(false);

@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import { Box, ThemeProvider } from "@mui/material";
 import theme from "@/themes/theme";
-import { Footer, Header } from "@/components";
+import { Footer, Header, Providers } from "@/components";
 import { headers } from "next/headers";
 import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
@@ -34,17 +34,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     return (
         <html lang="pl" suppressHydrationWarning={true}>
             <body className={inter.className}>
-                <AppRouterCacheProvider>
-                    <ThemeProvider theme={theme}>
-                        <Box sx={layoutContainerStyles}>
-                            <Header initialSummary={summary} fetchError={fetchError} />
-                            <Box component="main" sx={mainContentStyles}>
-                                {children}
+                <Providers>
+                    <AppRouterCacheProvider>
+                        <ThemeProvider theme={theme}>
+                            <Box sx={layoutContainerStyles}>
+                                <Header initialSummary={summary} fetchError={fetchError} />
+                                <Box component="main" sx={mainContentStyles}>
+                                    {children}
+                                </Box>
+                                <Footer />
                             </Box>
-                            <Footer />
-                        </Box>
-                    </ThemeProvider>
-                </AppRouterCacheProvider>
+                        </ThemeProvider>
+                    </AppRouterCacheProvider>
+                </Providers>
             </body>
         </html>
     );

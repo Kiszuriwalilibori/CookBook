@@ -60,7 +60,7 @@ export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel 
             );
             return;
         }
-        console.log("isAuthor from form", isAuthor);
+
         await onSubmit({
             author: finalAuthor,
             content,

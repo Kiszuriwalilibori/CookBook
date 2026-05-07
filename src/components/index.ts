@@ -10,5 +10,6 @@ import Carousel from "./Carousel/Carousel";
 import RecipeNotesModal from "./RecipeNotesModal/RecipeNotesModal";
 import LatestRecipesSection from "./LatestRecipesSection/LatestRecipesSection";
 import TopRatedRecipesSection from "./TopRatedRecipesSection";
+import Providers from "./AppProvider";
 
-export { ConfirmRemoveDialog, TopRatedRecipesSection, LatestRecipesSection, RecipeNotesModal, Footer, Header, Carousel, Menu, PageTitle, RecipeCard, RecipeFilters, Separator };
+export { ConfirmRemoveDialog, Providers, TopRatedRecipesSection, LatestRecipesSection, RecipeNotesModal, Footer, Header, Carousel, Menu, PageTitle, RecipeCard, RecipeFilters, Separator };
