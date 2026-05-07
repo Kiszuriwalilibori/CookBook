@@ -8,9 +8,10 @@ import { useIsAdminLogged } from "@/stores";
 import { errorMessages, validateComment } from "./utils";
 import { paperSx, textFieldSx, submitButtonSx } from "./commentStyles";
 import { Honeypot } from "./Honeypot";
+
 /* ------------------ COMPONENT ------------------ */
 
-export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel }: { onSubmit: (data: { author: string; content: string }) => Promise<void>; submitLabel?: string; onCancel?: () => void }) {
+export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel }: { onSubmit: (data: { author: string; content: string; isAuthor: boolean }) => Promise<void>; submitLabel?: string; onCancel?: () => void }) {
     const [author, setAuthor] = useState("");
     const [content, setContent] = useState("");
     const [errors, setErrors] = useState<string[]>([]);
@@ -45,7 +46,8 @@ export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel 
 
         const finalAuthor = isAdminLogged ? "Piotr" : author.trim();
         if (!finalAuthor) return;
-
+        const isAuthor = isAdminLogged;
+        console.log("isAuthor from form", isAuthor);
         const result = validateComment({
             author: finalAuthor,
             content,
@@ -58,10 +60,11 @@ export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel 
             );
             return;
         }
-
+        console.log("isAuthor from form", isAuthor);
         await onSubmit({
             author: finalAuthor,
             content,
+            isAuthor,
         });
 
         setAuthor("");
@@ -77,9 +80,41 @@ export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel 
             <Box sx={{ position: "relative" }}>
                 {/* 🟢 honeypot – NIE RUSZAMY */}
                 <Honeypot />
-                {!isAdminLogged && <TextField autoComplete="off" fullWidth size="small" label="Przedstaw się" value={author} onChange={e => setAuthor(e.target.value)} color="secondary" sx={textFieldSx} />}
+                {!isAdminLogged && (
+                    <TextField
+                        slotProps={{
+                            htmlInput: {
+                                "aria-label": "Imię autora komentarza",
+                            },
+                        }}
+                        autoComplete="off"
+                        fullWidth
+                        size="small"
+                        label="Przedstaw się"
+                        value={author}
+                        onChange={e => setAuthor(e.target.value)}
+                        color="secondary"
+                        sx={textFieldSx}
+                    />
+                )}
 
-                <TextField fullWidth multiline autoComplete="off" minRows={3} size="small" label="Komentarz" value={content} onChange={e => setContent(e.target.value)} color="secondary" sx={textFieldSx} />
+                <TextField
+                    slotProps={{
+                        htmlInput: {
+                            "aria-label": "Treść komentarza",
+                        },
+                    }}
+                    fullWidth
+                    multiline
+                    autoComplete="off"
+                    minRows={3}
+                    size="small"
+                    label="Komentarz"
+                    value={content}
+                    onChange={e => setContent(e.target.value)}
+                    color="secondary"
+                    sx={textFieldSx}
+                />
                 <Box display="flex" flexDirection={{ xs: "column-reverse", sm: "row" }} justifyContent={{ xs: "stretch", sm: "space-evenly" }} alignItems="center" gap={1} mt={1}>
                     <Button fullWidth variant="contained" onClick={handleSubmit} disabled={baseDisabled || validationFailed} sx={submitButtonSx}>
                         {submitLabel}

@@ -30,6 +30,11 @@ export default {
       type: 'string',
       validation: (Rule: Rule) => Rule.required(),
     },
+    {
+      name: 'isAuthor',
+      type: 'boolean',
+      initialValue: false,
+    },
 
     {
       name: 'createdAt',

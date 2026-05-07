@@ -1,51 +1,3 @@
-// TODO Jeśli chcesz, mogę dorzucić jeszcze:
-// 👉
-// prosty backend guard typu „1 like per fingerprint” (Mongo / Prisma)
-// Masz teraz dwa źródła prawdy dla autora:
-
-// frontend (input / admin override)
-// backend (brak walidacji autora poza required)
-
-// Jeśli chcesz poziom wyżej (bardziej „production-grade”), to:
-
-// admin author = enforce na backendzie (np. z cookie / session)
-// frontend tylko UX
-
-// Na teraz to, co masz, jest w pełni OK.
-
-// Jeśli chcesz,
-// mogę Ci w kolejnym kroku pokazać wersję, gdzie:
-
-// admin jest rozpoznawany backendowo
-// i nie da się spoofować "Piotr" z frontu (to jedyny realny loophole w obecnym setupie)
-
-// Jeśli będziesz chciał, mogę w następnym kroku:
-
-// spiąć honeypot tak, żeby działał bez document.getElementById
-// albo
-// dorzucić walidację + UX typu „disabled + loading + error inline”
-
-//todo Jeśli chcesz, mogę Ci dorzucić wersję z optimistic updates pod Twój konkretny stan komentarzy.Ta uwaga dotyczy useDebounceCallback.
-
-// TODO:Opcjonalne ulepszenie (polecane)
-
-// Jeśli chcesz UX na poziomie „pro”:
-
-// Optimistic update + debounce request
-
-// Czyli:
-
-// natychmiast zwiększasz licznik w UI
-// debounce wysyła request
-// w razie błędu rollback
-
-// To eliminuje „lag kliknięcia”. komentarze od todo dotyczą sytuacji po wstawieniu debounced
-//todo: Jeśli chcesz,
-// mogę Ci jeszcze pokazać upgrade, który rozwiązuje większy problem architektoniczny tutaj:
-
-// 👉
-// debounce + optimistic update + refresh bez race condition
-// bo przy like/unlike w React + fetch możesz mieć subtelne bugi przy szybkich klikach.
 "use client";
 
 import { useState } from "react";
@@ -58,6 +10,8 @@ import CommentForm from "./CommentForm";
 import { LikeButton } from "./likeButton";
 import { ReplyButton } from "./replyButton";
 import ReplyCollapse from "./ReplyCollapse";
+import Avatar from "@mui/material/Avatar";
+import Chip from "@mui/material/Chip";
 
 function formatDate(date: string) {
     return new Intl.DateTimeFormat("pl-PL", {
@@ -82,10 +36,12 @@ export default function CommentItem({
             author,
             content,
             parentId,
+            isAuthor,
         }: {
             author: string;
             content: string;
             parentId?: string | null;
+            isAuthor: boolean;
         },
         options?:
             | {
@@ -100,9 +56,10 @@ export default function CommentItem({
     const [isLiking, setIsLiking] = useState(false);
     const [animateLike, setAnimateLike] = useState(false);
     const fingerprint = useFingerprint();
+    const isAuthorComment = comment.isAuthor === true;
 
     if (!comment) return null;
-
+    console.log("commentisauthor", comment.isAuthor, "/images/author.jpg");
     const isPending = comment.status === "pending";
     const alreadyLiked = likes.includes(fingerprint);
 
@@ -184,10 +141,22 @@ export default function CommentItem({
                 >
                     {/* 👇 TWOJA ORYGINALNA ZAWARTOŚĆ (bez zmian) */}
 
-                    <Typography variant="body2" mb={1}>
+                    {/* <Typography variant="body2" mb={1}>
                         <strong>{comment.author}</strong> w dniu {formatDate(comment.createdAt)} napisał:
-                    </Typography>
+                    </Typography> */}
+                    <Box display="flex" alignItems="center" gap={1} mb={1}>
+                        {isAuthorComment && <Avatar src="/images/author.jpg" alt="Piotr" sx={{ width: 28, height: 28 }} />}
 
+                        <Typography variant="body2">
+                            <strong>{comment.author}</strong>
+                        </Typography>
+
+                        {isAuthorComment && <Chip label="Autor" size="small" color="primary" sx={{ height: 20, fontSize: 11 }} />}
+
+                        <Typography variant="caption" sx={{ ml: 0.5 }}>
+                            {formatDate(comment.createdAt)}
+                        </Typography>
+                    </Box>
                     <Typography variant="body2" mb={1}>
                         {comment.content}
                     </Typography>

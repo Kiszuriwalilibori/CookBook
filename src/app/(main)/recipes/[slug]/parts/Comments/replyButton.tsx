@@ -4,12 +4,15 @@ import { alpha } from "@mui/material/styles";
 
 type ReplyButtonProps = {
     onToggle: () => void;
+    expanded?: boolean;
 };
 
-export function ReplyButton({ onToggle }: ReplyButtonProps) {
+export function ReplyButton({ onToggle, expanded }: ReplyButtonProps) {
     return (
         <Tooltip title="Odpowiedz na komentarz" arrow>
             <IconButton
+                aria-label="Odpowiedz na komentarz"
+                aria-expanded={expanded}
                 size="small"
                 color="primary"
                 disableRipple

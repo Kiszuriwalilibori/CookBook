@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
 
-        const { recipeId, content, author, fingerprint, parentId, website } = body;
+        const { recipeId, content, author, fingerprint, parentId, website, isAuthor } = body;
 
         // 🟢 HONEYPOT
         if (website) {
@@ -63,6 +63,7 @@ export async function POST(req: Request) {
 
             content: content.trim(),
             author,
+            isAuthor,
 
             createdAt: new Date().toISOString(),
             fingerprint,

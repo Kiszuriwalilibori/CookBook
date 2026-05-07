@@ -85,6 +85,7 @@ export function LikeButton({ alreadyLiked, likesCount, isLiking, animate, onLike
         <Box sx={{ display: "flex", alignItems: "center" }}>
             <Tooltip title={alreadyLiked ? "Cofnij polubienie" : "Polub komentarz"} arrow>
                 <IconButton
+                    aria-label={alreadyLiked ? "Cofnij polubienie komentarza" : "Polub komentarz"}
                     size="medium"
                     color="primary"
                     disableRipple
