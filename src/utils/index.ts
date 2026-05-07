@@ -14,5 +14,26 @@ import { searchRecipeByTitle } from "./searchRecipeByTitle";
 import { verifyGoogle } from "./googleAuth";
 import { writeClient } from "./writeClient";
 import { getUserRecipeNote } from "./getUserRecipeNote";
+import { checkCommentCooldown } from "./comments/commentRateLimit";
+import { analyzeComment } from "./perspective";
 
-export { buildFilterClause, client, fetchSummary, getUserRecipeNote, generateRecipeMetadata, getFavoriteRecipesForSSR, getOptions, getRecipeById, getRecipeBySlug, getRecipesForCards, getSessionUser, getUserFavorites, getUserFromCookies, searchRecipeByTitle, verifyGoogle, writeClient };
+export {
+    analyzeComment,
+    buildFilterClause,
+    client,
+    checkCommentCooldown,
+    fetchSummary,
+    getUserRecipeNote,
+    generateRecipeMetadata,
+    getFavoriteRecipesForSSR,
+    getOptions,
+    getRecipeById,
+    getRecipeBySlug,
+    getRecipesForCards,
+    getSessionUser,
+    getUserFavorites,
+    getUserFromCookies,
+    searchRecipeByTitle,
+    verifyGoogle,
+    writeClient,
+};

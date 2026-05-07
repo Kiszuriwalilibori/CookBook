@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { writeClient } from "@/utils";
-import { checkCommentCooldown } from "@/utils/comments/commentRateLimit";
+import { analyzeComment, writeClient, checkCommentCooldown } from "@/utils";
+
 import { nanoid } from "nanoid";
-import { analyzeComment } from "@/utils/perspective";
 
 export async function GET(req: Request) {
     try {
