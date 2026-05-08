@@ -58,18 +58,34 @@ export default function Comments({ recipeId }: { recipeId: string }) {
 
                 const data = await res.json();
                 // 🔥 NOWE: zbyt szybkie próby
-                if (res.status === 429 || data?.reason === "Too soon") {
-                    showMessage.warning("Dodajesz komentarze zbyt szybko. Spróbuj ponownie za chwilę.");
+                if (!data.ok && data?.error?.code === "COMMENT_COOLDOWN") {
+                    showMessage.warning(data.error.message);
                     setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
                     options?.onError?.();
                     return;
                 }
-                if (!data.ok) throw new Error();
+                if (!data.ok && data?.error?.code === "COMMENT_REJECTED") {
+                    showMessage.error(data.error.message);
+                    setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
+                    options?.onError?.();
+                    return;
+                }
 
+                if (!data.ok) {
+                    throw new Error(data?.error?.message || "Unknown error");
+                }
                 setComments(prev => (prev ?? []).map(c => (c._id === tempId ? data.comment : c)));
             } catch (err) {
-                console.error("[COMMENTS][POST]", err);
+                console.error("[COMMENTS][POST]", {
+                    error: err,
+                    recipeId,
+                    parentId,
+                });
+
+                showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
+
                 setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
+
                 options?.onError?.();
             }
         },

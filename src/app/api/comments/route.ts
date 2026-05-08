@@ -42,7 +42,16 @@ export async function POST(req: Request) {
         const { allowed } = await checkCommentCooldown({ recipeId, fingerprint, parentId: parentId ?? null });
 
         if (!allowed) {
-            return NextResponse.json({ ok: false, reason: "Too soon" }, { status: 429 });
+            return NextResponse.json(
+                {
+                    ok: false,
+                    error: {
+                        code: "COMMENT_COOLDOWN",
+                        message: "Niedawno komentowałeś, odczekaj chwilę",
+                    },
+                },
+                { status: 429 }
+            );
         }
         const cookieStore = await cookies();
         const token = cookieStore.get("session")?.value;
@@ -63,7 +72,16 @@ export async function POST(req: Request) {
         const isApproved = result.valid;
 
         if (!isApproved) {
-            return NextResponse.json({ ok: false, reason: "rejected" }, { status: 400 });
+            return NextResponse.json(
+                {
+                    ok: false,
+                    error: {
+                        code: "COMMENT_REJECTED",
+                        message: "Komentarz nie przeszedł moderacji",
+                    },
+                },
+                { status: 400 }
+            );
         }
 
         const comment = {
