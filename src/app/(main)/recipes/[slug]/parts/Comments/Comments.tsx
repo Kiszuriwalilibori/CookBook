@@ -15,8 +15,15 @@ import { useCommentsVisibility } from "./utils/useCommentsVisibility";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
+    const [accordionOpen, setAccordionOpen] = useState(true);
     const [formOpen, setFormOpen] = useState(false);
     const showMessage = useMessage();
+
+    const openCommentForm = () => {
+        setFormOpen(true);
+
+        setAccordionOpen(true);
+    };
 
     const formRef = useRef<HTMLDivElement | null>(null);
 
@@ -88,7 +95,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 options?.onError?.();
             }
         },
-        [recipeId, fingerprint, showMessage]
+        [recipeId, fingerprint]
     );
 
     const fetchComments = useCallback(async () => {
@@ -123,7 +130,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
             setComments([]);
             showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
         }
-    }, [recipeId, showMessage]);
+    }, [recipeId]);
 
     useEffect(() => {
         fetchComments();
@@ -148,12 +155,12 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const isLoading = comments === null;
     const safeFlatComments = comments ?? [];
     const commentTree = buildCommentTree(safeFlatComments);
-    const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny } = useCommentsVisibility(commentTree, 3);
+    const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny /*, setViewMode*/ } = useCommentsVisibility(commentTree, 3);
 
     return (
         <>
             <Box id="comments">
-                <Accordion defaultExpanded elevation={0}>
+                <Accordion expanded={accordionOpen} onChange={(_, expanded) => setAccordionOpen(expanded)} elevation={0}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography variant="h5">Komentarze ({safeFlatComments.length})</Typography>
                     </AccordionSummary>
@@ -191,7 +198,9 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                                 {/* MORE BUTTON */}
                                 {hasAny && (
                                     <Box sx={showMoreButtonWrapperSx}>
-                                        <Button onClick={toggleCommentsVisibility}>{buttonLabel}</Button>
+                                        <Button variant="contained" onClick={toggleCommentsVisibility}>
+                                            {buttonLabel}
+                                        </Button>
                                     </Box>
                                 )}
                             </Box>
@@ -202,14 +211,14 @@ export default function Comments({ recipeId }: { recipeId: string }) {
 
             {/* 🔥 MOBILE STICKY CTA */}
             <Box sx={mobileCommentButtonWrapperSx}>
-                <Button variant="contained" color="primary" onClick={() => setFormOpen(true)}>
+                <Button variant="contained" color="primary" onClick={openCommentForm}>
                     Dodaj komentarz
                 </Button>
             </Box>
 
             {/* 🔥 DESKTOP FLOATING CTA */}
             <Box sx={desktopCommentButtonWrapperSx}>
-                <Button variant="contained" color="primary" startIcon={<ChatBubbleOutlineIcon />} onClick={() => setFormOpen(true)}>
+                <Button variant="contained" color="primary" startIcon={<ChatBubbleOutlineIcon />} onClick={openCommentForm}>
                     Skomentuj
                 </Button>
             </Box>

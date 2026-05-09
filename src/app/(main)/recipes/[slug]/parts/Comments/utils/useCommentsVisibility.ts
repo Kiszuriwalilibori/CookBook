@@ -40,6 +40,7 @@ export function useCommentsVisibility<T>(items: T[], previewCount = 3) {
         toggleCommentsVisibility,
         buttonLabel,
         hasAny: items.length > 0,
+        setViewMode,
     };
 }
 export default useCommentsVisibility;
