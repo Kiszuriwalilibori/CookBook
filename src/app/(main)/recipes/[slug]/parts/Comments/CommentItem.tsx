@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 
 import { RecipeComment } from "@/types";
-import { useFingerprint } from "@/hooks";
+import { useFingerprint, useMessage } from "@/hooks";
 import CommentForm from "./CommentForm";
 import { LikeButton } from "./likeButton";
 import { ReplyButton } from "./replyButton";
@@ -48,6 +48,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
     const [isLiking, setIsLiking] = useState(false);
     const [animateLike, setAnimateLike] = useState(false);
     const fingerprint = useFingerprint();
+    const showMessage = useMessage();
     const isAuthorComment = comment.isAuthor === true;
 
     if (!comment) return null;
@@ -71,7 +72,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
         setLikes(prev => (wasLiked ? prev.filter(id => id !== fingerprint) : [...prev, fingerprint]));
 
         try {
-            await fetch("/api/comments", {
+            const res = await fetch("/api/comments", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -79,12 +80,38 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
                     fingerprint,
                 }),
             });
-            refresh();
-        } catch (err) {
-            console.error("[LIKE][ERROR]", err);
+            const data = await res.json();
+            if (!data.ok && data?.error?.code === "COMMENT_NOT_FOUND") {
+                showMessage.error(data.error.message);
+                setLikes(prevLikes);
+                return;
+            }
 
-            // rollback
+            if (!data.ok && data?.error?.code === "INVALID_INPUT") {
+                showMessage.warning(data.error.message);
+                setLikes(prevLikes);
+                return;
+            }
+
+            if (!data.ok && data?.error?.code === "INTERNAL_ERROR") {
+                showMessage.error(data.error.message);
+                setLikes(prevLikes);
+                return;
+            }
+
+            if (!data.ok) {
+                showMessage.error("Nie udało się polubić komentarza");
+                setLikes(prevLikes);
+                return;
+            }
+
+            // success
+
+            setLikes(data.data.likes);
+        } catch (err: unknown) {
+            console.error("[COMMENTS][PATCH]", err);
             setLikes(prevLikes);
+            showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
         } finally {
             setIsLiking(false);
         }
