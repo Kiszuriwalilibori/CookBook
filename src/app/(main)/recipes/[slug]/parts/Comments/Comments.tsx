@@ -57,7 +57,6 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 });
 
                 const data = await res.json();
-                // 🔥 NOWE: zbyt szybkie próby
                 if (!data.ok && data?.error?.code === "COMMENT_COOLDOWN") {
                     showMessage.warning(data.error.message);
                     setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
@@ -89,22 +88,42 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 options?.onError?.();
             }
         },
-        [recipeId, fingerprint]
+        [recipeId, fingerprint, showMessage]
     );
 
     const fetchComments = useCallback(async () => {
         try {
             const res = await fetch(`/api/comments?recipeId=${recipeId}`);
             const data = await res.json();
+            if (!data.ok) {
+                switch (data?.error?.code) {
+                    case "MISSING_RECIPE_ID":
+                        showMessage.warning(data.error.message);
+                        break;
 
-            const safeComments: RecipeComment[] = Array.isArray(data.comments) ? data.comments.filter(Boolean) : [];
+                    case "FETCH_COMMENTS_FAILED":
+                        showMessage.error(data.error.message);
+                        break;
+
+                    default:
+                        showMessage.error("Wystąpił nieznany błąd");
+                }
+
+                setComments([]);
+                return;
+            }
+            const safeComments: RecipeComment[] = Array.isArray(data.data.comments) ? data.data.comments.filter(Boolean) : [];
 
             setComments(safeComments);
         } catch (err) {
-            console.error("[COMMENTS][FETCH]", err);
+            console.error("[COMMENTS][GET]", {
+                error: err,
+                recipeId,
+            });
             setComments([]);
+            showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
         }
-    }, [recipeId]);
+    }, [recipeId, showMessage]);
 
     useEffect(() => {
         fetchComments();

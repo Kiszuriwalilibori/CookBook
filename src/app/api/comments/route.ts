@@ -10,16 +10,39 @@ export async function GET(req: Request) {
         const { searchParams } = new URL(req.url);
         const recipeId = searchParams.get("recipeId");
 
-        if (!recipeId) {
-            return NextResponse.json({ error: "Missing recipeId" }, { status: 400 });
-        }
+        if (!recipeId)
+            return NextResponse.json(
+                {
+                    ok: false,
+                    error: {
+                        code: "MISSING_RECIPE_ID",
+                        message: "Nie znaleziono przepisu, który chcesz skomentować",
+                    },
+                },
+                { status: 400 }
+            );
 
         const comments = await writeClient.fetch(`*[_type=="recipeComment" && recipeId==$recipeId && status=="approved"] | order(createdAt desc)`, { recipeId });
 
-        return NextResponse.json({ comments });
+        return NextResponse.json(
+            {
+                ok: true,
+                data: { comments },
+            },
+            { status: 200 }
+        );
     } catch (err) {
         console.error("[COMMENTS][GET]", err);
-        return NextResponse.json({ error: "Failed to fetch comments" }, { status: 500 });
+        return NextResponse.json(
+            {
+                ok: false,
+                error: {
+                    code: "FETCH_COMMENTS_FAILED",
+                    message: "Nie udało się pobrać komentarzy",
+                },
+            },
+            { status: 500 }
+        );
     }
 }
 
