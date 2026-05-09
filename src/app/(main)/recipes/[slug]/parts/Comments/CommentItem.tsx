@@ -13,6 +13,7 @@ import ReplyCollapse from "./ReplyCollapse";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import { authorAvatarSx, authorChipSx, commentActionsSx, commentCardSx, commentContentWrapperSx, commentDateSx, commentHeaderSx, commentWrapperSx, repliesContainerSx, threadLineSx } from "./commentStyles";
+import { handleApiError } from "./utils/handleError";
 
 function formatDate(date: string) {
     return new Intl.DateTimeFormat("pl-PL", {
@@ -81,33 +82,23 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
                 }),
             });
             const data = await res.json();
-            if (!data.ok && data?.error?.code === "COMMENT_NOT_FOUND") {
-                showMessage.error(data.error.message);
-                setLikes(prevLikes);
-                return;
-            }
-
-            if (!data.ok && data?.error?.code === "INVALID_INPUT") {
-                showMessage.warning(data.error.message);
-                setLikes(prevLikes);
-                return;
-            }
-
-            if (!data.ok && data?.error?.code === "INTERNAL_ERROR") {
-                showMessage.error(data.error.message);
-                setLikes(prevLikes);
-                return;
-            }
-
             if (!data.ok) {
-                showMessage.error("Nie udało się polubić komentarza");
                 setLikes(prevLikes);
+
+                handleApiError(
+                    data.error,
+                    {
+                        COMMENT_NOT_FOUND: msg => showMessage.error(msg),
+                        INVALID_INPUT: msg => showMessage.warning(msg),
+                        INTERNAL_ERROR: msg => showMessage.error(msg),
+                    },
+                    msg => showMessage.error(msg)
+                );
+
                 return;
+            } else {
+                setLikes(data.data.likes);
             }
-
-            // success
-
-            setLikes(data.data.likes);
         } catch (err: unknown) {
             console.error("[COMMENTS][PATCH]", err);
             setLikes(prevLikes);
