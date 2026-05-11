@@ -1,18 +1,20 @@
-import { IconButton, Tooltip } from "@mui/material";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import { Button /*, IconButton, Tooltip */ } from "@mui/material";
+// import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import ReplyIcon from "@mui/icons-material/Reply";
 import { replyButtonSx } from "./commentStyles";
 
 type ReplyButtonProps = {
     onToggle: () => void;
     expanded?: boolean;
+    commentId: string;
+    author: string;
 };
 
-export function ReplyButton({ onToggle, expanded }: ReplyButtonProps) {
+export function ReplyButton({ onToggle, expanded, commentId, author }: ReplyButtonProps) {
     return (
-        <Tooltip title="Odpowiedz na komentarz" arrow>
-            <IconButton aria-label="Odpowiedz na komentarz" aria-expanded={expanded} size="small" color="primary" disableRipple onClick={onToggle} sx={replyButtonSx}>
-                <ChatBubbleOutlineIcon fontSize="small" />
-            </IconButton>
-        </Tooltip>
+        <Button size="small" aria-label={`Reply to comment by ${author}`} aria-expanded={expanded} aria-controls={`reply-form-${commentId}`} color="primary" disableRipple onClick={onToggle} sx={replyButtonSx} startIcon={<ReplyIcon />}>
+            Odpowiedz
+        </Button>
     );
 }
+export default ReplyButton;

@@ -1,25 +1,33 @@
 "use client";
-
-import { useState } from "react";
+import { /* useRef,*/ useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 
 import { RecipeComment } from "@/types";
 import { useFingerprint, useMessage } from "@/hooks";
 import CommentForm from "./CommentForm";
-import { LikeButton } from "./likeButton";
-import { ReplyButton } from "./replyButton";
+import { LikeButton } from "./LikeButton";
+import { ReplyButton } from "./ReplyButton";
 import ReplyCollapse from "./ReplyCollapse";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import { authorAvatarSx, authorChipSx, commentActionsSx, commentCardSx, commentContentWrapperSx, commentDateSx, commentHeaderSx, commentWrapperSx, repliesContainerSx, threadLineSx } from "./commentStyles";
 import { handleApiError } from "./utils/handleError";
 
-function formatDate(date: string) {
-    return new Intl.DateTimeFormat("pl-PL", {
-        dateStyle: "short",
-        timeStyle: "short",
-    }).format(new Date(date));
+function formatRelativeTime(date: string) {
+    const now = new Date();
+    const created = new Date(date);
+
+    const diff = now.getTime() - created.getTime();
+
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (minutes < 1) return "teraz";
+    if (minutes < 60) return `${minutes} min temu`;
+    if (hours < 24) return `${hours} godz. temu`;
+    return `${days} dni temu`;
 }
 
 type AddCommentPayload = {
@@ -51,6 +59,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
     const fingerprint = useFingerprint();
     const showMessage = useMessage();
     const isAuthorComment = comment.isAuthor === true;
+    // const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     if (!comment) return null;
 
@@ -108,7 +117,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
         }
     }
     return (
-        <Box sx={commentWrapperSx(depth)}>
+        <Box sx={commentWrapperSx(depth)} id={`comment-${comment._id}`}>
             {/* 🌲 vertical thread line */}
             {depth > 0 && <Box sx={threadLineSx} />}
 
@@ -119,17 +128,17 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
                     <Box sx={commentHeaderSx}>
                         {isAuthorComment && <Avatar src="/images/author.jpg" alt="Piotr" sx={authorAvatarSx} />}
 
-                        <Typography variant="body2">
+                        <Typography variant="body1">
                             <strong>{comment.author}</strong>
                         </Typography>
 
                         {isAuthorComment && <Chip label="Autor" size="small" color="primary" sx={authorChipSx} />}
 
                         <Typography variant="caption" sx={commentDateSx}>
-                            {formatDate(comment.createdAt)}
+                            {formatRelativeTime(comment.createdAt)}
                         </Typography>
                     </Box>
-                    <Typography variant="body2" mb={1}>
+                    <Typography variant="body1" sx={{ mb: 0.5 }}>
                         {comment.content}
                     </Typography>
 
@@ -142,10 +151,10 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
                     <Box sx={commentActionsSx}>
                         <LikeButton alreadyLiked={alreadyLiked} likesCount={likes.length} isLiking={isLiking} animate={animateLike} onLike={handleLike} />
 
-                        <ReplyButton onToggle={() => setFormOpen(v => !v)} />
+                        <ReplyButton onToggle={() => setFormOpen(v => !v)} commentId={comment._id} author={comment.author} />
                     </Box>
 
-                    <ReplyCollapse open={formOpen}>
+                    <ReplyCollapse open={formOpen} commentId={comment._id}>
                         <Box>
                             <CommentForm
                                 key={formOpen ? "open" : "closed"}

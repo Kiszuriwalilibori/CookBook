@@ -10,7 +10,7 @@ import CommentForm from "./CommentForm";
 import { buildCommentTree } from "@/utils/buildCommentTree";
 import { useFingerprint, useMessage } from "@/hooks";
 import type { RecipeComment } from "@/types";
-import { collapseSx, commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
+import { collapseSx, commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
 import { useCommentsVisibility } from "./utils/useCommentsVisibility";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
@@ -211,7 +211,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
 
             {/* 🔥 MOBILE STICKY CTA */}
             <Box sx={mobileCommentButtonWrapperSx}>
-                <Button variant="contained" color="primary" onClick={openCommentForm}>
+                <Button sx={mobileCommentButtonSx} variant="contained" color="primary" onClick={openCommentForm}>
                     Dodaj komentarz
                 </Button>
             </Box>

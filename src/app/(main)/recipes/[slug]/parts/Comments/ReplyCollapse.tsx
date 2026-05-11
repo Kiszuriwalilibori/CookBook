@@ -3,11 +3,13 @@ import { Collapse, Box } from "@mui/material";
 type ReplyCollapseProps = {
     open: boolean;
     children: React.ReactNode;
+    commentId: string;
 };
 
-export default function ReplyCollapse({ open, children }: ReplyCollapseProps) {
+export default function ReplyCollapse({ open, children, commentId }: ReplyCollapseProps) {
     return (
         <Collapse
+            id={`reply-form-${commentId}`}
             in={open}
             timeout={400}
             sx={{ mt: 1 }}

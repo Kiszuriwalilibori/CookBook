@@ -36,3 +36,5 @@ export function LikeButton({ alreadyLiked, likesCount, isLiking, animate, onLike
         </Box>
     );
 }
+
+export default LikeButton;

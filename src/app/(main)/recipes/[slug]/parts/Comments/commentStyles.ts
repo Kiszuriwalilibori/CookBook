@@ -69,31 +69,50 @@ export const commentWrapperSx = (depth: number) => ({
     ml: depth > 0 ? 2 : 0,
 });
 
-export const threadLineSx = {
+export const threadLineSx = (theme: Theme) => ({
     position: "absolute",
-    left: 0,
-    top: 0,
-    bottom: 0,
+
+    left: 6,
+    top: 8,
+    bottom: 8,
+
     width: "2px",
-    bgcolor: "divider",
-    borderRadius: 1,
-};
+
+    backgroundColor: theme.palette.divider,
+
+    opacity: 0.35,
+
+    borderRadius: 999,
+});
 
 export const commentContentWrapperSx = (depth: number) => (theme: Theme) => ({
     flex: 1,
     pl: depth > 0 ? 2 : 0,
 });
 
+// export const commentCardSx = (depth: number) => (theme: Theme) => ({
+//     p: 2,
+//     borderRadius: 2,
+//     border: "1px solid",
+//     borderColor: "divider",
+//     backgroundColor: depth === 0 ? theme.palette.background.paper : theme.palette.action.hover,
+//     transition: "background 0.2s ease",
+//     position: "relative",
+
+// });
 export const commentCardSx = (depth: number) => (theme: Theme) => ({
-    p: 1.5,
-    borderRadius: 2,
-    border: "1px solid",
-    borderColor: "divider",
-    backgroundColor: depth === 0 ? theme.palette.background.paper : theme.palette.action.hover,
+    padding: 2,
+
+    borderRadius: depth === 0 ? 2 : 0,
+
+    backgroundColor: depth === 0 ? theme.palette.action.hover : "transparent",
+
+    boxShadow: "none",
+
     transition: "background 0.2s ease",
+
     position: "relative",
 });
-
 export const commentHeaderSx = {
     display: "flex",
     alignItems: "center",
@@ -133,14 +152,15 @@ export const repliesContainerSx = {
 export const likeButtonWrapperSx = {
     display: "flex",
     alignItems: "center",
+    marginLeft: -1.25,
 };
 
 export const likeButtonSx = {
-    width: 40,
-    height: 40,
-
-    minWidth: 44,
-    minHeight: 44,
+    width: 48,
+    height: 48,
+    minWidth: 48,
+    minHeight: 48,
+    padding: 0,
 
     boxSizing: "border-box",
 
@@ -168,7 +188,7 @@ export const likeIconSx = (alreadyLiked: boolean, animate: boolean) => ({
 });
 
 export const likesCounterSx = (animateCounter: boolean) => ({
-    ml: 1,
+    ml: "-0.5rem",
     color: "text.secondary",
     userSelect: "none",
 
@@ -181,11 +201,42 @@ export const likesCounterSx = (animateCounter: boolean) => ({
     opacity: animateCounter ? 0.7 : 1,
 });
 
-// ReplyButton
-
 export const replyButtonSx = (theme: Theme) => ({
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 0.5,
+
+    padding: "4px 8px",
+
+    borderRadius: 999,
+
+    color: theme.palette.text.secondary,
+
+    backgroundColor: "transparent",
+
+    border: "none",
+
+    textTransform: "none",
+
+    fontWeight: 400,
+
+    transition: "all 0.15s ease",
+
     "&:hover": {
-        backgroundColor: alpha(theme.palette.primary.light, 0.2),
+        backgroundColor: alpha(theme.palette.text.primary, 0.04),
+        color: theme.palette.text.primary,
+    },
+
+    "&:focus-visible": {
+        outline: `2px solid ${theme.palette.text.primary}`,
+        outlineOffset: 2,
+    },
+    "& .MuiButton-icon": {
+        marginRight: 0,
+        marginLeft: 0,
+
+        position: "relative",
+        top: "-1px",
     },
 });
 
@@ -219,6 +270,11 @@ export const mobileCommentButtonWrapperSx = {
     display: { xs: "flex", md: "none" },
     justifyContent: "center",
     zIndex: 1300,
+};
+export const mobileCommentButtonSx = {
+    minHeight: 48,
+    padding: "12px 16px",
+    borderRadius: 24,
 };
 
 export const desktopCommentButtonWrapperSx = {
