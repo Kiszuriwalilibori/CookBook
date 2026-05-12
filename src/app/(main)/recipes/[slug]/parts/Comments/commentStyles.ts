@@ -10,6 +10,16 @@ export const paperSx = (theme: Theme) => ({
     p: 2,
 });
 
+export const formLabelSx = {
+    fontWeight: 600,
+    color: "text.primary",
+    minWidth: { sm: 140 },
+
+    "& .MuiFormLabel-asterisk": {
+        color: "error.main",
+    },
+};
+
 export const textFieldSx = (theme: Theme) => ({
     mb: 2,
 

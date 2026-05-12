@@ -3,10 +3,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Box, TextField, Button, Paper } from "@mui/material";
+import { Box, TextField, Button, Paper, FormLabel, Typography } from "@mui/material";
 import { useIsAdminLogged } from "@/stores";
 import { errorMessages, validateComment } from "./utils";
-import { paperSx, textFieldSx, submitButtonSx } from "./commentStyles";
+import { paperSx, textFieldSx, submitButtonSx, formLabelSx } from "./commentStyles";
 import { Honeypot } from "./Honeypot";
 // import { useMessage } from "@/hooks";
 
@@ -97,41 +97,51 @@ export default function CommentForm({
                 {/* 🟢 honeypot – NIE RUSZAMY */}
                 <Honeypot />
                 {!isAdminLogged && (
+                    <>
+                        <FormLabel required sx={formLabelSx}>
+                            Przedstaw się
+                        </FormLabel>
+                        <TextField
+                            inputRef={textAreaRef}
+                            slotProps={{
+                                htmlInput: {
+                                    "aria-label": "Imię autora komentarza",
+                                },
+                            }}
+                            autoComplete="off"
+                            fullWidth
+                            size="small"
+                            label="Przedstaw się"
+                            value={author}
+                            onChange={e => setAuthor(e.target.value)}
+                            color="secondary"
+                            sx={textFieldSx}
+                        />
+                    </>
+                )}
+                <>
+                    <FormLabel required sx={formLabelSx}>
+                        Skomentuj
+                    </FormLabel>
+
                     <TextField
-                        inputRef={textAreaRef}
                         slotProps={{
                             htmlInput: {
-                                "aria-label": "Imię autora komentarza",
+                                "aria-label": "Treść komentarza",
                             },
                         }}
-                        autoComplete="off"
                         fullWidth
+                        multiline
+                        autoComplete="off"
+                        minRows={3}
                         size="small"
-                        label="Przedstaw się"
-                        value={author}
-                        onChange={e => setAuthor(e.target.value)}
+                        label="Komentarz"
+                        value={content}
+                        onChange={e => setContent(e.target.value)}
                         color="secondary"
                         sx={textFieldSx}
                     />
-                )}
-
-                <TextField
-                    slotProps={{
-                        htmlInput: {
-                            "aria-label": "Treść komentarza",
-                        },
-                    }}
-                    fullWidth
-                    multiline
-                    autoComplete="off"
-                    minRows={3}
-                    size="small"
-                    label="Komentarz"
-                    value={content}
-                    onChange={e => setContent(e.target.value)}
-                    color="secondary"
-                    sx={textFieldSx}
-                />
+                </>
                 <Box display="flex" flexDirection={{ xs: "column-reverse", sm: "row" }} justifyContent={{ xs: "stretch", sm: "space-evenly" }} alignItems="center" gap={1} mt={1}>
                     <Button fullWidth variant="contained" onClick={handleSubmit} disabled={baseDisabled || validationFailed} sx={submitButtonSx}>
                         {submitLabel}
@@ -151,6 +161,15 @@ export default function CommentForm({
                         </Button>
                     )}
                 </Box>
+                {errors.length > 0 && (
+                    <Box mt={1}>
+                        {errors.map(error => (
+                            <Typography key={error} variant="caption" color="error" display="block">
+                                {errorMessages[error] ?? error}
+                            </Typography>
+                        ))}
+                    </Box>
+                )}
             </Box>
         </Paper>
     );
