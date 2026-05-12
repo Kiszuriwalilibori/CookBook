@@ -12,6 +12,7 @@ import { useFingerprint, useMessage } from "@/hooks";
 import type { RecipeComment } from "@/types";
 import { collapseSx, commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
 import { useCommentsVisibility } from "./utils/useCommentsVisibility";
+import { handleApiError } from "./utils/handleError";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
@@ -64,32 +65,22 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 });
 
                 const data = await res.json();
-                if (!data.ok && data?.error?.code === "COMMENT_COOLDOWN") {
-                    showMessage.warning(data.error.message);
-                    setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
-                    options?.onError?.();
-                    return;
-                }
-                if (!data.ok && data?.error?.code === "COMMENT_REJECTED") {
-                    showMessage.error(data.error.message);
-                    setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
-                    options?.onError?.();
-                    return;
-                }
-
                 if (!data.ok) {
-                    throw new Error(data?.error?.message || "Unknown error");
+                    setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
+                    handleApiError(
+                        data.error,
+                        {
+                            COMMENT_COOLDOWN: msg => showMessage.warning(msg),
+                            COMMENT_REJECTED: msg => showMessage.error(msg),
+                            INTERNAL_ERROR: msg => showMessage.error(msg),
+                        },
+                        msg => showMessage.error(msg)
+                    );
+                } else {
+                    setComments(prev => (prev ?? []).map(c => (c._id === tempId ? data.comment : c)));
                 }
-                setComments(prev => (prev ?? []).map(c => (c._id === tempId ? data.comment : c)));
             } catch (err) {
-                console.error("[COMMENTS][POST]", {
-                    error: err,
-                    recipeId,
-                    parentId,
-                });
-
                 showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
-
                 setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
 
                 options?.onError?.();
@@ -225,3 +216,4 @@ export default function Comments({ recipeId }: { recipeId: string }) {
         </>
     );
 }
+// todo warto rozważyć hooka do optimistic, który będzie sam zwracał callbacki do sukcesu i proażki

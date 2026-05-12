@@ -8,15 +8,27 @@ import { useIsAdminLogged } from "@/stores";
 import { errorMessages, validateComment } from "./utils";
 import { paperSx, textFieldSx, submitButtonSx } from "./commentStyles";
 import { Honeypot } from "./Honeypot";
+// import { useMessage } from "@/hooks";
 
 /* ------------------ COMPONENT ------------------ */
 
-export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel }: { onSubmit: (data: { author: string; content: string /*isAuthor: boolean*/ }) => Promise<void>; submitLabel?: string; onCancel?: () => void }) {
+export default function CommentForm({
+    textAreaRef,
+    onSubmit,
+    submitLabel = "Dodaj",
+    onCancel,
+}: {
+    textAreaRef?: React.RefObject<HTMLTextAreaElement | null> | null;
+    onSubmit: (data: { author: string; content: string /*isAuthor: boolean*/ }) => Promise<void>;
+    submitLabel?: string;
+    onCancel?: () => void;
+}) {
     const [author, setAuthor] = useState("");
     const [content, setContent] = useState("");
     const [errors, setErrors] = useState<string[]>([]);
 
     const isAdminLogged = useIsAdminLogged();
+    // const showMessage = useMessage();
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -28,6 +40,11 @@ export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel 
             });
 
             setErrors(result.errors);
+            // if (!result.valid) {
+            //     result.errors.forEach(error => {
+            //         showMessage.warning(errorMessages[error] ?? error);
+            //     });
+            // }
 
             if (!result.valid) {
                 console.log(
@@ -81,6 +98,7 @@ export default function CommentForm({ onSubmit, submitLabel = "Dodaj", onCancel 
                 <Honeypot />
                 {!isAdminLogged && (
                     <TextField
+                        inputRef={textAreaRef}
                         slotProps={{
                             htmlInput: {
                                 "aria-label": "Imię autora komentarza",

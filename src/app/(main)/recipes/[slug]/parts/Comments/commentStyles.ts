@@ -78,9 +78,10 @@ export const threadLineSx = (theme: Theme) => ({
 
     width: "2px",
 
-    backgroundColor: theme.palette.divider,
+    // backgroundColor: theme.palette.divider,
 
-    opacity: 0.35,
+    // opacity: 0.35,
+    backgroundColor: theme.palette.mode === "light" ? "rgba(60, 60, 60, 0.35)" : "rgba(220, 220, 220, 0.25)",
 
     borderRadius: 999,
 });
@@ -90,16 +91,6 @@ export const commentContentWrapperSx = (depth: number) => (theme: Theme) => ({
     pl: depth > 0 ? 2 : 0,
 });
 
-// export const commentCardSx = (depth: number) => (theme: Theme) => ({
-//     p: 2,
-//     borderRadius: 2,
-//     border: "1px solid",
-//     borderColor: "divider",
-//     backgroundColor: depth === 0 ? theme.palette.background.paper : theme.palette.action.hover,
-//     transition: "background 0.2s ease",
-//     position: "relative",
-
-// });
 export const commentCardSx = (depth: number) => (theme: Theme) => ({
     padding: 2,
 
@@ -107,7 +98,7 @@ export const commentCardSx = (depth: number) => (theme: Theme) => ({
 
     backgroundColor: depth === 0 ? theme.palette.action.hover : "transparent",
 
-    boxShadow: "none",
+    boxShadow: depth > 0 ? (theme.palette.mode === "light" ? "0 0 0 1px rgba(0,0,0,0.04)" : "0 0 0 1px rgba(255,255,255,0.06)") : "none",
 
     transition: "background 0.2s ease",
 

@@ -1,5 +1,5 @@
 "use client";
-import { /* useRef,*/ useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 
@@ -59,7 +59,12 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
     const fingerprint = useFingerprint();
     const showMessage = useMessage();
     const isAuthorComment = comment.isAuthor === true;
-    // const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    useEffect(() => {
+        if (formOpen) {
+            textAreaRef.current?.focus();
+        }
+    }, [formOpen]);
 
     if (!comment) return null;
 
@@ -109,7 +114,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
                 setLikes(data.data.likes);
             }
         } catch (err: unknown) {
-            console.error("[COMMENTS][PATCH]", err);
+            // console.error("[COMMENTS][PATCH]", err);
             setLikes(prevLikes);
             showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
         } finally {
@@ -157,6 +162,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
                     <ReplyCollapse open={formOpen} commentId={comment._id}>
                         <Box>
                             <CommentForm
+                                textAreaRef={textAreaRef}
                                 key={formOpen ? "open" : "closed"}
                                 submitLabel="Odpowiedz"
                                 onSubmit={async data => {
