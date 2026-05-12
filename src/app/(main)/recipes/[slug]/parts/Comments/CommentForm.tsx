@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Box, TextField, Button, Paper, FormLabel, Typography } from "@mui/material";
 import { useIsAdminLogged } from "@/stores";
 import { errorMessages, validateComment } from "./utils";
@@ -11,17 +11,7 @@ import { Honeypot } from "./Honeypot";
 
 /* ------------------ COMPONENT ------------------ */
 
-export default function CommentForm({
-    textAreaRef,
-    onSubmit,
-    submitLabel = "Dodaj",
-    onCancel,
-}: {
-    textAreaRef?: React.RefObject<HTMLTextAreaElement | null> | null;
-    onSubmit: (data: { author: string; content: string /*isAuthor: boolean*/ }) => Promise<void>;
-    submitLabel?: string;
-    onCancel?: () => void;
-}) {
+export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Dodaj", onCancel }: { textAreaRef?: React.RefObject<HTMLTextAreaElement | null> | null; onSubmit: (data: { author: string; content: string }) => Promise<void>; submitLabel?: string; onCancel?: () => void }) {
     const [author, setAuthor] = useState("");
     const [content, setContent] = useState("");
     const [isValid, setIsValid] = useState<boolean>(true);
@@ -33,15 +23,11 @@ export default function CommentForm({
     const [contentShowErrors, setContentShowErrors] = useState(false);
     const [authorActivated, setAuthorActivated] = useState(false);
     const [contentActivated, setContentActivated] = useState(false);
-    const authorRef = useRef<HTMLDivElement | null>(null);
-    const contentRef = useRef<HTMLDivElement | null>(null);
 
     const isAdminLogged = useIsAdminLogged();
-    // const showMessage = useMessage();
     function resetForm() {
         setAuthor("");
         setContent("");
-
         setAuthorErrors([]);
         setContentErrors([]);
         setAuthorShowErrors(false);
@@ -64,31 +50,6 @@ export default function CommentForm({
         setContentErrors(result.contentErrors);
         setIsValid(result.isValid);
     }
-    // useEffect(() => {
-    //     const timeout = setTimeout(() => {
-    //         const finalAuthor = isAdminLogged ? "Piotr" : author.trim();
-
-    //         const result = validateComment({
-    //             author: finalAuthor,
-    //             content,
-    //         });
-
-    //         setAuthorErrors(result.authorErrors);
-    //         setContentErrors(result.contentErrors);
-    //         setIsValid(result.isValid);
-    //         // if (!result.valid) {
-    //         //     result.errors.forEach(error => {
-    //         //         showMessage.warning(errorMessages[error] ?? error);
-    //         //     });
-    //         // }
-
-    //         if (!result.isValid) {
-    //             console.log("[COMMENT][VALIDATION_FAILED]", { authorErrors: result.authorErrors, contentErrors: result.contentErrors });
-    //         }
-    //     }, 500);
-
-    //     return () => clearTimeout(timeout);
-    // }, [author, content, isAdminLogged]);
 
     /* -------- submit (edge-case safe) -------- */
     async function handleSubmit() {
@@ -96,18 +57,15 @@ export default function CommentForm({
 
         const finalAuthor = isAdminLogged ? "Piotr" : author.trim();
         if (!finalAuthor) return;
-        const isAuthor = isAdminLogged;
-        console.log("isAuthor from form", isAuthor);
+
         const result = validateComment({
             author: finalAuthor,
             content,
         });
 
         if (!result.isValid) {
-            console.log("[COMMENT][SUBMIT_BLOCKED]", {
-                authorErrors: result.authorErrors,
-                contentErrors: result.contentErrors,
-            });
+            setAuthorErrors(result.authorErrors);
+            setContentErrors(result.contentErrors);
             return;
         }
 
@@ -116,11 +74,7 @@ export default function CommentForm({
             content,
         });
 
-        setAuthor("");
-        setContent("");
-        setAuthorErrors([]); // nowe
-        setContentErrors([]);
-        setIsValid(true);
+        resetForm();
     }
 
     /* -------- button logic (nie psujemy starej) -------- */
@@ -134,7 +88,6 @@ export default function CommentForm({
                 {!isAdminLogged && (
                     <Box
                         sx={fieldRowSx}
-                        ref={authorRef}
                         onMouseLeave={() => {
                             if (authorActivated) {
                                 setAuthorShowErrors(true);
@@ -178,7 +131,6 @@ export default function CommentForm({
                 )}
                 <Box
                     sx={fieldRowSx}
-                    ref={contentRef}
                     onMouseLeave={() => {
                         if (contentActivated) {
                             setContentShowErrors(true);
