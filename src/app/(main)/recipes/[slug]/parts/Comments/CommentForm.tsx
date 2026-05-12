@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { Box, TextField, Button, Paper, FormLabel, Typography } from "@mui/material";
 import { useIsAdminLogged } from "@/stores";
 import { errorMessages, validateComment } from "./utils";
-import { paperSx, textFieldSx, submitButtonSx, formLabelSx } from "./commentStyles";
+import { paperSx, textFieldSx, submitButtonSx, formLabelSx, fieldRowSx } from "./commentStyles";
 import { Honeypot } from "./Honeypot";
 // import { useMessage } from "@/hooks";
 
@@ -97,7 +97,7 @@ export default function CommentForm({
                 {/* 🟢 honeypot – NIE RUSZAMY */}
                 <Honeypot />
                 {!isAdminLogged && (
-                    <>
+                    <Box sx={fieldRowSx}>
                         <FormLabel required sx={formLabelSx}>
                             Przedstaw się
                         </FormLabel>
@@ -117,9 +117,9 @@ export default function CommentForm({
                             color="secondary"
                             sx={textFieldSx}
                         />
-                    </>
+                    </Box>
                 )}
-                <>
+                <Box sx={fieldRowSx}>
                     <FormLabel required sx={formLabelSx}>
                         Skomentuj
                     </FormLabel>
@@ -141,7 +141,7 @@ export default function CommentForm({
                         color="secondary"
                         sx={textFieldSx}
                     />
-                </>
+                </Box>
                 <Box display="flex" flexDirection={{ xs: "column-reverse", sm: "row" }} justifyContent={{ xs: "stretch", sm: "space-evenly" }} alignItems="center" gap={1} mt={1}>
                     <Button fullWidth variant="contained" onClick={handleSubmit} disabled={baseDisabled || validationFailed} sx={submitButtonSx}>
                         {submitLabel}

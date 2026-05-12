@@ -12,12 +12,32 @@ export const paperSx = (theme: Theme) => ({
 
 export const formLabelSx = {
     fontWeight: 600,
+
     color: "text.primary",
-    minWidth: { sm: 140 },
+
+    textAlign: {
+        sm: "right",
+    },
 
     "& .MuiFormLabel-asterisk": {
         color: "error.main",
     },
+};
+export const fieldRowSx = {
+    display: "grid",
+
+    gridTemplateColumns: {
+        xs: "1fr",
+        sm: "140px 1fr",
+    },
+
+    alignItems: {
+        sm: "center",
+    },
+
+    gap: 1.5,
+
+    mb: 2,
 };
 
 export const textFieldSx = (theme: Theme) => ({
@@ -53,6 +73,14 @@ export const textFieldSx = (theme: Theme) => ({
 
     "& .MuiInputLabel-root.Mui-focused": {
         color: theme.palette.secondary.dark,
+    },
+    "& .MuiOutlinedInput-root.Mui-focused fieldset": {
+        borderWidth: 2,
+        borderColor: theme.palette.secondary.main,
+    },
+
+    "& .MuiOutlinedInput-root.Mui-focused": {
+        boxShadow: `0 0 0 3px ${alpha(theme.palette.secondary.main, 0.35)}`,
     },
 });
 
