@@ -6,13 +6,15 @@ import { Box, Typography } from "@mui/material";
 import { RecipeComment } from "@/types";
 import { useFingerprint, useMessage } from "@/hooks";
 import CommentForm from "./CommentForm";
-import { LikeButton } from "./LikeButton";
-import { ReplyButton } from "./ReplyButton";
+
+import { ReplyButton } from "./ReplButton";
 import ReplyCollapse from "./ReplyCollapse";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import { authorAvatarSx, authorChipSx, commentActionsSx, commentCardSx, commentContentWrapperSx, commentDateSx, commentHeaderSx, commentWrapperSx, repliesContainerSx, threadLineSx } from "./commentStyles";
 import { handleApiError } from "./utils/handleError";
+import LikeItButton from "./LikeItButton";
+import { AnimatedDots } from "./AnimatedDots";
 
 function formatRelativeTime(date: string) {
     const now = new Date();
@@ -46,16 +48,17 @@ type HandleAddComment = (payload: AddCommentPayload, options?: AddCommentOptions
 interface CommentItemProps {
     comment: RecipeComment;
     recipeId: string;
-    refresh: () => void;
+
     depth?: number;
     handleAddComment: HandleAddComment;
 }
 
-export default function CommentItem({ comment, recipeId, refresh, depth = 0, handleAddComment }: CommentItemProps) {
+export default function CommentItem({ comment, recipeId, depth = 0, handleAddComment }: CommentItemProps) {
     const [formOpen, setFormOpen] = useState(false);
     const [likes, setLikes] = useState<string[]>(comment.likes);
     const [isLiking, setIsLiking] = useState(false);
     const [animateLike, setAnimateLike] = useState(false);
+    const [isReplySubmitting, setIsReplySubmitting] = useState(false);
     const fingerprint = useFingerprint();
     const showMessage = useMessage();
     const isAuthorComment = comment.isAuthor === true;
@@ -155,9 +158,15 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
                     )}
 
                     <Box sx={commentActionsSx}>
-                        <LikeButton alreadyLiked={alreadyLiked} likesCount={likes.length} isLiking={isLiking} animate={animateLike} onLike={handleLike} />
+                        <LikeItButton alreadyLiked={alreadyLiked} likesCount={likes.length} isLiking={isLiking} animate={animateLike} onLike={handleLike} />
 
                         <ReplyButton onToggle={() => setFormOpen(v => !v)} commentId={comment._id} author={comment.author} />
+                        {isReplySubmitting && (
+                            <Typography variant="caption" color="warning.main" sx={{ opacity: 0.7 }}>
+                                Wysyłanie...
+                                <AnimatedDots />
+                            </Typography>
+                        )}
                     </Box>
 
                     <ReplyCollapse open={formOpen} commentId={comment._id}>
@@ -166,12 +175,24 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
                                 textAreaRef={textAreaRef}
                                 key={formOpen ? "open" : "closed"}
                                 submitLabel="Odpowiedz"
+                                // onSubmit={async data => {
+                                //     setFormOpen(false);
+                                //     await handleAddComment({
+                                //         ...data,
+                                //         parentId: comment._id,
+                                //     });
+                                // }}
                                 onSubmit={async data => {
                                     setFormOpen(false);
-                                    await handleAddComment({
-                                        ...data,
-                                        parentId: comment._id,
-                                    });
+                                    setIsReplySubmitting(true);
+                                    try {
+                                        await handleAddComment({
+                                            ...data,
+                                            parentId: comment._id,
+                                        });
+                                    } finally {
+                                        setIsReplySubmitting(false);
+                                    }
                                 }}
                                 onCancel={() => setFormOpen(false)}
                             />
@@ -181,7 +202,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
                     {/* 👇 REPLIES */}
                     <Box sx={repliesContainerSx}>
                         {(comment.replies ?? []).filter(Boolean).map(reply => (
-                            <CommentItem key={reply._id} comment={reply} recipeId={recipeId} refresh={refresh} depth={depth + 1} handleAddComment={handleAddComment} />
+                            <CommentItem key={reply._id} comment={reply} recipeId={recipeId} depth={depth + 1} handleAddComment={handleAddComment} />
                         ))}
                     </Box>
                 </Box>

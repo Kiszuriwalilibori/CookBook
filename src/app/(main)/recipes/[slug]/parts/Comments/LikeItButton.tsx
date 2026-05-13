@@ -3,7 +3,7 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { useEffect, useState } from "react";
 import { likeButtonSx, likeButtonWrapperSx, likeIconSx, likesCounterSx } from "./commentStyles";
 
-type LikeButtonProps = {
+type LikeItButtonProps = {
     alreadyLiked: boolean;
     likesCount: number;
     isLiking: boolean;
@@ -11,7 +11,7 @@ type LikeButtonProps = {
     onLike: () => void;
 };
 
-export function LikeButton({ alreadyLiked, likesCount, isLiking, animate, onLike }: LikeButtonProps) {
+export function LikeItButton({ alreadyLiked, likesCount, isLiking, animate, onLike }: LikeItButtonProps) {
     const [animateCounter, setAnimateCounter] = useState(false);
 
     useEffect(() => {
@@ -37,4 +37,4 @@ export function LikeButton({ alreadyLiked, likesCount, isLiking, animate, onLike
     );
 }
 
-export default LikeButton;
+export default LikeItButton;

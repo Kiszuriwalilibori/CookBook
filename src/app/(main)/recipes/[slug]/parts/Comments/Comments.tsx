@@ -182,7 +182,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                                 {/* FIRST COMMENTS */}
                                 <Box key={viewMode} sx={commentsListSx}>
                                     {visibleItems.map(comment => (
-                                        <CommentItem key={comment._id} comment={comment} recipeId={recipeId} refresh={fetchComments} handleAddComment={handleAddComment} />
+                                        <CommentItem key={comment._id} comment={comment} recipeId={recipeId} handleAddComment={handleAddComment} />
                                     ))}
                                 </Box>
 
