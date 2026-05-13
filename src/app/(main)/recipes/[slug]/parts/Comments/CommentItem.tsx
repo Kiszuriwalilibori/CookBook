@@ -63,6 +63,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
     const fingerprint = useFingerprint();
     const showMessage = useMessage();
     const isAuthorComment = comment.isAuthor === true;
+    const isOwnComment = Boolean(fingerprint && comment.fingerprint && comment.fingerprint === fingerprint);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
@@ -132,7 +133,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
             {/* 📦 content wrapper */}
             <Box sx={commentContentWrapperSx(depth)}>
                 {/* 🧱 card */}
-                <Box sx={commentCardSx(depth)}>
+                <Box sx={commentCardSx(depth, isOwnComment)}>
                     <Box sx={commentHeaderSx}>
                         {isAuthorComment && <Avatar src="/images/author.jpg" alt="Piotr" sx={authorAvatarSx} />}
 
