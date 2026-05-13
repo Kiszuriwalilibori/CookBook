@@ -43,7 +43,6 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 parentId: parentId ?? null,
                 createdAt: new Date().toISOString(),
                 fingerprint: "",
-                status: "approved",
                 likes: [],
             };
 
@@ -147,7 +146,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const isLoading = comments === null;
     const safeFlatComments = comments ?? [];
     const commentTree = buildCommentTree(safeFlatComments);
-    const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny /*, setViewMode*/ } = useCommentsVisibility(commentTree, 3);
+    const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny } = useCommentsVisibility(commentTree, 3);
 
     return (
         <>

@@ -56,28 +56,5 @@ export default {
     },
 
     // 🧠 MODERATION STATUS
-    {
-      name: 'status',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Pending', value: 'pending'},
-          {title: 'Approved', value: 'approved'},
-          {title: 'Rejected', value: 'rejected'},
-        ],
-      },
-      initialValue: 'pending',
-      validation: (Rule: Rule) => Rule.required(),
-    },
-
-    {
-      name: 'moderationScore',
-      type: 'number',
-    },
-
-    {
-      name: 'moderationReason',
-      type: 'string',
-    },
   ],
 }

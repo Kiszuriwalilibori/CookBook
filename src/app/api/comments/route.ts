@@ -22,7 +22,7 @@ export async function GET(req: Request) {
                 { status: 400 }
             );
 
-        const comments = await writeClient.fetch(`*[_type=="recipeComment" && recipeId==$recipeId && status=="approved"] | order(createdAt desc)`, { recipeId });
+        const comments = await writeClient.fetch(`*[_type=="recipeComment" && recipeId==$recipeId] | order(createdAt desc)`, { recipeId });
 
         return NextResponse.json(
             {

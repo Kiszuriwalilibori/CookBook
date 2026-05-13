@@ -71,7 +71,6 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
     if (!comment) return null;
 
-    const isPending = comment.status === "pending";
     const alreadyLiked = likes.includes(fingerprint);
 
     async function handleLike() {
@@ -150,12 +149,6 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                     <Typography variant="body1" sx={{ mb: 0.5 }}>
                         {comment.content}
                     </Typography>
-
-                    {isPending && (
-                        <Typography variant="caption" color="warning.main">
-                            Oczekuje na moderację...
-                        </Typography>
-                    )}
 
                     <Box sx={commentActionsSx}>
                         <LikeItButton alreadyLiked={alreadyLiked} likesCount={likes.length} isLiking={isLiking} animate={animateLike} onLike={handleLike} />
