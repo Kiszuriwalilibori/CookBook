@@ -120,8 +120,6 @@ export async function POST(req: Request) {
 
             createdAt: new Date().toISOString(),
             fingerprint,
-
-            likesCount: 0,
             likes: [],
 
             status: "approved",

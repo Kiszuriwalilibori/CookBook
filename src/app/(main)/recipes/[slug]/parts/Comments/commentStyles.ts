@@ -208,19 +208,6 @@ export const likeButtonSx = {
     },
 };
 
-// export const likeIconSx = (alreadyLiked: boolean, animate: boolean) => ({
-//     color: alreadyLiked ? "success.main" : "action.active",
-//     transform: animate ? "scale(1.3)" : "scale(1)",
-//     transition: "transform 0.2s ease, color 0.2s ease",
-
-//     "@keyframes pop": {
-//         "0%": { transform: "scale(1)" },
-//         "50%": { transform: "scale(1.4)" },
-//         "100%": { transform: "scale(1)" },
-//     },
-
-//     animation: animate ? "pop 0.3s ease" : "none",
-// });
 export const likeIconSx = (alreadyLiked: boolean, animate: boolean) => ({
     color: alreadyLiked ? "success.main" : "action.active",
 
@@ -244,19 +231,7 @@ export const likeIconSx = (alreadyLiked: boolean, animate: boolean) => ({
 
     animation: animate ? "pop 260ms cubic-bezier(0.34, 1.56, 0.64, 1)" : "none",
 });
-// export const likesCounterSx = (animateCounter: boolean) => ({
-//     ml: "-0.5rem",
-//     color: "text.secondary",
-//     userSelect: "none",
 
-//     minWidth: 18,
-//     textAlign: "left",
-//     display: "inline-block",
-
-//     transition: "transform 0.15s ease, opacity 0.15s ease",
-//     transform: animateCounter ? "translateY(-2px) scale(1.05)" : "translateY(0)",
-//     opacity: animateCounter ? 0.7 : 1,
-// });
 export const likesCounterSx = (animateCounter: boolean) => ({
     ml: "-0.5rem",
 
