@@ -208,34 +208,76 @@ export const likeButtonSx = {
     },
 };
 
+// export const likeIconSx = (alreadyLiked: boolean, animate: boolean) => ({
+//     color: alreadyLiked ? "success.main" : "action.active",
+//     transform: animate ? "scale(1.3)" : "scale(1)",
+//     transition: "transform 0.2s ease, color 0.2s ease",
+
+//     "@keyframes pop": {
+//         "0%": { transform: "scale(1)" },
+//         "50%": { transform: "scale(1.4)" },
+//         "100%": { transform: "scale(1)" },
+//     },
+
+//     animation: animate ? "pop 0.3s ease" : "none",
+// });
 export const likeIconSx = (alreadyLiked: boolean, animate: boolean) => ({
     color: alreadyLiked ? "success.main" : "action.active",
-    transform: animate ? "scale(1.3)" : "scale(1)",
-    transition: "transform 0.2s ease, color 0.2s ease",
+
+    transform: animate ? "scale(1.55) rotate(-8deg)" : "scale(1) rotate(0deg)",
+
+    transition: "transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease",
+
+    willChange: "transform",
 
     "@keyframes pop": {
-        "0%": { transform: "scale(1)" },
-        "50%": { transform: "scale(1.4)" },
-        "100%": { transform: "scale(1)" },
+        "0%": {
+            transform: "scale(1) rotate(0deg)",
+        },
+        "45%": {
+            transform: "scale(1.55) rotate(-8deg)",
+        },
+        "100%": {
+            transform: "scale(1) rotate(0deg)",
+        },
     },
 
-    animation: animate ? "pop 0.3s ease" : "none",
+    animation: animate ? "pop 260ms cubic-bezier(0.34, 1.56, 0.64, 1)" : "none",
 });
+// export const likesCounterSx = (animateCounter: boolean) => ({
+//     ml: "-0.5rem",
+//     color: "text.secondary",
+//     userSelect: "none",
 
+//     minWidth: 18,
+//     textAlign: "left",
+//     display: "inline-block",
+
+//     transition: "transform 0.15s ease, opacity 0.15s ease",
+//     transform: animateCounter ? "translateY(-2px) scale(1.05)" : "translateY(0)",
+//     opacity: animateCounter ? 0.7 : 1,
+// });
 export const likesCounterSx = (animateCounter: boolean) => ({
     ml: "-0.5rem",
+
     color: "text.secondary",
+
     userSelect: "none",
 
     minWidth: 18,
+
     textAlign: "left",
+
     display: "inline-block",
 
-    transition: "transform 0.15s ease, opacity 0.15s ease",
-    transform: animateCounter ? "translateY(-2px) scale(1.05)" : "translateY(0)",
-    opacity: animateCounter ? 0.7 : 1,
-});
+    transition: "transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease",
 
+    transform: animateCounter ? "translateY(-4px) scale(1.18)" : "translateY(0) scale(1)",
+
+    opacity: animateCounter ? 0.82 : 1,
+
+    willChange: "transform",
+});
 export const replyButtonSx = (theme: Theme) => ({
     display: "inline-flex",
     alignItems: "center",

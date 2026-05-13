@@ -79,6 +79,7 @@ export default function CommentItem({ comment, recipeId, refresh, depth = 0, han
         const prevLikes = likes;
         const wasLiked = alreadyLiked;
         if (!wasLiked) {
+            navigator.vibrate?.(10);
             setAnimateLike(true);
             setTimeout(() => setAnimateLike(false), 300);
         }
