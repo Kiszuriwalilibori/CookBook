@@ -138,8 +138,8 @@ export const commentContentWrapperSx = (depth: number) => (theme: Theme) => ({
 // commentStyles.ts
 export const commentCardSx = (depth: number, isOwnComment: boolean) => (theme: Theme) => ({
     padding: 2,
-    borderRadius: depth === 0 ? 2 : 0,
-
+    // borderRadius: depth === 0 ? 2 : 0,
+    borderRadius: isOwnComment ? 3 : depth === 0 ? 2 : 0,
     backgroundColor: isOwnComment ? (theme.palette.mode === "light" ? "#e8f5e9" : "rgba(76, 175, 80, 0.08)") : depth === 0 ? theme.palette.action.hover : "transparent",
 
     border: isOwnComment ? `2px solid ${theme.palette.success.main}` : depth > 0 ? `1px solid ${theme.palette.divider}` : "none",

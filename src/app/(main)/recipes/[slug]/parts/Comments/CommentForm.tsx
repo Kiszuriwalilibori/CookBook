@@ -86,6 +86,8 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
                                 slotProps={{
                                     htmlInput: {
                                         "aria-label": "Imię autora komentarza",
+                                        "aria-invalid": validation.authorErrors.length > 0,
+                                        "aria-describedby": "author-error",
                                     },
                                 }}
                                 autoComplete="off"
@@ -128,6 +130,8 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
                         slotProps={{
                             htmlInput: {
                                 "aria-label": "Treść komentarza",
+                                "aria-invalid": validation.contentErrors.length > 0,
+                                "aria-describedby": "content-error",
                             },
                         }}
                         fullWidth
@@ -146,7 +150,7 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
 
                 <Box id="Content Error Box" mt={0.5} sx={errorBoxSx}>
                     {contentShowErrors && validation.contentErrors.length > 0 ? (
-                        <Typography variant="caption" color="error">
+                        <Typography variant="caption" color="error" id="content-error">
                             {contentErrorText}
                         </Typography>
                     ) : (
