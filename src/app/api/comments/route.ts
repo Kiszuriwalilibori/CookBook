@@ -125,7 +125,7 @@ export async function POST(req: Request) {
             status: "approved",
             moderationScore: result.score,
         };
-        console.log("isAdmin", isAdmin);
+
         await writeClient.create(comment);
 
         return NextResponse.json({

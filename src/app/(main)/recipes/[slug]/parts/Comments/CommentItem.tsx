@@ -15,6 +15,7 @@ import { authorAvatarSx, authorChipSx, commentActionsSx, commentCardSx, commentC
 import { handleApiError } from "./utils/handleError";
 import LikeItButton from "./LikeItButton";
 import { AnimatedDots } from "./AnimatedDots";
+import { useLikeAnimation } from "./utils/useLikeAnimation";
 
 function formatRelativeTime(date: string) {
     const now = new Date();
@@ -57,12 +58,13 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
     const [formOpen, setFormOpen] = useState(false);
     const [likes, setLikes] = useState<string[]>(comment.likes);
     const [isLiking, setIsLiking] = useState(false);
-    const [animateLike, setAnimateLike] = useState(false);
     const [isReplySubmitting, setIsReplySubmitting] = useState(false);
+    const { animateLike, triggerLikeAnimation } = useLikeAnimation(300);
     const fingerprint = useFingerprint();
     const showMessage = useMessage();
     const isAuthorComment = comment.isAuthor === true;
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
     useEffect(() => {
         if (formOpen) {
             textAreaRef.current?.focus();
@@ -77,15 +79,13 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
         if (isLiking || !fingerprint) return;
 
         setIsLiking(true);
-
         const prevLikes = likes;
         const wasLiked = alreadyLiked;
+
         if (!wasLiked) {
             navigator.vibrate?.(10);
-            setAnimateLike(true);
-            setTimeout(() => setAnimateLike(false), 300);
+            triggerLikeAnimation();
         }
-
         // optimistic update
         setLikes(prev => (wasLiked ? prev.filter(id => id !== fingerprint) : [...prev, fingerprint]));
 

@@ -1,6 +1,7 @@
+import React from "react";
 import { useState, useEffect } from "react";
 
-export function AnimatedDots() {
+export const AnimatedDots = React.memo(function AnimatedDots() {
     const [dots, setDots] = useState(".");
 
     useEffect(() => {
@@ -15,4 +16,4 @@ export function AnimatedDots() {
     }, []);
 
     return <>{dots}</>;
-}
+});
