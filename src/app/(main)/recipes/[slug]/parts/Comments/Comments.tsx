@@ -78,6 +78,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     );
                 } else {
                     setComments(prev => (prev ?? []).map(c => (c._id === tempId ? data.comment : c)));
+                    showMessage.success("Twój komentarz został dodany");
                 }
             } catch (err) {
                 showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
