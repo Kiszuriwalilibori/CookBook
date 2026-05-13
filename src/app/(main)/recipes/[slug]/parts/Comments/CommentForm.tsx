@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Box, TextField, Button, Paper, FormLabel, Typography } from "@mui/material";
 import { useIsAdminLogged } from "@/stores";
 import { errorMessages, validateComment } from "./utils";
-import { paperSx, textFieldSx, submitButtonSx, formLabelSx, fieldRowSx } from "./commentStyles";
+import { paperSx, textFieldSx, submitButtonSx, formLabelSx, fieldRowSx, errorBoxSx } from "./commentStyles";
 import { Honeypot } from "./Honeypot";
 
 export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Dodaj", onCancel }: { textAreaRef?: React.RefObject<HTMLTextAreaElement | null> | null; onSubmit: (data: { author: string; content: string }) => Promise<void>; submitLabel?: string; onCancel?: () => void }) {
@@ -59,59 +59,68 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
 
     const baseDisabled = !content.trim() || (!isAdminLogged && !author.trim());
 
+    const authorErrorText = validation.authorErrors.map(e => errorMessages[e] ?? e).join(", ");
+
+    const contentErrorText = validation.contentErrors.map(e => errorMessages[e] ?? e).join(", ");
+
     return (
         <Paper elevation={1} sx={paperSx}>
             <Box sx={{ position: "relative" }}>
                 <Honeypot />
 
                 {!isAdminLogged && (
-                    <Box
-                        sx={fieldRowSx}
-                        onMouseLeave={() => {
-                            if (authorActivated) setAuthorShowErrors(true);
-                        }}
-                    >
-                        <FormLabel required sx={formLabelSx}>
-                            Przedstaw się
-                        </FormLabel>
-
-                        <TextField
-                            inputRef={textAreaRef}
-                            slotProps={{
-                                htmlInput: {
-                                    "aria-label": "Imię autora komentarza",
-                                },
+                    <>
+                        <Box
+                            id="Author Text Field Row"
+                            sx={fieldRowSx}
+                            onMouseLeave={() => {
+                                if (authorActivated) setAuthorShowErrors(true);
                             }}
-                            autoComplete="off"
-                            fullWidth
-                            size="small"
-                            label="Przedstaw się"
-                            value={author}
-                            onChange={e => setAuthor(e.target.value)}
-                            onFocus={() => setAuthorActivated(true)}
-                            color="secondary"
-                            sx={textFieldSx}
-                        />
+                        >
+                            <FormLabel required sx={formLabelSx}>
+                                Przedstaw się
+                            </FormLabel>
 
-                        {authorShowErrors && validation.authorErrors.length > 0 && (
-                            <Box mt={0.5}>
-                                {validation.authorErrors.map(err => (
-                                    <Typography key={err} variant="caption" color="error" display="block">
-                                        {errorMessages[err] ?? err}
-                                    </Typography>
-                                ))}
-                            </Box>
-                        )}
-                    </Box>
+                            <TextField
+                                inputRef={textAreaRef}
+                                slotProps={{
+                                    htmlInput: {
+                                        "aria-label": "Imię autora komentarza",
+                                    },
+                                }}
+                                autoComplete="off"
+                                fullWidth
+                                size="small"
+                                label="Przedstaw się"
+                                value={author}
+                                onChange={e => setAuthor(e.target.value)}
+                                onFocus={() => setAuthorActivated(true)}
+                                color="secondary"
+                                sx={textFieldSx}
+                            />
+                        </Box>
+                        <Box id="Author Error Box" mt={0.5} sx={errorBoxSx}>
+                            {authorShowErrors && validation.authorErrors.length > 0 ? (
+                                <Typography variant="caption" color="error">
+                                    {authorErrorText}
+                                </Typography>
+                            ) : (
+                                <Typography variant="caption" sx={{ opacity: 0 }}>
+                                    .
+                                </Typography>
+                            )}
+                        </Box>
+                    </>
                 )}
 
                 <Box
+                    id=" Content Text Field Row"
                     sx={fieldRowSx}
                     onMouseLeave={() => {
                         if (contentActivated) setContentShowErrors(true);
                     }}
                 >
-                    <FormLabel required sx={formLabelSx}>
+                    <FormLabel id="Content Form Label" required sx={formLabelSx}>
                         Skomentuj
                     </FormLabel>
 
@@ -135,15 +144,17 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
                     />
                 </Box>
 
-                {contentShowErrors && validation.contentErrors.length > 0 && (
-                    <Box mt={0.5}>
-                        {validation.contentErrors.map(err => (
-                            <Typography key={err} variant="caption" color="error" display="block">
-                                {errorMessages[err] ?? err}
-                            </Typography>
-                        ))}
-                    </Box>
-                )}
+                <Box id="Content Error Box" mt={0.5} sx={errorBoxSx}>
+                    {contentShowErrors && validation.contentErrors.length > 0 ? (
+                        <Typography variant="caption" color="error">
+                            {contentErrorText}
+                        </Typography>
+                    ) : (
+                        <Typography variant="caption" sx={{ opacity: 0 }}>
+                            .
+                        </Typography>
+                    )}
+                </Box>
 
                 <Box display="flex" flexDirection={{ xs: "column-reverse", sm: "row" }} justifyContent={{ xs: "stretch", sm: "space-evenly" }} alignItems="center" gap={1} mt={1}>
                     <Button fullWidth variant="contained" onClick={handleSubmit} disabled={baseDisabled || !validation.isValid} sx={submitButtonSx}>
@@ -169,3 +180,19 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
         </Paper>
     );
 }
+
+// todo: focus MuiButton: {
+//   styleOverrides: {
+//     root: {
+//       "&:focus-visible": {
+//         outline: "3px solid #1976d2",
+//         outlineOffset: 2,
+//       },
+//     },
+//   },
+// }
+// Focus powinien:
+
+// być grubszy niż border
+// mieć kontrast min 3:1
+// być widoczny w dark mode

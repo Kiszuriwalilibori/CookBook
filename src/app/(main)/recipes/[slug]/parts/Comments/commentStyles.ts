@@ -83,7 +83,13 @@ export const textFieldSx = (theme: Theme) => ({
         boxShadow: `0 0 0 3px ${alpha(theme.palette.secondary.main, 0.35)}`,
     },
 });
-
+export const errorBoxSx = {
+    minHeight: "24px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+};
 export const submitButtonSx = (theme: Theme) => ({
     backgroundColor: theme.palette.secondary.dark,
     flex: { sm: 1 },
