@@ -386,3 +386,35 @@ body {
         padding: 0;
     }
 }
+/* GLOBAL FOCUS SYSTEM */
+
+/* reset default focus (tylko gdy nie focus-visible) */
+:focus {
+    outline: none;
+}
+
+/* standard HTML elements */
+:focus-visible {
+    outline: none;
+    box-shadow:
+        0 0 0 2px #0d3a74,
+        0 0 0 4px white;
+    border-radius: 2px;
+}
+
+/* MUI components (Button, Link, ListItem, etc.) */
+.Mui-focusVisible {
+    outline: none;
+    box-shadow:
+        0 0 0 2px #0d3a74,
+        0 0 0 4px white;
+    border-radius: 2px;
+}
+
+/* optional: inputs (MUI TextField, OutlinedInput) */
+.MuiOutlinedInput-root.Mui-focused {
+    box-shadow:
+        0 0 0 2px #0d3a74,
+        0 0 0 4px white;
+    border-radius: 2px;
+}

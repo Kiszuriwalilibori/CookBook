@@ -13,7 +13,15 @@ interface SlideItemProps {
 const CarouselItem: React.FC<SlideItemProps> = ({ slide }) => {
     return (
         <SlideWrapper key={slide._id}>
-            <StyledCard>
+            <StyledCard
+                sx={{
+                    "&:focus-within": {
+                        boxShadow: "0 0 0 3px #0d3a74, 0 0 0 5px white",
+                        outline: "none",
+                        borderRadius: "2px",
+                    },
+                }}
+            >
                 <SlideLink slide={slide}>
                     <AspectBox>
                         <SlideImage src={slide.imageUrl || "/placeholder.png"} alt={slide.title ?? "Recipe"} />
