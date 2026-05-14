@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { AppBar, Toolbar, IconButton, List, ListItem, ListItemText, ListItemIcon, Box, Drawer, Typography, ListItemButton } from "@mui/material";
+import { AppBar, Toolbar, IconButton, List, ListItem, ListItemText, ListItemIcon, Box, Drawer, Typography, ListItemButton, ButtonBase } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -21,6 +21,7 @@ import {
     navigationStyle,
     mobileMenuItemButtonStyle,
 } from "./styles";
+import { focusableSx, touchableSx } from "@/styles/utilityStyles";
 
 export interface NavItem {
     label: string;
@@ -54,7 +55,7 @@ const Menu: React.FC<MenuProps> = ({ navItems, mobileOpen, onMobileOpen, onMobil
                         !item.hidden && (
                             <React.Fragment key={item.label}>
                                 {item.href ? (
-                                    <ListItem component={Link} href={item.href} aria-label={`Navigate to ${item.label}`} onClick={() => handleMobileItemClick()} sx={mobileMenuItemStyle(currentPathname, item.href)}>
+                                    <ListItem component={Link} href={item.href} aria-label={`Navigate to ${item.label}`} onClick={() => handleMobileItemClick()} sx={{ ...mobileMenuItemStyle(currentPathname, item.href), ...touchableSx, ...focusableSx }}>
                                         <ListItemIcon sx={mobileMenuIconStyle}>{item.icon}</ListItemIcon>
                                         <ListItemText
                                             primary={item.label.trim()}
@@ -70,7 +71,7 @@ const Menu: React.FC<MenuProps> = ({ navItems, mobileOpen, onMobileOpen, onMobil
                                         />
                                     </ListItem>
                                 ) : (
-                                    <ListItemButton onClick={() => handleMobileItemClick(item.onClick)} sx={mobileMenuItemButtonStyle(currentPathname)}>
+                                    <ListItemButton onClick={() => handleMobileItemClick(item.onClick)} sx={{ ...mobileMenuItemButtonStyle(currentPathname), ...touchableSx, ...focusableSx }}>
                                         <ListItemIcon sx={mobileMenuIconStyle}>{item.icon}</ListItemIcon>
                                         <ListItemText
                                             primary={item.label.trim()}
@@ -103,7 +104,7 @@ const Menu: React.FC<MenuProps> = ({ navItems, mobileOpen, onMobileOpen, onMobil
                                 !item.hidden && (
                                     <React.Fragment key={item.label}>
                                         {item.href ? (
-                                            <Box component={Link} aria-current={currentPathname === item.href ? "page" : undefined} href={item.href} sx={desktopItemStyles(currentPathname, "")}>
+                                            <Box component={Link} aria-current={currentPathname === item.href ? "page" : undefined} href={item.href} sx={{ ...desktopItemStyles(currentPathname, ""), ...focusableSx }}>
                                                 <Box component="span" sx={desktopMenuIconStyle}>
                                                     {item.icon}
                                                 </Box>
@@ -112,14 +113,14 @@ const Menu: React.FC<MenuProps> = ({ navItems, mobileOpen, onMobileOpen, onMobil
                                                 </Typography>
                                             </Box>
                                         ) : (
-                                            <Box aria-current={currentPathname === item.href ? "page" : undefined} sx={desktopItemStyles(currentPathname, "")} onClick={item.onClick} role="button" tabIndex={0} onKeyDown={e => e.key === "Enter" && item.onClick?.()}>
+                                            <ButtonBase aria-current={currentPathname === item.href ? "page" : undefined} sx={{ ...desktopItemStyles(currentPathname, ""), ...focusableSx }} onClick={item.onClick}>
                                                 <Box component="span" sx={desktopMenuIconStyle}>
                                                     {item.icon}
                                                 </Box>
                                                 <Typography component="span" sx={desktopMenuLabelStyle}>
                                                     {item.label.trim()}
                                                 </Typography>
-                                            </Box>
+                                            </ButtonBase>
                                         )}
                                         {index < navItems.length - 1 && <Box sx={desktopMenuSeparatorStyle} />}
                                     </React.Fragment>

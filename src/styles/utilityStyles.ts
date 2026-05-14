@@ -5,8 +5,9 @@ export const focusableSx = {
     },
 
     "&.Mui-focusVisible, &:focus-visible": {
-        outline: "2px solid #036994",
-        outlineOffset: "2px",
+        outline: "none",
+        boxShadow: "0 0 0 2px  #0d3a74, 0 0 0 4px white",
+        borderRadius: "1px",
     },
     "& .MuiOutlinedInput-root": {
         "&:focus": {
@@ -15,22 +16,14 @@ export const focusableSx = {
         },
 
         "&.Mui-focused": {
-            outline: "2px solid #036994",
-            outlineOffset: "2px",
+            outline: "none",
+            boxShadow: "0 0 0 2px  #0d3a74, 0 0 0 4px white",
+            borderRadius: "1px",
         },
     },
 };
 
-export const createFocusableSx = (selector: string) => ({
-    [selector]: {
-        "&:focus": {
-            outline: "none",
-            boxShadow: "none",
-        },
-
-        "&.Mui-focused, &:focus-visible": {
-            outline: "2px solid #036994",
-            outlineOffset: "2px",
-        },
-    },
-});
+export const touchableSx = {
+    minHeight: "48px",
+    minWidth: "48px",
+};
