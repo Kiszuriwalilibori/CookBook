@@ -2,25 +2,24 @@
 
 import { useEffect, useState } from "react";
 import { useIsAdminLogged } from "@/stores/useAdminStore";
-import { IconButton, Box } from "@mui/material";
-import { Close as CloseIcon } from "@mui/icons-material";
-import { closeButtonStyles, signinButtonWrapperStyles } from "./Header.styles";
+import { Box, Button, Paper } from "@mui/material";
+import { closeButtonSx, signinButtonWrapperStyles } from "./Header.styles";
+import { focusableSx } from "@/styles/utilityStyles";
 
 export default function GoogleSignInButton() {
     const isAdminLogged = useIsAdminLogged();
     const [visible, setVisible] = useState(true);
-    const [loaded, setLoaded] = useState(false); // Nowy state – czeka na załadowanie przycisku Google
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setVisible(false);
-        }, 10000); // Znika po 10 sekundach
+        }, 100000000);
 
         return () => clearTimeout(timer);
     }, []);
 
     useEffect(() => {
-        // Czekaj na załadowanie Google i render przycisku
         if (window.googleInitialized) {
             setLoaded(true);
         } else {
@@ -38,15 +37,31 @@ export default function GoogleSignInButton() {
     if (isAdminLogged || !visible) return null;
 
     return (
-        <Box sx={signinButtonWrapperStyles}>
-            <Box sx={{ position: "relative" }}>
-                <div id="google-signin-button" />
-                {loaded && ( // Pokazuje close TYLKO gdy przycisk Google jest załadowany
-                    <IconButton sx={closeButtonStyles} onClick={() => setVisible(false)}>
-                        <CloseIcon style={{ color: "red" }} />
-                    </IconButton>
+        <Box sx={signinButtonWrapperStyles} role="group" aria-label="Logowanie" aria-live="polite">
+            <Paper
+                elevation={0}
+                sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 1,
+                    backgroundColor: "transparent",
+                }}
+            >
+                {loaded && (
+                    <Box aria-live="polite" sx={{ position: "absolute", left: -9999 }}>
+                        Opcja kontynuacji bez logowania jest dostępna
+                    </Box>
                 )}
-            </Box>
+                {/* Google button */}
+                <div id="google-signin-button" aria-label="Zaloguj się przez Google" />
+
+                {/* {loaded && ( */}
+                <Button aria-label="Kontynuuj bez logowania i pomiń logowanie konta" fullWidth onClick={() => setVisible(false)} sx={{ ...closeButtonSx, ...focusableSx }}>
+                    Kontynuuj bez logowania
+                </Button>
+                {/* )} */}
+            </Paper>
         </Box>
     );
 }
