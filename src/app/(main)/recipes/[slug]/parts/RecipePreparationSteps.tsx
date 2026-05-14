@@ -5,7 +5,7 @@ import type { PortableTextComponents } from "@portabletext/react";
 import Image from "next/image";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Recipe } from "@/types";
-import { styles, portableTextSx} from "../styles";
+import { styles, portableTextSx } from "../styles";
 
 // Custom PortableText components (typed correctly for compatibility)
 const PortableTextComponents: Partial<PortableTextComponents> = {
@@ -71,7 +71,7 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
                         <Typography variant="h3" sx={styles.recipeStepIndex}>
                             {i + 1}
                         </Typography>
-                        <ExpandMoreIcon sx={styles.recipeStepExpandIcon} />
+                        <ExpandMoreIcon sx={styles.recipeStepExpandIcon} aria-label="Expand step details" />
                     </AccordionSummary>
                     <AccordionDetails sx={styles.recipeStepAccordionDetails}>
                         {" "}

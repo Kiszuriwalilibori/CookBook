@@ -10,7 +10,7 @@ interface RecipeCardFavoriteButtonProps {
 
 export const RecipeCardFavoriteButton = React.memo(function RecipeCardFavoriteButton({ isFavorite, onClick }: RecipeCardFavoriteButtonProps) {
     return (
-        <IconButton onClick={onClick} sx={favoriteIcon(isFavorite)}>
+        <IconButton onClick={onClick} sx={favoriteIcon(isFavorite)} aria-label={`${isFavorite ? "Remove from" : "Add to"} favorites`}>
             <FavoriteIcon />
         </IconButton>
     );
