@@ -1,38 +1,20 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import { Box, Typography } from "@mui/material";
-
 import { RecipeComment } from "@/types";
 import { useFingerprint, useMessage } from "@/hooks";
 import CommentForm from "./CommentForm";
 
 import { ReplyButton } from "./ReplButton";
 import ReplyCollapse from "./ReplyCollapse";
-import Avatar from "@mui/material/Avatar";
-import Chip from "@mui/material/Chip";
-import { authorAvatarSx, authorChipSx, commentActionsSx, commentCardSx, commentContentWrapperSx, commentDateSx, commentHeaderSx, commentWrapperSx, repliesContainerSx, threadLineSx } from "./commentStyles";
+
+import { commentActionsSx, commentCardSx, commentContentWrapperSx, commentWrapperSx, repliesContainerSx, threadLineSx } from "./commentStyles";
 import { handleApiError } from "./utils/handleError";
 import LikeItButton from "./LikeItButton";
-// import { AnimatedDots } from "./AnimatedDots";
-import { useLikeAnimation } from "./utils/useLikeAnimation";
 import { LoadingIndicator } from "@/components";
-
-function formatRelativeTime(date: string) {
-    const now = new Date();
-    const created = new Date(date);
-
-    const diff = now.getTime() - created.getTime();
-
-    const minutes = Math.floor(diff / (1000 * 60));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-    if (minutes < 1) return "teraz";
-    if (minutes < 60) return `${minutes} min temu`;
-    if (hours < 24) return `${hours} godz. temu`;
-    return `${days} dni temu`;
-}
+import { checkIsOwnComment, useLikeAnimation, getRelativeTime, useSetInitialFocusInCommentItem } from "./utils";
+import CommentItemHeader from "./CommentItemHeader";
 
 type AddCommentPayload = {
     author: string;
@@ -64,14 +46,8 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
     const fingerprint = useFingerprint();
     const showMessage = useMessage();
     const isAuthorComment = comment.isAuthor === true;
-    const isOwnComment = Boolean(fingerprint && comment.fingerprint && comment.fingerprint === fingerprint);
-    const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
-    useEffect(() => {
-        if (formOpen) {
-            textAreaRef.current?.focus();
-        }
-    }, [formOpen]);
+    const isOwnComment = checkIsOwnComment(fingerprint, comment.fingerprint);
+    const textAreaRef = useSetInitialFocusInCommentItem(formOpen);
 
     if (!comment) return null;
 
@@ -136,7 +112,8 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                 {/* 🧱 card */}
                 <Box sx={commentCardSx(depth, isOwnComment)}>
                     <LoadingIndicator open={isReplySubmitting} prompt="Dodawanie odpowiedzi w toku" />
-                    <Box sx={commentHeaderSx}>
+                    <CommentItemHeader author={comment.author} createdAt={comment.createdAt} isAuthorComment={isAuthorComment} relativeTime={getRelativeTime(comment.createdAt)} />
+                    {/* <Box sx={commentHeaderSx}>
                         {isAuthorComment && <Avatar src="/images/author.jpg" alt="Piotr" sx={authorAvatarSx} />}
 
                         <Typography variant="body1">
@@ -146,9 +123,9 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                         {isAuthorComment && <Chip label="Autor" size="small" color="primary" sx={authorChipSx} />}
 
                         <Typography variant="caption" sx={commentDateSx}>
-                            {formatRelativeTime(comment.createdAt)}
+                            {getRelativeTime(comment.createdAt)}
                         </Typography>
-                    </Box>
+                    </Box> */}
                     <Typography variant="body1" sx={{ mb: 0.5 }}>
                         {comment.content}
                     </Typography>

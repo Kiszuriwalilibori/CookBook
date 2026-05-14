@@ -407,7 +407,7 @@ body {
     outline: none;
     box-shadow:
         0 0 0 2px #0d3a74,
-        0 0 0 4px white;
+        0 0 0 4px yellow;
     border-radius: 2px;
 }
 
@@ -415,6 +415,6 @@ body {
 .MuiOutlinedInput-root.Mui-focused {
     box-shadow:
         0 0 0 2px #0d3a74,
-        0 0 0 4px white;
+        0 0 0 4px yellow;
     border-radius: 2px;
 }

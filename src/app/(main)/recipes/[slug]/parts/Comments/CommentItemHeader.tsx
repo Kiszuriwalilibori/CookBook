@@ -1,0 +1,32 @@
+// CommentItemHeader.tsx
+
+"use client";
+
+import { Box, Typography, Avatar, Chip } from "@mui/material";
+
+import { authorAvatarSx, authorChipSx, commentDateSx, commentHeaderSx } from "./commentStyles";
+
+type CommentItemHeaderProps = {
+    author: string;
+    createdAt: string;
+    isAuthorComment: boolean;
+    relativeTime: string;
+};
+
+export default function CommentItemHeader({ author, createdAt, isAuthorComment, relativeTime }: CommentItemHeaderProps) {
+    return (
+        <Box sx={commentHeaderSx}>
+            {isAuthorComment && <Avatar src="/images/author.jpg" alt="Piotr" sx={authorAvatarSx} />}
+
+            <Typography variant="body1">
+                <strong>{author}</strong>
+            </Typography>
+
+            {isAuthorComment && <Chip label="Autor" size="small" color="primary" sx={authorChipSx} />}
+
+            <Typography variant="caption" sx={commentDateSx} dateTime={createdAt} component="time">
+                {relativeTime}
+            </Typography>
+        </Box>
+    );
+}

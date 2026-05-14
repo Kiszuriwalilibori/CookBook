@@ -30,7 +30,6 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
     function resetForm() {
         setAuthor("");
         setContent("");
-
         setAuthorShowErrors(false);
         setContentShowErrors(false);
         setAuthorActivated(false);
@@ -72,13 +71,6 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
 
                 {!isAdminLogged && (
                     <>
-                        {/* <Box
-                            id="Author Text Field Row"
-                            sx={fieldRowSx}
-                            onMouseLeave={() => {
-                                if (authorActivated) setAuthorShowErrors(true);
-                            }}
-                        > */}
                         <TextFieldRow id="Author Text Field Row" activated={authorActivated} onShowErrors={() => setAuthorShowErrors(true)}>
                             <FormLabel required sx={formLabelSx}>
                                 Przedstaw się
@@ -108,13 +100,6 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
                     </>
                 )}
 
-                {/* <Box
-                    id=" Content Text Field Row"
-                    sx={fieldRowSx}
-                    onMouseLeave={() => {
-                        if (contentActivated) setContentShowErrors(true);
-                    }}
-                > */}
                 <TextFieldRow id="Content Text Field Row" activated={contentActivated} onShowErrors={() => setContentShowErrors(true)}>
                     <FormLabel id="Content Form Label" required sx={formLabelSx}>
                         Skomentuj
@@ -168,16 +153,6 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
     );
 }
 
-// todo: focus MuiButton: {
-//   styleOverrides: {
-//     root: {
-//       "&:focus-visible": {
-//         outline: "3px solid #1976d2",
-//         outlineOffset: 2,
-//       },
-//     },
-//   },
-// }
 // Focus powinien:
 
 // być grubszy niż border
