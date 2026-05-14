@@ -10,6 +10,8 @@ export const Section = styled(Box)(({ theme }) => ({
 export const SlideWrapper = styled(Box)(({ theme }) => ({
     paddingLeft: theme.spacing(0.5),
     paddingRight: theme.spacing(0.5),
+    paddingTop: theme.spacing(0.5),
+    paddingBottom: theme.spacing(0.5),
 }));
 
 export const StyledCard = styled(Card)(({ theme }) => ({

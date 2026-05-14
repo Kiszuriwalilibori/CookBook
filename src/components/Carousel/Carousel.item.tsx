@@ -20,6 +20,12 @@ const CarouselItem: React.FC<SlideItemProps> = ({ slide }) => {
                         outline: "none",
                         borderRadius: "2px",
                     },
+                    "&:focus-within:focus-visible": {
+                        boxShadow: `
+            0 0 0 3px #0d3a74,
+            0 0 0 5px white
+        `,
+                    },
                 }}
             >
                 <SlideLink slide={slide}>
