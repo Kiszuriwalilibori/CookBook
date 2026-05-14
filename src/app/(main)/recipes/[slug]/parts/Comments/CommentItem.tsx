@@ -14,8 +14,9 @@ import Chip from "@mui/material/Chip";
 import { authorAvatarSx, authorChipSx, commentActionsSx, commentCardSx, commentContentWrapperSx, commentDateSx, commentHeaderSx, commentWrapperSx, repliesContainerSx, threadLineSx } from "./commentStyles";
 import { handleApiError } from "./utils/handleError";
 import LikeItButton from "./LikeItButton";
-import { AnimatedDots } from "./AnimatedDots";
+// import { AnimatedDots } from "./AnimatedDots";
 import { useLikeAnimation } from "./utils/useLikeAnimation";
+import { LoadingIndicator } from "@/components";
 
 function formatRelativeTime(date: string) {
     const now = new Date();
@@ -134,6 +135,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
             <Box sx={commentContentWrapperSx(depth)}>
                 {/* 🧱 card */}
                 <Box sx={commentCardSx(depth, isOwnComment)}>
+                    <LoadingIndicator open={isReplySubmitting} prompt="Dodawanie odpowiedzi w toku" />
                     <Box sx={commentHeaderSx}>
                         {isAuthorComment && <Avatar src="/images/author.jpg" alt="Piotr" sx={authorAvatarSx} />}
 
@@ -155,12 +157,6 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                         <LikeItButton alreadyLiked={alreadyLiked} likesCount={likes.length} isLiking={isLiking} animate={animateLike} onLike={handleLike} />
 
                         <ReplyButton onToggle={() => setFormOpen(v => !v)} commentId={comment._id} author={comment.author} />
-                        {isReplySubmitting && (
-                            <Typography variant="caption" color="warning.main" sx={{ opacity: 0.7 }}>
-                                Wysyłanie...
-                                <AnimatedDots />
-                            </Typography>
-                        )}
                     </Box>
 
                     <ReplyCollapse open={formOpen} commentId={comment._id}>
@@ -169,13 +165,6 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                                 textAreaRef={textAreaRef}
                                 key={formOpen ? "open" : "closed"}
                                 submitLabel="Odpowiedz"
-                                // onSubmit={async data => {
-                                //     setFormOpen(false);
-                                //     await handleAddComment({
-                                //         ...data,
-                                //         parentId: comment._id,
-                                //     });
-                                // }}
                                 onSubmit={async data => {
                                     setFormOpen(false);
                                     setIsReplySubmitting(true);

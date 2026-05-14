@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails, Skeleton, Collapse } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import LoadingIndicator from "@/components/LoadingIndicator";
 
 import CommentItem from "./CommentItem";
 import CommentForm from "./CommentForm";
@@ -16,6 +17,7 @@ import { handleApiError } from "./utils/handleError";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
+    const [isSubmittingComment, setIsSubmittingComment] = useState(false);
     const [accordionOpen, setAccordionOpen] = useState(true);
     const [formOpen, setFormOpen] = useState(false);
     const showMessage = useMessage();
@@ -45,7 +47,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 fingerprint: "",
                 likes: [],
             };
-
+            setIsSubmittingComment(true);
             options?.onSuccess?.();
             setComments(prev => [optimisticComment, ...(prev ?? [])]);
 
@@ -84,6 +86,8 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
 
                 options?.onError?.();
+            } finally {
+                setIsSubmittingComment(false);
             }
         },
         [recipeId, fingerprint]
@@ -151,6 +155,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     return (
         <>
             <Box id="comments">
+                <LoadingIndicator open={isSubmittingComment} prompt="Dodawanie komentarza w toku" />
                 <Accordion expanded={accordionOpen} onChange={(_, expanded) => setAccordionOpen(expanded)} elevation={0}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography variant="h5">Komentarze ({safeFlatComments.length})</Typography>

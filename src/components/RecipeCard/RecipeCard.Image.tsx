@@ -10,7 +10,7 @@ interface RecipeCardImageProps {
 export const RecipeCardImage = React.memo(function RecipeCardImage({ imageUrl, title }: RecipeCardImageProps) {
     return (
         <Box sx={styles.imageWrapper}>
-            <CardMedia component="img" height={200} image={imageUrl} alt={title} sx={styles.media} />
+            <CardMedia component="img" height={200} image={imageUrl} alt={title ? `${title} - zdjęcie przepisu` : "Zdjęcie przepisu"} title={title} sx={styles.media} />
         </Box>
     );
 });

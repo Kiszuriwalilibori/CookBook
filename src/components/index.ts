@@ -11,5 +11,6 @@ import RecipeNotesModal from "./RecipeNotesModal/RecipeNotesModal";
 import LatestRecipesSection from "./LatestRecipesSection/LatestRecipesSection";
 import TopRatedRecipesSection from "./TopRatedRecipesSection";
 import Providers from "./AppProvider";
+import LoadingIndicator from "./LoadingIndicator";
 
-export { ConfirmRemoveDialog, Providers, TopRatedRecipesSection, LatestRecipesSection, RecipeNotesModal, Footer, Header, Carousel, Menu, PageTitle, RecipeCard, RecipeFilters, Separator };
+export { ConfirmRemoveDialog, LoadingIndicator, Providers, TopRatedRecipesSection, LatestRecipesSection, RecipeNotesModal, Footer, Header, Carousel, Menu, PageTitle, RecipeCard, RecipeFilters, Separator };
