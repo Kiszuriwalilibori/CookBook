@@ -58,6 +58,7 @@ const Menu: React.FC<MenuProps> = ({ navItems, mobileOpen, onMobileOpen, onMobil
                                         <ListItemIcon sx={mobileMenuIconStyle}>{item.icon}</ListItemIcon>
                                         <ListItemText
                                             primary={item.label.trim()}
+                                            id="list item text"
                                             slotProps={{
                                                 primary: {
                                                     sx: {
@@ -102,7 +103,7 @@ const Menu: React.FC<MenuProps> = ({ navItems, mobileOpen, onMobileOpen, onMobil
                                 !item.hidden && (
                                     <React.Fragment key={item.label}>
                                         {item.href ? (
-                                            <Box component={Link} href={item.href} sx={desktopItemStyles(currentPathname, "")}>
+                                            <Box component={Link} aria-current={currentPathname === item.href ? "page" : undefined} href={item.href} sx={desktopItemStyles(currentPathname, "")}>
                                                 <Box component="span" sx={desktopMenuIconStyle}>
                                                     {item.icon}
                                                 </Box>
@@ -111,7 +112,7 @@ const Menu: React.FC<MenuProps> = ({ navItems, mobileOpen, onMobileOpen, onMobil
                                                 </Typography>
                                             </Box>
                                         ) : (
-                                            <Box sx={desktopItemStyles(currentPathname, "")} onClick={item.onClick} role="button" tabIndex={0} onKeyDown={e => e.key === "Enter" && item.onClick?.()}>
+                                            <Box aria-current={currentPathname === item.href ? "page" : undefined} sx={desktopItemStyles(currentPathname, "")} onClick={item.onClick} role="button" tabIndex={0} onKeyDown={e => e.key === "Enter" && item.onClick?.()}>
                                                 <Box component="span" sx={desktopMenuIconStyle}>
                                                     {item.icon}
                                                 </Box>
@@ -132,7 +133,7 @@ const Menu: React.FC<MenuProps> = ({ navItems, mobileOpen, onMobileOpen, onMobil
                 </Toolbar>
             </AppBar>
 
-            <Drawer anchor="top" open={mobileOpen} onClose={onMobileClose} ModalProps={{ keepMounted: true }} sx={drawerStyle}>
+            <Drawer anchor="top" aria-label="Menu nawigacyjne" role="navigation" open={mobileOpen} onClose={onMobileClose} ModalProps={{ keepMounted: true }} sx={drawerStyle}>
                 {drawer}
             </Drawer>
         </Box>
