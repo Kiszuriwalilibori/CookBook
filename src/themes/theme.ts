@@ -121,9 +121,9 @@ const baseTheme = createTheme({
             styleOverrides: {
                 root: {
                     color: "#F6723D",
-                    "&.Mui-focused": {
-                        color: "#F44F0C",
-                    },
+                    // "&.Mui-focused": {
+                    //     color: "#F44F0C",
+                    // },
                 },
             },
         },
@@ -136,10 +136,10 @@ const baseTheme = createTheme({
                     "&:hover .MuiOutlinedInput-notchedOutline": {
                         borderColor: "#FF9F41",
                     },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#F44F0C",
-                        boxShadow: "0 0 0 3px #F6723D30", // subtle orange focus halo
-                    },
+                    // "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    //     borderColor: "#F44F0C",
+                    //     boxShadow: "0 0 0 3px #F6723D30", // subtle orange focus halo
+                    // },
                 },
             },
         },
