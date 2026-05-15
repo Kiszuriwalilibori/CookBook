@@ -113,19 +113,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                 <Box sx={commentCardSx(depth, isOwnComment)}>
                     <LoadingIndicator open={isReplySubmitting} prompt="Dodawanie odpowiedzi w toku" />
                     <CommentItemHeader author={comment.author} createdAt={comment.createdAt} isAuthorComment={isAuthorComment} relativeTime={getRelativeTime(comment.createdAt)} />
-                    {/* <Box sx={commentHeaderSx}>
-                        {isAuthorComment && <Avatar src="/images/author.jpg" alt="Piotr" sx={authorAvatarSx} />}
 
-                        <Typography variant="body1">
-                            <strong>{comment.author}</strong>
-                        </Typography>
-
-                        {isAuthorComment && <Chip label="Autor" size="small" color="primary" sx={authorChipSx} />}
-
-                        <Typography variant="caption" sx={commentDateSx}>
-                            {getRelativeTime(comment.createdAt)}
-                        </Typography>
-                    </Box> */}
                     <Typography variant="body1" sx={{ mb: 0.5 }}>
                         {comment.content}
                     </Typography>

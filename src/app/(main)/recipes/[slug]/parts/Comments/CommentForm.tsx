@@ -4,10 +4,11 @@ import { useState } from "react";
 import { Box, TextField, Button, Paper, FormLabel } from "@mui/material";
 import { useIsAdminLogged } from "@/stores";
 import { errorMessages, validateComment } from "./utils";
-import { paperSx, textFieldSx, submitButtonSx, formLabelSx } from "./commentStyles";
+import { paperSx, textFieldSx, submitButtonSx, formLabelSx, actionsBoxSx } from "./commentStyles";
 import { Honeypot } from "./Honeypot";
 import { ValidationErrorBox } from "./ValidationErrorBox";
 import { TextFieldRow } from "./TextFieldRow";
+import { CommentFormCancelButton } from "./CommentFormCancelButton";
 
 export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Dodaj", onCancel }: { textAreaRef?: React.RefObject<HTMLTextAreaElement | null> | null; onSubmit: (data: { author: string; content: string }) => Promise<void>; submitLabel?: string; onCancel?: () => void }) {
     const [author, setAuthor] = useState("");
@@ -34,6 +35,10 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
         setContentShowErrors(false);
         setAuthorActivated(false);
         setContentActivated(false);
+    }
+    function handleReset() {
+        resetForm();
+        onCancel?.();
     }
 
     async function handleSubmit() {
@@ -128,25 +133,11 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
                 </TextFieldRow>
                 <ValidationErrorBox showErrors={contentShowErrors} hasErrors={validation.contentErrors.length > 0} errorText={contentErrorText} id="content-error" />
 
-                <Box display="flex" flexDirection={{ xs: "column-reverse", sm: "row" }} justifyContent={{ xs: "stretch", sm: "space-evenly" }} alignItems="center" gap={1} mt={1}>
+                <Box sx={actionsBoxSx}>
                     <Button fullWidth variant="contained" onClick={handleSubmit} disabled={baseDisabled || !validation.isValid} sx={submitButtonSx}>
                         {submitLabel}
                     </Button>
-
-                    {onCancel && (
-                        <Button
-                            variant="contained"
-                            color="warning"
-                            onClick={() => {
-                                resetForm();
-                                onCancel();
-                            }}
-                            fullWidth
-                            sx={{ flex: { sm: 1 }, minWidth: { sm: 140 } }}
-                        >
-                            Anuluj
-                        </Button>
-                    )}
+                    {onCancel && <CommentFormCancelButton onReset={handleReset} />}
                 </Box>
             </Box>
         </Paper>

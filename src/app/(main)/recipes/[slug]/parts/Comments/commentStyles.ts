@@ -337,3 +337,16 @@ export const desktopCommentButtonWrapperSx = {
     display: { xs: "none", md: "flex" },
     zIndex: 1300,
 };
+export const actionsBoxSx = {
+    display: "flex",
+    flexDirection: { xs: "column-reverse", sm: "row" },
+    justifyContent: { xs: "stretch", sm: "space-evenly" },
+    alignItems: "center",
+    gap: 1,
+    mt: 1,
+};
+
+export const cancelButtonSx = {
+    flex: { sm: 1 },
+    minWidth: { sm: 140 },
+};
