@@ -13,7 +13,7 @@ import { commentActionsSx, commentCardSx, commentContentWrapperSx, commentWrappe
 import { handleApiError } from "./utils/handleError";
 import LikeItButton from "./LikeItButton";
 import { LoadingIndicator } from "@/components";
-import { checkIsOwnComment, useLikeAnimation, getRelativeTime, useSetInitialFocusInCommentItem } from "./utils";
+import { checkIsOwnComment, useLikeAnimation, getRelativeTime, useSetInitialFocusInCommentItem, getAbsoluteCommentDate } from "./utils";
 import CommentItemHeader from "./CommentItemHeader";
 
 type AddCommentPayload = {
@@ -112,7 +112,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                 {/* 🧱 card */}
                 <Box sx={commentCardSx(depth, isOwnComment)}>
                     <LoadingIndicator open={isReplySubmitting} prompt="Dodawanie odpowiedzi w toku" />
-                    <CommentItemHeader author={comment.author} createdAt={comment.createdAt} isAuthorComment={isAuthorComment} relativeTime={getRelativeTime(comment.createdAt)} />
+                    <CommentItemHeader author={comment.author} createdAt={comment.createdAt} isAuthorComment={isAuthorComment} relativeTime={getRelativeTime(comment.createdAt)} absoluteDate={getAbsoluteCommentDate(comment.createdAt)} />
 
                     <Typography variant="body1" sx={{ mb: 0.5 }}>
                         {comment.content}

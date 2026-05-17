@@ -5,5 +5,6 @@ import { useSetInitialFocusInCommentItem } from "./useSetInitialFocusInCommentIt
 import getRelativeTime from "./getRelativeTime";
 import { checkIsOwnComment } from "./checkIsOwnComment";
 import { useLikeAnimation } from "./useLikeAnimation";
+import { getAbsoluteCommentDate } from "./getAbsoluteCommentDate";
 
-export { validateComment, useLikeAnimation, checkIsOwnComment, getRelativeTime, useSetInitialFocusInCommentItem, errorMessages, useCommentsVisibility };
+export { validateComment, getAbsoluteCommentDate, useLikeAnimation, checkIsOwnComment, getRelativeTime, useSetInitialFocusInCommentItem, errorMessages, useCommentsVisibility };
