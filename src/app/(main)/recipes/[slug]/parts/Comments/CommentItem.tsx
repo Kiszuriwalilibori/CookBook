@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 import { RecipeComment } from "@/types";
@@ -43,12 +43,32 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
     const [likes, setLikes] = useState<string[]>(comment.likes);
     const [isLiking, setIsLiking] = useState(false);
     const [isReplySubmitting, setIsReplySubmitting] = useState(false);
+
     const { animateLike, triggerLikeAnimation } = useLikeAnimation(300);
     const fingerprint = useFingerprint();
     const showMessage = useMessage();
     const isAuthorComment = comment.isAuthor === true;
     const isOwnComment = checkIsOwnComment(fingerprint, comment.fingerprint);
     const textAreaRef = useSetInitialFocusInCommentItem(formOpen);
+    const handleReplySubmit = useCallback(
+        async (data: Omit<AddCommentPayload, "parentId">) => {
+            setFormOpen(false);
+            setIsReplySubmitting(true);
+
+            try {
+                await handleAddComment({
+                    ...data,
+                    parentId: comment._id,
+                });
+            } finally {
+                setIsReplySubmitting(false);
+            }
+        },
+        [handleAddComment, comment._id]
+    );
+    const handleReplyCancel = useCallback(() => {
+        setFormOpen(false);
+    }, []);
 
     if (!comment) return null;
 
@@ -127,24 +147,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
                     <ReplyCollapse open={formOpen} commentId={comment._id}>
                         <Box>
-                            <CommentForm
-                                textAreaRef={textAreaRef}
-                                key={formOpen ? "open" : "closed"}
-                                submitLabel="Odpowiedz"
-                                onSubmit={async data => {
-                                    setFormOpen(false);
-                                    setIsReplySubmitting(true);
-                                    try {
-                                        await handleAddComment({
-                                            ...data,
-                                            parentId: comment._id,
-                                        });
-                                    } finally {
-                                        setIsReplySubmitting(false);
-                                    }
-                                }}
-                                onCancel={() => setFormOpen(false)}
-                            />
+                            <CommentForm textAreaRef={textAreaRef} key={formOpen ? "open" : "closed"} submitLabel="Odpowiedz" onSubmit={handleReplySubmit} onCancel={handleReplyCancel} />
                         </Box>
                     </ReplyCollapse>
 

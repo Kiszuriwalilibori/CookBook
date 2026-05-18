@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Box, TextField, Button, Paper, FormLabel } from "@mui/material";
+import { Box, TextField, Button, Paper, FormLabel, FormControlLabel, Checkbox } from "@mui/material";
 import { useIsAdminLogged } from "@/stores";
 import { errorMessages, validateComment } from "./utils";
 import { paperSx, textFieldSx, submitButtonSx, formLabelSx, actionsBoxSx } from "./commentStyles";
@@ -19,6 +19,7 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
 
     const [authorActivated, setAuthorActivated] = useState(false);
     const [contentActivated, setContentActivated] = useState(false);
+    const [isShortComment, setIsShortComment] = useState(false);
 
     const isAdminLogged = useIsAdminLogged();
 
@@ -134,7 +135,9 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
                     />
                 </TextFieldRow>
                 <ValidationErrorBox showErrors={contentShowErrors} hasErrors={validation.contentErrors.length > 0} errorText={contentErrorText} id="content-error" />
-
+                <Box sx={{ mt: 1, mb: 2 }}>
+                    <FormControlLabel control={<Checkbox checked={isShortComment} onChange={e => setIsShortComment(e.target.checked)} color="secondary" />} label="To jest krótki komentarz" />
+                </Box>
                 <Box sx={actionsBoxSx}>
                     <Button fullWidth variant="contained" onClick={handleSubmit} disabled={baseDisabled || !validation.isValid} sx={submitButtonSx}>
                         {submitLabel}
