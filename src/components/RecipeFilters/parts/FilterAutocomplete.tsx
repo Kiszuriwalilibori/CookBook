@@ -25,6 +25,7 @@ export default function FilterAutocomplete<T = string>({ label, placeholder = "W
 
     return (
         <Autocomplete<T, boolean, false, false>
+            id="filter_autocomplete"
             fullWidth
             multiple={multiple}
             options={options}
@@ -67,7 +68,7 @@ export default function FilterAutocomplete<T = string>({ label, placeholder = "W
                     </li>
                 );
             }}
-            renderInput={params => <TextField {...params} label={label} placeholder={placeholder} InputLabelProps={{ shrink: true }} sx={labelSx(theme)} error={error} helperText={helperText} />}
+            renderInput={params => <TextField {...params} id="text_field" label={label} placeholder={placeholder} InputLabelProps={{ shrink: true }} sx={labelSx(theme)} error={error} helperText={helperText} />}
         />
     );
 }

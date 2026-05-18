@@ -91,9 +91,10 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
                                     },
                                 }}
                                 autoComplete="off"
+                                helperText="2–40 znaków"
                                 fullWidth
                                 size="small"
-                                label="Przedstaw się"
+                                placeholder="np.: Kiszuriwalilibori"
                                 value={author}
                                 onChange={e => setAuthor(e.target.value)}
                                 onFocus={() => setAuthorActivated(true)}
@@ -119,11 +120,12 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
                             },
                         }}
                         fullWidth
-                        // multiline
+                        multiline // niszczy focusa
                         autoComplete="off"
-                        // minRows={3}
+                        minRows={3} // todo niszczy focusa
                         size="small"
-                        label="Komentarz"
+                        placeholder="Podziel się swoimi refleksjami"
+                        helperText="3–1000 znaków"
                         value={content}
                         onChange={e => setContent(e.target.value)}
                         onFocus={() => setContentActivated(true)}
@@ -144,8 +146,4 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
     );
 }
 
-// Focus powinien:
-
-// być grubszy niż border
-// mieć kontrast min 3:1
-// być widoczny w dark mode
+// TODO: w sumie helperText może też obsłużyć validation row

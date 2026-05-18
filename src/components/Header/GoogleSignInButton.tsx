@@ -42,7 +42,8 @@ export default function GoogleSignInButton() {
                 elevation={0}
                 sx={{
                     display: "flex",
-                    flexDirection: "row",
+                    flexDirection: { xs: "column", sm: "row" },
+                    width: { xs: "100%", sm: "auto" },
                     alignItems: "center",
                     gap: 1,
                     backgroundColor: "transparent",

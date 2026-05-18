@@ -35,7 +35,7 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
     switch (field.component) {
         case "autocomplete":
             return (
-                <Box sx={fieldBoxSx} key={field.key}>
+                <Box sx={fieldBoxSx} key={field.key} id="filter_field_renderer">
                     <FilterAutocomplete
                         label={field.label}
                         options={field.options}
