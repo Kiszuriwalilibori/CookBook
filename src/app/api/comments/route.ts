@@ -137,67 +137,103 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Failed to create comment" }, { status: 500 });
     }
 }
-
 export async function PATCH(req: Request) {
     try {
-        const { commentId, fingerprint } = await req.json();
+        const { commentId, fingerprint, option } = await req.json();
 
-        if (!commentId || !fingerprint) {
+        if (!option) {
             return NextResponse.json(
                 {
                     ok: false,
                     error: {
-                        code: "INVALID_INPUT",
-                        message: "Brak odcisku palca lub id komentarza",
+                        code: "MISSING_OPTION",
+                        message: "Brak parametru 'option'",
                     },
                 },
                 { status: 400 }
             );
         }
 
-        const comment = await writeClient.getDocument(commentId);
+        switch (option) {
+            case "HANDLE_LIKE":
+                // ====================  LOGIKA LAJKOWANIA====================
 
-        if (!comment) {
-            return NextResponse.json(
-                {
-                    ok: false,
-                    error: {
-                        code: "COMMENT_NOT_FOUND",
-                        message: "Nie znaleziono komentarza, który pragniesz polubić",
+                if (!commentId || !fingerprint) {
+                    return NextResponse.json(
+                        {
+                            ok: false,
+                            error: {
+                                code: "INVALID_INPUT",
+                                message: "Brak odcisku palca lub id komentarza",
+                            },
+                        },
+                        { status: 400 }
+                    );
+                }
+
+                const comment = await writeClient.getDocument(commentId);
+
+                if (!comment) {
+                    return NextResponse.json(
+                        {
+                            ok: false,
+                            error: {
+                                code: "COMMENT_NOT_FOUND",
+                                message: "Nie znaleziono komentarza, który pragniesz polubić",
+                            },
+                        },
+                        { status: 404 }
+                    );
+                }
+
+                const likes = (comment.likes || []) as string[];
+                const alreadyLiked = likes.includes(fingerprint);
+                let updatedLikes: string[];
+
+                if (alreadyLiked) {
+                    updatedLikes = likes.filter(f => f !== fingerprint);
+                    await writeClient.patch(commentId).set({ likes: updatedLikes }).commit();
+                } else {
+                    updatedLikes = [...likes, fingerprint];
+                    await writeClient.patch(commentId).setIfMissing({ likes: [] }).append("likes", [fingerprint]).commit();
+                }
+
+                return NextResponse.json(
+                    {
+                        ok: true,
+                        data: {
+                            commentId,
+                            likes: updatedLikes,
+                            liked: !alreadyLiked,
+                        },
                     },
-                },
-                { status: 404 }
-            );
+                    { status: 200 }
+                );
+
+            // ================================================================
+
+            case "HANDLE_SHORT_COMMENT":
+                // Na razie placeholder – tu będziesz dodawał logikę później
+                return NextResponse.json(
+                    {
+                        ok: true,
+                        message: "HANDLE_SHORT_COMMENT - obsługa w przygotowaniu",
+                    },
+                    { status: 200 }
+                );
+
+            default:
+                return NextResponse.json(
+                    {
+                        ok: false,
+                        error: {
+                            code: "UNKNOWN_OPTION",
+                            message: `Nieznana opcja: ${option}`,
+                        },
+                    },
+                    { status: 400 }
+                );
         }
-
-        const likes = (comment.likes || []) as string[];
-        const alreadyLiked = likes.includes(fingerprint);
-        let updatedLikes: string[];
-
-        if (alreadyLiked) {
-            updatedLikes = likes.filter(f => f !== fingerprint);
-            await writeClient
-                .patch(commentId)
-                .set({
-                    likes: updatedLikes,
-                })
-                .commit();
-        } else {
-            updatedLikes = [...likes, fingerprint];
-            await writeClient.patch(commentId).setIfMissing({ likes: [] }).append("likes", [fingerprint]).commit();
-        }
-
-        return NextResponse.json(
-            {
-                ok: true,
-                data: {
-                    commentId,
-                    likes: updatedLikes,
-                    liked: !alreadyLiked,
-                },
-            },
-            { status: 200 }
-        );
     } catch (err) {
         console.error("[COMMENTS][PATCH]", err);
         return NextResponse.json(
@@ -205,7 +241,7 @@ export async function PATCH(req: Request) {
                 ok: false,
                 error: {
                     code: "INTERNAL_ERROR",
-                    message: "Failed to toggle like",
+                    message: "Failed to process request",
                 },
             },
             { status: 500 }

@@ -167,7 +167,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                             <Collapse in={formOpen} timeout={400} sx={collapseSx}>
                                 <CommentForm
                                     submitLabel="Dodaj"
-                                    onSubmit={async data => {
+                                    onSubmitNormalComment={async data => {
                                         setFormOpen(false);
                                         await handleAddComment(data);
                                     }}

@@ -9,8 +9,20 @@ import { Honeypot } from "./Honeypot";
 import { ValidationErrorBox } from "./ValidationErrorBox";
 import { TextFieldRow } from "./TextFieldRow";
 import { CommentFormCancelButton } from "./CommentFormCancelButton";
+export interface CommentFormProps {
+    /** Ref do pola tekstowego (używany m.in. do focusa po błędzie) */
+    textAreaRef?: React.RefObject<HTMLTextAreaElement | null> | null;
 
-export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Dodaj", onCancel }: { textAreaRef?: React.RefObject<HTMLTextAreaElement | null> | null; onSubmit: (data: { author: string; content: string }) => Promise<void>; submitLabel?: string; onCancel?: () => void }) {
+    /** Funkcja wywoływana po poprawnym przesłaniu formularza */
+    onSubmitNormalComment: (data: { author: string; content: string }) => Promise<void>;
+
+    /** Etykieta przycisku wysyłania */
+    submitLabel?: string;
+
+    /** Opcjonalna funkcja cancel (np. zamykanie formularza odpowiedzi) */
+    onCancel?: () => void;
+}
+export default function CommentForm({ textAreaRef, onSubmitNormalComment, submitLabel = "Dodaj", onCancel }: CommentFormProps) {
     const [author, setAuthor] = useState("");
     const [content, setContent] = useState("");
 
@@ -56,7 +68,7 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
             return;
         }
 
-        await onSubmit({
+        await onSubmitNormalComment({
             author: finalAuthor,
             content,
         });
@@ -135,9 +147,11 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
                     />
                 </TextFieldRow>
                 <ValidationErrorBox showErrors={contentShowErrors} hasErrors={validation.contentErrors.length > 0} errorText={contentErrorText} id="content-error" />
-                <Box sx={{ mt: 1, mb: 2 }}>
-                    <FormControlLabel control={<Checkbox checked={isShortComment} onChange={e => setIsShortComment(e.target.checked)} color="secondary" />} label="To jest krótki komentarz" />
-                </Box>
+                {isAdminLogged && (
+                    <Box sx={{ mt: 1, mb: 2 }}>
+                        <FormControlLabel control={<Checkbox checked={isShortComment} onChange={e => setIsShortComment(e.target.checked)} color="primary" />} label="To jest krótki komentarz" />
+                    </Box>
+                )}
                 <Box sx={actionsBoxSx}>
                     <Button fullWidth variant="contained" onClick={handleSubmit} disabled={baseDisabled || !validation.isValid} sx={submitButtonSx}>
                         {submitLabel}

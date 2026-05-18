@@ -95,6 +95,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                 body: JSON.stringify({
                     commentId: comment._id,
                     fingerprint,
+                    option: "HANDLE_LIKE",
                 }),
             });
             const data = await res.json();
@@ -147,7 +148,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
                     <ReplyCollapse open={formOpen} commentId={comment._id}>
                         <Box>
-                            <CommentForm textAreaRef={textAreaRef} key={formOpen ? "open" : "closed"} submitLabel="Odpowiedz" onSubmit={handleReplySubmit} onCancel={handleReplyCancel} />
+                            <CommentForm textAreaRef={textAreaRef} key={formOpen ? "open" : "closed"} submitLabel="Odpowiedz" onSubmitNormalComment={handleReplySubmit} onCancel={handleReplyCancel} />
                         </Box>
                     </ReplyCollapse>
 
