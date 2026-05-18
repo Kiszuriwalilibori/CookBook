@@ -55,6 +55,20 @@ export default {
       initialValue: [],
     },
 
-    // 🧠 MODERATION STATUS
+    {
+      name: 'shortComment',
+      title: 'Short Comment',
+      type: 'object',
+      fields: [
+        {
+          name: 'content',
+          type: 'string',
+        },
+        {
+          name: 'createdAt',
+          type: 'datetime',
+        },
+      ],
+    },
   ],
 }

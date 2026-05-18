@@ -94,7 +94,7 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
                                 helperText="2–40 znaków"
                                 fullWidth
                                 size="small"
-                                placeholder="np.: Kiszuriwalilibori"
+                                placeholder="np.: Anulka"
                                 value={author}
                                 onChange={e => setAuthor(e.target.value)}
                                 onFocus={() => setAuthorActivated(true)}
@@ -124,7 +124,7 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
                         autoComplete="off"
                         minRows={3} // todo niszczy focusa
                         size="small"
-                        placeholder="Podziel się swoimi refleksjami"
+                        placeholder="Napisz coś"
                         helperText="3–1000 znaków"
                         value={content}
                         onChange={e => setContent(e.target.value)}
@@ -145,5 +145,3 @@ export default function CommentForm({ textAreaRef, onSubmit, submitLabel = "Doda
         </Paper>
     );
 }
-
-// TODO: w sumie helperText może też obsłużyć validation row

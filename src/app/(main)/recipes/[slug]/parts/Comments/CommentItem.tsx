@@ -15,6 +15,7 @@ import LikeItButton from "./LikeItButton";
 import { LoadingIndicator } from "@/components";
 import { checkIsOwnComment, useLikeAnimation, getRelativeTime, useSetInitialFocusInCommentItem, getAbsoluteCommentDate } from "./utils";
 import CommentItemHeader from "./CommentItemHeader";
+import ShortCommentItem from "./ShortCommentItem";
 
 type AddCommentPayload = {
     author: string;
@@ -117,7 +118,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                     <Typography variant="body1" sx={{ mb: 0.5 }}>
                         {comment.content}
                     </Typography>
-
+                    {comment.shortComment && <ShortCommentItem comment={comment} />}
                     <Box sx={commentActionsSx}>
                         <LikeItButton alreadyLiked={alreadyLiked} likesCount={likes.length} isLiking={isLiking} animate={animateLike} onLike={handleLike} />
 

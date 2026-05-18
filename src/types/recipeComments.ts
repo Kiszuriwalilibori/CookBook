@@ -12,6 +12,10 @@ export interface RecipeComment {
     fingerprint: string;
     moderationScore?: number;
     moderationReason?: string;
+    shortComment?: {
+        content: string;
+        createdAt: string;
+    } | null;
 
     likes: string[];
 
