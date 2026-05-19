@@ -92,7 +92,59 @@ export default function Comments({ recipeId }: { recipeId: string }) {
         },
         [recipeId, fingerprint]
     );
+    // const handleAddShortComment = useCallback(
+    //     async (data: { commentId: string; shortContent: string }) => {
+    //         const { commentId, shortContent } = data;
 
+    //         if (!commentId || !shortContent?.trim()) {
+    //             showMessage.warning("Brak treści skróconego komentarza");
+    //             return false;
+    //         }
+
+    //         setIsSubmittingComment(true);
+
+    //         try {
+    //             const res = await fetch("/api/comments", {
+    //                 method: "PATCH",
+    //                 headers: { "Content-Type": "application/json" },
+    //                 body: JSON.stringify({
+    //                     commentId,
+    //                     shortContent: shortContent.trim(),
+    //                     option: "HANDLE_SHORT_COMMENT",
+    //                 }),
+    //             });
+
+    //             const responseData = await res.json();
+
+    //             if (!responseData.ok) {
+    //                 handleApiError(
+    //                     responseData.error,
+    //                     {
+    //                         FORBIDDEN: () => showMessage.error("Brak uprawnień administratora"),
+    //                         INVALID_INPUT: () => showMessage.warning("Nieprawidłowe dane"),
+    //                         EMPTY_SHORT_COMMENT: () => showMessage.warning("Skrócony komentarz nie może być pusty"),
+    //                         SHORT_COMMENT_TOO_LONG: () => showMessage.warning("Skrócony komentarz jest za długi"),
+    //                         COMMENT_NOT_FOUND: () => showMessage.warning("Komentarz nie został znaleziony"),
+    //                     },
+    //                     msg => showMessage.error(msg || "Nie udało się dodać skróconego komentarza")
+    //                 );
+    //                 return false;
+    //             }
+
+    //             // Aktualizacja lokalnego stanu
+    //             setComments(prev => (prev ?? []).map(c => (c._id === commentId ? { ...c, shortComment: responseData.data.shortComment } : c)));
+
+    //             showMessage.success("Skrócony komentarz został dodany");
+    //             return true;
+    //         } catch {
+    //             showMessage.error("Wystąpił błąd podczas dodawania skróconego komentarza");
+    //             return false;
+    //         } finally {
+    //             setIsSubmittingComment(false);
+    //         }
+    //     },
+    //     [showMessage]
+    // );
     const fetchComments = useCallback(async () => {
         try {
             const res = await fetch(`/api/comments?recipeId=${recipeId}`);
@@ -167,6 +219,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                             <Collapse in={formOpen} timeout={400} sx={collapseSx}>
                                 <CommentForm
                                     submitLabel="Dodaj"
+                                    // onSubmitShortComment={handleAddShortComment}
                                     onSubmitNormalComment={async data => {
                                         setFormOpen(false);
                                         await handleAddComment(data);
@@ -187,7 +240,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                                 {/* FIRST COMMENTS */}
                                 <Box key={viewMode} sx={commentsListSx}>
                                     {visibleItems.map(comment => (
-                                        <CommentItem key={comment._id} comment={comment} recipeId={recipeId} handleAddComment={handleAddComment} />
+                                        <CommentItem /*handleAddShortComment={handleAddShortComment}*/ key={comment._id} comment={comment} recipeId={recipeId} handleAddComment={handleAddComment} />
                                     ))}
                                 </Box>
 

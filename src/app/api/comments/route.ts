@@ -4,6 +4,7 @@ import { google } from "googleapis";
 import { analyzeComment, writeClient, checkCommentCooldown } from "@/utils";
 
 import { nanoid } from "nanoid";
+import { handleShortComment } from "./handleShortComment";
 
 export async function GET(req: Request) {
     try {
@@ -139,8 +140,9 @@ export async function POST(req: Request) {
 }
 export async function PATCH(req: Request) {
     try {
-        const { commentId, fingerprint, option } = await req.json();
-
+        // const { commentId, fingerprint, option } = await req.json();
+        const body = await req.json();
+        const { commentId, fingerprint, option } = body;
         if (!option) {
             return NextResponse.json(
                 {
@@ -157,7 +159,7 @@ export async function PATCH(req: Request) {
         switch (option) {
             case "HANDLE_LIKE":
                 // ====================  LOGIKA LAJKOWANIA====================
-
+                console.log("handle lki");
                 if (!commentId || !fingerprint) {
                     return NextResponse.json(
                         {
@@ -213,14 +215,7 @@ export async function PATCH(req: Request) {
             // ================================================================
 
             case "HANDLE_SHORT_COMMENT":
-                // Na razie placeholder – tu będziesz dodawał logikę później
-                return NextResponse.json(
-                    {
-                        ok: true,
-                        message: "HANDLE_SHORT_COMMENT - obsługa w przygotowaniu",
-                    },
-                    { status: 200 }
-                );
+                return await handleShortComment(body);
 
             default:
                 return NextResponse.json(

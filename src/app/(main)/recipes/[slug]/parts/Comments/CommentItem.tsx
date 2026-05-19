@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useState } from "react";
 
-import { Box, Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 import { RecipeComment } from "@/types";
 import { useFingerprint, useMessage } from "@/hooks";
 import CommentForm from "./CommentForm";
@@ -9,13 +9,13 @@ import CommentForm from "./CommentForm";
 import { ReplyButton } from "./ReplButton";
 import ReplyCollapse from "./ReplyCollapse";
 
-import { commentActionsSx, commentCardSx, commentContentWrapperSx, commentWrapperSx, repliesContainerSx, threadLineSx } from "./commentStyles";
+import { authorAvatarSx, commentActionsSx, commentCardSx, commentContentWrapperSx, commentWrapperSx, repliesContainerSx, threadLineSx } from "./commentStyles";
 import { handleApiError } from "./utils/handleError";
 import LikeItButton from "./LikeItButton";
 import { LoadingIndicator } from "@/components";
 import { checkIsOwnComment, useLikeAnimation, getRelativeTime, useSetInitialFocusInCommentItem, getAbsoluteCommentDate } from "./utils";
 import CommentItemHeader from "./CommentItemHeader";
-import ShortCommentItem from "./ShortCommentItem";
+// import ShortCommentItem from "./ShortCommentItem";
 
 type AddCommentPayload = {
     author: string;
@@ -36,20 +36,81 @@ interface CommentItemProps {
 
     depth?: number;
     handleAddComment: HandleAddComment;
+    //     handleAddShortComment: (data: { commentId: string; shortContent: string }) => Promise<boolean>;
 }
 
-export default function CommentItem({ comment, recipeId, depth = 0, handleAddComment }: CommentItemProps) {
+export default function CommentItem({ comment, recipeId, depth = 0, handleAddComment /*, handleAddShortComment*/ }: CommentItemProps) {
     const [formOpen, setFormOpen] = useState(false);
     const [likes, setLikes] = useState<string[]>(comment.likes);
     const [isLiking, setIsLiking] = useState(false);
     const [isReplySubmitting, setIsReplySubmitting] = useState(false);
-
+    const [shortComment, setShortComment] = useState<string>(comment.shortComment ? comment.shortComment.content : "");
+    const [isShortCommentSubmitting, setIsShortCommentSubmitting] = useState(false);
     const { animateLike, triggerLikeAnimation } = useLikeAnimation(300);
     const fingerprint = useFingerprint();
     const showMessage = useMessage();
     const isAuthorComment = comment.isAuthor === true;
     const isOwnComment = checkIsOwnComment(fingerprint, comment.fingerprint);
     const textAreaRef = useSetInitialFocusInCommentItem(formOpen);
+
+    const handleAddShortComment = useCallback(
+        async (data: { commentId: string; shortContent: string }) => {
+            const prevShortComment = shortComment;
+            const { commentId, shortContent } = data;
+
+            if (!commentId || !shortContent?.trim()) {
+                showMessage.warning("Brak treści skróconego komentarza");
+                return false;
+            }
+            setShortComment(shortContent.trim());
+            setIsShortCommentSubmitting(true);
+
+            try {
+                const res = await fetch("/api/comments", {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        commentId,
+                        shortContent: shortContent.trim(),
+                        option: "HANDLE_SHORT_COMMENT",
+                    }),
+                });
+
+                const responseData = await res.json();
+
+                if (!responseData.ok) {
+                    setShortComment(prevShortComment);
+                    handleApiError(
+                        responseData.error,
+                        {
+                            FORBIDDEN: () => showMessage.error("Brak uprawnień administratora"),
+                            INVALID_INPUT: () => showMessage.warning("Nieprawidłowe dane"),
+                            EMPTY_SHORT_COMMENT: () => showMessage.warning("Skrócony komentarz nie może być pusty"),
+                            SHORT_COMMENT_TOO_LONG: () => showMessage.warning("Skrócony komentarz jest za długi"),
+                            COMMENT_NOT_FOUND: () => showMessage.warning("Komentarz nie został znaleziony"),
+                        },
+                        msg => showMessage.error(msg || "Nie udało się dodać skróconego komentarza")
+                    );
+                    return false;
+                }
+
+                // Aktualizacja lokalnego stanu
+                // sync z backendem
+                setShortComment(responseData.data.shortComment.content);
+
+                showMessage.success("Skrócony komentarz został dodany");
+                return true;
+            } catch {
+                setShortComment(prevShortComment);
+                showMessage.error("Wystąpił błąd podczas dodawania skróconego komentarza");
+                return false;
+            } finally {
+                setIsShortCommentSubmitting(false);
+            }
+        },
+        [showMessage]
+    );
+
     const handleReplySubmit = useCallback(
         async (data: Omit<AddCommentPayload, "parentId">) => {
             setFormOpen(false);
@@ -134,12 +195,26 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                 {/* 🧱 card */}
                 <Box sx={commentCardSx(depth, isOwnComment)}>
                     <LoadingIndicator open={isReplySubmitting} prompt="Dodawanie odpowiedzi w toku" />
+                    <LoadingIndicator open={isShortCommentSubmitting} prompt="Dodawanie krótkiego komentarza w toku" />
                     <CommentItemHeader author={comment.author} createdAt={comment.createdAt} isAuthorComment={isAuthorComment} relativeTime={getRelativeTime(comment.createdAt)} absoluteDate={getAbsoluteCommentDate(comment.createdAt)} />
 
                     <Typography variant="body1" sx={{ mb: 0.5 }}>
                         {comment.content}
                     </Typography>
-                    {comment.shortComment && <ShortCommentItem comment={comment} />}
+                    {shortComment && (
+                        <Box id="Short_Comment" sx={{ display: "flex", justifyContent: "end" }}>
+                            <Box sx={{ ...commentCardSx(0, false), display: "flex", gap: 1 }}>
+                                <Avatar src="/images/author.jpg" alt="Piotr" sx={authorAvatarSx} />
+
+                                <Typography variant="body1">
+                                    <strong>Piotr</strong>
+                                </Typography>
+
+                                <Typography variant="body1">{typeof shortComment === "string" ? shortComment : ""}</Typography>
+                            </Box>
+                        </Box>
+                    )}
+
                     <Box sx={commentActionsSx}>
                         <LikeItButton alreadyLiked={alreadyLiked} likesCount={likes.length} isLiking={isLiking} animate={animateLike} onLike={handleLike} />
 
@@ -148,7 +223,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
                     <ReplyCollapse open={formOpen} commentId={comment._id}>
                         <Box>
-                            <CommentForm textAreaRef={textAreaRef} key={formOpen ? "open" : "closed"} submitLabel="Odpowiedz" onSubmitNormalComment={handleReplySubmit} onCancel={handleReplyCancel} />
+                            <CommentForm textAreaRef={textAreaRef} key={formOpen ? "open" : "closed"} submitLabel="Odpowiedz" onSubmitShortComment={handleAddShortComment} onSubmitNormalComment={handleReplySubmit} onCancel={handleReplyCancel} commentId={comment._id} />
                         </Box>
                     </ReplyCollapse>
 

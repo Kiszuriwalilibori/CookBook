@@ -15,14 +15,16 @@ export interface CommentFormProps {
 
     /** Funkcja wywoływana po poprawnym przesłaniu formularza */
     onSubmitNormalComment: (data: { author: string; content: string }) => Promise<void>;
+    onSubmitShortComment?: (data: { commentId: string; shortContent: string }) => Promise<boolean>;
 
     /** Etykieta przycisku wysyłania */
     submitLabel?: string;
 
     /** Opcjonalna funkcja cancel (np. zamykanie formularza odpowiedzi) */
     onCancel?: () => void;
+    commentId?: string;
 }
-export default function CommentForm({ textAreaRef, onSubmitNormalComment, submitLabel = "Dodaj", onCancel }: CommentFormProps) {
+export default function CommentForm({ textAreaRef, commentId, onSubmitNormalComment, onSubmitShortComment, submitLabel = "Dodaj", onCancel }: CommentFormProps) {
     const [author, setAuthor] = useState("");
     const [content, setContent] = useState("");
 
@@ -53,8 +55,40 @@ export default function CommentForm({ textAreaRef, onSubmitNormalComment, submit
         resetForm();
         onCancel?.();
     }
+    async function handleSubmitShortComment() {
+        console.log("handleSubmitShortComment");
+        if (!onSubmitShortComment) {
+            console.error("onSubmitShortComment is not provided");
+            return;
+        }
 
-    async function handleSubmit() {
+        if (!commentId) {
+            console.error("commentId is required for short comment");
+            return;
+        }
+
+        const result = validateComment({
+            author: isAdminLogged ? "Piotr" : author.trim(),
+            content,
+        });
+
+        if (!result.isValid) {
+            setContentShowErrors(true);
+            return;
+        }
+        handleReset();
+        const success = await onSubmitShortComment({
+            commentId,
+            shortContent: content,
+        });
+
+        if (success) {
+            handleReset();
+            setIsShortComment(false);
+        }
+    }
+
+    async function handleSubmitNormalComment() {
         const finalAuthor = isAdminLogged ? "Piotr" : author.trim();
 
         const result = validateComment({
@@ -153,7 +187,7 @@ export default function CommentForm({ textAreaRef, onSubmitNormalComment, submit
                     </Box>
                 )}
                 <Box sx={actionsBoxSx}>
-                    <Button fullWidth variant="contained" onClick={handleSubmit} disabled={baseDisabled || !validation.isValid} sx={submitButtonSx}>
+                    <Button fullWidth variant="contained" onClick={isShortComment ? handleSubmitShortComment : handleSubmitNormalComment} disabled={baseDisabled || !validation.isValid} sx={submitButtonSx}>
                         {submitLabel}
                     </Button>
                     {onCancel && <CommentFormCancelButton onReset={handleReset} />}
