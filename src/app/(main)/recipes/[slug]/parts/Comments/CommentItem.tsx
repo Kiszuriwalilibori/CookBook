@@ -100,9 +100,9 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
                 showMessage.success("Skrócony komentarz został dodany");
                 return true;
-            } catch {
+            } catch (err) {
                 setShortComment(prevShortComment);
-                showMessage.error("Wystąpił błąd podczas dodawania skróconego komentarza");
+                handleApiError(err, {}, msg => showMessage.error(msg));
                 return false;
             } finally {
                 setIsShortCommentSubmitting(false);

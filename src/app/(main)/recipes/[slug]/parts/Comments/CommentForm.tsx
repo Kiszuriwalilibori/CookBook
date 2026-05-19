@@ -9,6 +9,7 @@ import { Honeypot } from "./Honeypot";
 import { ValidationErrorBox } from "./ValidationErrorBox";
 import { TextFieldRow } from "./TextFieldRow";
 import { CommentFormCancelButton } from "./CommentFormCancelButton";
+import { useMessage } from "@/hooks";
 export interface CommentFormProps {
     /** Ref do pola tekstowego (używany m.in. do focusa po błędzie) */
     textAreaRef?: React.RefObject<HTMLTextAreaElement | null> | null;
@@ -34,6 +35,7 @@ export default function CommentForm({ textAreaRef, commentId, onSubmitNormalComm
     const [authorActivated, setAuthorActivated] = useState(false);
     const [contentActivated, setContentActivated] = useState(false);
     const [isShortComment, setIsShortComment] = useState(false);
+    const showMessage = useMessage();
 
     const isAdminLogged = useIsAdminLogged();
 
@@ -56,14 +58,13 @@ export default function CommentForm({ textAreaRef, commentId, onSubmitNormalComm
         onCancel?.();
     }
     async function handleSubmitShortComment() {
-        console.log("handleSubmitShortComment");
         if (!onSubmitShortComment) {
-            console.error("onSubmitShortComment is not provided");
+            showMessage.error("onSubmitShortComment is not provided");
             return;
         }
 
         if (!commentId) {
-            console.error("commentId is required for short comment");
+            showMessage.error("commentId is required for short comment");
             return;
         }
 
