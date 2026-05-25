@@ -6,7 +6,7 @@ type HandleShortCommentBody = {
 };
 export async function handleShortComment(body: HandleShortCommentBody) {
     const { commentId, shortContent } = body;
-    console.log(commentId, shortContent);
+
     if (!commentId || typeof shortContent !== "string") {
         return NextResponse.json(
             {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails, Skeleton, Collapse } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -200,8 +200,9 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     }, [formOpen]);
 
     const isLoading = comments === null;
-    const safeFlatComments = comments ?? [];
-    const commentTree = buildCommentTree(safeFlatComments);
+    const safeFlatComments = useMemo(() => comments ?? [], [comments]);
+
+    const commentTree = useMemo(() => buildCommentTree(safeFlatComments), [safeFlatComments]);
     const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny } = useCommentsVisibility(commentTree, 3);
 
     return (
