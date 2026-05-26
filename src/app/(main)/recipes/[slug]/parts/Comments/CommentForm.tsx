@@ -169,6 +169,7 @@ export default function CommentForm({ textAreaRef, commentId, onSubmitNormalComm
                         }}
                         fullWidth
                         multiline // niszczy focusa
+                        data-autofocus
                         autoComplete="off"
                         minRows={3} // todo niszczy focusa
                         size="small"

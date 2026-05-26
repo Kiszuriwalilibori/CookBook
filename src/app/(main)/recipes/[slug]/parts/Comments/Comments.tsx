@@ -14,6 +14,8 @@ import type { RecipeComment } from "@/types";
 import { collapseSx, commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
 import { useCommentsVisibility } from "./utils/useCommentsVisibility";
 import { handleApiError } from "./utils/handleError";
+import { useScrollFocusOnOpen } from "./utils";
+// import { useScrollFocusOnOpen } from "./utils/useScrollFocusOnOpen";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
@@ -26,9 +28,8 @@ export default function Comments({ recipeId }: { recipeId: string }) {
         openForm();
         setAccordionOpen(true);
     };
-
-    const formRef = useRef<HTMLDivElement | null>(null);
-
+    const formContainerRef = useRef<HTMLDivElement>(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
     const fingerprint = useFingerprint();
 
     const handleAddComment = useCallback(
@@ -183,21 +184,25 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     }, [fetchComments]);
 
     // 🔥 scroll + autofocus after opening form
-    useEffect(() => {
-        if (isFormOpen && formRef.current) {
-            formRef.current.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-            });
+    // useEffect(() => {
+    //     if (isFormOpen && formRef.current) {
+    //         formRef.current.scrollIntoView({
+    //             behavior: "smooth",
+    //             block: "center",
+    //         });
 
-            setTimeout(() => {
-                const input = formRef.current?.querySelector("input, textarea") as HTMLElement | null;
+    //         setTimeout(() => {
+    //             const input = formRef.current?.querySelector("input, textarea") as HTMLElement | null;
 
-                input?.focus();
-            }, 300);
-        }
-    }, [isFormOpen]);
-
+    //             input?.focus();
+    //         }, 300);
+    //     }
+    // }, [isFormOpen]);
+    useScrollFocusOnOpen({
+        isOpen: isFormOpen,
+        ref: formContainerRef,
+        inputRef: textareaRef,
+    });
     const isLoading = comments === null;
     const safeFlatComments = useMemo(() => comments ?? [], [comments]);
 
@@ -215,9 +220,10 @@ export default function Comments({ recipeId }: { recipeId: string }) {
 
                     <AccordionDetails>
                         {/* FORM */}
-                        <Box ref={formRef}>
+                        <Box ref={formContainerRef}>
                             <Collapse in={isFormOpen} timeout={400} sx={collapseSx}>
                                 <CommentForm
+                                    textAreaRef={textareaRef}
                                     submitLabel="Dodaj"
                                     onSubmitNormalComment={async data => {
                                         closeForm();

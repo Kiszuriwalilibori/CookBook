@@ -9,5 +9,6 @@ import { getAbsoluteCommentDate } from "./getAbsoluteCommentDate";
 import { useLikeComment } from "./useLikeComment";
 import { useReplyComment } from "./useReplyComment";
 import { useShortComment } from "./useShortComment";
+import { useScrollFocusOnOpen } from "./useScrollFocusOnOpen";
 
-export { useLikeComment, useReplyComment, useShortComment, validateComment, getAbsoluteCommentDate, useLikeAnimation, checkIsOwnComment, getRelativeTime, useSetInitialFocusInCommentItem, errorMessages, useCommentsVisibility };
+export { useLikeComment, useScrollFocusOnOpen, useReplyComment, useShortComment, validateComment, getAbsoluteCommentDate, useLikeAnimation, checkIsOwnComment, getRelativeTime, useSetInitialFocusInCommentItem, errorMessages, useCommentsVisibility };
