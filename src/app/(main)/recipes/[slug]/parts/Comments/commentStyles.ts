@@ -350,3 +350,14 @@ export const cancelButtonSx = {
     flex: { sm: 1 },
     minWidth: { sm: 140 },
 };
+
+export const dotSx = { mx: 0.75, fontSize: "1.5rem", lineHeight: 0, verticalAlign: "middle" };
+
+export const honeypotSx = {
+    position: "absolute",
+    left: "-9999px",
+    width: "1px",
+    height: "1px",
+    overflow: "hidden",
+    opacity: 0,
+};

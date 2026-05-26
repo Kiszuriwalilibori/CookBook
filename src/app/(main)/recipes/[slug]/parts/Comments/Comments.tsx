@@ -9,7 +9,7 @@ import LoadingIndicator from "@/components/LoadingIndicator";
 import CommentItem from "./CommentItem";
 import CommentForm from "./CommentForm";
 import { buildCommentTree } from "@/utils/buildCommentTree";
-import { useFingerprint, useMessage } from "@/hooks";
+import { useBoolean, useFingerprint, useMessage } from "@/hooks";
 import type { RecipeComment } from "@/types";
 import { collapseSx, commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
 import { useCommentsVisibility } from "./utils/useCommentsVisibility";
@@ -19,12 +19,11 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
     const [isSubmittingComment, setIsSubmittingComment] = useState(false);
     const [accordionOpen, setAccordionOpen] = useState(true);
-    const [formOpen, setFormOpen] = useState(false);
+    const [isFormOpen, openForm, closeForm] = useBoolean(false);
     const showMessage = useMessage();
 
     const openCommentForm = () => {
-        setFormOpen(true);
-
+        openForm();
         setAccordionOpen(true);
     };
 
@@ -185,7 +184,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
 
     // 🔥 scroll + autofocus after opening form
     useEffect(() => {
-        if (formOpen && formRef.current) {
+        if (isFormOpen && formRef.current) {
             formRef.current.scrollIntoView({
                 behavior: "smooth",
                 block: "center",
@@ -197,7 +196,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 input?.focus();
             }, 300);
         }
-    }, [formOpen]);
+    }, [isFormOpen]);
 
     const isLoading = comments === null;
     const safeFlatComments = useMemo(() => comments ?? [], [comments]);
@@ -217,15 +216,14 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     <AccordionDetails>
                         {/* FORM */}
                         <Box ref={formRef}>
-                            <Collapse in={formOpen} timeout={400} sx={collapseSx}>
+                            <Collapse in={isFormOpen} timeout={400} sx={collapseSx}>
                                 <CommentForm
                                     submitLabel="Dodaj"
-                                    // onSubmitShortComment={handleAddShortComment}
                                     onSubmitNormalComment={async data => {
-                                        setFormOpen(false);
+                                        closeForm();
                                         await handleAddComment(data);
                                     }}
-                                    onCancel={() => setFormOpen(false)}
+                                    onCancel={() => closeForm()}
                                 />
                             </Collapse>
                         </Box>
