@@ -247,19 +247,15 @@ import { useFingerprint, useMessage } from "@/hooks";
 
 import { authorAvatarSx, commentActionsSx, commentCardSx, commentContentWrapperSx, commentWrapperSx, repliesContainerSx, threadLineSx } from "./commentStyles";
 
-import { checkIsOwnComment, useLikeAnimation, getRelativeTime, useSetInitialFocusInCommentItem, getAbsoluteCommentDate } from "./utils";
+import { useLikeComment, useReplyComment, useShortComment, checkIsOwnComment, useLikeAnimation, getRelativeTime, useSetInitialFocusInCommentItem, getAbsoluteCommentDate } from "./utils";
 
 import CommentForm from "./CommentForm";
 import CommentItemHeader from "./CommentItemHeader";
 import LikeItButton from "./LikeItButton";
 import ReplyCollapse from "./ReplyCollapse";
-import { ReplyButton } from "./ReplButton";
+import { ReplyButton } from "./ReplyButton";
 
 import { LoadingIndicator } from "@/components";
-
-import { useLikeComment } from "./utils/useLikeComment";
-import { useReplyComment } from "./utils/useReplyComment";
-import { useShortComment } from "./utils/useShortComment";
 
 type AddCommentPayload = {
     author: string;

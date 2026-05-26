@@ -1,89 +1,105 @@
-// hooks/useLikeComment.ts
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo } from "react";
+
 import { handleApiError } from "../utils/handleError";
+
+import { useOptimisticMutation } from "./useOptimisticMutation";
 
 type UseLikeCommentParams = {
     commentId: string;
     fingerprint: string;
     initialLikes: string[];
+
     showMessage: {
         error: (msg: string) => void;
         warning: (msg: string) => void;
     };
+
     onLikeAnimation?: () => void;
 };
 
-export function useLikeComment({ commentId, fingerprint, initialLikes, showMessage, onLikeAnimation }: UseLikeCommentParams) {
-    const [likes, setLikes] = useState<string[]>(initialLikes);
-    const [isLiking, setIsLiking] = useState(false);
+type LikeCommentResponse = {
+    ok: boolean;
 
-    const alreadyLiked = likes.includes(fingerprint);
+    error?: unknown;
+
+    data: {
+        likes: string[];
+    };
+};
+
+export function useLikeComment({ commentId, fingerprint, initialLikes, showMessage, onLikeAnimation }: UseLikeCommentParams) {
+    const { state: likes, setState: setLikes, isPending: isLiking, run } = useOptimisticMutation<string[]>(initialLikes);
+
+    const alreadyLiked = useMemo(() => likes.includes(fingerprint), [likes, fingerprint]);
 
     const handleLike = useCallback(async () => {
-        if (isLiking || !fingerprint) return;
+        if (isLiking || !fingerprint) {
+            return;
+        }
 
-        setIsLiking(true);
-
-        const prevLikes = likes;
         const wasLiked = alreadyLiked;
 
         if (!wasLiked) {
             navigator.vibrate?.(10);
+
             onLikeAnimation?.();
         }
 
-        // optimistic update
-        setLikes(prev => (wasLiked ? prev.filter(id => id !== fingerprint) : [...prev, fingerprint]));
-
         try {
-            const res = await fetch("/api/comments", {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
+            await run<LikeCommentResponse>({
+                optimisticUpdate: prev => (wasLiked ? prev.filter(id => id !== fingerprint) : [...prev, fingerprint]),
+
+                mutation: async () => {
+                    const res = await fetch("/api/comments", {
+                        method: "PATCH",
+
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+
+                        body: JSON.stringify({
+                            commentId,
+                            fingerprint,
+                            option: "HANDLE_LIKE",
+                        }),
+                    });
+
+                    const data = (await res.json()) as LikeCommentResponse;
+
+                    if (!data.ok) {
+                        throw data.error;
+                    }
+
+                    return data;
                 },
-                body: JSON.stringify({
-                    commentId,
-                    fingerprint,
-                    option: "HANDLE_LIKE",
-                }),
+
+                onSuccess: result => result.data.likes,
             });
+        } catch (error) {
+            handleApiError(
+                error,
+                {
+                    COMMENT_NOT_FOUND: msg => showMessage.error(String(msg)),
 
-            const data = await res.json();
+                    INVALID_INPUT: msg => showMessage.warning(String(msg)),
 
-            if (!data.ok) {
-                setLikes(prevLikes);
-
-                handleApiError(
-                    data.error,
-                    {
-                        COMMENT_NOT_FOUND: msg => showMessage.error(msg),
-
-                        INVALID_INPUT: msg => showMessage.warning(msg),
-
-                        INTERNAL_ERROR: msg => showMessage.error(msg),
-                    },
-                    msg => showMessage.error(msg)
-                );
-
-                return;
-            }
-
-            setLikes(data.data.likes);
-        } catch (err) {
-            setLikes(prevLikes);
-
-            showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
-        } finally {
-            setIsLiking(false);
+                    INTERNAL_ERROR: msg => showMessage.error(String(msg)),
+                },
+                msg => showMessage.error(msg)
+            );
         }
-    }, [alreadyLiked, commentId, fingerprint, isLiking, likes, onLikeAnimation, showMessage]);
+    }, [alreadyLiked, commentId, fingerprint, isLiking, onLikeAnimation, run, showMessage]);
 
     return {
         likes,
+        setLikes,
+
         isLiking,
+
         alreadyLiked,
+
         handleLike,
     };
 }

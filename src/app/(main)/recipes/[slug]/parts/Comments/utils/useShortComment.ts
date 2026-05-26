@@ -1,11 +1,14 @@
-// hooks/useShortComment.ts
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
+
 import { handleApiError } from "../utils/handleError";
+
+import { useOptimisticMutation } from "./useOptimisticMutation";
 
 type UseShortCommentParams = {
     initialShortComment?: string;
+
     showMessage: {
         success: (msg: string) => void;
         error: (msg: string) => void;
@@ -13,82 +16,97 @@ type UseShortCommentParams = {
     };
 };
 
-export function useShortComment({ initialShortComment = "", showMessage }: UseShortCommentParams) {
-    const [shortComment, setShortComment] = useState(initialShortComment);
+type ShortCommentResponse = {
+    ok: boolean;
 
-    const [isShortCommentSubmitting, setIsShortCommentSubmitting] = useState(false);
+    error?: unknown;
+
+    data: {
+        shortComment: {
+            content: string;
+        };
+    };
+};
+
+export function useShortComment({ initialShortComment = "", showMessage }: UseShortCommentParams) {
+    const { state: shortComment, setState: setShortComment, isPending: isShortCommentSubmitting, run } = useOptimisticMutation<string>(initialShortComment);
 
     const handleAddShortComment = useCallback(
         async ({ commentId, shortContent }: { commentId: string; shortContent: string }) => {
-            if (!commentId || !shortContent.trim()) {
+            const trimmedContent = shortContent.trim();
+
+            if (!commentId || !trimmedContent) {
                 showMessage.warning("Brak treści skróconego komentarza");
 
                 return false;
             }
 
-            const prevShortComment = shortComment;
-
-            setShortComment(shortContent.trim());
-            setIsShortCommentSubmitting(true);
-
             try {
-                const res = await fetch("/api/comments", {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json",
+                await run<ShortCommentResponse>({
+                    optimisticUpdate: () => trimmedContent,
+
+                    mutation: async () => {
+                        const res = await fetch("/api/comments", {
+                            method: "PATCH",
+
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+
+                            body: JSON.stringify({
+                                commentId,
+                                shortContent: trimmedContent,
+                                option: "HANDLE_SHORT_COMMENT",
+                            }),
+                        });
+
+                        const data = (await res.json()) as ShortCommentResponse;
+
+                        if (!data.ok) {
+                            throw data.error;
+                        }
+
+                        return data;
                     },
-                    body: JSON.stringify({
-                        commentId,
-                        shortContent: shortContent.trim(),
-                        option: "HANDLE_SHORT_COMMENT",
-                    }),
+
+                    onSuccess: result => {
+                        showMessage.success("Skrócony komentarz został dodany");
+
+                        return result.data.shortComment.content;
+                    },
                 });
 
-                const responseData = await res.json();
-
-                if (!responseData.ok) {
-                    setShortComment(prevShortComment);
-
-                    handleApiError(
-                        responseData.error,
-                        {
-                            FORBIDDEN: () => showMessage.error("Brak uprawnień administratora"),
-
-                            INVALID_INPUT: () => showMessage.warning("Nieprawidłowe dane"),
-
-                            EMPTY_SHORT_COMMENT: () => showMessage.warning("Skrócony komentarz nie może być pusty"),
-
-                            SHORT_COMMENT_TOO_LONG: () => showMessage.warning("Skrócony komentarz jest za długi"),
-
-                            COMMENT_NOT_FOUND: () => showMessage.warning("Komentarz nie został znaleziony"),
-                        },
-                        msg => showMessage.error(msg || "Nie udało się dodać skróconego komentarza")
-                    );
-
-                    return false;
-                }
-
-                setShortComment(responseData.data.shortComment.content);
-
-                showMessage.success("Skrócony komentarz został dodany");
-
                 return true;
-            } catch (err) {
-                setShortComment(prevShortComment);
+            } catch (error) {
+                handleApiError(
+                    error,
+                    {
+                        FORBIDDEN: () => showMessage.error("Brak uprawnień administratora"),
 
-                handleApiError(err, {}, msg => showMessage.error(msg));
+                        INVALID_INPUT: () => showMessage.warning("Nieprawidłowe dane"),
+
+                        EMPTY_SHORT_COMMENT: () => showMessage.warning("Skrócony komentarz nie może być pusty"),
+
+                        SHORT_COMMENT_TOO_LONG: () => showMessage.warning("Skrócony komentarz jest za długi"),
+
+                        COMMENT_NOT_FOUND: () => showMessage.warning("Komentarz nie został znaleziony"),
+                    },
+                    msg => showMessage.error(msg || "Nie udało się dodać skróconego komentarza")
+                );
 
                 return false;
-            } finally {
-                setIsShortCommentSubmitting(false);
             }
         },
-        [shortComment, showMessage]
+        [run, showMessage]
     );
 
     return {
         shortComment,
+
+        setShortComment,
+
         isShortCommentSubmitting,
+
         handleAddShortComment,
     };
 }
