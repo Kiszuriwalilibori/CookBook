@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails, Skeleton, Collapse } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -8,14 +8,10 @@ import LoadingIndicator from "@/components/LoadingIndicator";
 
 import CommentItem from "./CommentItem";
 import CommentForm from "./CommentForm";
-import { buildCommentTree } from "@/utils/buildCommentTree";
 import { useBoolean, useFingerprint, useMessage } from "@/hooks";
 import type { RecipeComment } from "@/types";
 import { collapseSx, commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
-import { useCommentsVisibility } from "./utils/useCommentsVisibility";
-import { handleApiError } from "./utils/handleError";
-import { useScrollFocusOnOpen } from "./utils";
-// import { useScrollFocusOnOpen } from "./utils/useScrollFocusOnOpen";
+import { useScrollFocusOnOpen, useCreateCommentTree, useCommentsVisibility, handleApiError } from "./utils";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
@@ -183,30 +179,16 @@ export default function Comments({ recipeId }: { recipeId: string }) {
         fetchComments();
     }, [fetchComments]);
 
-    // 🔥 scroll + autofocus after opening form
-    // useEffect(() => {
-    //     if (isFormOpen && formRef.current) {
-    //         formRef.current.scrollIntoView({
-    //             behavior: "smooth",
-    //             block: "center",
-    //         });
-
-    //         setTimeout(() => {
-    //             const input = formRef.current?.querySelector("input, textarea") as HTMLElement | null;
-
-    //             input?.focus();
-    //         }, 300);
-    //     }
-    // }, [isFormOpen]);
     useScrollFocusOnOpen({
         isOpen: isFormOpen,
         ref: formContainerRef,
         inputRef: textareaRef,
     });
     const isLoading = comments === null;
-    const safeFlatComments = useMemo(() => comments ?? [], [comments]);
+    const { commentTree, commentsCount } = useCreateCommentTree(comments);
+    // const safeFlatComments = useMemo(() => comments ?? [], [comments]);
 
-    const commentTree = useMemo(() => buildCommentTree(safeFlatComments), [safeFlatComments]);
+    // const commentTree = useMemo(() => buildCommentTree(safeFlatComments), [safeFlatComments]);
     const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny } = useCommentsVisibility(commentTree, 3);
 
     return (
@@ -215,7 +197,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 <LoadingIndicator open={isSubmittingComment} prompt="Dodawanie komentarza w toku" />
                 <Accordion expanded={accordionOpen} onChange={(_, expanded) => setAccordionOpen(expanded)} elevation={0}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography variant="h5">Komentarze ({safeFlatComments.length})</Typography>
+                        <Typography variant="h5">Komentarze ({commentsCount})</Typography>
                     </AccordionSummary>
 
                     <AccordionDetails>
