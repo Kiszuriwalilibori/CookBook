@@ -13,9 +13,11 @@ import { useBoolean, useFingerprint, useMessage } from "@/hooks";
 import type { ApiResponse, RecipeComment } from "@/types";
 import { collapseSx, commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
 import { useScrollFocusOnOpen, useCreateCommentTree, useCommentsVisibility, handleApiError } from "./utils";
+import { useCommentsState } from "./utils/useCommentsState";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
-    const [comments, setComments] = useState<RecipeComment[] | null>(null);
+    const { comments, setAllComments, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment } = useCommentsState();
+    // const [comments, setComments] = useState<RecipeComment[] | null>(null);
     const [isSubmittingComment, setIsSubmittingComment] = useState(false);
     const [accordionOpen, setAccordionOpen] = useState(true);
     const [isFormOpen, openForm, closeForm] = useBoolean(false);
@@ -47,7 +49,8 @@ export default function Comments({ recipeId }: { recipeId: string }) {
             };
             setIsSubmittingComment(true);
             options?.onSuccess?.();
-            setComments(prev => [optimisticComment, ...(prev ?? [])]);
+            addOptimisticComment(optimisticComment);
+            // setComments(prev => [optimisticComment, ...(prev ?? [])]);
 
             try {
                 const res = await fetch("/api/comments", {
@@ -65,7 +68,8 @@ export default function Comments({ recipeId }: { recipeId: string }) {
 
                 const data = await res.json();
                 if (!data.ok) {
-                    setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
+                    removeOptimisticComment(tempId);
+                    // setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
                     handleApiError(
                         data.error,
                         {
@@ -78,19 +82,20 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     );
                 } else {
                     const newComment = data.data.comment;
-                    setComments(prev => (prev ?? []).map(c => (c._id === tempId ? newComment : c)));
+                    // setComments(prev => (prev ?? []).map(c => (c._id === tempId ? newComment : c)));
+                    replaceOptimisticWithReal(tempId, newComment);
                     showMessage.success("Twój komentarz został dodany");
                 }
             } catch (err) {
                 showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
-                setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
-
+                // setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
+                removeOptimisticComment(tempId);
                 options?.onError?.();
             } finally {
                 setIsSubmittingComment(false);
             }
         },
-        [recipeId, fingerprint]
+        [recipeId, fingerprint, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment]
     );
 
     const fetchComments = useCallback(async () => {
@@ -113,18 +118,18 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                         showMessage.error(error.message || "Wystąpił nieznany błąd");
                 }
 
-                setComments([]);
+                setAllComments([]);
                 return;
             }
             const safeComments: RecipeComment[] = Array.isArray(data.data.comments) ? data.data.comments.filter(Boolean) : [];
 
-            setComments(safeComments);
+            setAllComments(safeComments);
         } catch (err) {
             console.error("[COMMENTS][GET]", {
                 error: err,
                 recipeId,
             });
-            setComments([]);
+            setAllComments([]);
             showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
         }
     }, [recipeId]);
