@@ -8,6 +8,7 @@ import LoadingIndicator from "@/components/LoadingIndicator";
 
 import CommentItem from "./CommentItem";
 import CommentForm from "./CommentForm";
+import { useIsAdminLogged } from "@/stores/useAdminStore";
 import { useBoolean, useFingerprint, useMessage } from "@/hooks";
 import type { ApiResponse, RecipeComment } from "@/types";
 import { collapseSx, commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
@@ -18,6 +19,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const [isSubmittingComment, setIsSubmittingComment] = useState(false);
     const [accordionOpen, setAccordionOpen] = useState(true);
     const [isFormOpen, openForm, closeForm] = useBoolean(false);
+    const isAdminLogged = useIsAdminLogged();
     const showMessage = useMessage();
 
     const openCommentForm = () => {
@@ -37,10 +39,10 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 recipeId,
                 content,
                 author,
-
+                isAuthor: isAdminLogged,
                 parentId: parentId ?? null,
                 createdAt: new Date().toISOString(),
-                fingerprint: "",
+                fingerprint,
                 likes: [],
             };
             setIsSubmittingComment(true);
@@ -70,6 +72,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                             COMMENT_COOLDOWN: msg => showMessage.warning(msg),
                             COMMENT_REJECTED: msg => showMessage.error(msg),
                             INTERNAL_ERROR: msg => showMessage.error(msg),
+                            INVALID_PARENT: msg => showMessage.error(msg),
                         },
                         msg => showMessage.error(msg)
                     );

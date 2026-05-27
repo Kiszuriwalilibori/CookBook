@@ -10,21 +10,21 @@ import { Dot } from "./utils/Dot";
 type CommentItemHeaderProps = {
     author: string;
     createdAt: string;
-    isAuthorComment: boolean;
+    isAdminComment: boolean;
     relativeTime: string;
     absoluteDate: string;
 };
 
-export default function CommentItemHeader({ author, createdAt, isAuthorComment, relativeTime, absoluteDate }: CommentItemHeaderProps) {
+export default function CommentItemHeader({ author, createdAt, isAdminComment: isAdminComment, relativeTime, absoluteDate }: CommentItemHeaderProps) {
     return (
         <Box sx={commentHeaderSx}>
-            {isAuthorComment && <Avatar src="/images/author.jpg" alt="Piotr" sx={authorAvatarSx} />}
+            {isAdminComment && <Avatar src="/images/author.jpg" alt="Piotr" sx={authorAvatarSx} />}
 
             <Typography variant="body1">
                 <strong>{author}</strong>
             </Typography>
 
-            {isAuthorComment && <Chip label="Autor" size="small" color="primary" sx={authorChipSx} />}
+            {isAdminComment && <Chip label="Autor" size="small" color="primary" sx={authorChipSx} />}
 
             <Typography variant="caption" sx={commentDateSx} dateTime={createdAt} component="time">
                 <Dot />

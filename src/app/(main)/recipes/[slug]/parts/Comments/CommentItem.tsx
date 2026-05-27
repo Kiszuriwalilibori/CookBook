@@ -36,7 +36,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
     const fingerprint = useFingerprint();
     const showMessage = useMessage();
 
-    const isAuthorComment = comment.isAuthor === true;
+    const isAdminComment = comment.isAuthor === true;
 
     const isOwnComment = checkIsOwnComment(fingerprint, comment.fingerprint);
 
@@ -86,7 +86,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
                     <LoadingIndicator open={isShortCommentSubmitting} prompt="Dodawanie krótkiego komentarza w toku" />
 
-                    <CommentItemHeader author={comment.author} createdAt={comment.createdAt} isAuthorComment={isAuthorComment} relativeTime={getRelativeTime(comment.createdAt)} absoluteDate={getAbsoluteCommentDate(comment.createdAt)} />
+                    <CommentItemHeader author={comment.author} createdAt={comment.createdAt} isAdminComment={isAdminComment} relativeTime={getRelativeTime(comment.createdAt)} absoluteDate={getAbsoluteCommentDate(comment.createdAt)} />
 
                     <Typography variant="body1" sx={{ mb: 0.5 }}>
                         {comment.content}
@@ -137,3 +137,4 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
         </Box>
     );
 }
+//todo w zasadzie pole comment.isAuthor powinno nazywać się comment.isadmin

@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { google } from "googleapis";
+// import { cookies } from "next/headers";
+// import { google } from "googleapis";
 import { analyzeComment, writeClient } from "@/utils";
 
 import { nanoid } from "nanoid";
 import { handleShortComment } from "./handleShortComment";
 import { ApiResponse, RecipeComment } from "@/types";
 import { checkCommentCooldown } from "@/app/(main)/recipes/[slug]/parts/Comments/utils";
+import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 
 export async function GET(req: Request) {
     try {
@@ -81,8 +82,19 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
                 { status: 400 }
             );
         }
+        if (parentId) {
+            const parent = await writeClient.getDocument(parentId);
+            if (!parent || parent.recipeId !== recipeId) {
+                return NextResponse.json(
+                    {
+                        ok: false,
+                        error: { code: "INVALID_PARENT", message: "Nieprawidłowy komentarz nadrzędny" },
+                    },
+                    { status: 400 }
+                );
+            }
+        }
 
-        // const { allowed } = await checkCommentCooldown(fingerprint);
         const cooldown = await checkCommentCooldown(fingerprint);
         if (!cooldown.allowed) {
             return NextResponse.json(
@@ -96,30 +108,21 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
                 { status: 429 }
             );
         }
-        // if (!allowed) {
-        //     return NextResponse.json(
-        //         {
-        //             ok: false,
-        //             error: {
-        //                 code: "COMMENT_COOLDOWN",
-        //                 message: "Niedawno komentowałeś, odczekaj chwilę",
-        //             },
-        //         },
-        //         { status: 429 }
-        //     );
-        // }
-        const cookieStore = await cookies();
-        const token = cookieStore.get("session")?.value;
 
-        const isAdmin =
-            !!token &&
-            (await new google.auth.OAuth2()
-                .verifyIdToken({
-                    idToken: token,
-                    audience: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-                })
-                .then(t => t.getPayload()?.email?.toLowerCase() === process.env.MY_EMAIL)
-                .catch(() => false));
+        // const cookieStore = await cookies();
+        // const token = cookieStore.get("session")?.value;
+
+        // const isAdmin =
+        //     !!token &&
+        //     (await new google.auth.OAuth2()
+        //         .verifyIdToken({
+        //             idToken: token,
+        //             audience: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+        //         })
+        //         .then(t => t.getPayload()?.email?.toLowerCase() === process.env.MY_EMAIL)
+        //         .catch(() => false));
+        const currentUser = await getUserFromCookies();
+        const isAdmin = currentUser?.isAdmin ?? false;
         const id = `comment-${nanoid()}`;
 
         // 🔥 MODERATION
@@ -148,7 +151,7 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
 
             content: content.trim(),
             author,
-            isAuthor: isAdmin,
+            isAuthor: isAdmin, // czy komentarz napisał właściciel strony (admin)
 
             createdAt: new Date().toISOString(),
             fingerprint,
