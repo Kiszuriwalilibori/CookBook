@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getUserFromCookies } from "@/utils/getUserFromCookies";
+import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 import { writeClient } from "@/utils";
 function getRecipeNotesId(userEmail: string, recipeId: string) {
     const safeUser = userEmail.toLowerCase().replace(/[^a-z0-9]/g, "_");

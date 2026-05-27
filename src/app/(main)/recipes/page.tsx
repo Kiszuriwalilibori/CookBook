@@ -4,7 +4,8 @@ import { Status, type Recipe } from "@/types";
 import { FilterState } from "@/models/filters";
 
 // ⬇️ SSR favorites
-import { getUserFromCookies, getUserFavorites } from "@/utils";
+import { getUserFavorites } from "@/utils";
+import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 
 interface RecipesPageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

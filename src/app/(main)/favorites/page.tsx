@@ -2,8 +2,8 @@ import { redirect } from "next/navigation";
 
 import PageTitle from "@/components/PageTitle";
 import FavoritesClient from "./FavoritesClient";
-import { getUserFavorites, getUserFromCookies} from "@/utils";
-
+import { getUserFavorites } from "@/utils";
+import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 
 export const dynamic = "force-dynamic";
 

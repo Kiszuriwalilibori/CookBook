@@ -1,4 +1,5 @@
-import { getUserFromCookies, writeClient } from "@/utils";
+import { writeClient } from "@/utils";
+import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 import { NextResponse } from "next/server";
 type HandleShortCommentBody = {
     commentId: string;

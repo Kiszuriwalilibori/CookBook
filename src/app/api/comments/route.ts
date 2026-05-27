@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { google } from "googleapis";
-import { analyzeComment, writeClient, checkCommentCooldown } from "@/utils";
+import { analyzeComment, writeClient } from "@/utils";
 
 import { nanoid } from "nanoid";
 import { handleShortComment } from "./handleShortComment";
 import { ApiResponse, RecipeComment } from "@/types";
+import { checkCommentCooldown } from "@/app/(main)/recipes/[slug]/parts/Comments/utils";
 
 export async function GET(req: Request) {
     try {
@@ -81,20 +82,32 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
             );
         }
 
-        const { allowed } = await checkCommentCooldown({ recipeId, fingerprint, parentId: parentId ?? null });
-
-        if (!allowed) {
+        // const { allowed } = await checkCommentCooldown(fingerprint);
+        const cooldown = await checkCommentCooldown(fingerprint);
+        if (!cooldown.allowed) {
             return NextResponse.json(
                 {
                     ok: false,
                     error: {
                         code: "COMMENT_COOLDOWN",
-                        message: "Niedawno komentowałeś, odczekaj chwilę",
+                        message: `Odczekaj ${cooldown.remainingSeconds} sekund przed dodaniem kolejnego komentarza`,
                     },
                 },
                 { status: 429 }
             );
         }
+        // if (!allowed) {
+        //     return NextResponse.json(
+        //         {
+        //             ok: false,
+        //             error: {
+        //                 code: "COMMENT_COOLDOWN",
+        //                 message: "Niedawno komentowałeś, odczekaj chwilę",
+        //             },
+        //         },
+        //         { status: 429 }
+        //     );
+        // }
         const cookieStore = await cookies();
         const token = cookieStore.get("session")?.value;
 

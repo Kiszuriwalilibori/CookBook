@@ -1,7 +1,8 @@
 // src/app/api/favorites/route.ts
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { getUserFavorites, getUserFromCookies, writeClient } from "@/utils";
+import { getUserFavorites, writeClient } from "@/utils";
+import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 // POST → dodanie ulubionego
 export async function POST(req: NextRequest) {
     try {
@@ -72,7 +73,6 @@ export async function DELETE(req: NextRequest) {
     }
 }
 
-
 export async function GET(req: NextRequest) {
     try {
         // używamy helpera, który sam obsłuży cookie + verifyGoogle
@@ -91,5 +91,3 @@ export async function GET(req: NextRequest) {
         return NextResponse.json([], { status: 401 });
     }
 }
-
-

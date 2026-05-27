@@ -14,10 +14,11 @@ import { generateRecipeSchema } from "@/utils/schema-org";
 import { resolveRecipeIdFromSlug } from "@/utils/resolveRecipeIdFromSlug";
 import { getRecipeById } from "@/utils/getRecipeById";
 import { RecipeNutrition } from "./parts";
-import { getUserFromCookies, getUserRecipeNote } from "@/utils";
+import { getUserRecipeNote } from "@/utils";
 import { PrivateUserNotes } from "./parts/PrivateUserNotes";
 import Comments from "./parts/Comments";
 import { RecipeCommentsButton } from "./parts/RecipeCommentsButton";
+import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 
 interface Params {
     slug: string;

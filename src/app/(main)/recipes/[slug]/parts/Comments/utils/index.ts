@@ -13,4 +13,6 @@ import { useScrollFocusOnOpen } from "./useScrollFocusOnOpen";
 import { useCreateCommentTree } from "./useCreateCommentTree";
 import { handleApiError } from "./handleApiError";
 
+export { checkCommentCooldown } from "./checkCommentCooldown";
+
 export { useLikeComment, handleApiError, useCreateCommentTree, useScrollFocusOnOpen, useReplyComment, useShortComment, validateComment, getAbsoluteCommentDate, useLikeAnimation, checkIsOwnComment, getRelativeTime, useSetInitialFocusInCommentItem, errorMessages, useCommentsVisibility };
