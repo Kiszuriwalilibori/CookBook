@@ -4,7 +4,7 @@ import type { User } from "@/types";
 
 export async function getUserFromCookies(): Promise<(User & { isAdmin: boolean }) | null> {
     try {
-        const cookieStore = await cookies(); // <-- dodaj await!
+        const cookieStore = await cookies();
         const token = cookieStore.get("session")?.value;
         if (!token) return null;
 
@@ -13,7 +13,6 @@ export async function getUserFromCookies(): Promise<(User & { isAdmin: boolean }
 
         const isAdmin = process.env.MY_EMAIL ? user.email.toLowerCase() === process.env.MY_EMAIL.toLowerCase() : false;
         return { ...user, isAdmin };
-        // return user;
     } catch (err) {
         console.error("[getUserFromCookies] Error:", err);
         return null;

@@ -9,7 +9,7 @@ import LoadingIndicator from "@/components/LoadingIndicator";
 import CommentItem from "./CommentItem";
 import CommentForm from "./CommentForm";
 import { useBoolean, useFingerprint, useMessage } from "@/hooks";
-import type { RecipeComment } from "@/types";
+import type { ApiResponse, RecipeComment } from "@/types";
 import { collapseSx, commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
 import { useScrollFocusOnOpen, useCreateCommentTree, useCommentsVisibility, handleApiError } from "./utils";
 
@@ -29,7 +29,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const fingerprint = useFingerprint();
 
     const handleAddComment = useCallback(
-        async ({ author, content, parentId }: { author: string; content: string; parentId?: string | null }, options?: { onSuccess?: () => void; onError?: () => void }) => {
+        async ({ author, content, parentId, website = "" }: { author: string; content: string; parentId?: string | null; website?: string }, options?: { onSuccess?: () => void; onError?: () => void }) => {
             const tempId = crypto.randomUUID();
 
             const optimisticComment: RecipeComment = {
@@ -57,7 +57,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                         author,
                         parentId: parentId ?? null,
                         fingerprint,
-                        website: "",
+                        website: website || "",
                     }),
                 });
 
@@ -74,7 +74,8 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                         msg => showMessage.error(msg)
                     );
                 } else {
-                    setComments(prev => (prev ?? []).map(c => (c._id === tempId ? data.comment : c)));
+                    const newComment = data.data.comment;
+                    setComments(prev => (prev ?? []).map(c => (c._id === tempId ? newComment : c)));
                     showMessage.success("Twój komentarz został dodany");
                 }
             } catch (err) {
@@ -88,75 +89,25 @@ export default function Comments({ recipeId }: { recipeId: string }) {
         },
         [recipeId, fingerprint]
     );
-    // const handleAddShortComment = useCallback(
-    //     async (data: { commentId: string; shortContent: string }) => {
-    //         const { commentId, shortContent } = data;
 
-    //         if (!commentId || !shortContent?.trim()) {
-    //             showMessage.warning("Brak treści skróconego komentarza");
-    //             return false;
-    //         }
-
-    //         setIsSubmittingComment(true);
-
-    //         try {
-    //             const res = await fetch("/api/comments", {
-    //                 method: "PATCH",
-    //                 headers: { "Content-Type": "application/json" },
-    //                 body: JSON.stringify({
-    //                     commentId,
-    //                     shortContent: shortContent.trim(),
-    //                     option: "HANDLE_SHORT_COMMENT",
-    //                 }),
-    //             });
-
-    //             const responseData = await res.json();
-
-    //             if (!responseData.ok) {
-    //                 handleApiError(
-    //                     responseData.error,
-    //                     {
-    //                         FORBIDDEN: () => showMessage.error("Brak uprawnień administratora"),
-    //                         INVALID_INPUT: () => showMessage.warning("Nieprawidłowe dane"),
-    //                         EMPTY_SHORT_COMMENT: () => showMessage.warning("Skrócony komentarz nie może być pusty"),
-    //                         SHORT_COMMENT_TOO_LONG: () => showMessage.warning("Skrócony komentarz jest za długi"),
-    //                         COMMENT_NOT_FOUND: () => showMessage.warning("Komentarz nie został znaleziony"),
-    //                     },
-    //                     msg => showMessage.error(msg || "Nie udało się dodać skróconego komentarza")
-    //                 );
-    //                 return false;
-    //             }
-
-    //             // Aktualizacja lokalnego stanu
-    //             setComments(prev => (prev ?? []).map(c => (c._id === commentId ? { ...c, shortComment: responseData.data.shortComment } : c)));
-
-    //             showMessage.success("Skrócony komentarz został dodany");
-    //             return true;
-    //         } catch {
-    //             showMessage.error("Wystąpił błąd podczas dodawania skróconego komentarza");
-    //             return false;
-    //         } finally {
-    //             setIsSubmittingComment(false);
-    //         }
-    //     },
-    //     [showMessage]
-    // );
     const fetchComments = useCallback(async () => {
         try {
             const res = await fetch(`/api/comments?recipeId=${recipeId}`);
-            const data = await res.json();
+            // const data = await res.json();
+            const data: ApiResponse<{ comments: RecipeComment[] }> = await res.json();
             if (!data.ok) {
-                switch (data?.error?.code) {
+                const error = data.error;
+                switch (error.code) {
                     case "MISSING_RECIPE_ID":
-                        showMessage.warning(data.error.message);
+                        showMessage.warning(error.message);
                         break;
 
                     case "FETCH_COMMENTS_FAILED":
-                        showMessage.error(data.error.message);
+                        showMessage.error(error.message);
                         break;
 
                     default:
-                        showMessage.error("Wystąpił nieznany błąd");
+                        showMessage.error(error.message || "Wystąpił nieznany błąd");
                 }
 
                 setComments([]);

@@ -15,7 +15,7 @@ export interface CommentFormProps {
     textAreaRef?: React.RefObject<HTMLTextAreaElement | null> | null;
 
     /** Funkcja wywoływana po poprawnym przesłaniu formularza */
-    onSubmitNormalComment: (data: { author: string; content: string }) => Promise<void>;
+    onSubmitNormalComment: (data: { author: string; content: string; website?: string }) => Promise<void>;
     onSubmitShortComment?: (data: { commentId: string; shortContent: string }) => Promise<boolean>;
 
     /** Etykieta przycisku wysyłania */
@@ -102,10 +102,12 @@ export default function CommentForm({ textAreaRef, commentId, onSubmitNormalComm
             setContentShowErrors(true);
             return;
         }
-
+        const honeypotInput = document.querySelector('input[name="website"]') as HTMLInputElement;
+        const websiteValue = honeypotInput?.value?.trim() || "";
         await onSubmitNormalComment({
             author: finalAuthor,
             content,
+            website: websiteValue,
         });
 
         resetForm();

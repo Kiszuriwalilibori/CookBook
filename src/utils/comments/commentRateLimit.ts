@@ -4,9 +4,11 @@ const COMMENT_COOLDOWN_MINUTES = 1;
 
 export async function checkCommentCooldown(params: { recipeId: string; fingerprint: string; parentId?: string | null }): Promise<{ allowed: boolean }> {
     const { recipeId, fingerprint, parentId } = params;
-
     const now = new Date();
     const cutoffTime = new Date(now.getTime() - COMMENT_COOLDOWN_MINUTES * 60000).toISOString();
+    // ==================== DEBUG LOGS ====================
+
+    // ===================================================
 
     const lastCommentQuery = `
 *[

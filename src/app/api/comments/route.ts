@@ -5,6 +5,7 @@ import { analyzeComment, writeClient, checkCommentCooldown } from "@/utils";
 
 import { nanoid } from "nanoid";
 import { handleShortComment } from "./handleShortComment";
+import { ApiResponse, RecipeComment } from "@/types";
 
 export async function GET(req: Request) {
     try {
@@ -47,7 +48,7 @@ export async function GET(req: Request) {
     }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
     try {
         const body = await req.json();
 
@@ -55,12 +56,29 @@ export async function POST(req: Request) {
 
         // 🟢 HONEYPOT
         if (website) {
-            console.log("[SPAM] honeypot triggered");
-            return NextResponse.json({ ok: false }, { status: 400 });
+            return NextResponse.json<ApiResponse>(
+                {
+                    ok: false,
+                    error: {
+                        code: "SPAM_DETECTED",
+                        message: "Wykryto próbę spamu",
+                    },
+                },
+                { status: 400 }
+            );
         }
 
         if (!recipeId || !content?.trim() || !author || !fingerprint) {
-            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+            return NextResponse.json<ApiResponse>(
+                {
+                    ok: false,
+                    error: {
+                        code: "MISSING_FIELDS",
+                        message: "Brak wymaganych pól",
+                    },
+                },
+                { status: 400 }
+            );
         }
 
         const { allowed } = await checkCommentCooldown({ recipeId, fingerprint, parentId: parentId ?? null });
@@ -129,13 +147,25 @@ export async function POST(req: Request) {
 
         await writeClient.create(comment);
 
-        return NextResponse.json({
-            ok: true,
-            comment,
-        });
+        return NextResponse.json<ApiResponse<{ comment: RecipeComment }>>(
+            {
+                ok: true,
+                data: { comment },
+            },
+            { status: 200 }
+        );
     } catch (err) {
         console.error("[COMMENTS][POST]", err);
-        return NextResponse.json({ error: "Failed to create comment" }, { status: 500 });
+        return NextResponse.json<ApiResponse>(
+            {
+                ok: false,
+                error: {
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: "Wystąpił nieoczekiwany błąd serwera",
+                },
+            },
+            { status: 500 }
+        );
     }
 }
 export async function PATCH(req: Request) {
@@ -159,7 +189,7 @@ export async function PATCH(req: Request) {
         switch (option) {
             case "HANDLE_LIKE":
                 // ====================  LOGIKA LAJKOWANIA====================
-                console.log("handle lki");
+
                 if (!commentId || !fingerprint) {
                     return NextResponse.json(
                         {

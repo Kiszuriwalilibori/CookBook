@@ -1,9 +1,5 @@
-export type ApiError = {
-    code: string;
-    message: string;
-};
+import { ApiError } from "@/types";
 
-export type ApiResponse<T> = { ok: true; data: T } | { ok: false; error: ApiError };
 export type ErrorHandlerMap = Partial<Record<string, (message: string) => void>>;
 type TransportError = { type: "NETWORK_ERROR"; message: string } | { type: "PARSE_ERROR"; message: string } | { type: "ABORTED"; message: string };
 

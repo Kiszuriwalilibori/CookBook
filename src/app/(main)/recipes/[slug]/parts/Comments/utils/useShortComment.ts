@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 
-import { handleApiError } from "../utils/handleError";
+import { handleApiError } from "./handleApiError";
 
 import { useOptimisticMutation } from "./useOptimisticMutation";
 

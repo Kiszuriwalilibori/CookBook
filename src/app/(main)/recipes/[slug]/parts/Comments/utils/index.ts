@@ -11,6 +11,6 @@ import { useReplyComment } from "./useReplyComment";
 import { useShortComment } from "./useShortComment";
 import { useScrollFocusOnOpen } from "./useScrollFocusOnOpen";
 import { useCreateCommentTree } from "./useCreateCommentTree";
-import { handleApiError } from "./handleError";
+import { handleApiError } from "./handleApiError";
 
 export { useLikeComment, handleApiError, useCreateCommentTree, useScrollFocusOnOpen, useReplyComment, useShortComment, validateComment, getAbsoluteCommentDate, useLikeAnimation, checkIsOwnComment, getRelativeTime, useSetInitialFocusInCommentItem, errorMessages, useCommentsVisibility };

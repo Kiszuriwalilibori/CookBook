@@ -17,10 +17,9 @@ export function useAdminRefetch(setDisplayRecipes: React.Dispatch<React.SetState
             prevStatusRef.current = loginStatus;
             return;
         }
-        console.log("useadminrefetch");
+
         // 🔥 jeśli wcześniej NIE był adminem i teraz jest adminem
         if (prevStatus !== "admin" && loginStatus === "admin") {
-            console.log("złapalismy wykonanie nieadmin >admin");
             const fetchAdmin = async () => {
                 // brak ograniczeń statusu
                 const fresh = await getRecipesForCards({}, true);
