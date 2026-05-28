@@ -1,13 +1,12 @@
 "use client";
 
-import { Box, Typography, Avatar } from "@mui/material";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 
-import { RecipeComment } from "@/types";
+import { LoadingIndicator } from "@/components";
 import { useFingerprint, useMessage } from "@/hooks";
-
-import { authorAvatarSx, shortCommentWrapperSx, shortCommentCardSx, commentActionsSx, commentCardSx, commentContentWrapperSx, commentWrapperSx, repliesContainerSx, commentContentSx, shortCommentAuthorSx } from "./commentStyles";
-
-import { useLikeComment, useReplyComment, useShortComment, checkIsOwnComment, useLikeAnimation, getRelativeTime, useSetInitialFocusInCommentItem, getAbsoluteCommentDate } from "./utils";
+import { RecipeComment } from "@/types";
 
 import CommentForm from "./CommentForm";
 import CommentItemHeader from "./CommentItemHeader";
@@ -15,7 +14,11 @@ import LikeItButton from "./LikeItButton";
 import ReplyCollapse from "./ReplyCollapse";
 import { ReplyButton } from "./ReplyButton";
 
-import { LoadingIndicator } from "@/components";
+import { authorAvatarSx, commentActionsSx, commentCardSx, commentContentSx, commentContentWrapperSx, commentWrapperSx, repliesContainerSx, shortCommentAuthorSx, shortCommentCardSx, shortCommentWrapperSx } from "./commentStyles";
+
+import { checkIsOwnComment, getAbsoluteCommentDate, getRelativeTime, useLikeAnimation, useLikeComment, useReplyComment, useSetInitialFocusInCommentItem, useShortComment } from "./utils";
+
+import { useRepliesVisibility } from "./utils/useRepliesVisibility";
 
 type AddCommentPayload = {
     author: string;
@@ -35,6 +38,8 @@ interface CommentItemProps {
 export default function CommentItem({ comment, recipeId, depth = 0, handleAddComment }: CommentItemProps) {
     const fingerprint = useFingerprint();
     const showMessage = useMessage();
+    const { showReplies, visibleReplies, hiddenRepliesCount, toggleRepliesVisibility } = useRepliesVisibility(comment.replies);
+    // const [showReplies, setShowReplies] = useState(false);
 
     const isAdminComment = comment.isAdmin === true;
 
@@ -78,8 +83,6 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
     return (
         <Box sx={commentWrapperSx(depth)} id={`comment-${comment._id}`}>
-            {/* {depth > 0 && <Box sx={threadLineSx} />} */}
-
             <Box sx={commentContentWrapperSx(depth)}>
                 <Box sx={commentCardSx(depth, isOwnComment)}>
                     <LoadingIndicator open={isReplySubmitting} prompt="Dodawanie odpowiedzi w toku" />
@@ -116,10 +119,25 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                         <CommentForm textAreaRef={textAreaRef} key={formOpen ? "open" : "closed"} submitLabel="Odpowiedz" onSubmitShortComment={handleAddShortComment} onSubmitNormalComment={handleReplySubmit} onCancel={handleReplyCancel} commentId={comment._id} />
                     </ReplyCollapse>
 
-                    <Box sx={repliesContainerSx}>
-                        {(comment.replies ?? []).filter(Boolean).map(reply => (
+                    <Box sx={repliesContainerSx} id={`replies-${comment._id}`}>
+                        {visibleReplies.map(reply => (
                             <CommentItem key={reply._id} comment={reply} recipeId={recipeId} depth={depth + 1} handleAddComment={handleAddComment} />
                         ))}
+
+                        {hiddenRepliesCount > 0 && (
+                            <Button
+                                size="small"
+                                aria-expanded={showReplies}
+                                aria-controls={`replies-${comment._id}`}
+                                startIcon={showReplies ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                onClick={toggleRepliesVisibility}
+                                sx={{
+                                    minHeight: 48,
+                                }}
+                            >
+                                {showReplies ? "Ukryj odpowiedzi" : `Pokaż jeszcze ${hiddenRepliesCount} ${hiddenRepliesCount === 1 ? "odpowiedź" : hiddenRepliesCount < 5 ? "odpowiedzi" : "odpowiedzi"}`}
+                            </Button>
+                        )}
                     </Box>
                 </Box>
             </Box>
