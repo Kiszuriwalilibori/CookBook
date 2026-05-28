@@ -6,6 +6,7 @@ import type { RecipeComment } from "@/types";
 
 export function useCommentsState() {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
+    const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
     const addOptimisticComment = useCallback((optimisticComment: RecipeComment) => {
         setComments(prev => [optimisticComment, ...(prev ?? [])]);
@@ -29,6 +30,8 @@ export function useCommentsState() {
     const resetComments = useCallback(() => {
         setComments([]);
     }, []);
+    const startSubmittingComment = useCallback(() => setIsSubmittingComment(true), []);
+    const stopSubmittingComment = useCallback(() => setIsSubmittingComment(false), []);
 
     return {
         comments,
@@ -38,5 +41,8 @@ export function useCommentsState() {
         removeOptimisticComment,
         updateComment,
         resetComments,
+        isSubmittingComment,
+        startSubmittingComment,
+        stopSubmittingComment,
     };
 }

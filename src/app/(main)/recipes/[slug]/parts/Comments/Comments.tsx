@@ -16,8 +16,7 @@ import { useScrollFocusOnOpen, useCreateCommentTree, useCommentsVisibility, hand
 import { useCommentsState } from "./utils/useCommentsState";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
-    const { comments, setAllComments, resetComments, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment } = useCommentsState();
-    const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+    const { comments, setAllComments, resetComments, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment, isSubmittingComment, startSubmittingComment, stopSubmittingComment } = useCommentsState();
     const [accordionOpen, setAccordionOpen] = useState(true);
     const [isFormOpen, openForm, closeForm] = useBoolean(false);
     const isAdminLogged = useIsAdminLogged();
@@ -46,7 +45,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 fingerprint,
                 likes: [],
             };
-            setIsSubmittingComment(true);
+            startSubmittingComment();
             options?.onSuccess?.();
             addOptimisticComment(optimisticComment);
 
@@ -88,7 +87,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 removeOptimisticComment(tempId);
                 options?.onError?.();
             } finally {
-                setIsSubmittingComment(false);
+                stopSubmittingComment();
             }
         },
         [recipeId, fingerprint, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment]
