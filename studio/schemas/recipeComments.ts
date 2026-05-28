@@ -31,7 +31,7 @@ export default {
       validation: (Rule: Rule) => Rule.required(),
     },
     {
-      name: 'isAuthor',
+      name: 'isAdmin',
       type: 'boolean',
       initialValue: false,
     },

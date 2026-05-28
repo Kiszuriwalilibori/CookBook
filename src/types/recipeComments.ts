@@ -8,7 +8,7 @@ export interface RecipeComment {
     content: string;
     author: string;
     createdAt: string;
-    isAuthor?: boolean;
+    isAdmin?: boolean;
     fingerprint: string;
     moderationScore?: number;
     moderationReason?: string;

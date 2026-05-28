@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails, Skeleton, Collapse } from "@mui/material";
+import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails, Collapse } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import LoadingIndicator from "@/components/LoadingIndicator";
@@ -16,8 +16,7 @@ import { useScrollFocusOnOpen, useCreateCommentTree, useCommentsVisibility, hand
 import { useCommentsState } from "./utils/useCommentsState";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
-    const { comments, setAllComments, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment } = useCommentsState();
-    // const [comments, setComments] = useState<RecipeComment[] | null>(null);
+    const { comments, setAllComments, resetComments, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment } = useCommentsState();
     const [isSubmittingComment, setIsSubmittingComment] = useState(false);
     const [accordionOpen, setAccordionOpen] = useState(true);
     const [isFormOpen, openForm, closeForm] = useBoolean(false);
@@ -41,7 +40,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 recipeId,
                 content,
                 author,
-                isAuthor: isAdminLogged,
+                isAdmin: isAdminLogged,
                 parentId: parentId ?? null,
                 createdAt: new Date().toISOString(),
                 fingerprint,
@@ -50,7 +49,6 @@ export default function Comments({ recipeId }: { recipeId: string }) {
             setIsSubmittingComment(true);
             options?.onSuccess?.();
             addOptimisticComment(optimisticComment);
-            // setComments(prev => [optimisticComment, ...(prev ?? [])]);
 
             try {
                 const res = await fetch("/api/comments", {
@@ -69,7 +67,6 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 const data = await res.json();
                 if (!data.ok) {
                     removeOptimisticComment(tempId);
-                    // setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
                     handleApiError(
                         data.error,
                         {
@@ -82,13 +79,12 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     );
                 } else {
                     const newComment = data.data.comment;
-                    // setComments(prev => (prev ?? []).map(c => (c._id === tempId ? newComment : c)));
+
                     replaceOptimisticWithReal(tempId, newComment);
                     showMessage.success("Twój komentarz został dodany");
                 }
             } catch (err) {
                 showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
-                // setComments(prev => (prev ?? []).filter(c => c._id !== tempId));
                 removeOptimisticComment(tempId);
                 options?.onError?.();
             } finally {
@@ -101,7 +97,6 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const fetchComments = useCallback(async () => {
         try {
             const res = await fetch(`/api/comments?recipeId=${recipeId}`);
-            // const data = await res.json();
             const data: ApiResponse<{ comments: RecipeComment[] }> = await res.json();
             if (!data.ok) {
                 const error = data.error;
@@ -118,7 +113,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                         showMessage.error(error.message || "Wystąpił nieznany błąd");
                 }
 
-                setAllComments([]);
+                resetComments();
                 return;
             }
             const safeComments: RecipeComment[] = Array.isArray(data.data.comments) ? data.data.comments.filter(Boolean) : [];
@@ -129,7 +124,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 error: err,
                 recipeId,
             });
-            setAllComments([]);
+            resetComments();
             showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
         }
     }, [recipeId]);
@@ -145,9 +140,6 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     });
     const isLoading = comments === null;
     const { commentTree, commentsCount } = useCreateCommentTree(comments);
-    // const safeFlatComments = useMemo(() => comments ?? [], [comments]);
-
-    // const commentTree = useMemo(() => buildCommentTree(safeFlatComments), [safeFlatComments]);
     const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny } = useCommentsVisibility(commentTree, 3);
 
     return (
@@ -176,17 +168,13 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                         </Box>
 
                         {isLoading ? (
-                            <Box>
-                                {[1, 2, 3].map(i => (
-                                    <Skeleton key={i} height={60} />
-                                ))}
-                            </Box>
+                            <LoadingIndicator open={isLoading} prompt="Trwa pobieranie komentarzy" />
                         ) : (
                             <Box sx={commentsContainerSx}>
                                 {/* FIRST COMMENTS */}
                                 <Box key={viewMode} sx={commentsListSx}>
                                     {visibleItems.map(comment => (
-                                        <CommentItem /*handleAddShortComment={handleAddShortComment}*/ key={comment._id} comment={comment} recipeId={recipeId} handleAddComment={handleAddComment} />
+                                        <CommentItem key={comment._id} comment={comment} recipeId={recipeId} handleAddComment={handleAddComment} />
                                     ))}
                                 </Box>
 
@@ -220,4 +208,3 @@ export default function Comments({ recipeId }: { recipeId: string }) {
         </>
     );
 }
-// todo warto rozważyć hooka do optimistic, który będzie sam zwracał callbacki do sukcesu i proażki

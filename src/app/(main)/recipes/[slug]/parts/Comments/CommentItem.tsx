@@ -36,7 +36,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
     const fingerprint = useFingerprint();
     const showMessage = useMessage();
 
-    const isAdminComment = comment.isAuthor === true;
+    const isAdminComment = comment.isAdmin === true;
 
     const isOwnComment = checkIsOwnComment(fingerprint, comment.fingerprint);
 

@@ -1,0 +1,1 @@
+export const COMMENT_COOLDOWN_MINUTES = 1;

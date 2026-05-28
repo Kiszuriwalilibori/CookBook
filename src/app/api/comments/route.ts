@@ -151,7 +151,7 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
 
             content: content.trim(),
             author,
-            isAuthor: isAdmin, // czy komentarz napisał właściciel strony (admin)
+            isAdmin, // czy komentarz napisał właściciel strony (admin)
 
             createdAt: new Date().toISOString(),
             fingerprint,

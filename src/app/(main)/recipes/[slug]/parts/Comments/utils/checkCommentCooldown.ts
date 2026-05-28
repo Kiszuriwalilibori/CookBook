@@ -1,6 +1,7 @@
 "use server";
+import { COMMENT_COOLDOWN_MINUTES } from "@/setup";
 import { client } from "@/utils";
-const COMMENT_COOLDOWN_MINUTES = 1;
+
 const COOLDOWN_MS = COMMENT_COOLDOWN_MINUTES * 60 * 1000;
 
 export async function checkCommentCooldown(fingerprint: string): Promise<{

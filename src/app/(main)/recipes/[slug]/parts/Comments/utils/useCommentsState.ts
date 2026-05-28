@@ -2,6 +2,8 @@
 import { useState, useCallback } from "react";
 import type { RecipeComment } from "@/types";
 
+// const initialComments =[]
+
 export function useCommentsState() {
     const [comments, setComments] = useState<RecipeComment[] | null>(null);
 
@@ -24,6 +26,9 @@ export function useCommentsState() {
     const setAllComments = useCallback((newComments: RecipeComment[]) => {
         setComments(newComments);
     }, []);
+    const resetComments = useCallback(() => {
+        setComments([]);
+    }, []);
 
     return {
         comments,
@@ -32,5 +37,6 @@ export function useCommentsState() {
         replaceOptimisticWithReal,
         removeOptimisticComment,
         updateComment,
+        resetComments,
     };
 }
