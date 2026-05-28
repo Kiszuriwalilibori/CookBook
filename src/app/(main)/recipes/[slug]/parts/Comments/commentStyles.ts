@@ -361,3 +361,21 @@ export const honeypotSx = {
     overflow: "hidden",
     opacity: 0,
 };
+
+export const shortCommentWrapperSx = {
+    display: "flex",
+    justifyContent: "end",
+};
+
+export const shortCommentCardSx = (theme: Theme) => ({
+    ...commentCardSx(0, false)(theme),
+    display: "flex",
+    gap: 1,
+});
+export const commentContentSx = {
+    mb: 0.5,
+};
+
+export const shortCommentAuthorSx = {
+    fontWeight: 700,
+};

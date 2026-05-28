@@ -5,7 +5,7 @@ import { Box, Typography, Avatar } from "@mui/material";
 import { RecipeComment } from "@/types";
 import { useFingerprint, useMessage } from "@/hooks";
 
-import { authorAvatarSx, commentActionsSx, commentCardSx, commentContentWrapperSx, commentWrapperSx, repliesContainerSx, threadLineSx } from "./commentStyles";
+import { authorAvatarSx, shortCommentWrapperSx, shortCommentCardSx, commentActionsSx, commentCardSx, commentContentWrapperSx, commentWrapperSx, repliesContainerSx, commentContentSx, shortCommentAuthorSx } from "./commentStyles";
 
 import { useLikeComment, useReplyComment, useShortComment, checkIsOwnComment, useLikeAnimation, getRelativeTime, useSetInitialFocusInCommentItem, getAbsoluteCommentDate } from "./utils";
 
@@ -78,7 +78,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
     return (
         <Box sx={commentWrapperSx(depth)} id={`comment-${comment._id}`}>
-            {depth > 0 && <Box sx={threadLineSx} />}
+            {/* {depth > 0 && <Box sx={threadLineSx} />} */}
 
             <Box sx={commentContentWrapperSx(depth)}>
                 <Box sx={commentCardSx(depth, isOwnComment)}>
@@ -88,28 +88,17 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
                     <CommentItemHeader author={comment.author} createdAt={comment.createdAt} isAdminComment={isAdminComment} relativeTime={getRelativeTime(comment.createdAt)} absoluteDate={getAbsoluteCommentDate(comment.createdAt)} />
 
-                    <Typography variant="body1" sx={{ mb: 0.5 }}>
+                    <Typography variant="body1" sx={commentContentSx}>
                         {comment.content}
                     </Typography>
 
                     {shortComment && (
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "end",
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    ...commentCardSx(0, false),
-                                    display: "flex",
-                                    gap: 1,
-                                }}
-                            >
+                        <Box sx={shortCommentWrapperSx}>
+                            <Box sx={shortCommentCardSx}>
                                 <Avatar src="/images/author.jpg" alt="Piotr" sx={authorAvatarSx} />
 
-                                <Typography variant="body1">
-                                    <strong>Piotr</strong>
+                                <Typography variant="body1" sx={shortCommentAuthorSx}>
+                                    Piotr
                                 </Typography>
 
                                 <Typography variant="body1">{shortComment}</Typography>
@@ -137,4 +126,3 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
         </Box>
     );
 }
-//todo w zasadzie pole comment.isAuthor powinno nazywać się comment.isadmin

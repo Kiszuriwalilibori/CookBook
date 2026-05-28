@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { dotSx } from "../commentStyles";
+import { dotSx } from "./commentStyles";
 
 export const Dot = () => {
     return (

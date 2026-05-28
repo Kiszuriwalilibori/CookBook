@@ -5,7 +5,7 @@
 import { Box, Typography, Avatar, Chip } from "@mui/material";
 
 import { authorAvatarSx, authorChipSx, commentDateSx, commentHeaderSx } from "./commentStyles";
-import { Dot } from "./utils/Dot";
+import { Dot } from "./Dot";
 
 type CommentItemHeaderProps = {
     author: string;
