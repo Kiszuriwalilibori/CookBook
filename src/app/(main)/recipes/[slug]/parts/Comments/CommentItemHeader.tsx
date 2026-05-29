@@ -13,17 +13,26 @@ type CommentItemHeaderProps = {
     isAdminComment: boolean;
     relativeTime: string;
     absoluteDate: string;
+    isOwnComment: boolean;
 };
 
-export default function CommentItemHeader({ author, createdAt, isAdminComment: isAdminComment, relativeTime, absoluteDate }: CommentItemHeaderProps) {
+export default function CommentItemHeader({ author, createdAt, isAdminComment: isAdminComment, isOwnComment, relativeTime, absoluteDate }: CommentItemHeaderProps) {
     return (
         <Box sx={commentHeaderSx}>
             {isAdminComment && <Avatar src="/images/author.jpg" alt="Piotr" sx={authorAvatarSx} />}
 
-            <Typography variant="body1">
+            {/* <Typography variant="body1">
                 <strong>{author}</strong>
+            </Typography> */}
+            <Typography
+                variant="body1"
+                sx={{
+                    color: isOwnComment ? "success.main" : "text.primary",
+                    fontWeight: isOwnComment ? 700 : 500,
+                }}
+            >
+                {author}
             </Typography>
-
             {isAdminComment && <Chip label="Autor" size="small" color="primary" sx={authorChipSx} />}
 
             <Typography variant="caption" sx={commentDateSx} dateTime={createdAt} component="time">

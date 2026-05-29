@@ -140,13 +140,16 @@ export const commentCardSx = (depth: number, isOwnComment: boolean) => (theme: T
 
     borderRadius: isOwnComment ? 3 : depth === 0 ? 2 : 0,
 
-    backgroundColor: isOwnComment ? (theme.palette.mode === "light" ? "#e8f5e9" : "rgba(76, 175, 80, 0.08)") : depth === 0 ? theme.palette.action.hover : "transparent",
+    // backgroundColor: isOwnComment ? (theme.palette.mode === "light" ? "#e8f5e9" : "rgba(76, 175, 80, 0.08)") : depth === 0 ? theme.palette.action.hover : "transparent",
 
     border: depth > 0 ? `1px solid ${theme.palette.divider}` : "none",
 
-    boxShadow: isOwnComment ? `0 0 0 3px ${alpha(theme.palette.success.main, 0.12)}` : depth > 0 ? (theme.palette.mode === "light" ? "0 0 0 1px rgba(0,0,0,0.04)" : "0 0 0 1px rgba(255,255,255,0.06)") : "none",
+    // boxShadow: isOwnComment ? `0 0 0 3px ${alpha(theme.palette.success.main, 0.12)}` : depth > 0 ? (theme.palette.mode === "light" ? "0 0 0 1px rgba(0,0,0,0.04)" : "0 0 0 1px rgba(255,255,255,0.06)") : "none",
 
     transition: "all 0.25s ease",
+    backgroundColor: depth === 0 ? theme.palette.action.hover : "transparent",
+
+    boxShadow: depth > 0 ? (theme.palette.mode === "light" ? "0 0 0 1px rgba(0,0,0,0.04)" : "0 0 0 1px rgba(255,255,255,0.06)") : "none",
 });
 
 export const commentHeaderSx = {

@@ -7,7 +7,7 @@ const STORAGE_KEY = "comments_sort_mode";
 
 export const useCommentsSorting = (comments: RecipeComment[] | null) => {
     const fingerprint = useFingerprint();
-    // const [sortMode, setSortMode] = useState<SortMode>("newest");
+
     const [sortMode, setSortModeInternal] = useState<SortMode>(() => {
         if (typeof window === "undefined") return "newest";
 
@@ -18,7 +18,7 @@ export const useCommentsSorting = (comments: RecipeComment[] | null) => {
         return "newest";
     });
 
-    // === NOWOŚĆ: Zapis do localStorage przy każdej zmianie ===
+    // ===  Zapis do localStorage przy każdej zmianie ===
     const setSortMode = (newMode: SortMode) => {
         setSortModeInternal(newMode);
         localStorage.setItem(STORAGE_KEY, newMode);

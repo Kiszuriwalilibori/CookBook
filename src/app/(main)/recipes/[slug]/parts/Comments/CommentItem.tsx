@@ -89,7 +89,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
                     <LoadingIndicator open={isShortCommentSubmitting} prompt="Dodawanie krótkiego komentarza w toku" />
 
-                    <CommentItemHeader author={comment.author} createdAt={comment.createdAt} isAdminComment={isAdminComment} relativeTime={getRelativeTime(comment.createdAt)} absoluteDate={getAbsoluteCommentDate(comment.createdAt)} />
+                    <CommentItemHeader isOwnComment={isOwnComment} author={comment.author} createdAt={comment.createdAt} isAdminComment={isAdminComment} relativeTime={getRelativeTime(comment.createdAt)} absoluteDate={getAbsoluteCommentDate(comment.createdAt)} />
 
                     <Typography variant="body1" sx={commentContentSx}>
                         {comment.content}
@@ -114,7 +114,8 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
                         <ReplyButton onToggle={toggleReplyForm} commentId={comment._id} author={comment.author} />
                     </Box>
-
+                    {/* </Box> */}
+                    {/* tu granica card */}
                     <ReplyCollapse open={formOpen} commentId={comment._id}>
                         <CommentForm textAreaRef={textAreaRef} key={formOpen ? "open" : "closed"} submitLabel="Odpowiedz" onSubmitShortComment={handleAddShortComment} onSubmitNormalComment={handleReplySubmit} onCancel={handleReplyCancel} commentId={comment._id} />
                     </ReplyCollapse>
@@ -141,6 +142,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                     </Box>
                 </Box>
             </Box>
+            {/* tu wywalić jednego boxa jak kombinujemy z card */}
         </Box>
     );
 }

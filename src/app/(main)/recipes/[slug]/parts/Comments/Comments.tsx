@@ -139,42 +139,9 @@ export default function Comments({ recipeId }: { recipeId: string }) {
         inputRef: textareaRef,
     });
     const isLoading = comments === null;
-
-    //     if (!comments) return [];
-
-    //     const sorted = [...comments];
-
-    //     switch (sortMode) {
-    //         case "most_liked":
-    //             sorted.sort((a, b) => {
-    //                 const likesDiff = b.likes.length - a.likes.length;
-    //                 if (likesDiff !== 0) return likesDiff;
-    //                 // drugi klucz: najnowszy na górze
-    //                 return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    //             });
-    //             break;
-
-    //         case "my_comments":
-    //             sorted.sort((a, b) => {
-    //                 const isMyA = a.fingerprint === fingerprint;
-    //                 const isMyB = b.fingerprint === fingerprint;
-
-    //                 if (isMyA && !isMyB) return -1;
-    //                 if (!isMyA && isMyB) return 1;
-    //                 // oba moje lub oba nie moje → sortujemy po dacie
-    //                 return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    //             });
-    //             break;
-
-    //         case "newest":
-    //         default:
-    //             sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    //     }
-
-    //     return sorted;
-    // }, [comments, sortMode, fingerprint]);
     const { commentTree, commentsCount } = useCreateCommentTree(sortedComments);
     const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny } = useCommentsVisibility(commentTree, 3);
+    if (!comments) return [];
 
     return (
         <>
@@ -183,27 +150,8 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 <Accordion expanded={accordionOpen} onChange={(_, expanded) => setAccordionOpen(expanded)} elevation={0}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography variant="h5">Komentarze ({commentsCount})</Typography>
-                        {/* <FormControl size="small" sx={{ minWidth: 140 }}>
-                            <Select
-                                value={sortMode}
-                                onChange={e => setSortMode(e.target.value as SortMode)}
-                                onClick={e => e.stopPropagation()} // ← kluczowe
-                                displayEmpty
-                                variant="outlined"
-                                sx={{
-                                    bgcolor: "background.paper",
-                                    "& .MuiOutlinedInput-notchedOutline": {
-                                        borderColor: "divider",
-                                    },
-                                }}
-                            >
-                                <MenuItem value="newest">Najnowsze</MenuItem>
-                                <MenuItem value="most_liked">Według polubień</MenuItem>
-                                <MenuItem value="my_comments">Moje komentarze</MenuItem>
-                            </Select>
-                        </FormControl> */}
-                        {/* Kontener zatrzymujący propagację */}
-                        <Box onClick={e => e.stopPropagation()} sx={{ display: "flex", gap: 0.5 }}>
+
+                        <Box onClick={e => e.stopPropagation()} sx={{ margin: "0 auto", display: "flex", gap: 2 }}>
                             <Button size="small" variant={sortMode === "newest" ? "contained" : "outlined"} onClick={() => setSortMode("newest")}>
                                 Najnowsze
                             </Button>
