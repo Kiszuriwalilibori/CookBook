@@ -13,11 +13,13 @@ import { useScrollFocusOnOpen } from "./useScrollFocusOnOpen";
 import { useCreateCommentTree } from "./useCreateCommentTree";
 import { handleApiError } from "./handleApiError";
 import { useRepliesVisibility } from "./useRepliesVisibility";
+import { useCommentsSorting } from "./useCommentsSorting";
 
 export { checkCommentCooldown } from "./checkCommentCooldown";
 
 export {
     useLikeComment,
+    useCommentsSorting,
     useRepliesVisibility,
     handleApiError,
     useCreateCommentTree,
