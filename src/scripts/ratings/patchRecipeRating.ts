@@ -44,7 +44,6 @@ export function mergeRatings(existingRatings: RecipeRating[], newRatings: Recipe
             _key: generateKey(),
         });
     });
-
     return Array.from(ratingsMap.values());
 }
 

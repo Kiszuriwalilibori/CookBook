@@ -93,7 +93,8 @@ async function patchRecipeRatings(input: PatchRecipeRatingsInput): Promise<void>
     const existingRatings = existingData?.ratings || [];
     const mergedRatings = mergeRatings(existingRatings, newRatings);
     const newSummary = calculateRatingSummary(mergedRatings);
-
+    console.log("mergedRatings", mergedRatings);
+    console.log("newSummary", newSummary);
     await writeClient
         .patch(recipe._id)
         .set({

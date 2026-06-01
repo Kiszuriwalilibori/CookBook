@@ -151,7 +151,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography variant="h5">Komentarze ({commentsCount})</Typography>
 
-                        <Box onClick={e => e.stopPropagation()} sx={{ margin: "0 auto", display: "flex", gap: 2 }}>
+                        {/* <Box onClick={e => e.stopPropagation()} sx={{ margin: "0 auto", display: "flex", gap: 2 }}>
                             <Button size="small" variant={sortMode === "newest" ? "contained" : "outlined"} onClick={() => setSortMode("newest")}>
                                 Najnowsze
                             </Button>
@@ -163,7 +163,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                             <Button size="small" variant={sortMode === "my_comments" ? "contained" : "outlined"} onClick={() => setSortMode("my_comments")}>
                                 Moje
                             </Button>
-                        </Box>
+                        </Box> */}
                     </AccordionSummary>
 
                     <AccordionDetails>
@@ -186,6 +186,19 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                             <LoadingIndicator open={isLoading} prompt="Trwa pobieranie komentarzy" />
                         ) : (
                             <Box sx={commentsContainerSx}>
+                                <Box onClick={e => e.stopPropagation()} sx={{ margin: "0 auto", display: "flex", gap: 2 }}>
+                                    <Button size="small" variant={sortMode === "newest" ? "contained" : "outlined"} onClick={() => setSortMode("newest")}>
+                                        Najnowsze
+                                    </Button>
+
+                                    <Button size="small" variant={sortMode === "most_liked" ? "contained" : "outlined"} onClick={() => setSortMode("most_liked")}>
+                                        Polubienia
+                                    </Button>
+
+                                    <Button size="small" variant={sortMode === "my_comments" ? "contained" : "outlined"} onClick={() => setSortMode("my_comments")}>
+                                        Moje
+                                    </Button>
+                                </Box>
                                 {/* FIRST COMMENTS */}
                                 <Box key={viewMode} sx={commentsListSx}>
                                     {visibleItems.map(comment => (
@@ -208,18 +221,22 @@ export default function Comments({ recipeId }: { recipeId: string }) {
             </Box>
 
             {/* 🔥 MOBILE STICKY CTA */}
-            <Box sx={mobileCommentButtonWrapperSx}>
-                <Button sx={mobileCommentButtonSx} variant="contained" color="primary" onClick={openCommentForm}>
-                    Dodaj komentarz
-                </Button>
-            </Box>
+            {!isFormOpen && (
+                <Box sx={mobileCommentButtonWrapperSx}>
+                    <Button sx={mobileCommentButtonSx} variant="contained" color="primary" onClick={openCommentForm}>
+                        Dodaj komentarz
+                    </Button>
+                </Box>
+            )}
 
             {/* 🔥 DESKTOP FLOATING CTA */}
-            <Box sx={desktopCommentButtonWrapperSx}>
-                <Button variant="contained" color="primary" startIcon={<ChatBubbleOutlineIcon />} onClick={openCommentForm}>
-                    Skomentuj
-                </Button>
-            </Box>
+            {!isFormOpen && (
+                <Box sx={desktopCommentButtonWrapperSx}>
+                    <Button variant="contained" color="primary" startIcon={<ChatBubbleOutlineIcon />} onClick={openCommentForm}>
+                        Skomentuj
+                    </Button>
+                </Box>
+            )}
         </>
     );
 }
