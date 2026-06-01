@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { Box, TextField, Button, Paper, FormLabel, FormControlLabel, Checkbox } from "@mui/material";
+import { RefObject, useState } from "react";
+import { Box, TextField, Button, Paper, FormLabel, FormControlLabel, Checkbox, Collapse } from "@mui/material";
 import { useIsAdminLogged } from "@/stores";
 import { errorMessages, validateComment } from "./utils";
-import { paperSx, textFieldSx, submitButtonSx, formLabelSx, actionsBoxSx } from "./commentStyles";
+import { paperSx, textFieldSx, submitButtonSx, formLabelSx, actionsBoxSx, collapseSx } from "./commentStyles";
 import { Honeypot } from "./Honeypot";
 import { ValidationErrorBox } from "./ValidationErrorBox";
 import { TextFieldRow } from "./TextFieldRow";
@@ -13,7 +13,10 @@ import { useMessage } from "@/hooks";
 export interface CommentFormProps {
     /** Ref do pola tekstowego (używany m.in. do focusa po błędzie) */
     textAreaRef?: React.RefObject<HTMLTextAreaElement | null> | null;
-
+    /** Określa czy formularz jest aktualnie rozwinięty */
+    isFormOpen: boolean;
+    /** Ref do kontenera formularza (używany przez mechanizm scroll/focus) */
+    formContainerRef: RefObject<HTMLDivElement | null>;
     /** Funkcja wywoływana po poprawnym przesłaniu formularza */
     onSubmitNormalComment: (data: { author: string; content: string; website?: string }) => Promise<void>;
     onSubmitShortComment?: (data: { commentId: string; shortContent: string }) => Promise<boolean>;
@@ -25,7 +28,7 @@ export interface CommentFormProps {
     onCancel?: () => void;
     commentId?: string;
 }
-export default function CommentForm({ textAreaRef, commentId, onSubmitNormalComment, onSubmitShortComment, submitLabel = "Dodaj", onCancel }: CommentFormProps) {
+export default function CommentForm({ textAreaRef, formContainerRef, commentId, isFormOpen, onSubmitNormalComment, onSubmitShortComment, submitLabel = "Dodaj", onCancel }: CommentFormProps) {
     const [author, setAuthor] = useState("");
     const [content, setContent] = useState("");
 
@@ -120,83 +123,87 @@ export default function CommentForm({ textAreaRef, commentId, onSubmitNormalComm
     const contentErrorText = validation.contentErrors.map(e => errorMessages[e] ?? e).join(", ");
 
     return (
-        <Paper elevation={1} sx={paperSx}>
-            <Box sx={{ position: "relative" }}>
-                <Honeypot />
+        <Box ref={formContainerRef}>
+            <Collapse in={isFormOpen} timeout={400} sx={collapseSx}>
+                <Paper elevation={1} sx={paperSx}>
+                    <Box sx={{ position: "relative" }}>
+                        <Honeypot />
 
-                {!isAdminLogged && (
-                    <>
-                        <TextFieldRow id="Author Text Field Row" activated={authorActivated} onShowErrors={() => setAuthorShowErrors(true)}>
-                            <FormLabel required sx={formLabelSx}>
-                                Przedstaw się
+                        {!isAdminLogged && (
+                            <>
+                                <TextFieldRow id="Author Text Field Row" activated={authorActivated} onShowErrors={() => setAuthorShowErrors(true)}>
+                                    <FormLabel required sx={formLabelSx}>
+                                        Przedstaw się
+                                    </FormLabel>
+
+                                    <TextField
+                                        inputRef={textAreaRef}
+                                        slotProps={{
+                                            htmlInput: {
+                                                "aria-label": "Imię autora komentarza",
+                                                "aria-invalid": validation.authorErrors.length > 0,
+                                                "aria-describedby": "author-error",
+                                            },
+                                        }}
+                                        autoComplete="off"
+                                        helperText="2–40 znaków"
+                                        fullWidth
+                                        size="small"
+                                        placeholder="np.: Anulka"
+                                        value={author}
+                                        onChange={e => setAuthor(e.target.value)}
+                                        onFocus={() => setAuthorActivated(true)}
+                                        color="secondary"
+                                        sx={textFieldSx}
+                                    />
+                                </TextFieldRow>
+                                <ValidationErrorBox showErrors={authorShowErrors} hasErrors={validation.authorErrors.length > 0} errorText={authorErrorText} id="author-error" />
+                            </>
+                        )}
+
+                        <TextFieldRow id="Content Text Field Row" activated={contentActivated} onShowErrors={() => setContentShowErrors(true)}>
+                            <FormLabel id="Content Form Label" required sx={formLabelSx}>
+                                Skomentuj
                             </FormLabel>
 
                             <TextField
-                                inputRef={textAreaRef}
                                 slotProps={{
                                     htmlInput: {
-                                        "aria-label": "Imię autora komentarza",
-                                        "aria-invalid": validation.authorErrors.length > 0,
-                                        "aria-describedby": "author-error",
+                                        "aria-label": "Treść komentarza",
+                                        "aria-invalid": validation.contentErrors.length > 0,
+                                        "aria-describedby": "content-error",
                                     },
                                 }}
-                                autoComplete="off"
-                                helperText="2–40 znaków"
                                 fullWidth
+                                multiline // niszczy focusa
+                                data-autofocus
+                                autoComplete="off"
+                                minRows={3} // todo niszczy focusa
                                 size="small"
-                                placeholder="np.: Anulka"
-                                value={author}
-                                onChange={e => setAuthor(e.target.value)}
-                                onFocus={() => setAuthorActivated(true)}
+                                placeholder="Napisz coś"
+                                helperText="3–1000 znaków"
+                                value={content}
+                                onChange={e => setContent(e.target.value)}
+                                onFocus={() => setContentActivated(true)}
                                 color="secondary"
                                 sx={textFieldSx}
                             />
                         </TextFieldRow>
-                        <ValidationErrorBox showErrors={authorShowErrors} hasErrors={validation.authorErrors.length > 0} errorText={authorErrorText} id="author-error" />
-                    </>
-                )}
-
-                <TextFieldRow id="Content Text Field Row" activated={contentActivated} onShowErrors={() => setContentShowErrors(true)}>
-                    <FormLabel id="Content Form Label" required sx={formLabelSx}>
-                        Skomentuj
-                    </FormLabel>
-
-                    <TextField
-                        slotProps={{
-                            htmlInput: {
-                                "aria-label": "Treść komentarza",
-                                "aria-invalid": validation.contentErrors.length > 0,
-                                "aria-describedby": "content-error",
-                            },
-                        }}
-                        fullWidth
-                        multiline // niszczy focusa
-                        data-autofocus
-                        autoComplete="off"
-                        minRows={3} // todo niszczy focusa
-                        size="small"
-                        placeholder="Napisz coś"
-                        helperText="3–1000 znaków"
-                        value={content}
-                        onChange={e => setContent(e.target.value)}
-                        onFocus={() => setContentActivated(true)}
-                        color="secondary"
-                        sx={textFieldSx}
-                    />
-                </TextFieldRow>
-                <ValidationErrorBox showErrors={contentShowErrors} hasErrors={validation.contentErrors.length > 0} errorText={contentErrorText} id="content-error" />
-                {isAdminLogged && (
-                    <Box sx={{ mt: 1, mb: 2 }}>
-                        <FormControlLabel control={<Checkbox checked={isShortComment} onChange={e => setIsShortComment(e.target.checked)} color="primary" />} label="To jest krótki komentarz" />
+                        <ValidationErrorBox showErrors={contentShowErrors} hasErrors={validation.contentErrors.length > 0} errorText={contentErrorText} id="content-error" />
+                        {isAdminLogged && (
+                            <Box sx={{ mt: 1, mb: 2 }}>
+                                <FormControlLabel control={<Checkbox checked={isShortComment} onChange={e => setIsShortComment(e.target.checked)} color="primary" />} label="To jest krótki komentarz" />
+                            </Box>
+                        )}
+                        <Box sx={actionsBoxSx}>
+                            <Button fullWidth variant="contained" onClick={isShortComment ? handleSubmitShortComment : handleSubmitNormalComment} disabled={baseDisabled || !validation.isValid} sx={submitButtonSx}>
+                                {submitLabel}
+                            </Button>
+                            {onCancel && <CommentFormCancelButton onReset={handleReset} />}
+                        </Box>
                     </Box>
-                )}
-                <Box sx={actionsBoxSx}>
-                    <Button fullWidth variant="contained" onClick={isShortComment ? handleSubmitShortComment : handleSubmitNormalComment} disabled={baseDisabled || !validation.isValid} sx={submitButtonSx}>
-                        {submitLabel}
-                    </Button>
-                    {onCancel && <CommentFormCancelButton onReset={handleReset} />}
-                </Box>
-            </Box>
-        </Paper>
+                </Paper>
+            </Collapse>
+        </Box>
     );
 }

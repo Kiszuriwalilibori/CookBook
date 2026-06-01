@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails, Collapse } from "@mui/material";
+import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import LoadingIndicator from "@/components/LoadingIndicator";
@@ -11,7 +11,7 @@ import CommentForm from "./CommentForm";
 import { useIsAdminLogged } from "@/stores/useAdminStore";
 import { useBoolean, useFingerprint, useMessage } from "@/hooks";
 import type { ApiResponse, RecipeComment } from "@/types";
-import { collapseSx, commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
+import { commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
 import { useScrollFocusOnOpen, useCreateCommentTree, useCommentsVisibility, handleApiError } from "./utils";
 import { useCommentsState } from "./utils/useCommentsState";
 import { useCommentsSorting } from "./utils/useCommentsSorting";
@@ -168,19 +168,19 @@ export default function Comments({ recipeId }: { recipeId: string }) {
 
                     <AccordionDetails>
                         {/* FORM */}
-                        <Box ref={formContainerRef}>
-                            <Collapse in={isFormOpen} timeout={400} sx={collapseSx}>
-                                <CommentForm
-                                    textAreaRef={textareaRef}
-                                    submitLabel="Dodaj"
-                                    onSubmitNormalComment={async data => {
-                                        closeForm();
-                                        await handleAddComment(data);
-                                    }}
-                                    onCancel={() => closeForm()}
-                                />
-                            </Collapse>
-                        </Box>
+                        {/* <Box ref={formContainerRef}> */}
+                        <CommentForm
+                            formContainerRef={formContainerRef}
+                            isFormOpen={isFormOpen}
+                            textAreaRef={textareaRef}
+                            submitLabel="Dodaj"
+                            onSubmitNormalComment={async data => {
+                                closeForm();
+                                await handleAddComment(data);
+                            }}
+                            onCancel={() => closeForm()}
+                        />
+                        {/* </Box> */}
 
                         {isLoading ? (
                             <LoadingIndicator open={isLoading} prompt="Trwa pobieranie komentarzy" />
