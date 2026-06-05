@@ -20,6 +20,7 @@ export function RecipeHero({ recipe }: RecipeHeroProps) {
                         style={{ objectFit: "cover" }}
                         priority // Optional: Prioritize for hero image
                         sizes="(max-width: 768px) 100vw, 50vw" // Responsive sizes for optimization
+                        unoptimized={true}
                     />
                 </Box>
             )}

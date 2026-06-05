@@ -1,17 +1,3 @@
-// import { useFingerprintStore } from "@/stores";
-
-// export function useFingerprint(): string {
-//     const getFingerprint = useFingerprintStore(state => state.getFingerprint);
-
-//     return getFingerprint();
-// }
-
-// src/hooks/useFingerprint.ts
-// src/hooks/useFingerprint.ts
-// src/hooks/useFingerprint.ts
-// src/hooks/useFingerprint.ts
-// src/hooks/useFingerprint.ts
-// src/hooks/useFingerprint.ts
 "use client";
 
 import { useEffect } from "react";
