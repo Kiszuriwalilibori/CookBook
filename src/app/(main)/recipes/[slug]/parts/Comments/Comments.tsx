@@ -142,6 +142,9 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const { commentTree, commentsCount } = useCreateCommentTree(sortedComments);
     const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny } = useCommentsVisibility(commentTree, 3);
     if (!comments) return [];
+    if (!fingerprint) {
+        return null; // lub skeleton / loading fragment
+    }
 
     return (
         <>

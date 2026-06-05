@@ -79,6 +79,9 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
     });
 
     if (!comment) return null;
+    if (!fingerprint) {
+        return null; // lub skeleton / loading fragment
+    }
 
     return (
         <Box sx={commentWrapperSx(depth)} id={`comment-${comment._id}`}>

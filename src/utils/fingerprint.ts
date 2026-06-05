@@ -38,6 +38,9 @@ interface WEBGLDebugRendererInfo {
  * Generates a device/browser fingerprint for rating-blocking
  */
 export function generateDeviceFingerprint(): string {
+    if (typeof window === "undefined") {
+        throw new Error("generateDeviceFingerprint() should only be called on the client");
+    }
     const nav = navigator as Navigator & NavigatorExtended;
 
     const components = {
