@@ -1,5 +1,5 @@
 "use client";
-
+import { useRef } from "react";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Avatar, Box, Button, Typography } from "@mui/material";
@@ -40,12 +40,10 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
     const showMessage = useMessage();
     const { showReplies, visibleReplies, hiddenRepliesCount, toggleRepliesVisibility } = useRepliesVisibility(comment.replies);
     // const [showReplies, setShowReplies] = useState(false);
-
+    const replyFormRef = useRef<HTMLDivElement>(null);
     const isAdminComment = comment.isAdmin === true;
 
     const isOwnComment = checkIsOwnComment(fingerprint, comment.fingerprint);
-
-    const textAreaRef = useSetInitialFocusInCommentItem(false);
 
     const { animateLike, triggerLikeAnimation } = useLikeAnimation(300);
 
@@ -69,6 +67,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
         commentId: comment._id,
         handleAddComment,
     });
+    const textAreaRef = useSetInitialFocusInCommentItem(formOpen);
 
     // =========================
     // SHORT COMMENT HOOK
@@ -117,7 +116,17 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                     {/* </Box> */}
                     {/* tu granica card */}
                     <ReplyCollapse open={formOpen} commentId={comment._id}>
-                        <CommentForm textAreaRef={textAreaRef} key={formOpen ? "open" : "closed"} submitLabel="Odpowiedz" onSubmitShortComment={handleAddShortComment} onSubmitNormalComment={handleReplySubmit} onCancel={handleReplyCancel} commentId={comment._id} />
+                        <CommentForm
+                            formContainerRef={replyFormRef}
+                            isFormOpen={formOpen}
+                            textAreaRef={textAreaRef}
+                            key={formOpen ? "open" : "closed"}
+                            submitLabel="Odpowiedz"
+                            onSubmitShortComment={handleAddShortComment}
+                            onSubmitNormalComment={handleReplySubmit}
+                            onCancel={handleReplyCancel}
+                            commentId={comment._id}
+                        />
                     </ReplyCollapse>
 
                     <Box sx={repliesContainerSx} id={`replies-${comment._id}`}>

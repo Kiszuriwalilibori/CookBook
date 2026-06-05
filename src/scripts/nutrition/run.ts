@@ -6,3 +6,4 @@ async function main() {
 }
 
 main().catch(console.error);
+// upewnij się że z pliku nutritionData jest eksportowana nutritionData a nie exampleRecipe

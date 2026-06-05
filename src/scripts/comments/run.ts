@@ -1,7 +1,13 @@
-import { deleteAllRecipeComments } from "./deleteAllRecipeComments";
+// runImportComments.ts
+
+import { comments } from "./comments";
+import { importRecipeComments } from "./importRecipeComments";
 
 async function main() {
-    await deleteAllRecipeComments();
+    await importRecipeComments({
+        recipeTitle: "Makaron z truskawkami",
+        comments,
+    });
 }
 
 main().catch(console.error);
