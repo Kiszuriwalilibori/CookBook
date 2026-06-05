@@ -89,6 +89,9 @@ const createPageMetadata = (
     title: pageSpecific.title,
     description: pageSpecific.description,
     keywords: [...DEFAULT_KEYWORDS, ...(pageSpecific.keywords || [page])],
+    // alternates: {
+    //     canonical: page === "home" ? BASE_URL : `${BASE_URL}/${page}`,
+    // },
     alternates: {
         canonical: page === "home" ? BASE_URL : `${BASE_URL}/${page}`,
     },

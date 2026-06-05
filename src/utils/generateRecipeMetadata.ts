@@ -1,8 +1,10 @@
 import type { Recipe } from "@/types";
-import BASE_URL from "../../public/metadata/metadata";
+// import BASE_URL from "../../public/metadata/metadata";
 import type { PortableTextBlock, PortableTextSpan } from "@portabletext/types";
 
 export function generateRecipeMetadata(recipe: Recipe) {
+    const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
+    const recipeUrl = recipe.slug?.current ? `${BASE_URL}/recipes/${recipe.slug.current}` : BASE_URL;
     const extractText = (blocks?: PortableTextBlock[]): string => {
         if (!blocks) return "";
         return blocks
@@ -20,7 +22,7 @@ export function generateRecipeMetadata(recipe: Recipe) {
 
     const mainImage = recipe.description?.image?.asset?.url || recipe.preparationSteps?.[0]?.image?.asset?.url || `${BASE_URL}og-image-default.jpg`;
 
-    const url = recipe.source?.url || (recipe.slug ? `${BASE_URL}recipes/${recipe.slug.current}` : BASE_URL);
+    // const url = recipe.source?.url || (recipe.slug ? `${BASE_URL}/recipes/${recipe.slug.current}` : BASE_URL);
 
     const description = extractText(recipe.description?.content).substring(0, 200) || "Przepis kulinarny";
 
@@ -31,10 +33,13 @@ export function generateRecipeMetadata(recipe: Recipe) {
     return {
         title: recipe.title,
         description,
+        alternates: {
+            canonical: recipeUrl,
+        },
         openGraph: {
             title: ogTitle,
             description,
-            url,
+            url: recipeUrl,
             type: "article" as const,
             images: [
                 {
