@@ -4,7 +4,6 @@ import type { Recipe } from "@/types";
 import type { PortableTextBlock } from "@portabletext/types";
 
 export function generateRecipeSchema(recipe: Recipe) {
-    console.log("recipe", recipe);
     const extractText = (blocks?: PortableTextBlock[]): string => {
         if (!blocks) return "";
 
