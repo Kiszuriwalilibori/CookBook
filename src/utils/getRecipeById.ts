@@ -7,6 +7,8 @@ export async function getRecipeById(id: string): Promise<Recipe | null> {
         groq`
       *[_type == "recipe" && _id == $id][0]{
         _id,
+        _createdAt,
+        _updatedAt,
         title,
         slug,
         description {

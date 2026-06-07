@@ -14,6 +14,8 @@ export default async function getLatestRecipes(limit = 6): Promise<Recipe[]> {
         | order(_createdAt desc)[0...$buffer]
         {
             _id,
+            _createdAt,
+            _updatedAt,
             title,
             slug,
             status,

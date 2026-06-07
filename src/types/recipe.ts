@@ -20,6 +20,8 @@ interface PortableTextBlock {
 
 export interface Recipe {
     _id: string;
+    _createdAt: string;
+    _updatedAt: string;
     title: string;
     slug?: {
         current: string;
