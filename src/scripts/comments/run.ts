@@ -5,7 +5,7 @@ import { importRecipeComments } from "./importRecipeComments";
 
 async function main() {
     await importRecipeComments({
-        recipeTitle: "Makaron z truskawkami",
+        recipeTitle: "Rumsztyk",
         comments,
     });
 }

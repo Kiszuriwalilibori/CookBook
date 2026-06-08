@@ -1,5 +1,4 @@
 import type { Recipe } from "@/types";
-// import BASE_URL from "../../public/metadata/metadata";
 import type { PortableTextBlock, PortableTextSpan } from "@portabletext/types";
 
 export function generateRecipeMetadata(recipe: Recipe) {
@@ -20,18 +19,17 @@ export function generateRecipeMetadata(recipe: Recipe) {
             .trim();
     };
 
-    const mainImage = recipe.description?.image?.asset?.url || recipe.preparationSteps?.[0]?.image?.asset?.url || `${BASE_URL}og-image-default.jpg`;
-
-    // const url = recipe.source?.url || (recipe.slug ? `${BASE_URL}/recipes/${recipe.slug.current}` : BASE_URL);
-
+    const mainImage = recipe.description?.image?.asset?.url || recipe.preparationSteps?.[0]?.image?.asset?.url || `${BASE_URL}/og-image-default.jpg`;
     const description = extractText(recipe.description?.content).substring(0, 200) || "Przepis kulinarny";
-
-    const nutritionText = recipe.nutrition ? `${recipe.nutrition.per100g.calories} kcal • ${recipe.nutrition.per100g.protein}g B • ${recipe.nutrition.per100g.fat}g T • ${recipe.nutrition.per100g.carbohydrate}g W` : "";
-
-    const ogTitle = nutritionText ? `${recipe.title} • ${nutritionText}` : recipe.title;
+    const ogTitle = `${recipe.title} – sprawdzony przepis`;
 
     return {
         title: recipe.title,
+        authors: [
+            {
+                name: "Piotr Maksymiuk",
+            },
+        ],
         description,
         alternates: {
             canonical: recipeUrl,
@@ -57,6 +55,10 @@ export function generateRecipeMetadata(recipe: Recipe) {
             title: ogTitle,
             description,
             images: [mainImage],
+        },
+        robots: {
+            index: true,
+            follow: true,
         },
     };
 }

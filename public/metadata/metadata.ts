@@ -62,7 +62,7 @@ const DEFAULT_OG = {
     description: "Proste i pyszne przepisy na każdy dzień. Obiady, desery, przekąski i więcej – wszystko przetestowane w domowej kuchni.",
     images: [
         {
-            // url: "https://twoja-domena.pl/og-image-default.jpg", // 1200x630 px rekomendowane
+            // 1200x630 px rekomendowane
             url: `${BASE_URL}og-image-default.jpg`,
             width: 1200,
             height: 630,
