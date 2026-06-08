@@ -41,12 +41,13 @@ export function generateRecipeMetadata(recipe: Recipe) {
             type: "article" as const,
             images: [
                 {
-                    url: mainImage,
+                    url: `${recipeUrl}/opengraph-image`,
                     width: 1200,
                     height: 630,
                     alt: recipe.title,
                 },
             ],
+
             siteName: "Przepisy Piotra Maksymiuka",
             locale: "pl_PL" as const,
         },
