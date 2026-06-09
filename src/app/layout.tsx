@@ -24,7 +24,10 @@ export async function generateMetadata() {
     const pathName = (await headerList).get("x-current-path") ?? "";
     const segments = pathName.split("/").filter(Boolean);
     const pageKey = (segments[0] ?? "home") as Pages;
-
+    if (pageKey === "recipes" && segments.length > 1) {
+        // nie generujemy dla recipes
+        return {};
+    }
     return metadata[pageKey] ?? metadata.home;
 }
 

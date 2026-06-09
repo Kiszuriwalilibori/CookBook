@@ -3,7 +3,7 @@
 const API_URL = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${process.env.PERSPECTIVE_COMMENT_ANALYZER_API_KEY}`;
 
 const CONFIG = {
-    languages: ["en"],
+    languages: ["pl", "en"],
     requestedAttributes: {
         TOXICITY: {},
         INSULT: {},

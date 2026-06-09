@@ -5,6 +5,7 @@ import { useCallback, useMemo } from "react";
 import { handleApiError } from "./handleApiError";
 
 import { useOptimisticMutation } from "./useOptimisticMutation";
+// import ApiResponse from "@/models/apiResponse";
 
 type UseLikeCommentParams = {
     commentId: string;
@@ -28,7 +29,9 @@ type LikeCommentResponse = {
         likes: string[];
     };
 };
-
+// type LikeCommentResponse = ApiResponse<{
+//     likes: string[];
+// }>;
 export function useLikeComment({ commentId, fingerprint, initialLikes, showMessage, onLikeAnimation }: UseLikeCommentParams) {
     const { state: likes, setState: setLikes, isPending: isLiking, run } = useOptimisticMutation<string[]>(initialLikes);
 
