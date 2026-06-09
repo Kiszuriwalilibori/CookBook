@@ -60,7 +60,6 @@ export interface Recipe {
         notes?: string;
     }>;
 
-    // Zostaje – do czasu przełączenia aplikacji
     calories?: number;
     prepTime?: number;
     cookTime?: number;

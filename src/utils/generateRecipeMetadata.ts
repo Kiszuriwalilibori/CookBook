@@ -19,10 +19,11 @@ export function generateRecipeMetadata(recipe: Recipe) {
             .trim();
     };
 
-    const mainImage = recipe.description?.image?.asset?.url || recipe.preparationSteps?.[0]?.image?.asset?.url || `${BASE_URL}/og-image-default.jpg`;
+    // const mainImage = recipe.description?.image?.asset?.url || recipe.preparationSteps?.[0]?.image?.asset?.url || `${BASE_URL}/og-image-default.jpg`;
     const description = extractText(recipe.description?.content).substring(0, 200) || "Przepis kulinarny";
     const ogTitle = `${recipe.title} – sprawdzony przepis`;
-
+    const ogImageUrl = `${recipeUrl}/opengraph-image`;
+    console.log("OG IMAGE", `${recipeUrl}/opengraph-image`);
     return {
         title: recipe.title,
         authors: [
@@ -41,7 +42,7 @@ export function generateRecipeMetadata(recipe: Recipe) {
             type: "article" as const,
             images: [
                 {
-                    url: `${recipeUrl}/opengraph-image`,
+                    url: ogImageUrl,
                     width: 1200,
                     height: 630,
                     alt: recipe.title,
@@ -55,7 +56,7 @@ export function generateRecipeMetadata(recipe: Recipe) {
             card: "summary_large_image" as const,
             title: ogTitle,
             description,
-            images: [mainImage],
+            images: [ogImageUrl],
         },
         robots: {
             index: true,
