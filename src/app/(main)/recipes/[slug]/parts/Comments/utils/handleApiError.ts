@@ -1,4 +1,4 @@
-import { ApiError } from "@/types";
+import { ApiResponseError } from "@/types";
 
 export type ErrorHandlerMap = Partial<Record<string, (message: string) => void>>;
 type TransportError = { type: "NETWORK_ERROR"; message: string } | { type: "PARSE_ERROR"; message: string } | { type: "ABORTED"; message: string };
@@ -6,7 +6,7 @@ type TransportError = { type: "NETWORK_ERROR"; message: string } | { type: "PARS
 function isTransportError(err: unknown): err is TransportError {
     return typeof err === "object" && err !== null && "type" in err && typeof (err as { type?: unknown }).type === "string";
 }
-export function isApiError(err: unknown): err is ApiError {
+export function isApiError(err: unknown): err is ApiResponseError {
     return typeof err === "object" && err !== null && "code" in err && "message" in err;
 }
 

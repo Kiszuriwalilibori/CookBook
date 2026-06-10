@@ -4,7 +4,6 @@ import client from "./client";
 export default async function getTopRatedRecipes(limit = 6): Promise<Recipe[]> {
     // 🔥 Pobieramy WIĘCEJ niż potrzebujemy (buffer)
     const bufferSize = limit * 3;
-
     const recipes: Recipe[] = await client.fetch(
         `
         *[

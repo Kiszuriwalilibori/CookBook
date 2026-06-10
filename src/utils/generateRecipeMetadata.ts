@@ -23,7 +23,6 @@ export function generateRecipeMetadata(recipe: Recipe) {
     const description = extractText(recipe.description?.content).substring(0, 200) || "Przepis kulinarny";
     const ogTitle = `${recipe.title} – sprawdzony przepis`;
     const ogImageUrl = `${recipeUrl}/opengraph-image`;
-    console.log("OG IMAGE", `${recipeUrl}/opengraph-image`);
     return {
         title: recipe.title,
         authors: [
