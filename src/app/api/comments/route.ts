@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { writeClient } from "@/utils";
-import { handleShortComment } from "./handleShortComment";
+import { handleShortComment } from "./handleShortComment.service";
 import { handleLike } from "./like.service";
 import { ApiError, createComment } from "./comment.service";
 
@@ -96,11 +96,13 @@ export async function PATCH(req: Request) {
 
         switch (option) {
             case "HANDLE_LIKE":
-                const result = await handleLike(body);
-                return NextResponse.json({ ok: true, data: result }, { status: 200 });
+                const likeResult = await handleLike(body);
+                return NextResponse.json({ ok: true, data: likeResult }, { status: 200 });
 
             case "HANDLE_SHORT_COMMENT":
-                return await handleShortComment(body);
+                // return await handleShortComment(body);
+                const handleShortCommentResult = await handleShortComment(body);
+                return NextResponse.json({ ok: true, data: handleShortCommentResult }, { status: 200 });
             default:
                 return NextResponse.json(
                     {

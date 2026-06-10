@@ -11,6 +11,7 @@ export function isApiError(err: unknown): err is ApiError {
 }
 
 export function handleApiError(err: unknown, map: Record<string, (msg: string) => void>, fallback?: (msg: string) => void) {
+    console.log(err);
     // 🟡 transport errors (fetch / parse)
     if (isTransportError(err)) {
         switch (err.type) {

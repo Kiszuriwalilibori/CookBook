@@ -38,9 +38,10 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
     const [authorActivated, setAuthorActivated] = useState(false);
     const [contentActivated, setContentActivated] = useState(false);
     const [isShortComment, setIsShortComment] = useState(false);
-    const showMessage = useMessage();
 
+    const showMessage = useMessage();
     const isAdminLogged = useIsAdminLogged();
+    const isShortCommentModeAvailable = !!commentId;
 
     // 🔥 single source of truth for validation
     const validation = validateComment({
@@ -55,6 +56,7 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
         setContentShowErrors(false);
         setAuthorActivated(false);
         setContentActivated(false);
+        setIsShortComment(false);
     }
     function handleReset() {
         resetForm();
@@ -62,12 +64,12 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
     }
     async function handleSubmitShortComment() {
         if (!onSubmitShortComment) {
-            showMessage.error("onSubmitShortComment is not provided");
+            showMessage.error("Błąd techniczny: funkcja short comment nie jest dostępna w tym kontekście.");
             return;
         }
 
         if (!commentId) {
-            showMessage.error("commentId is required for short comment");
+            showMessage.error("Short comment można dodawać tylko do istniejącego komentarza.");
             return;
         }
 
@@ -190,7 +192,7 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
                             />
                         </TextFieldRow>
                         <ValidationErrorBox showErrors={contentShowErrors} hasErrors={validation.contentErrors.length > 0} errorText={contentErrorText} id="content-error" />
-                        {isAdminLogged && (
+                        {isAdminLogged && isShortCommentModeAvailable && (
                             <Box sx={{ mt: 1, mb: 2 }}>
                                 <FormControlLabel control={<Checkbox checked={isShortComment} onChange={e => setIsShortComment(e.target.checked)} color="primary" />} label="To jest krótki komentarz" />
                             </Box>
