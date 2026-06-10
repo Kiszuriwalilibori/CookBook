@@ -79,3 +79,17 @@ export type ApiError = {
 };
 
 export type ApiResponse<T = unknown> = { ok: true; data: T } | { ok: false; error: ApiError };
+
+export type CreateCommentInput = {
+    recipeId: string;
+    content: string;
+    author: string;
+    fingerprint: string;
+    parentId?: string;
+    website?: string;
+};
+
+export type ModerationResult = {
+    valid: boolean;
+    score: number;
+};
