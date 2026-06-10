@@ -1,12 +1,8 @@
 import { NextResponse } from "next/server";
-import { analyzeComment, writeClient } from "@/utils";
-
-import { nanoid } from "nanoid";
+import { writeClient } from "@/utils";
 import { handleShortComment } from "./handleShortComment";
-import { ApiResponse, RecipeComment } from "@/types";
-import { checkCommentCooldown } from "@/app/(main)/recipes/[slug]/parts/Comments/utils";
-import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 import { handleLike } from "./handleLike";
+import { ApiError, createComment } from "./comment.service";
 
 export async function GET(req: Request) {
     try {
@@ -48,141 +44,39 @@ export async function GET(req: Request) {
         );
     }
 }
-
-export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
+export async function POST(req: Request) {
     try {
         const body = await req.json();
+        const result = await createComment(body);
 
-        const { recipeId, content, author, fingerprint, parentId, website } = body;
-
-        // 🟢 HONEYPOT
-        if (website) {
-            return NextResponse.json<ApiResponse>(
-                {
-                    ok: false,
-                    error: {
-                        code: "SPAM_DETECTED",
-                        message: "Wykryto próbę spamu",
-                    },
-                },
-                { status: 400 }
-            );
-        }
-
-        if (!recipeId || !content?.trim() || !author || !fingerprint) {
-            return NextResponse.json<ApiResponse>(
-                {
-                    ok: false,
-                    error: {
-                        code: "MISSING_FIELDS",
-                        message: "Brak wymaganych pól",
-                    },
-                },
-                { status: 400 }
-            );
-        }
-        if (parentId) {
-            const parent = await writeClient.getDocument(parentId);
-            if (!parent || parent.recipeId !== recipeId) {
-                return NextResponse.json(
-                    {
-                        ok: false,
-                        error: { code: "INVALID_PARENT", message: "Nieprawidłowy komentarz nadrzędny" },
-                    },
-                    { status: 400 }
-                );
-            }
-        }
-
-        const cooldown = await checkCommentCooldown(fingerprint);
-        if (!cooldown.allowed) {
+        return NextResponse.json({ ok: true, data: result }, { status: 200 });
+    } catch (err: unknown) {
+        if (err instanceof ApiError) {
             return NextResponse.json(
                 {
                     ok: false,
                     error: {
-                        code: "COMMENT_COOLDOWN",
-                        message: `Odczekaj ${cooldown.remainingSeconds} sekund przed dodaniem kolejnego komentarza`,
+                        code: err.code,
+                        message: err.message,
                     },
                 },
-                { status: 429 }
+                { status: err.status ?? 500 }
             );
-        }
-
-        // const cookieStore = await cookies();
-        // const token = cookieStore.get("session")?.value;
-
-        // const isAdmin =
-        //     !!token &&
-        //     (await new google.auth.OAuth2()
-        //         .verifyIdToken({
-        //             idToken: token,
-        //             audience: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-        //         })
-        //         .then(t => t.getPayload()?.email?.toLowerCase() === process.env.MY_EMAIL)
-        //         .catch(() => false));
-        const currentUser = await getUserFromCookies();
-        const isAdmin = currentUser?.isAdmin ?? false;
-        const id = `comment-${nanoid()}`;
-
-        // 🔥 MODERATION
-        const result = await analyzeComment(content);
-        const isApproved = result.valid;
-
-        if (!isApproved) {
+        } else {
             return NextResponse.json(
                 {
                     ok: false,
                     error: {
-                        code: "COMMENT_REJECTED",
-                        message: "Komentarz nie przeszedł moderacji",
+                        code: "INTERNAL_SERVER_ERROR",
+                        message: "Wystąpił nieoczekiwany błąd serwera",
                     },
                 },
-                { status: 400 }
+                { status: 500 }
             );
         }
-
-        const comment = {
-            _type: "recipeComment",
-            _id: id,
-
-            recipeId,
-            parentId: parentId || null,
-
-            content: content.trim(),
-            author,
-            isAdmin, // czy komentarz napisał właściciel strony (admin)
-
-            createdAt: new Date().toISOString(),
-            fingerprint,
-            likes: [],
-
-            // status: "approved",
-            // moderationScore: result.score,
-        };
-
-        await writeClient.create(comment);
-
-        return NextResponse.json<ApiResponse<{ comment: RecipeComment }>>(
-            {
-                ok: true,
-                data: { comment },
-            },
-            { status: 200 }
-        );
-    } catch (err) {
-        console.error("[COMMENTS][POST]", err);
-        return NextResponse.json<ApiResponse>(
-            {
-                ok: false,
-                error: {
-                    code: "INTERNAL_SERVER_ERROR",
-                    message: "Wystąpił nieoczekiwany błąd serwera",
-                },
-            },
-            { status: 500 }
-        );
     }
 }
+
 export async function PATCH(req: Request) {
     try {
         const body = await req.json();
