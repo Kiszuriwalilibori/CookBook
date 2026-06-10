@@ -17,4 +17,10 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
   },
+  schemaExtraction: {
+    enabled: true,
+  },
+  typegen: {
+    enabled: true,
+  },
 })

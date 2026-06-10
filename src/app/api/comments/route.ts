@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { writeClient } from "@/utils";
 import { handleShortComment } from "./handleShortComment";
-import { handleLike } from "./handleLike";
+import { handleLike } from "./like.service";
 import { ApiError, createComment } from "./comment.service";
 
 export async function GET(req: Request) {
@@ -96,7 +96,8 @@ export async function PATCH(req: Request) {
 
         switch (option) {
             case "HANDLE_LIKE":
-                return handleLike(body);
+                const result = await handleLike(body);
+                return NextResponse.json({ ok: true, data: result }, { status: 200 });
 
             case "HANDLE_SHORT_COMMENT":
                 return await handleShortComment(body);
@@ -112,17 +113,30 @@ export async function PATCH(req: Request) {
                     { status: 400 }
                 );
         }
-    } catch (err) {
+    } catch (err: unknown) {
         console.error("[COMMENTS][PATCH]", err);
-        return NextResponse.json(
-            {
-                ok: false,
-                error: {
-                    code: "INTERNAL_ERROR",
-                    message: "Failed to process request",
+        if (err instanceof ApiError) {
+            return NextResponse.json(
+                {
+                    ok: false,
+                    error: {
+                        code: err.code,
+                        message: err.message,
+                    },
                 },
-            },
-            { status: 500 }
-        );
+                { status: err.status ?? 500 }
+            );
+        } else {
+            return NextResponse.json(
+                {
+                    ok: false,
+                    error: {
+                        code: "INTERNAL_ERROR",
+                        message: "Failed to process request",
+                    },
+                },
+                { status: 500 }
+            );
+        }
     }
 }
