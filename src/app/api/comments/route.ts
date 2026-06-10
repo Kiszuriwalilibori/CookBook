@@ -82,16 +82,7 @@ export async function PATCH(req: Request) {
         const body = await req.json();
         const { option } = body;
         if (!option) {
-            return NextResponse.json(
-                {
-                    ok: false,
-                    error: {
-                        code: "MISSING_OPTION",
-                        message: "Brak parametru 'option'",
-                    },
-                },
-                { status: 400 }
-            );
+            throw new ApiError("MISSING_OPTION", "Brak parametru 'option'", 400);
         }
 
         switch (option) {
@@ -100,20 +91,10 @@ export async function PATCH(req: Request) {
                 return NextResponse.json({ ok: true, data: likeResult }, { status: 200 });
 
             case "HANDLE_SHORT_COMMENT":
-                // return await handleShortComment(body);
                 const handleShortCommentResult = await handleShortComment(body);
                 return NextResponse.json({ ok: true, data: handleShortCommentResult }, { status: 200 });
             default:
-                return NextResponse.json(
-                    {
-                        ok: false,
-                        error: {
-                            code: "UNKNOWN_OPTION",
-                            message: `Nieznana opcja: ${option}`,
-                        },
-                    },
-                    { status: 400 }
-                );
+                throw new ApiError("UNKNOWN_OPTION", `Nieznana opcja: ${option}`, 400);
         }
     } catch (err: unknown) {
         console.error("[COMMENTS][PATCH]", err);

@@ -1,4 +1,4 @@
-import { writeClient } from "@/utils";
+import { writeClient, client } from "@/utils";
 import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 import { ApiError } from "./comment.service";
 
@@ -33,7 +33,7 @@ async function assertIsAdmin() {
 }
 
 async function getComment(commentId: string) {
-    const comment = await writeClient.getDocument(commentId);
+    const comment = await client.getDocument(commentId);
 
     if (!comment) {
         throw new ApiError("COMMENT_NOT_FOUND", "Nie znaleziono komentarza", 404);

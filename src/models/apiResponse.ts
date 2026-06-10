@@ -1,15 +1,15 @@
-type ApiSuccess<TData> = {
-    ok: true;
-    data: TData;
-};
+// type ApiSuccess<TData> = {
+//     ok: true;
+//     data: TData;
+// };
 
-type ApiError = {
-    ok: false;
-    error: {
-        code: string;
-        message: string;
-    };
-};
+// type ApiError = {
+//     ok: false;
+//     error: {
+//         code: string;
+//         message: string;
+//     };
+// };
 
-export type ApiResponse<TData> = ApiSuccess<TData> | ApiError;
-export default ApiResponse;
+// export type ApiResponse<TData> = ApiSuccess<TData> | ApiError;
+// export default ApiResponse;
