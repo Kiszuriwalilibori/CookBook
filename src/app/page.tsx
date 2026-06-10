@@ -5,6 +5,7 @@ import getRandomRecipes from "@/utils/getRandomRecipes";
 import getLatestRecipes from "@/utils/getLatestRecipes";
 import { LatestRecipesSection, TopRatedRecipesSection } from "@/components";
 import getTopRatedRecipes from "@/utils/getTopRatedRecipes";
+import { pageRootSx, contentWrapperSx, leftColumnSx, rightColumnSx } from "./recipes/recipes.page.styles";
 
 // ISR: adjust revalidate to taste (seconds)
 export const revalidate = 60;
@@ -15,24 +16,17 @@ export default async function Page() {
     const topRatedRecipes = await getTopRatedRecipes(6);
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+        <Box sx={pageRootSx}>
             {/* Pass server-fetched slides to the client Slider*/}
             <Slider initialSlides={slides} />
             {/* Sekcja Najnowsze */}
-            <Box
-                sx={{
-                    display: "flex",
-                    flex: 1, // wypełnia pozostałą wysokość strony
-                    flexDirection: { xs: "column", md: "row" },
-                    width: "100%",
-                }}
-            >
+            <Box sx={contentWrapperSx}>
                 {/* LEWA: Najnowsze */}
-                <Box sx={{ flex: 1, borderRight: { xs: "none", md: "1px solid #ccc" } }}>
+                <Box sx={leftColumnSx}>
                     <LatestRecipesSection recipes={latestRecipes} />
                 </Box>
 
-                <Box sx={{ flex: 1 }}>
+                <Box sx={rightColumnSx}>
                     <TopRatedRecipesSection recipes={topRatedRecipes} />
                 </Box>
             </Box>
