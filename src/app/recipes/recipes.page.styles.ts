@@ -13,12 +13,22 @@ export const contentWrapperSx: SxProps<Theme> = {
     flexDirection: { xs: "column", md: "row" },
     width: "100%",
 };
+const columnBaseSx: SxProps<Theme> = {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+};
 
 export const leftColumnSx: SxProps<Theme> = {
-    flex: 1,
+    ...columnBaseSx,
+    backgroundColor: "#D6E2CF",
     borderRight: { xs: "none", md: "1px solid #ccc" },
 };
 
 export const rightColumnSx: SxProps<Theme> = {
-    flex: 1,
+    ...columnBaseSx,
+    backgroundColor: "#b88e8d",
 };

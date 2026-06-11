@@ -22,11 +22,11 @@ export default async function Page() {
             {/* Sekcja Najnowsze */}
             <Box sx={contentWrapperSx}>
                 {/* LEWA: Najnowsze */}
-                <Box sx={leftColumnSx}>
+                <Box id="left column" sx={leftColumnSx}>
                     <LatestRecipesSection recipes={latestRecipes} />
                 </Box>
 
-                <Box sx={rightColumnSx}>
+                <Box id="right column" sx={rightColumnSx}>
                     <TopRatedRecipesSection recipes={topRatedRecipes} />
                 </Box>
             </Box>

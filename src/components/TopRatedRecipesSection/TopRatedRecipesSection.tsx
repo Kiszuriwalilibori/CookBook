@@ -14,7 +14,7 @@ export default function TopRatedRecipesSection({ recipes }: Props) {
     if (!recipes?.length) return null;
 
     return (
-        <Box sx={styles.container}>
+        <>
             <Box sx={styles.headerBox}>
                 <Typography variant="h5" sx={styles.headerText}>
                     Najwyżej oceniane
@@ -26,6 +26,6 @@ export default function TopRatedRecipesSection({ recipes }: Props) {
                     <RecipeCard key={recipe._id} recipe={recipe} isFavorite={false} onAddFavorite={() => {}} onRemoveFavorite={() => {}} />
                 ))}
             </Box>
-        </Box>
+        </>
     );
 }
