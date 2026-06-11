@@ -1,31 +1,23 @@
-"use client";
-
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import RecipeCard from "@/components/RecipeCard";
-import type { Recipe } from "@/types";
+
 import { styles } from "./TopRatedRecipesSection.styles";
+import getTopRatedRecipes from "@/utils/getTopRatedRecipes";
 
-interface Props {
-    recipes: Recipe[];
-}
+export default async function TopRatedRecipesSection() {
+    try {
+        const recipes = await getTopRatedRecipes(6);
+        if (!recipes?.length) return null;
 
-export default function TopRatedRecipesSection({ recipes }: Props) {
-    if (!recipes?.length) return null;
-
-    return (
-        <>
-            <Box sx={styles.headerBox}>
-                <Typography variant="h5" sx={styles.headerText}>
-                    Najwyżej oceniane
-                </Typography>
-            </Box>
-
+        return (
             <Box sx={styles.gridContainer}>
                 {recipes.map(recipe => (
-                    <RecipeCard key={recipe._id} recipe={recipe} isFavorite={false} onAddFavorite={() => {}} onRemoveFavorite={() => {}} />
+                    <RecipeCard key={recipe._id} recipe={recipe} isFavorite={false} />
                 ))}
             </Box>
-        </>
-    );
+        );
+    } catch {
+        return <Typography>Nie udało się pobrać najwyżej ocenianych przepisów.</Typography>;
+    }
 }

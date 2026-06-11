@@ -42,6 +42,5 @@ export default async function getLatestRecipes(limit = 6): Promise<Recipe[]> {
 
         if (filtered.length === limit) break;
     }
-
     return filtered;
 }

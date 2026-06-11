@@ -1,8 +1,11 @@
+"use client";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+
+import { useTheme } from "@mui/material/styles";
 
 type LoadingIndicatorProps = {
     open?: boolean;
@@ -12,12 +15,14 @@ type LoadingIndicatorProps = {
 };
 
 export default function LoadingIndicator({ open = true, prompt = "Ładowanie...", size = 120, centeredInParent = false }: LoadingIndicatorProps) {
+    const theme = useTheme();
     return (
         <Backdrop
             open={open}
             sx={{
                 position: centeredInParent ? "absolute" : "fixed",
-                zIndex: theme => theme.zIndex.modal + 999,
+                inset: 0,
+                zIndex: theme.zIndex.modal + 999,
                 backgroundColor: "transparent",
             }}
         >

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Card, CardContent, Box } from "@mui/material";
 import NextLink from "next/link";
@@ -13,8 +15,8 @@ import { RecipeCardFavoriteButton } from "./RecipeCard.FavoriteButton";
 interface RecipeCardProps {
     recipe: Recipe;
     isFavorite: boolean;
-    onAddFavorite: (id: string) => void;
-    onRemoveFavorite: (id: string) => void;
+    onAddFavorite?: (id: string) => void;
+    onRemoveFavorite?: (id: string) => void;
 }
 
 export const RecipeCard = React.memo(function RecipeCard({ recipe, isFavorite, onAddFavorite, onRemoveFavorite }: RecipeCardProps) {
@@ -25,7 +27,7 @@ export const RecipeCard = React.memo(function RecipeCard({ recipe, isFavorite, o
 
     const handleFavorite = (e: React.MouseEvent) => {
         e.preventDefault();
-
+        if (!onAddFavorite || !onRemoveFavorite) return;
         if (isFavorite) {
             onRemoveFavorite(recipe._id);
         } else {

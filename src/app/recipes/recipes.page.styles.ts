@@ -13,13 +13,16 @@ export const contentWrapperSx: SxProps<Theme> = {
     flexDirection: { xs: "column", md: "row" },
     width: "100%",
 };
+
+export const columnHeaderSx: SxProps<Theme> = { px: 2, pt: 2, width: "100%", textAlign: "center" };
 const columnBaseSx: SxProps<Theme> = {
     flex: 1,
     width: "100%",
-    height: "100%",
+    minHeight: "100%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    position: "relative",
 };
 
 export const leftColumnSx: SxProps<Theme> = {

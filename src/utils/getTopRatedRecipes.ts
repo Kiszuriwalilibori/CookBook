@@ -44,6 +44,5 @@ export default async function getTopRatedRecipes(limit = 6): Promise<Recipe[]> {
 
         if (filtered.length === limit) break;
     }
-
     return filtered;
 }
