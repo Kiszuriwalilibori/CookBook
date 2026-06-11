@@ -21,7 +21,6 @@ export default async function Page() {
             <Slider initialSlides={slides} />
             {/* Sekcja Najnowsze */}
             <Box sx={contentWrapperSx}>
-                {/* LEWA: Najnowsze */}
                 <Box id="left column" sx={leftColumnSx}>
                     <LatestRecipesSection recipes={latestRecipes} />
                 </Box>

@@ -3,11 +3,20 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-export default function LoadingIndicator({ open = true, prompt = "Ładowanie...", size = 120 }) {
+
+type LoadingIndicatorProps = {
+    open?: boolean;
+    prompt?: string;
+    size?: number;
+    centeredInParent?: boolean;
+};
+
+export default function LoadingIndicator({ open = true, prompt = "Ładowanie...", size = 120, centeredInParent = false }: LoadingIndicatorProps) {
     return (
         <Backdrop
             open={open}
             sx={{
+                position: centeredInParent ? "absolute" : "fixed",
                 zIndex: theme => theme.zIndex.modal + 999,
                 backgroundColor: "transparent",
             }}
