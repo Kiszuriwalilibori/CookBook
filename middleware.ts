@@ -27,7 +27,7 @@ export function middleware(request: NextRequest) {
         response.cookies.set("userId", crypto.randomUUID(), {
             httpOnly: true,
             sameSite: "lax",
-            secure: true,
+            secure: process.env.NODE_ENV === "production",
             path: "/",
             maxAge: 60 * 60 * 24 * 365,
         });
