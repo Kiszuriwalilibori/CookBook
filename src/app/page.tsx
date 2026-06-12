@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import { Box } from "@mui/material";
 import Slider from "@/components/Slider/Slider";
 import getRandomRecipes from "@/utils/getRandomRecipes";
-// import getLatestRecipes from "@/utils/getLatestRecipes";
 import { LatestRecipesSection, LoadingIndicator, TopRatedRecipesSection } from "@/components";
 
 import { pageRootSx, contentWrapperSx, leftColumnSx, rightColumnSx } from "./recipes/recipes.page.styles";

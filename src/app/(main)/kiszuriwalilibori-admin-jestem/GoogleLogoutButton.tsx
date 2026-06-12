@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useLoginStatus, useSetLoginStatus } from "@/stores/useAdminStore";
 import { useRouter, usePathname } from "next/navigation";
-import { logoutButtonWrapper } from "./Header.styles";
+import { logoutButtonWrapper } from "./styles";
 
 export const GoogleLogoutButton = () => {
     const loginStatus = useLoginStatus();

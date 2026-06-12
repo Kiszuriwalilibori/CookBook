@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useIsAdminLogged } from "@/stores/useAdminStore";
 import { Box, Button, Paper } from "@mui/material";
-import { closeButtonSx, signinButtonWrapperStyles } from "./Header.styles";
 import { focusableSx } from "@/styles/utilityStyles";
+import { closeButtonSx, signinButtonWrapperStyles } from "./styles";
 
 export default function GoogleSignInButton() {
     const isAdminLogged = useIsAdminLogged();

@@ -6,8 +6,8 @@ import { Menu } from "@/components";
 import { useEscapeKey, useRecipesSummary, useGoogleSignIn, useNavItems } from "@/hooks";
 import { RecipeFilter } from "@/types";
 
-import GoogleLogoutButton from "./GoogleLogoutButton";
-import GoogleSignInButton from "./GoogleSignInButton";
+// import GoogleLogoutButton from "./GoogleLogoutButton";
+// import GoogleSignInButton from "./GoogleSignInButton";
 import { RecipeFiltersModal } from "./RecipeFiltersModal";
 
 interface HeaderProps {
@@ -47,8 +47,8 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
         <>
             <Menu navItems={navItems} mobileOpen={ui.mobileMenuOpen} onMobileOpen={openMobileMenu} onMobileClose={closeMobileMenu} />
 
-            <GoogleSignInButton />
-            <GoogleLogoutButton />
+            {/* <GoogleSignInButton />
+            <GoogleLogoutButton /> */}
 
             <RecipeFiltersModal open={ui.filterOpen} onClose={closeFilters} options={options} />
         </>

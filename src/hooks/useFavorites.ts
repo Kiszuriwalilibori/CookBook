@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -30,52 +29,70 @@ export const useFavorites = () => {
         fetchFavorites();
     }, [isUserLogged, googleToken, hydrated, setFavorites]);
     useResetFavoritesOnLogout();
-    
-const addFavorite = useCallback(
-    async (recipeId: string) => {
-        if (loading) return;
-        setLoading(true);
-        add(recipeId);
 
-        try {
-            await fetch("/api/favorites", {
-                method: "POST",
-                body: JSON.stringify({ recipeId }),
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-            });
-        } catch {
-            remove(recipeId);
-        } finally {
-            setLoading(false);
-        }
-    },
-    [loading, add, remove]
-);
-
-    
-    
-const removeFavorite = useCallback(
-    async (recipeId: string) => {
-        if (loading) return;
-        setLoading(true);
-        remove(recipeId);
-
-        try {
-            await fetch("/api/favorites", {
-                method: "DELETE",
-                body: JSON.stringify({ recipeId }),
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-            });
-        } catch {
+    const addFavorite = useCallback(
+        async (recipeId: string) => {
+            if (loading) return;
+            setLoading(true);
             add(recipeId);
-        } finally {
-            setLoading(false);
-        }
-    },
-    [loading, add, remove]
-);
+
+            try {
+                const res = await fetch("/api/favorites", {
+                    method: "POST",
+                    body: JSON.stringify({ recipeId }),
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                });
+
+                const data = await res.json();
+
+                console.log("data favorites post", data);
+                // await fetch("/api/favorites", {
+                //     method: "POST",
+                //     body: JSON.stringify({ recipeId }),
+                //     headers: { "Content-Type": "application/json" },
+                //     credentials: "include",
+                // });
+            } catch {
+                remove(recipeId);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [loading, add, remove]
+    );
+
+    const removeFavorite = useCallback(
+        async (recipeId: string) => {
+            if (loading) return;
+            setLoading(true);
+            remove(recipeId);
+
+            try {
+                const res = await fetch("/api/favorites", {
+                    method: "DELETE",
+                    body: JSON.stringify({ recipeId }),
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                });
+
+                const data = await res.json();
+
+                console.log("data favorites DELETE", data);
+                // await fetch("/api/favorites", {
+                //     method: "DELETE",
+                //     body: JSON.stringify({ recipeId }),
+                //     headers: { "Content-Type": "application/json" },
+                //     credentials: "include",
+                // });
+            } catch {
+                add(recipeId);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [loading, add, remove]
+    );
 
     return { favorites, addFavorite, removeFavorite, loading };
 };

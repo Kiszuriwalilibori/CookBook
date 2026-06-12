@@ -78,7 +78,12 @@ export type ApiResponseError = {
     message: string;
 };
 
-export type ApiResponse<T = unknown> = { ok: true; data: T } | { ok: false; error: ApiResponseError };
+export type ApiSuccessResponse<T> = {
+    ok: true;
+    data: T;
+};
+
+export type ApiResponse<T = unknown> = ApiSuccessResponse<T> | { ok: false; error: ApiResponseError };
 
 export type CreateCommentInput = {
     recipeId: string;
