@@ -10,6 +10,7 @@ import { layoutContainerStyles, mainContentStyles } from "./layout.styles";
 import { fetchSummary } from "@/utils/fetchSummary";
 import metadata from "../../public/metadata/metadata";
 import { Pages } from "@/models/pages";
+import { BootstrapUser } from "./bootstrapUser";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,6 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <html lang="pl" suppressHydrationWarning={true}>
             <body className={inter.className}>
                 <Providers>
+                    <BootstrapUser />
                     <AppRouterCacheProvider>
                         <ThemeProvider theme={theme}>
                             <Box sx={layoutContainerStyles}>
