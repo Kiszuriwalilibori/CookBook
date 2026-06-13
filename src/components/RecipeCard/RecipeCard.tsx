@@ -12,6 +12,7 @@ import { RecipeCardDescription } from "./RecipeCard.Description";
 import { RecipeCardTitle } from "./RecipeCard.Title";
 import { RecipeCardImage } from "./RecipeCard.Image";
 import { RecipeCardFavoriteButton } from "./RecipeCard.FavoriteButton";
+// import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 interface RecipeCardProps {
     recipe: Recipe;
     isFavorite: boolean;

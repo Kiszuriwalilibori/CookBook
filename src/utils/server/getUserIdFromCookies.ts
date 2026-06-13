@@ -5,9 +5,5 @@ export async function getUserIdFromCookies() {
     const userId = cookieStore.get("userId")?.value;
 
     if (!userId) return null;
-
-    return {
-        userId,
-        isAdmin: false, // na razie ignorujemy admin logikę
-    };
+    return userId;
 }
