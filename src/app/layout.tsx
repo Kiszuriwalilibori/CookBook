@@ -34,7 +34,8 @@ export async function generateMetadata() {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
     const { summary, error: fetchError } = await fetchSummary();
-
+    const cookies = await getUserIdFromCookies();
+    if (cookies) console.log("cokies", cookies);
     return (
         <html lang="pl" suppressHydrationWarning={true}>
             <body className={inter.className}>
@@ -44,6 +45,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                         <ThemeProvider theme={theme}>
                             <Box sx={layoutContainerStyles}>
                                 <Header initialSummary={summary} fetchError={fetchError} />
+                                {cookies && cookies.userId && <span>{cookies.userId}</span>}
                                 <Box component="main" sx={mainContentStyles}>
                                     {children}
                                 </Box>
