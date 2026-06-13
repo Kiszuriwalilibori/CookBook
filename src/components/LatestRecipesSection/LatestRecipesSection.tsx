@@ -8,6 +8,8 @@ import getLatestRecipes from "@/utils/getLatestRecipes";
 export default async function LatestRecipesSection() {
     try {
         const recipes = await getLatestRecipes(6);
+        //    test only
+
         if (!recipes?.length) return null;
 
         return (
