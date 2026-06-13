@@ -11,6 +11,7 @@ import { fetchSummary } from "@/utils/fetchSummary";
 import metadata from "../../public/metadata/metadata";
 import { Pages } from "@/models/pages";
 import { BootstrapUser } from "./bootstrapUser";
+import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 
 const inter = Inter({ subsets: ["latin"] });
 
