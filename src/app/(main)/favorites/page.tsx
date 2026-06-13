@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export default async function FavoritesPage() {
     const user = await getUserFromCookies();
     const cookies = await getUserIdFromCookies();
-    console.log("cokies", cookies);
+    if (cookies) console.log("cokies", cookies.userId);
     if (!user) redirect("/");
 
     const initialRecipes = await getUserFavorites(user.userId);
@@ -19,6 +19,7 @@ export default async function FavoritesPage() {
     return (
         <>
             <PageTitle title="Ulubione przepisy" />
+            {cookies && cookies.userId && <span>cookies.userId</span>}
             <FavoritesClient initialRecipes={initialRecipes} />
         </>
     );
