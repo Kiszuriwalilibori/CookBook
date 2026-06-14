@@ -48,7 +48,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                         <ThemeProvider theme={theme}>
                             <Box sx={layoutContainerStyles}>
                                 <Header initialSummary={summary} fetchError={fetchError} />
-                                {userId && <span>{userId}</span>}
                                 <Box component="main" sx={mainContentStyles}>
                                     {children}
                                 </Box>
