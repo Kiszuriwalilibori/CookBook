@@ -12,6 +12,7 @@ import metadata from "../../public/metadata/metadata";
 import { Pages } from "@/models/pages";
 import { BootstrapUser } from "./bootstrapUser";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
+import UserInitializer from "@/components/UserInitialiser";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,6 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <Providers>
                     <BootstrapUser />
                     <AppRouterCacheProvider>
+                        <UserInitializer userId={userId} />
                         <ThemeProvider theme={theme}>
                             <Box sx={layoutContainerStyles}>
                                 <Header initialSummary={summary} fetchError={fetchError} />
@@ -59,4 +61,3 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </html>
     );
 }
-// todo postarać się o google key
