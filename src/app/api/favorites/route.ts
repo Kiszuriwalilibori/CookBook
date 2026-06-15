@@ -1,50 +1,90 @@
 // src/app/api/favorites/route.ts
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { getUserFavorites, writeClient } from "@/utils";
+import { getUserFavorites, writeClient, client } from "@/utils";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
+import { ApiError } from "../comments/comment.service";
 // POST → dodanie ulubionego
 export async function POST(req: NextRequest) {
     try {
         const { recipeId } = await req.json();
-        console.log("[favorites][POST] Received recipeId:", recipeId);
-
         if (!recipeId) {
-            console.warn("[favorites][POST] Missing recipeId");
-            return NextResponse.json({ error: "Missing recipeId" }, { status: 400 });
+            throw new ApiError("MISSING_RECIPE_ID", "Brak Id przepisu", 400);
         }
 
-        // Pobranie usera za pomocą helpera
+        const recipe = await client.fetch(
+            `*[_type == "recipe" && _id == $recipeId][0]{
+        _id,
+        title
+    }`,
+            { recipeId }
+        );
+
+        if (!recipe) {
+            throw new ApiError("RECIPE_NOT_FOUND", "Nie znaleziono przepisu", 404);
+        }
+
         const user = await getUserIdFromCookies();
 
         if (!user) {
-            console.warn("[favorites][POST] No token, user not logged in");
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+            // console.warn("[favorites][POST] No token, user not logged in");
+            throw new ApiError("MISSING_USER", "Nie zdefiniowano użytkownika", 401);
+            // return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
-
-        console.log("[favorites][POST] Verified user:", user);
 
         // Sprawdzenie, czy ulubiony już istnieje
-        const existing = await writeClient.fetch(`*[_type=="favorite" && userId==$userId && recipe._ref==$recipeId][0]`, { userId: user /*.userId*/, recipeId });
+        // const existing = await client.fetch(`*[_type=="favorite" && userId==$userId && recipe._ref==$recipeId][0]`, { userId: user, recipeId });
+        const existing = await client.fetch(`defined(*[_type=="favorite" && userId==$userId && recipe._ref==$recipeId][0]._id)`, {
+            userId: user,
+            recipeId,
+        });
 
-        console.log("[favorites][POST] Existing favorite:", existing);
-
-        if (!existing) {
-            await writeClient.create({
-                _type: "favorite",
-                userId: user,
-                recipe: { _type: "reference", _ref: recipeId },
-            });
-            console.log("[favorites][POST] Favorite created!");
-        } else {
-            console.log("[favorites][POST] Favorite already exists, skipping create.");
+        if (existing) {
+            throw new ApiError("ALREADY_FAVORITE", "Ten przepis już należy do ulubionych", 409);
         }
 
-        return NextResponse.json({ ok: true });
-    } catch (err) {
-        console.error("[favorites][POST] Error:", err);
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        await writeClient.create({
+            _type: "favorite",
+            userId: user,
+            recipe: { _type: "reference", _ref: recipeId },
+        });
+
+        return NextResponse.json(
+            {
+                ok: true,
+                data: {
+                    title: recipe.title,
+                },
+            },
+            { status: 200 }
+        );
+    } catch (err: unknown) {
+        if (err instanceof ApiError) {
+            return NextResponse.json(
+                {
+                    ok: false,
+                    error: {
+                        code: err.code,
+                        message: err.message,
+                    },
+                },
+                { status: err.status ?? 500 }
+            );
+        } else {
+            return NextResponse.json(
+                {
+                    ok: false,
+                    error: {
+                        code: "INTERNAL_SERVER_ERROR",
+                        message: "Wystąpił nieoczekiwany błąd serwera",
+                    },
+                },
+                { status: 500 }
+            );
+        }
     }
+    // console.error("[favorites][POST] Error:", err);
+    // return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 }
 
 // DELETE → usunięcie ulubionego
