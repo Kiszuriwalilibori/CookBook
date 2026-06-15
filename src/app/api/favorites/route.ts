@@ -48,16 +48,15 @@ export async function POST(req: NextRequest) {
             userId: user,
             recipe: { _type: "reference", _ref: recipeId },
         });
-
-        return NextResponse.json(
-            {
-                ok: true,
-                data: {
-                    title: recipe.title,
-                },
+        console.log("dodano do ulubionych ", recipe.title);
+        const result = {
+            ok: true,
+            data: {
+                title: recipe.title,
             },
-            { status: 200 }
-        );
+        };
+        console.log("add result", result);
+        return NextResponse.json(result, { status: 200 });
     } catch (err: unknown) {
         if (err instanceof ApiError) {
             return NextResponse.json(

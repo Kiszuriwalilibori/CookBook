@@ -37,6 +37,7 @@ export const useFavorites = () => {
 
     const removeFavorite = useCallback(
         async (recipeId: string) => {
+            console.log("remove from removeFavorite", recipeId);
             if (loading) return;
             setLoading(true);
             remove(recipeId);

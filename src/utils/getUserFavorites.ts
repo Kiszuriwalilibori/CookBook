@@ -13,7 +13,7 @@ export async function getUserFavorites(userId: string): Promise<Recipe[]> {
         } | order(createdAt desc)`,
         { userId }
     );
-    console.log("getUserFavorites", userId, favorites.map((f: { recipe?: Recipe }) => f.recipe).filter(Boolean));
+
     return favorites.map((f: { recipe?: Recipe }) => f.recipe).filter(Boolean);
 }
 
