@@ -25,8 +25,7 @@ export const useFavorites = () => {
                 });
 
                 const data = await response.json();
-
-                console.log("data favorites post", data);
+                console.log(data);
             } catch {
                 remove(recipeId);
             } finally {

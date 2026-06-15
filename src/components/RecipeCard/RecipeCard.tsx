@@ -14,16 +14,12 @@ import { useIsFavorite } from "@/stores/useFavoritesStore";
 
 interface RecipeCardProps {
     recipe: Recipe;
-
     onAddFavorite?: (id: string) => void;
     onRemoveFavorite?: (id: string) => void;
 }
 
 export const RecipeCard = React.memo(function RecipeCard({ recipe, onAddFavorite, onRemoveFavorite }: RecipeCardProps) {
     const { title, description, slug } = recipe;
-    // const favs = useGetFavorites();
-    // console.log("recipe card favs", favs);
-    // const isFavorite = favs.has(recipe._id);
     const isFavorite = useIsFavorite(recipe._id);
 
     const imageUrl = description?.image?.asset?.url || "/placeholder-image.jpg";
