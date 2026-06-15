@@ -1,7 +1,9 @@
 import { writeClient } from "@/utils";
 import type { Recipe } from "@/types";
+import { unstable_noStore as noStore } from "next/cache";
 import { recipeCardProjection } from "@/utils/projections/recipeCardProjection";
 export async function getUserFavorites(userId: string): Promise<Recipe[]> {
+    noStore();
     console.log("getUserFavorites", userId);
     if (!userId) return [];
     console.log("getUserFavorites userid", userId);
