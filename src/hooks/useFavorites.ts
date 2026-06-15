@@ -3,10 +3,12 @@
 import { useState, useCallback } from "react";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useResetFavoritesOnLogout } from "./useResetFavoritesOnLogout";
+import { useRouter } from "next/navigation";
 
 export const useFavorites = () => {
     const { favorites, add, remove } = useFavoritesStore();
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     useResetFavoritesOnLogout();
 
@@ -30,6 +32,7 @@ export const useFavorites = () => {
                 remove(recipeId);
             } finally {
                 setLoading(false);
+                router.refresh();
             }
         },
         [loading, add, remove]
