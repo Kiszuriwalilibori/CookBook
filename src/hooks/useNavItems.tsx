@@ -9,7 +9,7 @@ import SearchIcon from "@mui/icons-material/Search";
 
 import { useRecipesSummary } from "@/hooks";
 import { RecipeFilter } from "@/types";
-import { useIsUserLogged } from "@/stores/useAdminStore";
+import { useFavoritesStore } from "@/stores/useFavoritesStore";
 
 export type NavItem = {
     label: string;
@@ -22,12 +22,12 @@ export type NavItem = {
 export const useNavItems = (initialSummary?: RecipeFilter | null, onSearchClick?: () => void): NavItem[] => {
     const { summary: options } = useRecipesSummary(initialSummary || undefined);
     const isFiltersLoaded = options.title.length > 0;
-    const isUserLogged = useIsUserLogged();
+    const { areFavoritesEmpty } = useFavoritesStore();
     return [
         { label: "Home", href: "/", icon: <HomeIcon /> },
         { label: "Przepisy", href: "/recipes", icon: <MenuBookIcon /> },
         { label: "Artykuły", href: "/blog", icon: <ArticleIcon /> },
-        { label: "Ulubione", href: "/favorites", icon: <FavoriteIcon />, hidden: !isUserLogged },
+        { label: "Ulubione", href: "/favorites", icon: <FavoriteIcon />, hidden: areFavoritesEmpty },
         { label: "O mnie", href: "/about", icon: <InfoIcon /> },
         {
             label: "Szukaj",

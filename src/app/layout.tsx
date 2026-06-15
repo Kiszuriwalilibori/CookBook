@@ -13,6 +13,7 @@ import { Pages } from "@/models/pages";
 import { BootstrapUser } from "./bootstrapUser";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 import UserInitializer from "@/components/UserInitialiser";
+import FavoritesInitialiser from "@/components/FavoritesInitialiser";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,6 +46,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     <BootstrapUser />
                     <AppRouterCacheProvider>
                         <UserInitializer userId={userId} />
+                        <FavoritesInitialiser />
                         <ThemeProvider theme={theme}>
                             <Box sx={layoutContainerStyles}>
                                 <Header initialSummary={summary} fetchError={fetchError} />

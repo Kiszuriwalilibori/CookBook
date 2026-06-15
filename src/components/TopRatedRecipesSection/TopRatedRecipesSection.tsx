@@ -13,7 +13,7 @@ export default async function TopRatedRecipesSection() {
         return (
             <Box sx={styles.gridContainer}>
                 {recipes.map(recipe => (
-                    <RecipeCard key={recipe._id} recipe={recipe} isFavorite={false} />
+                    <RecipeCard key={recipe._id} recipe={recipe} /*isFavorite={false}*/ />
                 ))}
             </Box>
         );

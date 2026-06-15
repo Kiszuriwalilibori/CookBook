@@ -6,6 +6,7 @@ import { FilterState } from "@/models/filters";
 // ⬇️ SSR favorites
 import { getUserFavorites } from "@/utils";
 import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
+import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 
 interface RecipesPageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -64,12 +65,15 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     }
 
     // --- SSR favorites (NO CACHE, per-request) ---
+    // let initialFavorites: string[] = [];
     let initialFavorites: string[] = [];
     try {
-        const user = await getUserFromCookies();
+        const user = await getUserIdFromCookies();
         if (user) {
-            const favorites = await getUserFavorites(user.userId);
+            const favorites = await getUserFavorites(user);
+            console.log("favorites from recipes page", favorites);
             initialFavorites = favorites.map(f => f._id);
+            console.log("initial favorites from recipes page", initialFavorites);
         }
     } catch (err) {
         console.error("Error fetching favorites:", err);

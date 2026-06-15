@@ -10,16 +10,22 @@ import { RecipeCardDescription } from "./RecipeCard.Description";
 import { RecipeCardTitle } from "./RecipeCard.Title";
 import { RecipeCardImage } from "./RecipeCard.Image";
 import { RecipeCardFavoriteButton } from "./RecipeCard.FavoriteButton";
+import { useIsFavorite } from "@/stores/useFavoritesStore";
 
 interface RecipeCardProps {
     recipe: Recipe;
-    isFavorite: boolean;
+
     onAddFavorite?: (id: string) => void;
     onRemoveFavorite?: (id: string) => void;
 }
 
-export const RecipeCard = React.memo(function RecipeCard({ recipe, isFavorite, onAddFavorite, onRemoveFavorite }: RecipeCardProps) {
+export const RecipeCard = React.memo(function RecipeCard({ recipe, onAddFavorite, onRemoveFavorite }: RecipeCardProps) {
     const { title, description, slug } = recipe;
+    // const favs = useGetFavorites();
+    // console.log("recipe card favs", favs);
+    // const isFavorite = favs.has(recipe._id);
+    const isFavorite = useIsFavorite(recipe._id);
+
     const imageUrl = description?.image?.asset?.url || "/placeholder-image.jpg";
     const handleFavorite = (e: React.MouseEvent) => {
         e.preventDefault();

@@ -2,7 +2,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getUserFavorites, writeClient } from "@/utils";
-import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
+import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 // POST → dodanie ulubionego
 export async function POST(req: NextRequest) {
     try {
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Pobranie usera za pomocą helpera
-        const user = await getUserFromCookies();
+        const user = await getUserIdFromCookies();
 
         if (!user) {
             console.warn("[favorites][POST] No token, user not logged in");
@@ -25,16 +25,15 @@ export async function POST(req: NextRequest) {
         console.log("[favorites][POST] Verified user:", user);
 
         // Sprawdzenie, czy ulubiony już istnieje
-        const existing = await writeClient.fetch(`*[_type=="favorite" && userId==$userId && recipe._ref==$recipeId][0]`, { userId: user.userId, recipeId });
+        const existing = await writeClient.fetch(`*[_type=="favorite" && userId==$userId && recipe._ref==$recipeId][0]`, { userId: user /*.userId*/, recipeId });
 
         console.log("[favorites][POST] Existing favorite:", existing);
 
         if (!existing) {
             await writeClient.create({
                 _type: "favorite",
-                userId: user.userId,
+                userId: user,
                 recipe: { _type: "reference", _ref: recipeId },
-                createdAt: new Date().toISOString(),
             });
             console.log("[favorites][POST] Favorite created!");
         } else {
@@ -57,13 +56,13 @@ export async function DELETE(req: NextRequest) {
         }
 
         // używamy helpera
-        const user = await getUserFromCookies();
+
+        const user = await getUserIdFromCookies();
         if (!user) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const ids = await writeClient.fetch(`*[_type=="favorite" && userId==$userId && recipe._ref==$recipeId]._id`, { userId: user.userId, recipeId });
-
+        const ids = await writeClient.fetch(`*[_type=="favorite" && userId==$userId && recipe._ref==$recipeId]._id`, { userId: user, recipeId });
         await Promise.all(ids.map((id: string) => writeClient.delete(id)));
 
         return NextResponse.json({ ok: true });
@@ -75,15 +74,13 @@ export async function DELETE(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
     try {
-        // używamy helpera, który sam obsłuży cookie + verifyGoogle
-        const user = await getUserFromCookies();
-
+        const user = await getUserIdFromCookies();
         if (!user) {
             return NextResponse.json([], { status: 401 });
         }
 
         // pobranie ulubionych
-        const favorites = await getUserFavorites(user.userId);
+        const favorites = await getUserFavorites(user);
 
         return NextResponse.json(favorites);
     } catch (err) {

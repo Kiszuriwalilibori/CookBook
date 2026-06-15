@@ -9,14 +9,13 @@ import { useFavorites } from "@/hooks";
 
 import { useConfirmDialog } from "@/hooks/useConfirmDialog";
 import { EmptyFavoritesMessage } from "./EmptyFavoritesMesage";
-import { useRedirectIfNotLogged } from "@/hooks/useRedicrectIfNotLogged";
 
 interface Props {
     initialRecipes: Recipe[];
 }
 
 export default function FavoritesClient({ initialRecipes }: Props) {
-    const { favorites, addFavorite, removeFavorite } = useFavorites();
+    const { /*favorites,*/ addFavorite, removeFavorite } = useFavorites();
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
     const handleRemoveFavorite = useCallback(
         async (recipe: Recipe) => {
@@ -36,9 +35,6 @@ export default function FavoritesClient({ initialRecipes }: Props) {
     // Hook confirm dialog
     const { isOpen, payload, loading: dialogLoading, openDialog, cancel, confirm } = useConfirmDialog<Recipe>({ onConfirm: handleRemoveFavorite });
 
-    // CSR: redirect jeśli user wylogowany
-    useRedirectIfNotLogged();
-
     if (displayRecipes.length === 0) {
         return <EmptyFavoritesMessage />;
     }
@@ -50,7 +46,7 @@ export default function FavoritesClient({ initialRecipes }: Props) {
                     <Grid size={gridSize} key={recipe._id}>
                         <RecipeCard
                             recipe={recipe}
-                            isFavorite={favorites.has(recipe._id)}
+                            // isFavorite={favorites.has(recipe._id)}
                             onAddFavorite={() => addFavorite(recipe._id)}
                             onRemoveFavorite={() => openDialog(recipe)} // <-- otwieramy dialog
                         />

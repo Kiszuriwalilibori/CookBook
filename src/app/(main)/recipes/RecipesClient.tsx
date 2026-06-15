@@ -18,14 +18,11 @@ interface RecipesClientProps {
 }
 
 export default function RecipesClient({ initialRecipes, initialFavorites }: RecipesClientProps) {
-    
-
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
 
     useHydrateSSR(initialRecipes, setDisplayRecipes);
     useNonAdminRefetch(setDisplayRecipes);
     useAdminRefetch(setDisplayRecipes);
-    // useClearQueryParams();
 
     const { hydrated, setFavorites } = useFavoritesStore();
 
@@ -35,7 +32,7 @@ export default function RecipesClient({ initialRecipes, initialFavorites }: Reci
         }
     }, [hydrated, initialFavorites, setFavorites]);
 
-    const { favorites, addFavorite, removeFavorite } = useFavorites();
+    const { addFavorite, removeFavorite } = useFavorites();
 
     if (displayRecipes.length === 0) {
         return (
@@ -54,7 +51,7 @@ export default function RecipesClient({ initialRecipes, initialFavorites }: Reci
             <Grid container spacing={3} justifyContent="center">
                 {displayRecipes.map(recipe => (
                     <Grid size={gridSize} key={recipe._id}>
-                        <RecipeCard recipe={recipe} isFavorite={favorites.has(recipe._id)} onAddFavorite={addFavorite} onRemoveFavorite={removeFavorite} />
+                        <RecipeCard recipe={recipe} onAddFavorite={addFavorite} onRemoveFavorite={removeFavorite} />
                     </Grid>
                 ))}
             </Grid>
