@@ -32,7 +32,6 @@ export const useFavorites = () => {
                 remove(recipeId);
             } finally {
                 setLoading(false);
-                router.refresh();
             }
         },
         [loading, add, remove]
