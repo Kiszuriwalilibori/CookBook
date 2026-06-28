@@ -82,35 +82,78 @@ export async function POST(req: NextRequest) {
             );
         }
     }
-    // console.error("[favorites][POST] Error:", err);
-    // return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 }
 
-// DELETE → usunięcie ulubionego
 export async function DELETE(req: NextRequest) {
     try {
         const { recipeId } = await req.json();
-        if (!recipeId) {
-            return NextResponse.json({ error: "Missing recipeId" }, { status: 400 });
-        }
 
-        // używamy helpera
+        if (!recipeId) {
+            throw new ApiError("MISSING_RECIPE_ID", "Brak Id przepisu", 400);
+        }
 
         const user = await getUserIdFromCookies();
+
         if (!user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+            throw new ApiError("MISSING_USER", "Nie zdefiniowano użytkownika", 401);
         }
 
-        const ids = await writeClient.fetch(`*[_type=="favorite" && userId==$userId && recipe._ref==$recipeId]._id`, { userId: user, recipeId });
-        await Promise.all(ids.map((id: string) => writeClient.delete(id)));
+        const favorites = await client.fetch<
+            {
+                _id: string;
+                title: string;
+            }[]
+        >(
+            `*[_type == "favorite" && userId == $userId && recipe._ref == $recipeId]{
+                _id,
+                "title": recipe->title
+            }`,
+            {
+                userId: user,
+                recipeId,
+            }
+        );
 
-        return NextResponse.json({ ok: true });
-    } catch (err) {
-        console.error("[favorites][DELETE] Error:", err);
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        if (favorites.length === 0) {
+            throw new ApiError("FAVORITE_NOT_FOUND", "Przepis nie znajduje się w ulubionych", 404);
+        }
+
+        for (const favorite of favorites) {
+            await writeClient.delete(favorite._id);
+        }
+
+        return NextResponse.json({
+            ok: true,
+            data: {
+                title: favorites[0].title,
+            },
+        });
+    } catch (err: unknown) {
+        if (err instanceof ApiError) {
+            return NextResponse.json(
+                {
+                    ok: false,
+                    error: {
+                        code: err.code,
+                        message: err.message,
+                    },
+                },
+                { status: err.status ?? 500 }
+            );
+        }
+
+        return NextResponse.json(
+            {
+                ok: false,
+                error: {
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: "Wystąpił nieoczekiwany błąd serwera",
+                },
+            },
+            { status: 500 }
+        );
     }
 }
-
 export async function GET(req: NextRequest) {
     try {
         const user = await getUserIdFromCookies();
