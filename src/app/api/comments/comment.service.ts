@@ -111,3 +111,10 @@ export async function createComment(input: CreateCommentInput) {
 
     return { comment };
 }
+export type ApiErrorResponse = {
+    ok: false;
+    error: {
+        code: string;
+        message: string;
+    };
+};

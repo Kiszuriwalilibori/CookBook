@@ -154,19 +154,44 @@ export async function DELETE(req: NextRequest) {
         );
     }
 }
+
 export async function GET(req: NextRequest) {
     try {
         const user = await getUserIdFromCookies();
+
         if (!user) {
-            return NextResponse.json([], { status: 401 });
+            throw new ApiError("MISSING_USER", "Nie zdefiniowano użytkownika", 401);
         }
 
-        // pobranie ulubionych
         const favorites = await getUserFavorites(user);
 
-        return NextResponse.json(favorites);
-    } catch (err) {
-        console.error("[favorites][GET] Error:", err);
-        return NextResponse.json([], { status: 401 });
+        return NextResponse.json({
+            ok: true,
+            data: favorites,
+        });
+    } catch (err: unknown) {
+        if (err instanceof ApiError) {
+            return NextResponse.json(
+                {
+                    ok: false,
+                    error: {
+                        code: err.code,
+                        message: err.message,
+                    },
+                },
+                { status: err.status ?? 500 }
+            );
+        }
+
+        return NextResponse.json(
+            {
+                ok: false,
+                error: {
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: "Wystąpił nieoczekiwany błąd serwera",
+                },
+            },
+            { status: 500 }
+        );
     }
 }

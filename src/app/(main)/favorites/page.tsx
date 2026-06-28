@@ -1,13 +1,13 @@
 import PageTitle from "@/components/PageTitle";
 import FavoritesClient from "./FavoritesClient";
-import { getUserFavorites } from "@/utils";
+import { getUserFavoritesRecipes } from "@/utils";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 
 export const dynamic = "force-dynamic";
 
 export default async function FavoritesPage() {
     const user = await getUserIdFromCookies();
-    const initialRecipes = await getUserFavorites(user!);
+    const initialRecipes = await getUserFavoritesRecipes(user!);
 
     return (
         <>

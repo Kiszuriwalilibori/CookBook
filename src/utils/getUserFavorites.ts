@@ -1,24 +1,6 @@
 import { writeClient } from "@/utils";
-import type { Recipe } from "@/types";
-import { recipeCardProjection } from "@/utils/projections/recipeCardProjection";
-export async function getUserFavorites(userId: string): Promise<Recipe[]> {
-    console.log("getUserFavorites", userId);
+export async function getUserFavorites(userId: string): Promise<string[]> {
     if (!userId) return [];
-    console.log("getUserFavorites userid", userId);
-    const favorites = await writeClient.fetch(
-        `*[_type=="favorite" && userId==$userId]{
-            recipe->{
-                ${recipeCardProjection}
-            }
-        } | order(createdAt desc)`,
-        { userId }
-    );
 
-    return favorites.map((f: { recipe?: Recipe }) => f.recipe).filter(Boolean);
+    return writeClient.fetch(`*[_type == "favorite" && userId == $userId].recipe._ref`, { userId });
 }
-
-// export async function getUserFavorites(userId: string): Promise<string[]> {
-//     if (!userId) return [];
-//     const favorites = writeClient.fetch(`*[_type == "favorite" && userId == $userId].recipe._ref`, { userId });
-//     return favorites;
-// }
