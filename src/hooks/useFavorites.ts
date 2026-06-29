@@ -25,7 +25,10 @@ export const useFavorites = () => {
                 });
 
                 const data = await response.json();
-                console.log(data);
+
+                if (!response.ok || !data.ok) {
+                    throw new Error(data.error?.message ?? "Nie udało się dodać ulubionego");
+                }
             } catch {
                 remove(recipeId);
             } finally {
@@ -43,16 +46,19 @@ export const useFavorites = () => {
             remove(recipeId);
 
             try {
-                const res = await fetch("/api/favorites", {
+                const response = await fetch("/api/favorites", {
                     method: "DELETE",
                     body: JSON.stringify({ recipeId }),
                     headers: { "Content-Type": "application/json" },
                     credentials: "include",
                 });
 
-                const data = await res.json();
+                const data = await response.json();
 
                 console.log("data favorites DELETE", data);
+                if (!response.ok || !data.ok) {
+                    throw new Error(data.error?.message ?? "Nie udało się usunąć ulubionego");
+                }
             } catch {
                 add(recipeId);
             } finally {

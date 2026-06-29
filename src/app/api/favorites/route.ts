@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { getUserFavorites, writeClient, client } from "@/utils";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 import { ApiError } from "../comments/comment.service";
+import { apiErrorResponse } from "@/utils/server/apiErrorResponse";
 // POST → dodanie ulubionego
 export async function POST(req: NextRequest) {
     try {
@@ -26,14 +27,12 @@ export async function POST(req: NextRequest) {
 
         const user = await getUserIdFromCookies();
 
-        if (!user) {
-            // console.warn("[favorites][POST] No token, user not logged in");
+        if (user) {
             throw new ApiError("MISSING_USER", "Nie zdefiniowano użytkownika", 401);
-            // return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
         // Sprawdzenie, czy ulubiony już istnieje
-        // const existing = await client.fetch(`*[_type=="favorite" && userId==$userId && recipe._ref==$recipeId][0]`, { userId: user, recipeId });
+
         const existing = await client.fetch(`defined(*[_type=="favorite" && userId==$userId && recipe._ref==$recipeId][0]._id)`, {
             userId: user,
             recipeId,
@@ -42,45 +41,23 @@ export async function POST(req: NextRequest) {
         if (existing) {
             throw new ApiError("ALREADY_FAVORITE", "Ten przepis już należy do ulubionych", 409);
         }
-
+        console.log("tu jestem");
         await writeClient.create({
             _type: "favorite",
             userId: user,
             recipe: { _type: "reference", _ref: recipeId },
         });
-        console.log("dodano do ulubionych ", recipe.title);
+
         const result = {
             ok: true,
             data: {
                 title: recipe.title,
             },
         };
-        console.log("add result", result);
+
         return NextResponse.json(result, { status: 200 });
     } catch (err: unknown) {
-        if (err instanceof ApiError) {
-            return NextResponse.json(
-                {
-                    ok: false,
-                    error: {
-                        code: err.code,
-                        message: err.message,
-                    },
-                },
-                { status: err.status ?? 500 }
-            );
-        } else {
-            return NextResponse.json(
-                {
-                    ok: false,
-                    error: {
-                        code: "INTERNAL_SERVER_ERROR",
-                        message: "Wystąpił nieoczekiwany błąd serwera",
-                    },
-                },
-                { status: 500 }
-            );
-        }
+        return apiErrorResponse(err);
     }
 }
 
@@ -129,29 +106,7 @@ export async function DELETE(req: NextRequest) {
             },
         });
     } catch (err: unknown) {
-        if (err instanceof ApiError) {
-            return NextResponse.json(
-                {
-                    ok: false,
-                    error: {
-                        code: err.code,
-                        message: err.message,
-                    },
-                },
-                { status: err.status ?? 500 }
-            );
-        }
-
-        return NextResponse.json(
-            {
-                ok: false,
-                error: {
-                    code: "INTERNAL_SERVER_ERROR",
-                    message: "Wystąpił nieoczekiwany błąd serwera",
-                },
-            },
-            { status: 500 }
-        );
+        return apiErrorResponse(err);
     }
 }
 
@@ -170,28 +125,6 @@ export async function GET(req: NextRequest) {
             data: favorites,
         });
     } catch (err: unknown) {
-        if (err instanceof ApiError) {
-            return NextResponse.json(
-                {
-                    ok: false,
-                    error: {
-                        code: err.code,
-                        message: err.message,
-                    },
-                },
-                { status: err.status ?? 500 }
-            );
-        }
-
-        return NextResponse.json(
-            {
-                ok: false,
-                error: {
-                    code: "INTERNAL_SERVER_ERROR",
-                    message: "Wystąpił nieoczekiwany błąd serwera",
-                },
-            },
-            { status: 500 }
-        );
+        return apiErrorResponse(err);
     }
 }
