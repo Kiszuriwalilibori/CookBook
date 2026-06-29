@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
 
         const user = await getUserIdFromCookies();
 
-        if (user) {
+        if (!user) {
             throw new ApiError("MISSING_USER", "Nie zdefiniowano użytkownika", 401);
         }
 
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
         return apiErrorResponse(err);
     }
 }
-
+// DELETE → usunięcie ulubionego
 export async function DELETE(req: NextRequest) {
     try {
         const { recipeId } = await req.json();
@@ -109,7 +109,7 @@ export async function DELETE(req: NextRequest) {
         return apiErrorResponse(err);
     }
 }
-
+// GET → pobranie ulubionego
 export async function GET(req: NextRequest) {
     try {
         const user = await getUserIdFromCookies();
