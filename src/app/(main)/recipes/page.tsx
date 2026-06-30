@@ -70,9 +70,7 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     try {
         const user = await getUserIdFromCookies();
         if (user) {
-            const favorites = await getUserFavorites(user);
-
-            initialFavorites = favorites.map(f => f._id);
+            initialFavorites = await getUserFavorites(user);
         }
     } catch (err) {
         console.error("Error fetching favorites:", err);
