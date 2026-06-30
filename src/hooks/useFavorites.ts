@@ -49,6 +49,7 @@ export const useFavorites = () => {
                 if (!response.ok || !data.ok) {
                     throw data.error;
                 }
+                showMessage.success(`❤️ Dodano do ulubionych: "${data.data.title}" `);
             } catch (error) {
                 remove(recipeId);
                 handleApiError(
@@ -84,10 +85,10 @@ export const useFavorites = () => {
 
                 const data = await response.json();
 
-                console.log("data favorites DELETE", data);
                 if (!response.ok || !data.ok) {
                     throw data.error;
                 }
+                showMessage.success(`🤍 Usunięto z ulubionych: "${data.data.title}" `);
             } catch (error) {
                 add(recipeId);
                 handleApiError(

@@ -19,6 +19,7 @@ interface RecipesClientProps {
 
 export default function RecipesClient({ initialRecipes, initialFavorites }: RecipesClientProps) {
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
+    const { isLoading } = useFavorites();
 
     useHydrateSSR(initialRecipes, setDisplayRecipes);
     useNonAdminRefetch(setDisplayRecipes);
@@ -51,7 +52,7 @@ export default function RecipesClient({ initialRecipes, initialFavorites }: Reci
             <Grid container spacing={3} justifyContent="center">
                 {displayRecipes.map(recipe => (
                     <Grid size={gridSize} key={recipe._id}>
-                        <RecipeCard recipe={recipe} onAddFavorite={addFavorite} onRemoveFavorite={removeFavorite} />
+                        <RecipeCard loading={isLoading(recipe._id)} recipe={recipe} onAddFavorite={addFavorite} onRemoveFavorite={removeFavorite} />
                     </Grid>
                 ))}
             </Grid>
