@@ -14,7 +14,7 @@ import { useIsFavorite } from "@/stores/useFavoritesStore";
 
 interface RecipeCardProps {
     recipe: Recipe;
-    loading: boolean;
+    loading?: boolean;
     onAddFavorite?: (id: string) => void;
     onRemoveFavorite?: (id: string) => void;
 }
