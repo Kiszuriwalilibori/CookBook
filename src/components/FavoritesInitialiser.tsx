@@ -3,49 +3,34 @@
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useEffect } from "react";
 
-// export default function FavoritesInitializer() {
-//     const { setFavorites, hydrated } = useFavoritesStore();
-
-//     // 🔥 fetch tylko RAZ
-//     useEffect(() => {
-//         if (hydrated) return;
-
-//         const fetchFavorites = async () => {
-//             const res = await fetch("/api/favorites", {
-//                 credentials: "include",
-//             });
-
-//             const data: { _id: string }[] = await res.json();
-//             if (!Array.isArray(data)) return;
-
-//             setFavorites(data.map(r => r._id));
-//         };
-
-//         fetchFavorites();
-//     }, [hydrated]);
-
-//     return null;
-// }
-
 import type { ApiSuccessResponse } from "@/types";
 import { ApiErrorResponse } from "@/app/api/comments/comment.service";
+import { useMessage } from "@/hooks";
 
 export default function FavoritesInitializer() {
+    const showMessage = useMessage();
     const { setFavorites, hydrated } = useFavoritesStore();
 
     useEffect(() => {
         if (hydrated) return;
 
         const fetchFavorites = async () => {
-            const res = await fetch("/api/favorites", {
-                credentials: "include",
-            });
-            if (!res.ok) return;
-            const result: ApiSuccessResponse<string[]> | ApiErrorResponse = await res.json();
+            try {
+                const res = await fetch("/api/favorites", {
+                    credentials: "include",
+                });
 
-            if (!result.ok) return;
+                const result: ApiSuccessResponse<string[]> | ApiErrorResponse = await res.json();
 
-            setFavorites(result.data);
+                if (!res.ok || !result.ok) {
+                    showMessage.error(result.ok ? "Nie udało się pobrać ulubionych." : result.error.message);
+                    return;
+                }
+
+                setFavorites(result.data);
+            } catch {
+                showMessage.error("Nie udało się pobrać ulubionych.");
+            }
         };
 
         fetchFavorites();

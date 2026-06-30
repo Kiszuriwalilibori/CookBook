@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
         if (isExisting) {
             throw new ApiError("ALREADY_FAVORITE", "Ten przepis już należy do ulubionych", 409);
         }
-        console.log("tu jestem");
+
         await writeClient.create({
             _type: "favorite",
             userId: user,
