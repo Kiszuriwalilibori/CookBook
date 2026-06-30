@@ -14,7 +14,7 @@ export default async function LatestRecipesSection() {
         return (
             <Box sx={styles.gridContainer}>
                 {recipes.map(recipe => (
-                    <RecipeCard key={recipe._id} recipe={recipe} /*isFavorite={false} */ />
+                    <RecipeCard key={recipe._id} recipe={recipe} />
                 ))}
             </Box>
         );

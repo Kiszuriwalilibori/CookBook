@@ -2,12 +2,10 @@
 
 import { Box, Grid } from "@mui/material";
 import { useCallback, useState } from "react";
-import { RecipeCard, ConfirmRemoveDialog } from "@/components";
+import { RecipeCard } from "@/components";
 import { gridSize, pageContainerStyle } from "./styles";
 import type { Recipe } from "@/types";
-import { useFavorites } from "@/hooks";
 
-import { useConfirmDialog } from "@/hooks/useConfirmDialog";
 import { EmptyFavoritesMessage } from "./EmptyFavoritesMesage";
 
 interface Props {
@@ -15,25 +13,12 @@ interface Props {
 }
 
 export default function FavoritesClient({ initialRecipes }: Props) {
-    const { isLoading, addFavorite, removeFavorite } = useFavorites();
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
-    const handleRemoveFavorite = useCallback(
-        async (recipe: Recipe) => {
-            // Optimistic UI
-            setDisplayRecipes(prev => prev.filter(r => r._id !== recipe._id));
+    const handleRemoved = useCallback((recipeId: string) => {
+        setDisplayRecipes(prev => prev.filter(recipe => recipe._id !== recipeId));
+    }, []);
 
-            try {
-                await removeFavorite(recipe._id);
-            } catch (err) {
-                // rollback
-                setDisplayRecipes(prev => [...prev, recipe]);
-                console.error("[FavoritesClient] Remove failed:", err);
-            }
-        },
-        [removeFavorite]
-    );
     // Hook confirm dialog
-    const { isOpen, payload, loading: dialogLoading, openDialog, cancel, confirm } = useConfirmDialog<Recipe>({ onConfirm: handleRemoveFavorite });
 
     if (displayRecipes.length === 0) {
         return <EmptyFavoritesMessage />;
@@ -44,18 +29,10 @@ export default function FavoritesClient({ initialRecipes }: Props) {
             <Grid container spacing={3} justifyContent="center">
                 {displayRecipes.map(recipe => (
                     <Grid size={gridSize} key={recipe._id}>
-                        <RecipeCard
-                            recipe={recipe}
-                            loading={isLoading(recipe._id)}
-                            onAddFavorite={() => addFavorite(recipe._id)}
-                            onRemoveFavorite={() => openDialog(recipe)} // <-- otwieramy dialog
-                        />
+                        <RecipeCard recipe={recipe} onRemoved={handleRemoved} />
                     </Grid>
                 ))}
             </Grid>
-
-            {/* Dialog potwierdzenia */}
-            {payload && <ConfirmRemoveDialog open={isOpen} loading={dialogLoading} title={payload.title} onCancel={cancel} onConfirm={confirm} />}
         </Box>
     );
 }
