@@ -5,6 +5,9 @@ import { Grid, Box, Typography } from "@mui/material";
 
 import { PageTitle, RecipeCard } from "@/components";
 import { gridSize, pageContainerStyle } from "./styles";
+import { ConfirmRemoveDialog } from "@/components";
+import { useConfirmDialog } from "@/hooks/useConfirmDialog";
+import { useCallback } from "react";
 
 import type { Recipe } from "@/types";
 import { useAdminRefetch, useHydrateSSR, useNonAdminRefetch } from "./effects";
@@ -34,6 +37,22 @@ export default function RecipesClient({ initialRecipes, initialFavorites }: Reci
     }, [hydrated, initialFavorites, setFavorites]);
 
     const { addFavorite, removeFavorite } = useFavorites();
+    const handleRemoveFavorite = useCallback(
+        async (recipe: Recipe) => {
+            await removeFavorite(recipe._id);
+        },
+        [removeFavorite]
+    );
+    const {
+        isOpen,
+        payload,
+        loading: dialogLoading,
+        openDialog,
+        cancel,
+        confirm,
+    } = useConfirmDialog<Recipe>({
+        onConfirm: handleRemoveFavorite,
+    });
 
     if (displayRecipes.length === 0) {
         return (
@@ -52,10 +71,11 @@ export default function RecipesClient({ initialRecipes, initialFavorites }: Reci
             <Grid container spacing={3} justifyContent="center">
                 {displayRecipes.map(recipe => (
                     <Grid size={gridSize} key={recipe._id}>
-                        <RecipeCard loading={isLoading(recipe._id)} recipe={recipe} onAddFavorite={addFavorite} onRemoveFavorite={removeFavorite} />
+                        <RecipeCard loading={isLoading(recipe._id)} recipe={recipe} onAddFavorite={addFavorite} onRemoveFavorite={() => openDialog(recipe)} />
                     </Grid>
                 ))}
             </Grid>
+            {payload && <ConfirmRemoveDialog open={isOpen} loading={dialogLoading} title={payload.title} onCancel={cancel} onConfirm={confirm} />}
         </Box>
     );
 }
