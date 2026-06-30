@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import { notFound, redirect } from "next/navigation";
 
-// import { Recipe } from "@/types";
 import { Separator } from "@/components";
 import { styles } from "./styles";
 import { mapRecipeToMetadata } from "./parts/RecipeMetadata/RecipeMetadata.utils";
@@ -18,7 +17,7 @@ import { getUserRecipeNote } from "@/utils";
 import { PrivateUserNotes } from "./parts/PrivateUserNotes";
 import Comments from "./parts/Comments";
 import { RecipeCommentsButton } from "./parts/RecipeCommentsButton";
-import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
+import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 
 interface Params {
     slug: string;
@@ -61,11 +60,11 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
 
     // 2️⃣ _id → recipe
 
-    const [recipe, user] = await Promise.all([getRecipeById(id), getUserFromCookies()]);
+    const [recipe, userId] = await Promise.all([getRecipeById(id), getUserIdFromCookies()]);
     if (!recipe) notFound();
     let initialNotes: string | undefined = undefined;
-    if (user) {
-        initialNotes = await getUserRecipeNote(user.email, recipe._id);
+    if (userId) {
+        initialNotes = await getUserRecipeNote(userId, recipe._id);
     }
 
     // 3️⃣ SEO canonical redirect
@@ -106,15 +105,15 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
 
                 <Separator />
 
-                <PrivateUserNotes recipeId={recipe._id} userEmail={user?.email} initialNotes={initialNotes} />
-                {/* {initialNotes && <PrivateUserNotes notes={initialNotes} />} */}
+                <PrivateUserNotes recipeId={recipe._id} initialNotes={initialNotes} />
+
                 <Box sx={styles.copyButtonContainer}>
                     <RecipeCopyButton recipe={recipe} />
                     <RecipePrintButton />
                     <RecipePdfButton recipe={recipe} slug={slug} />
                     <RecipeKeepAwakeButton />
                     <RecipeShareButton title={recipe.title} />
-                    <RecipeNotesButton recipeId={recipe._id} userEmail={user?.email} initialNotes={initialNotes} />
+                    <RecipeNotesButton recipeId={recipe._id} initialNotes={initialNotes} />
                     <RecipeCommentsButton />
                 </Box>
                 <Separator />

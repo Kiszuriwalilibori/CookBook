@@ -11,18 +11,13 @@ interface Props {
     open: boolean;
     onClose: () => void;
     initialValue?: string;
-
-    // nowe propsy dla integracji z API
     recipeId: string;
-    userEmail: string;
-
-    onSave?: (value: string) => void; // opcjonalny callback
 }
 
 export const NOTES_SAVE_STATUS_ID = "notes-save-status";
 const MAX_LENGTH = 200;
 
-export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, userEmail, onSave }: Props) => {
+export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }: Props) => {
     const [notes, setNotes] = useState(initialValue);
     const [saving, setSaving] = useState(false);
     const textFieldRef = useRef<HTMLInputElement | null>(null);
@@ -59,7 +54,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
         setNotes(value);
     };
     const handleSave = async () => {
-        if (!recipeId || !userEmail) return;
+        if (!recipeId) return;
         const sanitized = notes.trim();
         if (!sanitized) {
             alert("Notatka nie może być pusta!");
@@ -77,7 +72,6 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
             });
             router.refresh(); // 🔥 DODAJ TO
             // callback opcjonalny
-            onSave?.(sanitized);
         } catch (err) {
             console.error("Nie udało się zapisać notatki:", err);
             alert("Nie udało się zapisać notatki. Spróbuj ponownie.");
@@ -95,7 +89,6 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId, u
         setSaving(true);
         try {
             await fetch(`/api/recipe-notes?recipeId=${recipeId}`, { method: "DELETE" });
-            onSave?.("");
             router.refresh();
             onClose();
         } catch (err) {

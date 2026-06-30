@@ -2,19 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import { useIsUserLogged, useLoginStatus } from "@/stores/useAdminStore";
 import { containerStyles, textStyles } from "./PrivateUserNotes.styles";
+import { useIsUserSet } from "@/stores/userStore";
 
 interface PrivateUserNotesProps {
     recipeId: string;
-    userEmail?: string;
     initialNotes?: string;
 }
 
-export const PrivateUserNotes = ({ recipeId, userEmail, initialNotes }: PrivateUserNotesProps) => {
-    const isUserLogged = useIsUserLogged();
-    const loginStatus = useLoginStatus();
-
+export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesProps) => {
+    const hasUser = useIsUserSet();
     const [notes, setNotes] = useState(initialNotes || "");
     const [loading, setLoading] = useState(false);
 
@@ -23,7 +20,7 @@ export const PrivateUserNotes = ({ recipeId, userEmail, initialNotes }: PrivateU
     }, [initialNotes]);
 
     useEffect(() => {
-        if (!isUserLogged || !userEmail) {
+        if (!hasUser) {
             setNotes("");
             return;
         }
@@ -35,9 +32,9 @@ export const PrivateUserNotes = ({ recipeId, userEmail, initialNotes }: PrivateU
             .then(res => res.json())
             .then(data => setNotes(data.notes || ""))
             .finally(() => setLoading(false));
-    }, [recipeId, userEmail, loginStatus, isUserLogged]);
+    }, [recipeId, hasUser]);
 
-    if (!isUserLogged) return null;
+    if (!hasUser) return null;
     if (!notes?.trim() && !loading) return null;
 
     return (

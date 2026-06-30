@@ -6,13 +6,6 @@ interface UserStore {
     setUserId: (userId: string | null) => void;
 }
 
-// export const useUserStore = create<UserStore>(set => ({
-//     userId: null,
-//     setUserId: userId => set({ userId }),
-// }));
-
-// src/store/userStore.ts
-
 export const useUserStore = create<UserStore>(set => ({
     userId: null,
     setUserId: userId => set({ userId }),
