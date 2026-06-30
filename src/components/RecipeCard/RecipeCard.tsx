@@ -110,6 +110,7 @@ export const RecipeCard = React.memo(function RecipeCard({ recipe, onRemoved }: 
 
     const handleFavorite = (e: React.MouseEvent) => {
         e.preventDefault();
+        if (isLoading(recipe._id)) return;
 
         if (isFavorite) {
             openDialog(recipe);
@@ -132,7 +133,7 @@ export const RecipeCard = React.memo(function RecipeCard({ recipe, onRemoved }: 
                     <Box sx={styles.imageWrapper}>
                         <RecipeCardImage imageUrl={imageUrl} title={title} />
 
-                        <RecipeCardFavoriteButton disabled={isLoading(recipe._id)} isFavorite={isFavorite} onClick={handleFavorite} />
+                        <RecipeCardFavoriteButton isFavorite={isFavorite} onClick={handleFavorite} />
                     </Box>
 
                     <CardContent sx={styles.content}>
