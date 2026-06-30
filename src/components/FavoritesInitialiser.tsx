@@ -40,7 +40,7 @@ export default function FavoritesInitializer() {
             const res = await fetch("/api/favorites", {
                 credentials: "include",
             });
-
+            if (!res.ok) return;
             const result: ApiSuccessResponse<string[]> | ApiErrorResponse = await res.json();
 
             if (!result.ok) return;

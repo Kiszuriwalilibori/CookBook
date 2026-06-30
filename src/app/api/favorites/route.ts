@@ -5,10 +5,26 @@ import { getUserFavorites, writeClient, client } from "@/utils";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 import { ApiError } from "../comments/comment.service";
 import { apiErrorResponse } from "@/utils/server/apiErrorResponse";
+
+async function parseBody(req: NextRequest): Promise<{ recipeId?: string }> {
+    try {
+        return await req.json();
+    } catch {
+        throw new ApiError("INVALID_JSON", "Nieprawidłowy format JSON", 400);
+    }
+}
 // POST → dodanie ulubionego
 export async function POST(req: NextRequest) {
     try {
-        const { recipeId } = await req.json();
+        const user = await getUserIdFromCookies();
+
+        if (!user) {
+            throw new ApiError("MISSING_USER", "Nie zdefiniowano użytkownika", 401);
+        }
+
+        // const { recipeId } = await req.json();
+        const { recipeId } = await parseBody(req);
+
         if (!recipeId) {
             throw new ApiError("MISSING_RECIPE_ID", "Brak Id przepisu", 400);
         }
@@ -25,20 +41,14 @@ export async function POST(req: NextRequest) {
             throw new ApiError("RECIPE_NOT_FOUND", "Nie znaleziono przepisu", 404);
         }
 
-        const user = await getUserIdFromCookies();
-
-        if (!user) {
-            throw new ApiError("MISSING_USER", "Nie zdefiniowano użytkownika", 401);
-        }
-
         // Sprawdzenie, czy ulubiony już istnieje
 
-        const existing = await client.fetch(`defined(*[_type=="favorite" && userId==$userId && recipe._ref==$recipeId][0]._id)`, {
+        const isExisting = await client.fetch(`defined(*[_type=="favorite" && userId==$userId && recipe._ref==$recipeId][0]._id)`, {
             userId: user,
             recipeId,
         });
 
-        if (existing) {
+        if (isExisting) {
             throw new ApiError("ALREADY_FAVORITE", "Ten przepis już należy do ulubionych", 409);
         }
         console.log("tu jestem");
@@ -63,7 +73,7 @@ export async function POST(req: NextRequest) {
 // DELETE → usunięcie ulubionego
 export async function DELETE(req: NextRequest) {
     try {
-        const { recipeId } = await req.json();
+        const { recipeId } = await parseBody(req);
 
         if (!recipeId) {
             throw new ApiError("MISSING_RECIPE_ID", "Brak Id przepisu", 400);
@@ -110,7 +120,7 @@ export async function DELETE(req: NextRequest) {
     }
 }
 // GET → pobranie ulubionego
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         const user = await getUserIdFromCookies();
 
