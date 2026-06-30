@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function FavoritesClient({ initialRecipes }: Props) {
-    const { /*favorites,*/ addFavorite, removeFavorite } = useFavorites();
+    const { isLoading, addFavorite, removeFavorite } = useFavorites();
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
     const handleRemoveFavorite = useCallback(
         async (recipe: Recipe) => {
@@ -46,7 +46,7 @@ export default function FavoritesClient({ initialRecipes }: Props) {
                     <Grid size={gridSize} key={recipe._id}>
                         <RecipeCard
                             recipe={recipe}
-                            // isFavorite={favorites.has(recipe._id)}
+                            loading={isLoading(recipe._id)}
                             onAddFavorite={() => addFavorite(recipe._id)}
                             onRemoveFavorite={() => openDialog(recipe)} // <-- otwieramy dialog
                         />

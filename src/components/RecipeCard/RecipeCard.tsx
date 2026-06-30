@@ -14,11 +14,12 @@ import { useIsFavorite } from "@/stores/useFavoritesStore";
 
 interface RecipeCardProps {
     recipe: Recipe;
+    loading: boolean;
     onAddFavorite?: (id: string) => void;
     onRemoveFavorite?: (id: string) => void;
 }
 
-export const RecipeCard = React.memo(function RecipeCard({ recipe, onAddFavorite, onRemoveFavorite }: RecipeCardProps) {
+export const RecipeCard = React.memo(function RecipeCard({ loading, recipe, onAddFavorite, onRemoveFavorite }: RecipeCardProps) {
     const { title, description, slug } = recipe;
     const isFavorite = useIsFavorite(recipe._id);
 
@@ -38,7 +39,7 @@ export const RecipeCard = React.memo(function RecipeCard({ recipe, onAddFavorite
             <Card sx={styles.card}>
                 <Box sx={styles.imageWrapper}>
                     <RecipeCardImage imageUrl={imageUrl} title={title} />
-                    <RecipeCardFavoriteButton isFavorite={isFavorite} onClick={handleFavorite} />
+                    <RecipeCardFavoriteButton disabled={loading} isFavorite={isFavorite} onClick={handleFavorite} />
                 </Box>
 
                 <CardContent sx={styles.content}>

@@ -8,14 +8,32 @@ import useMessage from "./useMessage";
 
 export const useFavorites = () => {
     const { favorites, add, remove } = useFavoritesStore();
-    const [loading, setLoading] = useState(false);
+    const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
     const showMessage = useMessage();
     useResetFavoritesOnLogout();
+    const startLoading = useCallback((recipeId: string) => {
+        setLoadingIds(prev => {
+            const next = new Set(prev);
+            next.add(recipeId);
+            return next;
+        });
+    }, []);
+
+    const stopLoading = useCallback((recipeId: string) => {
+        setLoadingIds(prev => {
+            const next = new Set(prev);
+            next.delete(recipeId);
+            return next;
+        });
+    }, []);
+
+    const isLoading = useCallback((recipeId: string) => loadingIds.has(recipeId), [loadingIds]);
 
     const addFavorite = useCallback(
         async (recipeId: string) => {
-            if (loading) return;
-            setLoading(true);
+            if (loadingIds.has(recipeId)) return;
+
+            startLoading(recipeId);
             add(recipeId);
 
             try {
@@ -43,17 +61,17 @@ export const useFavorites = () => {
                     msg => showMessage.error(msg)
                 );
             } finally {
-                setLoading(false);
+                stopLoading(recipeId);
             }
         },
-        [loading, add, remove]
+        [loadingIds, startLoading, add, remove, showMessage, stopLoading]
     );
 
     const removeFavorite = useCallback(
         async (recipeId: string) => {
-            console.log("remove from removeFavorite", recipeId);
-            if (loading) return;
-            setLoading(true);
+            if (loadingIds.has(recipeId)) return;
+
+            startLoading(recipeId);
             remove(recipeId);
 
             try {
@@ -81,13 +99,13 @@ export const useFavorites = () => {
                     msg => showMessage.error(msg)
                 );
             } finally {
-                setLoading(false);
+                stopLoading(recipeId);
             }
         },
-        [loading, add, remove]
+        [loadingIds, startLoading, remove, add, showMessage, stopLoading]
     );
 
-    return { favorites, addFavorite, removeFavorite, loading };
+    return { favorites, addFavorite, removeFavorite, isLoading };
 };
 
 // todo trzeba skonsumować odpowiedzi
