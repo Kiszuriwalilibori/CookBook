@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { writeClient } from "@/utils";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
+import { MAX_PRIVATE_NOTE_LENGTH } from "@/setup";
 function getRecipeNotesId(userId: string, recipeId: string) {
     return `recipeNotes_${userId}_${recipeId}`;
 }
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Missing recipeId" }, { status: 400 });
     }
 
-    const sanitizedNotes = notes?.trim().slice(0, 2000);
+    const sanitizedNotes = notes?.trim().slice(0, MAX_PRIVATE_NOTE_LENGTH);
 
     if (!sanitizedNotes) {
         return NextResponse.json({ error: "Notes cannot be empty" }, { status: 400 });

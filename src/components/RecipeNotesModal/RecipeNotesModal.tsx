@@ -6,6 +6,7 @@ import useEscapeKey from "@/hooks/useEscapeKey";
 import { modalStyles, visuallyHidden } from "../Header/Header.styles";
 import { useRouter } from "next/navigation";
 import { recipeNotesModalStyles } from "./RecipeNotesModal.styles";
+import { MAX_PRIVATE_NOTE_LENGTH } from "@/setup";
 
 interface Props {
     open: boolean;
@@ -15,7 +16,6 @@ interface Props {
 }
 
 export const NOTES_SAVE_STATUS_ID = "notes-save-status";
-const MAX_LENGTH = 200;
 
 export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }: Props) => {
     const [notes, setNotes] = useState(initialValue);
@@ -50,7 +50,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
 
     // 🔹 Ograniczenie do 200 znaków w stanie
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const value = e.target.value.slice(0, MAX_LENGTH);
+        const value = e.target.value.slice(0, MAX_PRIVATE_NOTE_LENGTH);
         setNotes(value);
     };
     const handleSave = async () => {
@@ -120,7 +120,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                     <Stack spacing={3}>
                         <TextField label="Twoje notatki" multiline minRows={6} fullWidth value={notes} onChange={handleChange} inputRef={textFieldRef} />
                         <Box sx={recipeNotesModalStyles.counterText}>
-                            {notes.length} /{MAX_LENGTH} znaków (pozostało {MAX_LENGTH - notes.length})
+                            {notes.length} /{MAX_PRIVATE_NOTE_LENGTH} znaków (pozostało {MAX_PRIVATE_NOTE_LENGTH - notes.length})
                         </Box>
                         <Stack direction="row" spacing={2} justifyContent="flex-end">
                             <Button variant="outlined" onClick={onClose} disabled={saving}>

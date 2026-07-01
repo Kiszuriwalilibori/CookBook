@@ -1,1 +1,3 @@
 export const COMMENT_COOLDOWN_MINUTES = 1;
+
+export const MAX_PRIVATE_NOTE_LENGTH = 200;
