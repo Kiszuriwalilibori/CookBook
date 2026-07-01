@@ -19,18 +19,41 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
         setNotes(initialNotes || "");
     }, [initialNotes]);
 
+    //     if (!hasUser) {
+    //         setNotes("");
+    //         return;
+    //     }
+
+    //     // 🔥 KLUCZOWE: zawsze fetch przy zmianie loginStatus
+    //     setLoading(true);
+
+    //     fetch(`/api/recipe-notes?recipeId=${recipeId}`)
+    //         .then(res => res.json())
+    //         .then(data => setNotes(data.notes || ""))
+    //         .finally(() => setLoading(false));
+    // }, [recipeId, hasUser]);
     useEffect(() => {
         if (!hasUser) {
             setNotes("");
             return;
         }
 
-        // 🔥 KLUCZOWE: zawsze fetch przy zmianie loginStatus
         setLoading(true);
 
         fetch(`/api/recipe-notes?recipeId=${recipeId}`)
             .then(res => res.json())
-            .then(data => setNotes(data.notes || ""))
+            .then(result => {
+                if (result.ok) {
+                    setNotes(result.data.notes);
+                } else {
+                    console.error(result.error.message);
+                    setNotes("");
+                }
+            })
+            .catch(err => {
+                console.error("Nie udało się pobrać notatki:", err);
+                setNotes("");
+            })
             .finally(() => setLoading(false));
     }, [recipeId, hasUser]);
 

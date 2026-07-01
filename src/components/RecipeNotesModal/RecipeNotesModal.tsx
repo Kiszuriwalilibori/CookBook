@@ -48,14 +48,42 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
         }
     }, [open, initialValue, hasOpenedOnce]);
 
-    // 🔹 Ograniczenie do 200 znaków w stanie
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const value = e.target.value.slice(0, MAX_PRIVATE_NOTE_LENGTH);
         setNotes(value);
     };
+
+    //     if (!recipeId) return;
+    //     const sanitized = notes.trim();
+    //     if (!sanitized) {
+    //         alert("Notatka nie może być pusta!");
+    //         return;
+    //     }
+
+    //     setSaving(true);
+
+    //     try {
+    //         // zapis przez route /api/recipe-notes
+    //         await fetch("/api/recipe-notes", {
+    //             method: "POST",
+    //             headers: { "Content-Type": "application/json" },
+    //             body: JSON.stringify({ recipeId, notes: sanitized }),
+    //         });
+    //         router.refresh(); // 🔥 DODAJ TO
+    //         // callback opcjonalny
+    //     } catch (err) {
+    //         console.error("Nie udało się zapisać notatki:", err);
+    //         alert("Nie udało się zapisać notatki. Spróbuj ponownie.");
+    //     } finally {
+    //         setSaving(false);
+    //         onClose();
+    //     }
+    // };
     const handleSave = async () => {
         if (!recipeId) return;
+
         const sanitized = notes.trim();
+
         if (!sanitized) {
             alert("Notatka nie może być pusta!");
             return;
@@ -64,14 +92,19 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
         setSaving(true);
 
         try {
-            // zapis przez route /api/recipe-notes
-            await fetch("/api/recipe-notes", {
+            const response = await fetch("/api/recipe-notes", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ recipeId, notes: sanitized }),
             });
-            router.refresh(); // 🔥 DODAJ TO
-            // callback opcjonalny
+
+            const result = await response.json();
+
+            if (!result.ok) {
+                throw new Error(result.error.message);
+            }
+
+            router.refresh();
         } catch (err) {
             console.error("Nie udało się zapisać notatki:", err);
             alert("Nie udało się zapisać notatki. Spróbuj ponownie.");
@@ -81,14 +114,41 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
         }
     };
 
+    //     if (!notes?.trim()) return; // nie pozwalamy na delete pustej notatki
+    //     const confirmDelete = confirm("Czy na pewno chcesz usunąć notatkę?");
+    //     if (!confirmDelete) return;
+
+    //     setSaving(true);
+    //     try {
+    //         await fetch(`/api/recipe-notes?recipeId=${recipeId}`, { method: "DELETE" });
+    //         router.refresh();
+    //         onClose();
+    //     } catch (err) {
+    //         console.error("Nie udało się usunąć notatki:", err);
+    //         alert("Nie udało się usunąć notatki. Spróbuj ponownie.");
+    //     } finally {
+    //         setSaving(false);
+    //     }
+    // };
     const handleDelete = async () => {
-        if (!notes?.trim()) return; // nie pozwalamy na delete pustej notatki
+        if (!notes?.trim()) return;
+
         const confirmDelete = confirm("Czy na pewno chcesz usunąć notatkę?");
         if (!confirmDelete) return;
 
         setSaving(true);
+
         try {
-            await fetch(`/api/recipe-notes?recipeId=${recipeId}`, { method: "DELETE" });
+            const response = await fetch(`/api/recipe-notes?recipeId=${recipeId}`, {
+                method: "DELETE",
+            });
+
+            const result = await response.json();
+
+            if (!result.ok) {
+                throw new Error(result.error.message);
+            }
+
             router.refresh();
             onClose();
         } catch (err) {
@@ -98,6 +158,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
             setSaving(false);
         }
     };
+
     return (
         <Modal
             open={open}

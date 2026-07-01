@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
+        "ignoreDeprecations": "6.0",
         "target": "ES2017",
         "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
@@ -27,3 +28,5 @@
     "include": ["next-env.d.ts", "**/*.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/sanity.js", "src/components/RecipeCard", "src/app/api/aggregate/route.ts", "src/components/EmptyState", "src/utils/writeClient.js"],
     "exclude": ["node_modules"]
 }
+
+// "ignoreDeprecations": "6.0", to jest dirty ale na razie musi zostać
