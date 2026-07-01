@@ -7,6 +7,8 @@ import { modalStyles, visuallyHidden } from "../Header/Header.styles";
 import { useRouter } from "next/navigation";
 import { recipeNotesModalStyles } from "./RecipeNotesModal.styles";
 import { MAX_PRIVATE_NOTE_LENGTH } from "@/setup";
+import { handleApiError } from "@/app/(main)/recipes/[slug]/parts/Comments/utils";
+import { useMessage } from "@/hooks";
 
 interface Props {
     open: boolean;
@@ -23,6 +25,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const textFieldRef = useRef<HTMLInputElement | null>(null);
     const [hasOpenedOnce, setHasOpenedOnce] = useState(false);
+    const showMessage = useMessage();
     const router = useRouter();
     useEscapeKey(open, onClose);
 
@@ -102,13 +105,21 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
             const result = await response.json();
 
             if (!result.ok) {
-                throw new Error(result.error.message);
+                throw result.error;
             }
 
             router.refresh();
         } catch (err) {
-            console.error("Nie udało się zapisać notatki:", err);
-            alert("Nie udało się zapisać notatki. Spróbuj ponownie.");
+            handleApiError(
+                err,
+                {
+                    EMPTY_NOTES: msg => showMessage.warning(msg),
+                    RECIPE_NOT_FOUND: msg => showMessage.warning(msg),
+                    MISSING_RECIPE_ID: msg => showMessage.warning(msg),
+                    MISSING_USER: () => showMessage.warning("Nie można zidentyfikować użytkownika."),
+                },
+                msg => showMessage.error(msg)
+            );
         } finally {
             setSaving(false);
             onClose();
@@ -144,14 +155,21 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
             const result = await response.json();
 
             if (!result.ok) {
-                throw new Error(result.error.message);
+                throw result.error;
             }
 
             router.refresh();
             onClose();
         } catch (err) {
-            console.error("Nie udało się usunąć notatki:", err);
-            alert("Nie udało się usunąć notatki. Spróbuj ponownie.");
+            handleApiError(
+                err,
+                {
+                    NOTE_NOT_FOUND: msg => showMessage.warning(msg),
+                    MISSING_RECIPE_ID: msg => showMessage.warning(msg),
+                    MISSING_USER: msg => showMessage.warning(msg),
+                },
+                msg => showMessage.error(msg)
+            );
         } finally {
             setSaving(false);
         }

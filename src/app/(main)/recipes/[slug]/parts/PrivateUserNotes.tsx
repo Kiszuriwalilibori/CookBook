@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { containerStyles, textStyles } from "./PrivateUserNotes.styles";
 import { useIsUserSet } from "@/stores/userStore";
+import { handleApiError } from "./Comments/utils";
+import { useMessage } from "@/hooks";
 
 interface PrivateUserNotesProps {
     recipeId: string;
@@ -14,6 +16,7 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
     const hasUser = useIsUserSet();
     const [notes, setNotes] = useState(initialNotes || "");
     const [loading, setLoading] = useState(false);
+    const showMessage = useMessage();
 
     useEffect(() => {
         setNotes(initialNotes || "");
@@ -46,12 +49,19 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
                 if (result.ok) {
                     setNotes(result.data.notes);
                 } else {
-                    console.error(result.error.message);
                     setNotes("");
+                    handleApiError(
+                        result.error,
+                        {
+                            MISSING_USER: msg => showMessage.warning(msg),
+                            MISSING_RECIPE_ID: msg => showMessage.warning(msg),
+                        },
+                        msg => showMessage.error(msg)
+                    );
                 }
             })
             .catch(err => {
-                console.error("Nie udało się pobrać notatki:", err);
+                handleApiError(err, {}, msg => showMessage.error(msg));
                 setNotes("");
             })
             .finally(() => setLoading(false));

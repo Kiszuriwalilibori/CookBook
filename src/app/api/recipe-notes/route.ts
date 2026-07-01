@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
         const userId = await getUserIdFromCookies();
 
         if (!userId) {
-            throw new ApiError("MISSING_USER", "Nie zdefiniowano użytkownika", 401);
+            throw new ApiError("MISSING_USER", "Nie można zidentyfikować użytkownika", 401);
         }
 
         const { searchParams } = new URL(req.url);
@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
         const userId = await getUserIdFromCookies();
 
         if (!userId) {
-            throw new ApiError("MISSING_USER", "Nie zdefiniowano użytkownika", 401);
+            throw new ApiError("MISSING_USER", "Nie można zidentyfikować użytkownika", 401);
         }
 
         const { recipeId, notes } = await parseBody(req);
@@ -71,6 +71,7 @@ export async function POST(req: NextRequest) {
         if (!recipeId) {
             throw new ApiError("MISSING_RECIPE_ID", "Brak ID przepisu", 400);
         }
+
         const recipe = await client.fetch(`*[_type == "recipe" && _id == $recipeId][0]{ _id }`, { recipeId });
 
         if (!recipe) {
@@ -123,7 +124,7 @@ export async function DELETE(req: NextRequest) {
         const userId = await getUserIdFromCookies();
 
         if (!userId) {
-            throw new ApiError("MISSING_USER", "Nie zdefiniowano użytkownika", 401);
+            throw new ApiError("MISSING_USER", "Nie można zidentyfikować użytkownika", 401);
         }
 
         const { searchParams } = new URL(req.url);
