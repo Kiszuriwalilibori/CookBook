@@ -22,7 +22,6 @@ export async function POST(req: NextRequest) {
             throw new ApiError("MISSING_USER", "Nie zdefiniowano użytkownika", 401);
         }
 
-        // const { recipeId } = await req.json();
         const { recipeId } = await parseBody(req);
 
         if (!recipeId) {

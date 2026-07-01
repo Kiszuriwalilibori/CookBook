@@ -73,7 +73,7 @@ export interface User {
 }
 export type { RatingValue, RecipeRating, PatchRecipeRatingsInput, RatingSummary } from "./recipeRatings";
 export type { RecipeComment, RecipeComments } from "./recipeComments";
-export type ApiResponseError = {
+export type ApiErrorPayload = {
     code: string;
     message: string;
 };
@@ -83,7 +83,7 @@ export type ApiSuccessResponse<T> = {
     data: T;
 };
 
-export type ApiResponse<T = unknown> = ApiSuccessResponse<T> | { ok: false; error: ApiResponseError };
+export type ApiResponse<T = unknown> = ApiSuccessResponse<T> | { ok: false; error: ApiErrorPayload };
 
 export type CreateCommentInput = {
     recipeId: string;

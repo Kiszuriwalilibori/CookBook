@@ -134,9 +134,6 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
     const handleDelete = async () => {
         if (!notes?.trim()) return;
 
-        // const confirmDelete = confirm("Czy na pewno chcesz usunąć notatkę?");
-        // if (!confirmDelete) return;
-
         setSaving(true);
 
         try {
@@ -201,7 +198,6 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                                     variant="contained"
                                     color="error"
                                     onClick={openDeleteDialog}
-                                    // onClick={handleDelete}
                                     disabled={saving || !notes?.trim()} // opcjonalnie blokuj jeśli brak treści
                                 >
                                     Usuń

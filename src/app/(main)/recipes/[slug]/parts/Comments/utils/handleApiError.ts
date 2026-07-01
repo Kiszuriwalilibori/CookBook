@@ -1,4 +1,4 @@
-import { ApiResponseError } from "@/types";
+import { ApiErrorPayload } from "@/types";
 
 export type ErrorHandlerMap = Partial<Record<string, (message: string) => void>>;
 type TransportError = { type: "NETWORK_ERROR"; message: string } | { type: "PARSE_ERROR"; message: string } | { type: "ABORTED"; message: string };
@@ -6,7 +6,7 @@ type TransportError = { type: "NETWORK_ERROR"; message: string } | { type: "PARS
 function isTransportError(err: unknown): err is TransportError {
     return typeof err === "object" && err !== null && "type" in err && typeof (err as { type?: unknown }).type === "string";
 }
-export function isApiError(err: unknown): err is ApiResponseError {
+export function isApiErrorPayload(err: unknown): err is ApiErrorPayload {
     return typeof err === "object" && err !== null && "code" in err && "message" in err;
 }
 
@@ -27,7 +27,7 @@ export function handleApiError(err: unknown, map: Record<string, (msg: string) =
         }
     }
 
-    if (!isApiError(err)) {
+    if (!isApiErrorPayload(err)) {
         fallback?.("Nieoczekiwany błąd");
         return;
     }
