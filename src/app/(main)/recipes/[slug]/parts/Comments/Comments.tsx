@@ -9,10 +9,10 @@ import LoadingIndicator from "@/components/LoadingIndicator";
 import CommentItem from "./CommentItem";
 import CommentForm from "./CommentForm";
 import { useIsAdminLogged } from "@/stores/useAdminStore";
-import { useBoolean, useFingerprint, useMessage } from "@/hooks";
+import { useBoolean, useFingerprint, useMessage, useApiResponseErrorHandler } from "@/hooks";
 import type { ApiResponse, RecipeComment } from "@/types";
 import { commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
-import { useScrollFocusOnOpen, useCreateCommentTree, useCommentsVisibility, handleApiError } from "./utils";
+import { useScrollFocusOnOpen, useCreateCommentTree, useCommentsVisibility } from "./utils";
 import { useCommentsState } from "./utils/useCommentsState";
 import { useCommentsSorting } from "./utils/useCommentsSorting";
 
@@ -22,6 +22,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
     const [isFormOpen, openForm, closeForm] = useBoolean(false);
     const isAdminLogged = useIsAdminLogged();
     const showMessage = useMessage();
+    const handleApiResponseError = useApiResponseErrorHandler();
     const { sortMode, setSortMode, sortedComments } = useCommentsSorting(comments);
     const openCommentForm = () => {
         openForm();
@@ -67,16 +68,23 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 const data = await res.json();
                 if (!data.ok) {
                     removeOptimisticComment(tempId);
-                    handleApiError(
-                        data.error,
-                        {
-                            COMMENT_COOLDOWN: msg => showMessage.warning(msg),
-                            COMMENT_REJECTED: msg => showMessage.error(msg),
-                            INTERNAL_ERROR: msg => showMessage.error(msg),
-                            INVALID_PARENT: msg => showMessage.error(msg),
+                    handleApiResponseError(data.error, {
+                        COMMENT_COOLDOWN: {
+                            type: "warning",
                         },
-                        msg => showMessage.error(msg)
-                    );
+
+                        COMMENT_REJECTED: {
+                            type: "error",
+                        },
+
+                        INTERNAL_ERROR: {
+                            type: "error",
+                        },
+
+                        INVALID_PARENT: {
+                            type: "error",
+                        },
+                    });
                 } else {
                     const newComment = data.data.comment;
 

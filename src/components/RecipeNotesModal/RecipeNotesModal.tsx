@@ -7,8 +7,7 @@ import { modalStyles, visuallyHidden } from "../Header/Header.styles";
 import { useRouter } from "next/navigation";
 import { recipeNotesModalStyles } from "./RecipeNotesModal.styles";
 import { MAX_PRIVATE_NOTE_LENGTH } from "@/setup";
-import { handleApiError } from "@/app/(main)/recipes/[slug]/parts/Comments/utils";
-import { useMessage } from "@/hooks";
+import { useApiResponseErrorHandler } from "@/hooks";
 
 interface Props {
     open: boolean;
@@ -25,8 +24,9 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const textFieldRef = useRef<HTMLInputElement | null>(null);
     const [hasOpenedOnce, setHasOpenedOnce] = useState(false);
-    const showMessage = useMessage();
+
     const router = useRouter();
+    const handleApiResponseError = useApiResponseErrorHandler();
     useEscapeKey(open, onClose);
 
     useEffect(() => {
@@ -110,16 +110,33 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
 
             router.refresh();
         } catch (err) {
-            handleApiError(
-                err,
-                {
-                    EMPTY_NOTES: msg => showMessage.warning(msg),
-                    RECIPE_NOT_FOUND: msg => showMessage.warning(msg),
-                    MISSING_RECIPE_ID: msg => showMessage.warning(msg),
-                    MISSING_USER: () => showMessage.warning("Nie można zidentyfikować użytkownika."),
+            handleApiResponseError(err, {
+                EMPTY_NOTES: {
+                    type: "warning",
                 },
-                msg => showMessage.error(msg)
-            );
+
+                RECIPE_NOT_FOUND: {
+                    type: "warning",
+                },
+
+                MISSING_RECIPE_ID: {
+                    type: "warning",
+                },
+
+                MISSING_USER: {
+                    type: "warning",
+                },
+            });
+            // handleApiError(
+            //     err,
+            //     {
+            //         EMPTY_NOTES: msg => showMessage.warning(msg),
+            //         RECIPE_NOT_FOUND: msg => showMessage.warning(msg),
+            //         MISSING_RECIPE_ID: msg => showMessage.warning(msg),
+            //         MISSING_USER: () => showMessage.warning("Nie można zidentyfikować użytkownika."),
+            //     },
+            //     msg => showMessage.error(msg)
+            // );
         } finally {
             setSaving(false);
             onClose();
@@ -161,15 +178,28 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
             router.refresh();
             onClose();
         } catch (err) {
-            handleApiError(
-                err,
-                {
-                    NOTE_NOT_FOUND: msg => showMessage.warning(msg),
-                    MISSING_RECIPE_ID: msg => showMessage.warning(msg),
-                    MISSING_USER: msg => showMessage.warning(msg),
+            handleApiResponseError(err, {
+                NOTE_NOT_FOUND: {
+                    type: "warning",
                 },
-                msg => showMessage.error(msg)
-            );
+
+                MISSING_RECIPE_ID: {
+                    type: "warning",
+                },
+
+                MISSING_USER: {
+                    type: "warning",
+                },
+            });
+            // handleApiError(
+            //     err,
+            //     {
+            //         NOTE_NOT_FOUND: msg => showMessage.warning(msg),
+            //         MISSING_RECIPE_ID: msg => showMessage.warning(msg),
+            //         MISSING_USER: msg => showMessage.warning(msg),
+            //     },
+            //     msg => showMessage.error(msg)
+            // );
         } finally {
             setSaving(false);
         }

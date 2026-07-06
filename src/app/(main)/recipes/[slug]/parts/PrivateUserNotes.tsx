@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { containerStyles, textStyles } from "./PrivateUserNotes.styles";
 import { useIsUserSet } from "@/stores/userStore";
-import { handleApiError } from "./Comments/utils";
-import { useMessage } from "@/hooks";
+import { useApiResponseErrorHandler } from "@/hooks";
 
 interface PrivateUserNotesProps {
     recipeId: string;
@@ -16,7 +15,7 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
     const hasUser = useIsUserSet();
     const [notes, setNotes] = useState(initialNotes || "");
     const [loading, setLoading] = useState(false);
-    const showMessage = useMessage();
+    const handleApiResponseError = useApiResponseErrorHandler();
 
     useEffect(() => {
         setNotes(initialNotes || "");
@@ -50,18 +49,19 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
                     setNotes(result.data.notes);
                 } else {
                     setNotes("");
-                    handleApiError(
-                        result.error,
-                        {
-                            MISSING_USER: msg => showMessage.warning(msg),
-                            MISSING_RECIPE_ID: msg => showMessage.warning(msg),
+                    handleApiResponseError(result.error, {
+                        MISSING_USER: {
+                            type: "warning",
                         },
-                        msg => showMessage.error(msg)
-                    );
+
+                        MISSING_RECIPE_ID: {
+                            type: "warning",
+                        },
+                    });
                 }
             })
             .catch(err => {
-                handleApiError(err, {}, msg => showMessage.error(msg));
+                handleApiResponseError(err);
                 setNotes("");
             })
             .finally(() => setLoading(false));
@@ -82,3 +82,5 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
         </Box>
     );
 };
+// todo setnotes jest wkilka razy wywołaywane z kontekstami, przerobić na specyficzny hook
+// !notes?.trim() setNotes("");

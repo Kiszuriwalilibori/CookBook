@@ -13,4 +13,22 @@ import { useFingerprint } from "./useFingerprint";
 import { useMessage } from "./useMessage";
 import { useDelayedCondition } from "./useDelayedCondition";
 import { useBoolean } from "./useBoolean";
-export { useConfirmDialog, useBoolean, useDelayedCondition, useMessage, useCreateRecipeFilterFields, useDebouncedCallback, useEscapeKey, useFavorites, useFilters, useFingerprint, useGoogleSignIn, useNavItems, useRecipesSummary, useResetFavoritesOnLogout, useSyncRecipesStore };
+import { useApiResponseErrorHandler } from "./useApiResponseErrorHandler";
+export {
+    useConfirmDialog,
+    useBoolean,
+    useApiResponseErrorHandler,
+    useDelayedCondition,
+    useMessage,
+    useCreateRecipeFilterFields,
+    useDebouncedCallback,
+    useEscapeKey,
+    useFavorites,
+    useFilters,
+    useFingerprint,
+    useGoogleSignIn,
+    useNavItems,
+    useRecipesSummary,
+    useResetFavoritesOnLogout,
+    useSyncRecipesStore,
+};

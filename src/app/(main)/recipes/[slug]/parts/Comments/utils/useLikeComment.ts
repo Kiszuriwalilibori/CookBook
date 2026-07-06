@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 
-import { handleApiError } from "./handleApiError";
+import { useApiResponseErrorHandler } from "@/hooks";
 
 import { useOptimisticMutation } from "./useOptimisticMutation";
 
@@ -31,7 +31,7 @@ type LikeCommentResponse = {
 
 export function useLikeComment({ commentId, fingerprint, initialLikes, showMessage, onLikeAnimation }: UseLikeCommentParams) {
     const { state: likes, setState: setLikes, isPending: isLiking, run } = useOptimisticMutation<string[]>(initialLikes);
-
+    const handleApiResponseError = useApiResponseErrorHandler();
     const alreadyLiked = useMemo(() => likes.includes(fingerprint), [likes, fingerprint]);
 
     const handleLike = useCallback(async () => {
@@ -78,17 +78,30 @@ export function useLikeComment({ commentId, fingerprint, initialLikes, showMessa
                 onSuccess: result => result.data.likes,
             });
         } catch (error) {
-            handleApiError(
-                error,
-                {
-                    COMMENT_NOT_FOUND: msg => showMessage.error(String(msg)),
-
-                    INVALID_INPUT: msg => showMessage.warning(String(msg)),
-
-                    INTERNAL_ERROR: msg => showMessage.error(String(msg)),
+            handleApiResponseError(error, {
+                COMMENT_NOT_FOUND: {
+                    type: "error",
                 },
-                msg => showMessage.error(msg)
-            );
+
+                INVALID_INPUT: {
+                    type: "warning",
+                },
+
+                INTERNAL_ERROR: {
+                    type: "error",
+                },
+            });
+            // handleApiError(
+            //     error,
+            //     {
+            //         COMMENT_NOT_FOUND: msg => showMessage.error(String(msg)),
+
+            //         INVALID_INPUT: msg => showMessage.warning(String(msg)),
+
+            //         INTERNAL_ERROR: msg => showMessage.error(String(msg)),
+            //     },
+            //     msg => showMessage.error(msg)
+            // );
         }
     }, [alreadyLiked, commentId, fingerprint, isLiking, onLikeAnimation, run, showMessage]);
 
@@ -103,3 +116,13 @@ export function useLikeComment({ commentId, fingerprint, initialLikes, showMessa
         handleLike,
     };
 }
+// todo uwaga tu jest jakiś stary format type LikeCommentResponse = {
+//     ok: boolean;
+
+//     error?: unknown;
+
+//     data: {
+//         likes: string[];
+//     };
+// };
+// niezgodny z obecną doktryną

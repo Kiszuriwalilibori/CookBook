@@ -3,13 +3,14 @@
 import { useState, useCallback } from "react";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useResetFavoritesOnLogout } from "./useResetFavoritesOnLogout";
-import { handleApiError } from "@/app/(main)/recipes/[slug]/parts/Comments/utils";
 import useMessage from "./useMessage";
+import { useApiResponseErrorHandler } from "@/hooks";
 
 export const useFavorites = () => {
     const { favorites, add, remove } = useFavoritesStore();
     const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
     const showMessage = useMessage();
+    const handleApiResponseError = useApiResponseErrorHandler();
     useResetFavoritesOnLogout();
     const startLoading = useCallback((recipeId: string) => {
         setLoadingIds(prev => {
@@ -52,15 +53,28 @@ export const useFavorites = () => {
                 showMessage.success(`❤️ Dodano do ulubionych: "${data.data.title}" `);
             } catch (error) {
                 remove(recipeId);
-                handleApiError(
-                    error,
-                    {
-                        ALREADY_FAVORITE: msg => showMessage.warning(msg),
-                        MISSING_USER: msg => showMessage.error(msg),
-                        RECIPE_NOT_FOUND: msg => showMessage.error(msg),
+                handleApiResponseError(error, {
+                    ALREADY_FAVORITE: {
+                        type: "warning",
                     },
-                    msg => showMessage.error(msg)
-                );
+
+                    MISSING_USER: {
+                        type: "error",
+                    },
+
+                    RECIPE_NOT_FOUND: {
+                        type: "error",
+                    },
+                });
+                // handleApiError(
+                //     error,
+                //     {
+                //         ALREADY_FAVORITE: msg => showMessage.warning(msg),
+                //         MISSING_USER: msg => showMessage.error(msg),
+                //         RECIPE_NOT_FOUND: msg => showMessage.error(msg),
+                //     },
+                //     msg => showMessage.error(msg)
+                // );
             } finally {
                 stopLoading(recipeId);
             }
@@ -91,14 +105,23 @@ export const useFavorites = () => {
                 showMessage.success(`🤍 Usunięto z ulubionych: "${data.data.title}" `);
             } catch (error) {
                 add(recipeId);
-                handleApiError(
-                    error,
-                    {
-                        FAVORITE_NOT_FOUND: msg => showMessage.warning(msg),
-                        MISSING_USER: msg => showMessage.error(msg),
+                handleApiResponseError(error, {
+                    FAVORITE_NOT_FOUND: {
+                        type: "warning",
                     },
-                    msg => showMessage.error(msg)
-                );
+
+                    MISSING_USER: {
+                        type: "error",
+                    },
+                });
+                // handleApiError(
+                //     error,
+                //     {
+                //         FAVORITE_NOT_FOUND: msg => showMessage.warning(msg),
+                //         MISSING_USER: msg => showMessage.error(msg),
+                //     },
+                //     msg => showMessage.error(msg)
+                // );
             } finally {
                 stopLoading(recipeId);
             }
