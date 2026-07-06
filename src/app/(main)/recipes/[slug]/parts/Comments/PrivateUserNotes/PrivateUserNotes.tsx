@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import { containerStyles, textStyles } from "./PrivateUserNotes.styles";
+import { containerStyles, textStyles } from "../../PrivateUserNotes.styles";
 import { useIsUserSet } from "@/stores/userStore";
 import { useApiResponseErrorHandler } from "@/hooks";
+import { useNotesState } from "./useNotesState";
 
 interface PrivateUserNotesProps {
     recipeId: string;
@@ -13,7 +14,7 @@ interface PrivateUserNotesProps {
 
 export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesProps) => {
     const hasUser = useIsUserSet();
-    const [notes, setNotes] = useState(initialNotes || "");
+    const { notes, setNotes, clearNotes, hasNotes } = useNotesState(initialNotes);
     const [loading, setLoading] = useState(false);
     const handleApiResponseError = useApiResponseErrorHandler();
 
@@ -36,7 +37,7 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
     // }, [recipeId, hasUser]);
     useEffect(() => {
         if (!hasUser) {
-            setNotes("");
+            clearNotes();
             return;
         }
 
@@ -48,7 +49,7 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
                 if (result.ok) {
                     setNotes(result.data.notes);
                 } else {
-                    setNotes("");
+                    clearNotes();
                     handleApiResponseError(result.error, {
                         MISSING_USER: {
                             type: "warning",
@@ -62,13 +63,13 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
             })
             .catch(err => {
                 handleApiResponseError(err);
-                setNotes("");
+                clearNotes();
             })
             .finally(() => setLoading(false));
     }, [recipeId, hasUser]);
 
     if (!hasUser) return null;
-    if (!notes?.trim() && !loading) return null;
+    if (!hasNotes && !loading) return null;
 
     return (
         <Box sx={containerStyles}>
@@ -82,5 +83,4 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
         </Box>
     );
 };
-// todo setnotes jest wkilka razy wywołaywane z kontekstami, przerobić na specyficzny hook
-// !notes?.trim() setNotes("");
+export default PrivateUserNotes;

@@ -14,7 +14,7 @@ import { resolveRecipeIdFromSlug } from "@/utils/resolveRecipeIdFromSlug";
 import { getRecipeById } from "@/utils/getRecipeById";
 import { RecipeNutrition } from "./parts";
 import { getUserRecipeNote } from "@/utils";
-import { PrivateUserNotes } from "./parts/PrivateUserNotes";
+import PrivateUserNotes from "./parts/Comments/PrivateUserNotes";
 import Comments from "./parts/Comments";
 import { RecipeCommentsButton } from "./parts/RecipeCommentsButton";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
