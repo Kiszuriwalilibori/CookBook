@@ -26,32 +26,32 @@ import { RecipeNutritionInput } from "@/types/nutrition";
 //     },
 // };
 export const nutritionData: RecipeNutritionInput = {
-    title: "Raita",
+    title: "Papryka faszerowana po angielsku",
 
-    totalWeight: 1500,
+    totalWeight: 1380,
 
     per100g: {
-        calories: 71,
-        protein: 4.0,
-        fat: 3.7,
-        carbohydrate: 5.5,
+        calories: 98,
+        protein: 4.6,
+        fat: 6.8,
+        carbohydrate: 4.1,
     },
 
     micronutrients: {
-        vitaminA: 63, // µg
-        vitaminC: 12.8, // mg
-        vitaminD: 0.03, // µg
-        vitaminE: 0.27, // mg
-        vitaminK: 12.7, // µg
-        vitaminB6: 0.08, // mg
-        folate: 16, // µg
+        vitaminA: 91, // µg
+        vitaminC: 74.0, // mg
+        vitaminD: 0.35, // µg
+        vitaminE: 0.92, // mg
+        vitaminK: 8.4, // µg
+        vitaminB6: 0.22, // mg
+        folate: 42, // µg
 
-        calcium: 130, // mg
-        iron: 0.43, // mg
-        magnesium: 15, // mg
-        potassium: 211, // mg
-        sodium: 56, // mg
-        zinc: 0.49, // mg
-        selenium: 4.8, // µg
+        calcium: 31, // mg
+        iron: 0.82, // mg
+        magnesium: 18, // mg
+        potassium: 145, // mg
+        sodium: 410, // mg
+        zinc: 0.88, // mg
+        selenium: 9.6, // µg
     },
 };

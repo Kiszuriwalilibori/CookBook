@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 
 export const useEscapeKey = (isOpen: boolean, onClose: () => void, options: { preventDefault?: boolean } = {}) => {

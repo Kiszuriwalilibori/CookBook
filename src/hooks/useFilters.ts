@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useDebouncedCallback } from "./useDebouncedCallback";
 import { normalizeMultiple } from "@/components/RecipeFilters/utils/normalize";

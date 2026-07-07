@@ -1,3 +1,5 @@
+"use client";
+
 import { SnackbarOrigin, useSnackbar } from "notistack";
 
 interface MessageOptions {

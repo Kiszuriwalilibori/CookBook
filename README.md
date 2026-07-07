@@ -133,3 +133,5 @@ real-time comments (SSE / WebSocket)
 Ale na teraz — jesteś dosłownie 1 linijkę od działającego drzewa 👍
 
 test
+
+//todo admin nie powinien mieć 1 minuty ograniczenia w komentowaniu

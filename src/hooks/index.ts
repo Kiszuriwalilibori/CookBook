@@ -14,6 +14,8 @@ import { useMessage } from "./useMessage";
 import { useDelayedCondition } from "./useDelayedCondition";
 import { useBoolean } from "./useBoolean";
 import { useApiResponseErrorHandler } from "./useApiResponseErrorHandler";
+import { useIngredientsChecks } from "./useIngredientsChecks";
+
 export {
     useConfirmDialog,
     useBoolean,
@@ -21,6 +23,7 @@ export {
     useDelayedCondition,
     useMessage,
     useCreateRecipeFilterFields,
+    useIngredientsChecks,
     useDebouncedCallback,
     useEscapeKey,
     useFavorites,

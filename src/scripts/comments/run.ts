@@ -5,8 +5,9 @@ import { importRecipeComments } from "./importRecipeComments";
 
 async function main() {
     await importRecipeComments({
-        recipeTitle: "Rumsztyk",
+        recipeTitle: "Adżapsandali",
         comments,
+        overwrite: true,
     });
 }
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 import { useRecipesStore } from "@/stores/useRecipesStore";
 import { type Recipe } from "@/types";
