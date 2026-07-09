@@ -4,8 +4,9 @@ import { Box, Checkbox, Typography } from "@mui/material";
 
 import { RecipeIngredient } from "@/types";
 import { styles } from "../styles";
+import { useIngredientChecksStore } from "@/stores";
 
-import { useIngredientsChecks } from "@/hooks/useIngredientsChecks";
+import getIngredientKey from "@/utils/getIngredientKey";
 
 interface RecipeIngredientItemProps {
     recipeId: string;
@@ -27,7 +28,12 @@ function formatIngredient(ingredient: RecipeIngredient): string {
 }
 
 export function RecipeIngredientItem({ recipeId, ingredient }: RecipeIngredientItemProps) {
-    const { isChecked, toggle } = useIngredientsChecks(recipeId);
+    // const { isChecked, toggle } = useIngredientsChecks(recipeId);
+    const key = getIngredientKey(recipeId, ingredient);
+
+    const checked = useIngredientChecksStore(state => state.checks[key] ?? false);
+
+    const toggle = useIngredientChecksStore(state => state.toggle);
 
     return (
         <Box component="li" role="listitem" sx={styles.ingredientsListItemFull}>
@@ -36,8 +42,10 @@ export function RecipeIngredientItem({ recipeId, ingredient }: RecipeIngredientI
                     p: 0,
                     mr: 1,
                 }}
-                checked={isChecked(ingredient)}
-                onChange={() => toggle(ingredient)}
+                checked={checked}
+                onChange={() => toggle(key)}
+                // checked={isChecked(ingredient)}
+                // onChange={() => toggle(ingredient)}
                 slotProps={{
                     input: {
                         "aria-label": `Dostępny składnik: ${ingredient.name}`,
