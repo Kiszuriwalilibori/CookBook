@@ -57,8 +57,7 @@ export function generateRecipeSchema(recipe: Recipe) {
               }
             : undefined,
 
-        recipeIngredient: recipe.ingredients?.filter(i => !i.excluded).map(i => `${i.quantity || ""} ${i.unit || ""} ${i.name || ""}`.trim()) || [],
-
+        recipeIngredient: [...(recipe.ingredients ?? []).map(({ quantity, unit, name }) => `${quantity || ""} ${unit || ""} ${name || ""}`.trim()), ...(recipe.optionalIngredients ?? []).map(({ quantity, unit, name }) => `${quantity || ""} ${unit || ""} ${name || ""} (opcjonalnie)`.trim())],
         recipeInstructions:
             recipe.preparationSteps?.map(step => ({
                 "@type": "HowToStep" as const,
@@ -92,3 +91,4 @@ export function generateRecipeSchema(recipe: Recipe) {
 
     return jsonLd;
 }
+// todo optionalingredients czy tu nie trzeba?

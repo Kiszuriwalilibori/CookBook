@@ -4,19 +4,19 @@ import { styles } from "../styles";
 import getIngredientKey from "@/utils/getIngredientKey";
 import { RecipeIngredientItem } from "./RecipeIngredientsItem";
 
-interface RecipeIngredientsProps {
+interface RecipeOptionalIngredientsProps {
     recipe: Recipe;
 }
 
-export function RecipeIngredients({ recipe }: RecipeIngredientsProps) {
-    const ingredients = recipe.ingredients;
+export function RecipeOptionalIngredients({ recipe }: RecipeOptionalIngredientsProps) {
+    const ingredients = recipe.optionalIngredients;
 
     if (!ingredients || ingredients.length === 0) return null;
 
     return (
-        <Box id="RecipeIngredients" sx={styles.ingredientsContainer}>
+        <Box id="RecipeOptionalIngredients" sx={styles.ingredientsContainer}>
             <Typography variant="h2" sx={styles.ingredientsTitle}>
-                Składniki
+                Składniki opcjonalne
             </Typography>
 
             <List sx={styles.ingredientsList}>

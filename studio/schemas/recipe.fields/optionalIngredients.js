@@ -1,8 +1,8 @@
-import IngredientsInput from '../../components/IngredientsInput'
+import OptionalIngredientsInput from '../../components/OptionalIngredientsInput'
 
 export default {
-  name: 'ingredients',
-  title: 'Składniki',
+  name: 'optionalIngredients',
+  title: 'Składniki opcjonalne',
   options: {
     collapsible: true,
   },
@@ -15,18 +15,27 @@ export default {
         {name: 'quantity', title: 'Ilość', type: 'number'},
         {name: 'unit', title: 'Jednostka miary', type: 'string'},
       ],
-
       preview: {
-        select: {quantity: 'quantity', unit: 'unit', name: 'name'},
+        select: {
+          quantity: 'quantity',
+          unit: 'unit',
+          name: 'name',
+        },
         prepare({quantity, unit, name}) {
           const parts = []
+
           if (quantity != null) parts.push(`${quantity}`)
           if (unit) parts.push(unit)
           if (name) parts.push(name)
-          return {title: parts.join(' ') || '(brak składnika)'}
+
+          return {
+            title: parts.join(' ') || '(brak składnika)',
+          }
         },
       },
     },
   ],
-  components: {input: IngredientsInput},
+  components: {
+    input: OptionalIngredientsInput,
+  },
 }

@@ -1,6 +1,6 @@
 // runPatchIngredients.ts
 
-import {ingredients } from "./ingredients";
+import { ingredients } from "./ingredients";
 import { patchRecipeIngredients } from "./patchRecipeIngredients";
 
 async function main() {

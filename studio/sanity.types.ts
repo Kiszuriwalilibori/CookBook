@@ -144,7 +144,6 @@ export type Recipe = {
     notes?: string
   }
   ingredients?: Array<{
-    excluded?: boolean
     name?: string
     quantity?: number
     unit?: string

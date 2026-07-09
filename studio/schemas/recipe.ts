@@ -5,6 +5,7 @@ import description from './recipe.fields/description'
 import dietary from './recipe.fields/dietary'
 import ingredients from './recipe.fields/ingredients'
 import ingredientsNotes from './recipe.fields/ingredientsNotes'
+import optionalIngredients from './recipe.fields/optionalIngredients'
 import kizia from './recipe.fields/kizia'
 import notes from './recipe.fields/notes'
 import nutrition from './recipe.fields/nutrition'
@@ -29,6 +30,7 @@ export default {
     slug,
     description,
     ingredients,
+    optionalIngredients,
     ingredientsNotes,
     products,
     preparationSteps,

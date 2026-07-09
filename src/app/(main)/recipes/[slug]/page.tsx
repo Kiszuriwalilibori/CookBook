@@ -1,24 +1,59 @@
+// import { Box } from "@mui/material";
+// import { notFound, redirect } from "next/navigation";
+
+// import { Separator } from "@/components";
+// import { styles } from "./styles";
+// import { mapRecipeToMetadata } from "./parts/RecipeMetadata/RecipeMetadata.utils";
+
+// import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton, RecipeNotesButton, RecipeRatingSection, RecipeShareButton } from "./parts";
+
+// import { generateRecipeMetadata } from "@/utils/generateRecipeMetadata";
+// import { generateRecipeSchema } from "@/utils/schema-org";
+
+// import { resolveRecipeIdFromSlug } from "@/utils/resolveRecipeIdFromSlug";
+// import { getRecipeById } from "@/utils/getRecipeById";
+// import { RecipeNutrition } from "./parts";
+// import { getUserRecipeNote } from "@/utils";
+// import PrivateUserNotes from "./parts/Comments/PrivateUserNotes";
+// import Comments from "./parts/Comments";
+// import { RecipeCommentsButton } from "./parts/RecipeCommentsButton";
+// import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
+// import { RecipeOptionalIngredients } from "./parts/RecipeOptionalIngredients";
+// import { RecipeIngredientsNotes } from "./parts/RecipeIngredientsNotes";
 import { Box } from "@mui/material";
 import { notFound, redirect } from "next/navigation";
 
 import { Separator } from "@/components";
+
+import {
+    RecipeCommentsButton,
+    RecipeCopyButton,
+    RecipeDescription,
+    RecipeHero,
+    RecipeIngredients,
+    RecipeIngredientsNotes,
+    RecipeKeepAwakeButton,
+    RecipeMetadata,
+    RecipeNotesButton,
+    RecipeNutrition,
+    RecipeOptionalIngredients,
+    RecipePdfButton,
+    RecipePreparationSteps,
+    RecipePrintButton,
+    RecipeRatingSection,
+    RecipeShareButton,
+    RecipeSource,
+} from "./parts";
+
+import Comments from "./parts/Comments";
+import PrivateUserNotes from "./parts/Comments/PrivateUserNotes";
+
 import { styles } from "./styles";
 import { mapRecipeToMetadata } from "./parts/RecipeMetadata/RecipeMetadata.utils";
 
-import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton, RecipeNotesButton, RecipeRatingSection, RecipeShareButton } from "./parts";
+import { generateRecipeMetadata, generateRecipeSchema, getRecipeById, getUserRecipeNote, resolveRecipeIdFromSlug } from "@/utils";
 
-import { generateRecipeMetadata } from "@/utils/generateRecipeMetadata";
-import { generateRecipeSchema } from "@/utils/schema-org";
-
-import { resolveRecipeIdFromSlug } from "@/utils/resolveRecipeIdFromSlug";
-import { getRecipeById } from "@/utils/getRecipeById";
-import { RecipeNutrition } from "./parts";
-import { getUserRecipeNote } from "@/utils";
-import PrivateUserNotes from "./parts/Comments/PrivateUserNotes";
-import Comments from "./parts/Comments";
-import { RecipeCommentsButton } from "./parts/RecipeCommentsButton";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
-
 interface Params {
     slug: string;
 }
@@ -77,6 +112,8 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
     const jsonLd = generateRecipeSchema(recipe);
     const metadata = mapRecipeToMetadata(recipe);
 
+    console.log(recipe);
+
     return (
         <>
             {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}
@@ -92,6 +129,8 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 <Box sx={styles.ingredientsPrepWrapper}>
                     <Box sx={styles.ingredientsWrapper}>
                         <RecipeIngredients recipe={recipe} />
+                        <RecipeOptionalIngredients recipe={recipe} />
+                        <RecipeIngredientsNotes recipe={recipe} />
                     </Box>
 
                     <Box sx={styles.prepWrapper}>

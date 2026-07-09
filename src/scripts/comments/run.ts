@@ -5,9 +5,9 @@ import { importRecipeComments } from "./importRecipeComments";
 
 async function main() {
     await importRecipeComments({
-        recipeTitle: "Adżapsandali",
+        recipeTitle: "Wiosenna sałatka z kozim serem i truskawkami",
         comments,
-        overwrite: true,
+        overwrite: false,
     });
 }
 

@@ -148,3 +148,4 @@ export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
     );
 }
 //todo tu krzyczy o błędzie z undefined
+// todo powinno uwzględniać optionalingredients

@@ -27,7 +27,7 @@ export const GoogleLogoutButton = () => {
     if (loginStatus === "not_logged") return null;
 
     return (
-        <Button sx={logoutButtonWrapper} variant="contained" color="error" size="small" startIcon={<LogoutIcon />} onClick={handleLogout}>
+        <Button id="GoogleLogoutButton" sx={logoutButtonWrapper} variant="contained" color="error" size="small" startIcon={<LogoutIcon />} onClick={handleLogout}>
             Wyloguj
         </Button>
     );

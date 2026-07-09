@@ -26,32 +26,28 @@ import { RecipeNutritionInput } from "@/types/nutrition";
 //     },
 // };
 export const nutritionData: RecipeNutritionInput = {
-    title: "Papryka faszerowana po angielsku",
-
-    totalWeight: 1380,
-
+    title: "Wiosenna sałatka z kozim serem i truskawkami",
+    totalWeight: 312,
     per100g: {
-        calories: 98,
-        protein: 4.6,
-        fat: 6.8,
-        carbohydrate: 4.1,
+        calories: 208.6,
+        protein: 6.4,
+        fat: 16.8,
+        carbohydrate: 10.4,
     },
-
     micronutrients: {
-        vitaminA: 91, // µg
-        vitaminC: 74.0, // mg
-        vitaminD: 0.35, // µg
-        vitaminE: 0.92, // mg
-        vitaminK: 8.4, // µg
-        vitaminB6: 0.22, // mg
-        folate: 42, // µg
-
-        calcium: 31, // mg
-        iron: 0.82, // mg
-        magnesium: 18, // mg
-        potassium: 145, // mg
-        sodium: 410, // mg
-        zinc: 0.88, // mg
-        selenium: 9.6, // µg
+        vitaminA: 280,
+        vitaminC: 31.5,
+        vitaminD: 0.1,
+        vitaminE: 3.2,
+        vitaminK: 155,
+        vitaminB6: 0.16,
+        folate: 85,
+        calcium: 125,
+        iron: 2.1,
+        magnesium: 55,
+        potassium: 290,
+        sodium: 310,
+        zinc: 1.1,
+        selenium: 4.8,
     },
 };

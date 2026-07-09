@@ -1,20 +1,39 @@
+import { analyzeComment } from "./perspective";
 import { buildFilterClause } from "./buildFilterClause";
 import { client } from "./client";
 import { fetchSummary } from "./fetchSummary";
 import { generateRecipeMetadata } from "./generateRecipeMetadata";
-
+import { generateRecipeSchema } from "./schema-org";
 import { getOptions } from "./getOptions";
 import { getRecipeById } from "./getRecipeById";
 import { getRecipeBySlug } from "./getRecipeBySlug";
 import { getRecipesForCards } from "./getRecipesForCards";
 import { getSessionUser } from "./session";
-import { getUserFavoritesRecipes } from "./getUserFavoritesRecipes";
 import { getUserFavorites } from "./getUserFavorites";
-
+import { getUserFavoritesRecipes } from "./getUserFavoritesRecipes";
+import { getUserRecipeNote } from "./getUserRecipeNote";
+import { resolveRecipeIdFromSlug } from "./resolveRecipeIdFromSlug";
 import { searchRecipeByTitle } from "./searchRecipeByTitle";
 import { verifyGoogle } from "./googleAuth";
 import { writeClient } from "./writeClient";
-import { getUserRecipeNote } from "./getUserRecipeNote";
-import { analyzeComment } from "./perspective";
 
-export { analyzeComment, buildFilterClause, client, fetchSummary, getUserRecipeNote, getUserFavoritesRecipes, generateRecipeMetadata, getOptions, getRecipeById, getRecipeBySlug, getRecipesForCards, getSessionUser, getUserFavorites, searchRecipeByTitle, verifyGoogle, writeClient };
+export {
+    analyzeComment,
+    buildFilterClause,
+    client,
+    fetchSummary,
+    generateRecipeMetadata,
+    generateRecipeSchema,
+    getOptions,
+    getRecipeById,
+    getRecipeBySlug,
+    getRecipesForCards,
+    getSessionUser,
+    getUserFavorites,
+    getUserFavoritesRecipes,
+    getUserRecipeNote,
+    resolveRecipeIdFromSlug,
+    searchRecipeByTitle,
+    verifyGoogle,
+    writeClient,
+};

@@ -6,9 +6,9 @@ import { Menu } from "@/components";
 import { useEscapeKey, useRecipesSummary, useGoogleSignIn, useNavItems } from "@/hooks";
 import { RecipeFilter } from "@/types";
 
-// import GoogleLogoutButton from "./GoogleLogoutButton";
 // import GoogleSignInButton from "./GoogleSignInButton";
 import { RecipeFiltersModal } from "./RecipeFiltersModal";
+import GoogleLogoutButton from "@/app/(main)/kiszuriwalilibori-admin-jestem/GoogleLogoutButton";
 
 interface HeaderProps {
     initialSummary?: RecipeFilter | null;
@@ -47,12 +47,11 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
         <>
             <Menu navItems={navItems} mobileOpen={ui.mobileMenuOpen} onMobileOpen={openMobileMenu} onMobileClose={closeMobileMenu} />
 
-            {/* <GoogleSignInButton />
-            <GoogleLogoutButton /> */}
-
+            <GoogleLogoutButton />
             <RecipeFiltersModal open={ui.filterOpen} onClose={closeFilters} options={options} />
         </>
     );
 };
 
 export default Header;
+// todo kiedyś tam usunąć GLB, na razie przydatny testowo i tak widoczny tylko przy adminie zalogowanym

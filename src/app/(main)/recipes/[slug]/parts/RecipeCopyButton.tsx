@@ -64,12 +64,7 @@ export function RecipeCopyButton({ recipe }: RecipeCopyButtonProps) {
     return (
         <>
             <Tooltip title="Kopiuj składniki i przygotowanie do dokumentu" placement="top">
-                <IconButton
-                    id="RecipeCopyButton"
-                    onClick={handleCopy}
-                    sx={styles.recipeButton}
-                    
-                >
+                <IconButton id="RecipeCopyButton" onClick={handleCopy} sx={styles.recipeButton}>
                     <CopyAllIcon sx={styles.recipeButtonIcon} />
                 </IconButton>
             </Tooltip>
@@ -82,3 +77,4 @@ export function RecipeCopyButton({ recipe }: RecipeCopyButtonProps) {
         </>
     );
 }
+// todo optionalingredients też powinno zapisywać

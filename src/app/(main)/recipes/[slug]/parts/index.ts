@@ -16,4 +16,7 @@ export { RecipePrintButton } from "./RecipePrintButton";
 export { RecipeSource } from "./RecipeSource";
 export { RecipeRatingSection } from "./RecipeRatingSection";
 export { RecipeShareButton } from "./RecipeShareButton";
+export { RecipeCommentsButton } from "./RecipeCommentsButton";
+export { RecipeIngredientsNotes } from "./RecipeIngredientsNotes";
+export { RecipeOptionalIngredients } from "./RecipeOptionalIngredients";
 export { default as RecipeRatingWidget } from "./RecipeRatingWidget";

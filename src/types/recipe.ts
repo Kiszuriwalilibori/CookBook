@@ -44,7 +44,11 @@ export interface Recipe {
         name: string;
         quantity: number;
         unit?: string;
-        excluded: boolean;
+    }>;
+    optionalIngredients?: Array<{
+        name: string;
+        quantity: number;
+        unit?: string;
     }>;
 
     ingredientsNotes?: string;
