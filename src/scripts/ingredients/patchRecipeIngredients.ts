@@ -34,7 +34,6 @@ export async function patchRecipeIngredients(recipe: RecipeIngredientsInput): Pr
                 name: item.name,
                 quantity: item.quantity,
                 unit: item.unit,
-                excluded: item.excluded ?? false,
             })),
         })
         .commit();

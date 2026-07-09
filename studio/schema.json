@@ -881,13 +881,6 @@
           "of": {
             "type": "object",
             "attributes": {
-              "excluded": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "boolean"
-                },
-                "optional": true
-              },
               "name": {
                 "type": "objectAttribute",
                 "value": {
