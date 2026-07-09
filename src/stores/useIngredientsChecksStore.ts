@@ -43,3 +43,4 @@ export const useIngredientChecksStore = create<IngredientChecksStore>()(
         }
     )
 );
+// todo rozważyć wykorzytanie _key z sanity bo faktycznie jest, choć nie przewiduje go typ

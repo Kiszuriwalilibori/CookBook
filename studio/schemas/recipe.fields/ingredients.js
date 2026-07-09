@@ -11,7 +11,7 @@ export default {
     {
       type: 'object',
       fields: [
-        {name: 'name', title: 'Składnik', type: 'string'},
+        {name: 'name', title: 'Składnik', type: 'string', validation: (Rule) => Rule.required()},
         {name: 'quantity', title: 'Ilość', type: 'number'},
         {name: 'unit', title: 'Jednostka miary', type: 'string'},
       ],

@@ -22,6 +22,7 @@ export interface RecipeIngredient {
     name: string;
     quantity: number;
     unit?: string;
+    _key: string;
 }
 
 export interface Recipe {

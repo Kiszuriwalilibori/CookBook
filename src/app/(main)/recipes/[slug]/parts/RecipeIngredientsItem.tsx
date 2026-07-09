@@ -44,8 +44,6 @@ export function RecipeIngredientItem({ recipeId, ingredient }: RecipeIngredientI
                 }}
                 checked={checked}
                 onChange={() => toggle(key)}
-                // checked={isChecked(ingredient)}
-                // onChange={() => toggle(ingredient)}
                 slotProps={{
                     input: {
                         "aria-label": `Dostępny składnik: ${ingredient.name}`,

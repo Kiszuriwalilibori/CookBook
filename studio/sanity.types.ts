@@ -39,7 +39,7 @@ export type RecipeNotes = {
   _createdAt: string
   _updatedAt: string
   _rev: string
-  userId?: string
+  userEmail?: string
   recipe?: {
     _ref: string
     _type: 'reference'

@@ -21,11 +21,13 @@ export async function getRecipeById(id: string): Promise<Recipe | null> {
           name,
           quantity,
           unit,
+          _key,
         },
         optionalIngredients[] {
           name,
           quantity,
           unit,
+          _key,
         },
         ingredientsNotes,
         products,
