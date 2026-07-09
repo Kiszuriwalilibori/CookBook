@@ -6,17 +6,18 @@ import { RecipeIngredientItem } from "./RecipeIngredientsItem";
 
 interface RecipeIngredientsProps {
     recipe: Recipe;
+    title: string;
+    id: string;
+    ingredients: Recipe["ingredients"];
 }
 
-export function RecipeIngredients({ recipe }: RecipeIngredientsProps) {
-    const ingredients = recipe.ingredients;
-
+export function RecipeIngredientsGeneric({ recipe, title, id, ingredients }: RecipeIngredientsProps) {
     if (!ingredients || ingredients.length === 0) return null;
 
     return (
-        <Box id="RecipeIngredients" sx={styles.ingredientsContainer}>
+        <Box id={id} sx={styles.ingredientsContainer}>
             <Typography variant="h2" sx={styles.ingredientsTitle}>
-                Składniki
+                {title}
             </Typography>
 
             <List sx={styles.ingredientsList}>

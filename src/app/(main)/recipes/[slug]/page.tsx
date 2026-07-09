@@ -30,13 +30,12 @@ import {
     RecipeCopyButton,
     RecipeDescription,
     RecipeHero,
-    RecipeIngredients,
+    RecipeIngredientsGeneric,
     RecipeIngredientsNotes,
     RecipeKeepAwakeButton,
     RecipeMetadata,
     RecipeNotesButton,
     RecipeNutrition,
-    RecipeOptionalIngredients,
     RecipePdfButton,
     RecipePreparationSteps,
     RecipePrintButton,
@@ -55,6 +54,7 @@ import { generateRecipeMetadata, generateRecipeSchema, getRecipeById, getUserRec
 
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 import { RecipeIngredientsClearButton } from "./parts/RecipeIngredientsClearButton";
+
 interface Params {
     slug: string;
 }
@@ -127,8 +127,11 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 <Separator />
                 <Box sx={styles.ingredientsPrepWrapper}>
                     <Box sx={styles.ingredientsWrapper}>
-                        <RecipeIngredients recipe={recipe} />
-                        <RecipeOptionalIngredients recipe={recipe} />
+                        <RecipeIngredientsGeneric recipe={recipe} id="RecipeIngredients" title="Składniki" ingredients={recipe.ingredients} />
+
+                        <RecipeIngredientsGeneric recipe={recipe} id="RecipeOptionalIngredients" title="Składniki opcjonalne" ingredients={recipe.optionalIngredients} />
+                        {/* <RecipeIngredients recipe={recipe} />
+                        <RecipeOptionalIngredients recipe={recipe} /> */}
                         <RecipeIngredientsClearButton recipeId={recipe._id} />
                         <RecipeIngredientsNotes recipe={recipe} />
                     </Box>
