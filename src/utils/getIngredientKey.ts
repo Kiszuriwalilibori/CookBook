@@ -1,8 +1,6 @@
-import { Recipe } from "@/types";
+import { RecipeIngredient } from "@/types";
 
-type Ingredient = NonNullable<Recipe["ingredients"]>[number];
-
-export function getIngredientKey(recipeId: string, ingredient: Ingredient): string {
+export function getIngredientKey(recipeId: string, ingredient: RecipeIngredient): string {
     return `${recipeId}-${ingredient.name}-${ingredient.quantity}-${ingredient.unit ?? ""}`;
 }
 export default getIngredientKey;

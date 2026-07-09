@@ -2,30 +2,28 @@
 
 import { Box, Checkbox, Typography } from "@mui/material";
 
-import { Recipe } from "@/types";
+import { RecipeIngredient } from "@/types";
 import { styles } from "../styles";
 
 import { useIngredientsChecks } from "@/hooks/useIngredientsChecks";
 
-type Ingredient = NonNullable<Recipe["ingredients"]>[number];
-
 interface RecipeIngredientItemProps {
     recipeId: string;
-    ingredient: Ingredient;
+    ingredient: RecipeIngredient;
 }
 
-function formatIngredient(ing: Ingredient): string {
-    const rawUnit = ing.unit?.toLowerCase() || "";
+function formatIngredient(ingredient: RecipeIngredient): string {
+    const rawUnit = ingredient.unit?.toLowerCase() || "";
 
     if (rawUnit === "szczypta") return "szczypta";
     if (rawUnit === "odrobina") return "odrobina";
 
-    if (!ing.quantity) return "";
+    if (!ingredient.quantity) return "";
 
     const omitUnit = rawUnit.includes("sztuk");
-    const unit = omitUnit ? "" : ing.unit || "";
+    const unit = omitUnit ? "" : ingredient.unit || "";
 
-    return `${ing.quantity}${unit ? ` ${unit}` : ""}`;
+    return `${ingredient.quantity}${unit ? ` ${unit}` : ""}`;
 }
 
 export function RecipeIngredientItem({ recipeId, ingredient }: RecipeIngredientItemProps) {

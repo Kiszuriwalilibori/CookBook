@@ -2,10 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { Recipe } from "@/types";
+import { RecipeIngredient } from "@/types";
 import getIngredientKey from "@/utils/getIngredientKey";
-
-type Ingredient = NonNullable<Recipe["ingredients"]>[number];
 
 type IngredientChecks = Record<string, boolean>;
 
@@ -27,14 +25,14 @@ export function useIngredientsChecks(recipeId: string) {
     }, []);
 
     const isChecked = useCallback(
-        (ingredient: Ingredient) => {
+        (ingredient: RecipeIngredient) => {
             return Boolean(checks[getIngredientKey(recipeId, ingredient)]);
         },
         [checks, recipeId]
     );
 
     const toggle = useCallback(
-        (ingredient: Ingredient) => {
+        (ingredient: RecipeIngredient) => {
             setChecks(prev => {
                 const key = getIngredientKey(recipeId, ingredient);
 

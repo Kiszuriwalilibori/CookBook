@@ -18,6 +18,12 @@ interface PortableTextBlock {
     }>; // Expand for other annotations as needed
 }
 
+export interface RecipeIngredient {
+    name: string;
+    quantity: number;
+    unit?: string;
+}
+
 export interface Recipe {
     _id: string;
     _createdAt: string;
@@ -40,16 +46,9 @@ export interface Recipe {
         notes?: string;
     };
 
-    ingredients?: Array<{
-        name: string;
-        quantity: number;
-        unit?: string;
-    }>;
-    optionalIngredients?: Array<{
-        name: string;
-        quantity: number;
-        unit?: string;
-    }>;
+    ingredients?: RecipeIngredient[];
+
+    optionalIngredients?: RecipeIngredient[];
 
     ingredientsNotes?: string;
     products?: string[];

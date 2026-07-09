@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Recipe } from "./recipe";
+import { Recipe, RecipeIngredient } from "./recipe";
 
 export interface MenuItem {
     label: string;
@@ -66,6 +66,7 @@ export const StatusOptions = [
 export const REGULAR_USER_STATUSES: readonly Status[] = [Status.Good, Status.Acceptable];
 
 export type { Recipe };
+export type { RecipeIngredient };
 
 export interface User {
     userId: string;

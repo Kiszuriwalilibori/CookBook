@@ -1,11 +1,9 @@
-import type { Recipe } from "@/types/recipe";
-
-type RecipeIngredientItem = NonNullable<Recipe["ingredients"]>[number];
+import type { RecipeIngredient } from "@/types/recipe";
 
 export interface RecipeIngredientsInput {
     title: string;
     ingredients: Array<
-        Omit<RecipeIngredientItem, "quantity"> & {
+        Omit<RecipeIngredient, "quantity"> & {
             quantity?: number;
         }
     >;
