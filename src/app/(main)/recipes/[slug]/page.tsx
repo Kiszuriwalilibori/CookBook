@@ -112,8 +112,6 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
     const jsonLd = generateRecipeSchema(recipe);
     const metadata = mapRecipeToMetadata(recipe);
 
-    console.log(recipe);
-
     return (
         <>
             {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}

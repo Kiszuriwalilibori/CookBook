@@ -26,25 +26,28 @@ export function useIngredientsChecks(recipeId: string) {
 
     const isChecked = useCallback(
         (ingredient: RecipeIngredient) => {
-            return Boolean(checks[getIngredientKey(recipeId, ingredient)]);
+            const key = getIngredientKey(recipeId, ingredient);
+
+            return Boolean(checks[key]);
         },
         [checks, recipeId]
     );
 
     const toggle = useCallback(
         (ingredient: RecipeIngredient) => {
-            setChecks(prev => {
-                const key = getIngredientKey(recipeId, ingredient);
+            const key = getIngredientKey(recipeId, ingredient);
 
-                const updated = {
-                    ...prev,
-                    [key]: !prev[key],
-                };
+            // zawsze pobieramy aktualny stan z localStorage
+            const current = getStoredChecks();
 
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+            const updated = {
+                ...current,
+                [key]: !current[key],
+            };
 
-                return updated;
-            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+            setChecks(updated);
         },
         [recipeId]
     );
@@ -54,4 +57,5 @@ export function useIngredientsChecks(recipeId: string) {
         toggle,
     };
 }
+
 export default useIngredientsChecks;
