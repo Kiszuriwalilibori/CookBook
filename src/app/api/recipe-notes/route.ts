@@ -8,8 +8,8 @@ function getRecipeNotesId(userId: string, recipeId: string) {
 }
 
 import type { NextRequest } from "next/server";
-import { ApiError } from "../comments/comment.service";
-import { apiErrorResponse } from "@/utils/server/apiErrorResponse";
+
+import { ApiError, apiErrorResponse } from "@/models/apiResponse";
 
 async function parseBody(req: NextRequest): Promise<{
     recipeId?: string;

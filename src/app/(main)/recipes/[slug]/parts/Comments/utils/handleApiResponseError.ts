@@ -1,4 +1,4 @@
-import { ApiErrorPayload } from "@/types";
+import { ApiErrorPayload } from "@/models/apiResponse";
 
 // export type MessageType = "error" | "warning" | "info";
 import { MessageMethods } from "@/hooks/useMessage";

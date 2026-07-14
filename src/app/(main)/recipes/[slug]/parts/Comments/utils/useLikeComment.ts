@@ -108,11 +108,8 @@ export function useLikeComment({ commentId, fingerprint, initialLikes, showMessa
     return {
         likes,
         setLikes,
-
         isLiking,
-
         alreadyLiked,
-
         handleLike,
     };
 }

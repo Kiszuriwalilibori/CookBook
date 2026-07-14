@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import { analyzeComment, writeClient } from "@/utils";
 import { checkCommentCooldown } from "@/app/(main)/recipes/[slug]/parts/Comments/utils";
 import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
+import { ApiError } from "@/models/apiResponse";
 
 type CreateCommentInput = {
     recipeId: string;
@@ -12,17 +13,17 @@ type CreateCommentInput = {
     website?: string;
 };
 
-export class ApiError extends Error {
-    status: number;
-    code: string;
+// export class ApiError extends Error {
+//     status: number;
+//     code: string;
 
-    constructor(code: string, message: string, status = 400) {
-        super(message);
-        Object.setPrototypeOf(this, ApiError.prototype);
-        this.code = code;
-        this.status = status;
-    }
-}
+//     constructor(code: string, message: string, status = 400) {
+//         super(message);
+//         Object.setPrototypeOf(this, ApiError.prototype);
+//         this.code = code;
+//         this.status = status;
+//     }
+// }
 
 function assertNotSpam(website?: string) {
     if (website) {

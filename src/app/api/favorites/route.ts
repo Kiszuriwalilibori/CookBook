@@ -3,8 +3,8 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getUserFavorites, writeClient, client } from "@/utils";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
-import { ApiError } from "../comments/comment.service";
-import { apiErrorResponse } from "@/utils/server/apiErrorResponse";
+
+import { ApiError, apiErrorResponse } from "@/models/apiResponse";
 
 async function parseBody(req: NextRequest): Promise<{ recipeId?: string }> {
     try {

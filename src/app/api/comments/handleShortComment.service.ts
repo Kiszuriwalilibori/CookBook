@@ -1,6 +1,6 @@
+import { ApiError } from "@/models/apiResponse";
 import { writeClient, client } from "@/utils";
 import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
-import { ApiError } from "./comment.service";
 
 type HandleShortCommentArgs = {
     commentId: string;

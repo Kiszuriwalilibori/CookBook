@@ -1,5 +1,5 @@
+import { ApiError } from "@/models/apiResponse";
 import { writeClient } from "@/utils";
-import { ApiError } from "./comment.service";
 
 type HandleLikeArgs = {
     commentId: string;

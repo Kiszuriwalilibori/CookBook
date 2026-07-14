@@ -1,9 +1,7 @@
-
-
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { RecipeSource } from "./RecipeSource";
-import type { Recipe } from "@/types";
+import { Status, type Recipe } from "@/types";
 
 // -----------------------------
 //  Store typing for strict mode
@@ -50,7 +48,7 @@ const createRecipe = (partial: Partial<Recipe>): Recipe => {
     const base: Recipe = {
         _id: "1",
         title: "Test",
-        status: "Good",
+        status: Status.Good,
     };
     return { ...base, ...partial };
 };

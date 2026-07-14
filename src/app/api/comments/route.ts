@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { writeClient } from "@/utils";
 import { handleShortComment } from "./handleShortComment.service";
 import { handleLike } from "./like.service";
-import { ApiError, createComment } from "./comment.service";
+import { createComment } from "./comment.service";
+import { ApiError } from "@/models/apiResponse";
 
 export async function GET(req: Request) {
     try {

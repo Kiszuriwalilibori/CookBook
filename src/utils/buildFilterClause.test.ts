@@ -1,12 +1,10 @@
-
-
 import { buildFilterClause } from "./buildFilterClause";
 import { FilterState } from "@/models/filters";
 
 // --- Example values --------------------------------------------------------
 const exampleValues: Partial<FilterState> = {
     title: "  Pizza  ",
-    cuisine: "iTAlian",
+    cuisine: ["iTAlian"],
     "source.url": "EXAMPLE.com",
     "source.book": "Cookbook",
     "source.title": "SourceTitle",

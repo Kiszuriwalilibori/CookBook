@@ -1,4 +1,4 @@
-import { ApiErrorPayload } from "@/types";
+import { ApiErrorPayload } from "@/models/apiResponse";
 
 export type ErrorHandlerMap = Partial<Record<string, (message: string) => void>>;
 type TransportError = { type: "NETWORK_ERROR"; message: string } | { type: "PARSE_ERROR"; message: string } | { type: "ABORTED"; message: string };
