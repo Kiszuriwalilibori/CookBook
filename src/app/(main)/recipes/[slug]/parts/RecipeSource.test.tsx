@@ -49,6 +49,8 @@ const createRecipe = (partial: Partial<Recipe>): Recipe => {
         _id: "1",
         title: "Test",
         status: Status.Good,
+        _createdAt: "test-created-at",
+        _updatedAt: "test-updated-at",
     };
     return { ...base, ...partial };
 };

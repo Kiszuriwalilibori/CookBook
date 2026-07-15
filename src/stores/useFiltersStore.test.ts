@@ -202,7 +202,7 @@ describe("useFiltersStore", () => {
             const { result } = renderHook(() => useFiltersStore());
 
             act(() => {
-                result.current.setFilters({ title: "pasta", cuisine: "italian" });
+                result.current.setFilters({ title: "pasta", cuisine: ["italian"] });
             });
 
             expect(result.current.filters.title).toBe("pasta");
@@ -236,7 +236,7 @@ describe("useFiltersStore", () => {
             const titleValue = result.current.filters.title;
 
             act(() => {
-                result.current.setFilters({ cuisine: "italian" });
+                result.current.setFilters({ cuisine: ["italian"] });
             });
 
             expect(result.current.filters.title).toBe(titleValue);

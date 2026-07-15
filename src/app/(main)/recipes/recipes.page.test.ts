@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import RecipesPage from "./page";
 import { getRecipesForCards } from "@/utils/getRecipesForCards";
-import { Recipe } from "@/types";
+import { Recipe, Status } from "@/types";
 
 // --- Mocks ---
 jest.mock("@/utils/getRecipesForCards", () => ({
@@ -40,7 +40,7 @@ describe("RecipesPage (server component)", () => {
             status: "Good",
         });
 
-        const fakeRecipes: Recipe[] = [{ _id: "1", title: "Test", cuisine: ["italian"], tags: [], dietary: [], products: [], source: {}, status: "Good" }];
+        const fakeRecipes: Recipe[] = [{ _id: "1", title: "Test", cuisine: ["italian"], tags: [], dietary: [], products: [], source: {}, _createdAt: "", _updatedAt: "", status: Status.Good }];
 
         mockedGetRecipesForCards.mockResolvedValueOnce(fakeRecipes);
 
