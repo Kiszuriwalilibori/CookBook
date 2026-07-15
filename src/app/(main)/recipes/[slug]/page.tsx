@@ -128,17 +128,13 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 <Box sx={styles.ingredientsPrepWrapper}>
                     <Box sx={styles.ingredientsWrapper}>
                         <RecipeIngredientsGeneric recipe={recipe} id="RecipeIngredients" title="Składniki" ingredients={recipe.ingredients} />
-
                         <RecipeIngredientsGeneric recipe={recipe} id="RecipeOptionalIngredients" title="Składniki opcjonalne" ingredients={recipe.optionalIngredients} />
-                        {/* <RecipeIngredients recipe={recipe} />
-                        <RecipeOptionalIngredients recipe={recipe} /> */}
                         <RecipeIngredientsClearButton recipeId={recipe._id} />
                         <RecipeIngredientsNotes recipe={recipe} />
                     </Box>
 
                     <Box sx={styles.prepWrapper}>
                         <RecipePreparationSteps recipe={recipe} />
-
                         <RecipeNutrition nutrition={recipe.nutrition} />
                     </Box>
                 </Box>
@@ -146,9 +142,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 <RecipeSource recipe={recipe} />
 
                 <Separator />
-
                 <PrivateUserNotes recipeId={recipe._id} initialNotes={initialNotes} />
-
                 <Box sx={styles.copyButtonContainer}>
                     <RecipeCopyButton recipe={recipe} />
                     <RecipePrintButton />

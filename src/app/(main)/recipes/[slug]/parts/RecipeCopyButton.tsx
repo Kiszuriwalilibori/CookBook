@@ -2,7 +2,9 @@
 
 import { IconButton, Tooltip, Snackbar, Alert } from "@mui/material";
 import CopyAllIcon from "@mui/icons-material/CopyAll";
+import { useIsAdminLogged } from "@/stores/useAdminStore";
 import { useState } from "react";
+import { useIsUserSet } from "@/stores/userStore";
 import { Recipe } from "@/types";
 import { styles } from "../styles";
 
@@ -14,42 +16,128 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 export function RecipeCopyButton({ recipe }: RecipeCopyButtonProps) {
     const [open, setOpen] = useState(false);
+    const [privateNotes, setPrivateNotes] = useState("");
+    const isAdminLogged = useIsAdminLogged();
+    const hasUser = useIsUserSet();
 
-    const generateCopyableText = (): string => {
+    const loadPrivateNotes = async (): Promise<string> => {
+        if (!hasUser) {
+            setPrivateNotes("");
+            return "";
+        }
+        try {
+            const response = await fetch(`/api/recipe-notes?recipeId=${recipe._id}`);
+            const result = await response.json();
+
+            if (result.ok) {
+                const notes = result.data.notes ?? "";
+                setPrivateNotes(notes);
+                return notes;
+            }
+
+            setPrivateNotes("");
+            return "";
+        } catch {
+            setPrivateNotes("");
+            return "";
+        }
+    };
+
+    // useEffect(() => {
+    //     if (!hasUser) {
+    //         setPrivateNotes("");
+    //         return;
+    //     }
+
+    //     fetch(`/api/recipe-notes?recipeId=${recipe._id}`)
+    //         .then(res => res.json())
+    //         .then(result => {
+    //             if (result.ok) {
+    //                 setPrivateNotes(result.data.notes ?? "");
+    //             } else {
+    //                 setPrivateNotes("");
+    //             }
+    //         })
+    //         .catch(() => {
+    //             setPrivateNotes("");
+    //         });
+    // }, [recipe._id, hasUser]);
+
+    // const generateCopyableText = (): string => {
+    //     let text = `${recipe.title}\n\n`;
+
+    //     // Ingredients
+    //     text += "Składniki:\n";
+    //     recipe.ingredients?.forEach(ing => {
+    //         text += `- ${ing.quantity}${ing.unit ? ` ${ing.unit}` : ""} ${ing.name}\n`;
+    //     });
+
+    //     // Preparation steps
+    //     text += "\nPrzygotowanie:\n";
+    //     recipe.preparationSteps?.forEach((step, i) => {
+    //         text += `${i + 1}. `;
+    //         if (step.content) {
+    //             step.content.forEach(block => {
+    //                 block.children?.forEach(child => {
+    //                     if (child.text) text += child.text + " ";
+    //                 });
+    //             });
+    //         }
+    //         if (step.notes) {
+    //             text += `(${step.notes})`;
+    //         }
+    //         text += "\n";
+    //     });
+
+    //     // Recipe URL (internal)
+    //     const slugPath = recipe.slug?.current || "unknown-slug";
+    //     text += `\nŹródło: ${BASE_URL}/recipes/${slugPath}`;
+
+    //     return text;
+    // };
+    const generateCopyableText = (notes = privateNotes): string => {
         let text = `${recipe.title}\n\n`;
 
-        // Ingredients
         text += "Składniki:\n";
         recipe.ingredients?.forEach(ing => {
-            text += `- ${ing.quantity}${ing.unit ? ` ${ing.unit}` : ""} ${ing.name}\n`;
+            text += `- ${ing.quantity ?? ""}${ing.unit ? ` ${ing.unit}` : ""} ${ing.name}\n`;
         });
 
-        // Preparation steps
+        if (recipe.optionalIngredients?.length) {
+            text += "\nSkładniki opcjonalne:\n";
+            recipe.optionalIngredients.forEach(ing => {
+                text += `- ${ing.quantity ?? ""}${ing.unit ? ` ${ing.unit}` : ""} ${ing.name}\n`;
+            });
+        }
+
         text += "\nPrzygotowanie:\n";
         recipe.preparationSteps?.forEach((step, i) => {
             text += `${i + 1}. `;
-            if (step.content) {
-                step.content.forEach(block => {
-                    block.children?.forEach(child => {
-                        if (child.text) text += child.text + " ";
-                    });
+
+            step.content?.forEach(block => {
+                block.children?.forEach(child => {
+                    if (child.text) text += `${child.text} `;
                 });
-            }
+            });
+
             if (step.notes) {
                 text += `(${step.notes})`;
             }
+
             text += "\n";
         });
-
-        // Recipe URL (internal)
-        const slugPath = recipe.slug?.current || "unknown-slug";
-        text += `\nŹródło: ${BASE_URL}/recipes/${slugPath}`;
-
+        if (notes.trim()) {
+            text += `\n\nTwoje notatki:\n${notes}`;
+        }
+        if (isAdminLogged) {
+            const slugPath = recipe.slug?.current || "unknown-slug";
+            text += `\nŹródło: ${BASE_URL}/recipes/${slugPath}`;
+        }
         return text;
     };
-
     const handleCopy = async () => {
-        const text = generateCopyableText();
+        const notes = await loadPrivateNotes();
+        const text = generateCopyableText(notes);
         try {
             await navigator.clipboard.writeText(text);
             setOpen(true);
@@ -77,4 +165,4 @@ export function RecipeCopyButton({ recipe }: RecipeCopyButtonProps) {
         </>
     );
 }
-// todo optionalingredients też powinno zapisywać
+// todo: okazalo się, że notatka jest pobierana dopiero

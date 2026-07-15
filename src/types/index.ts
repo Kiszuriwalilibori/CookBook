@@ -75,10 +75,6 @@ export interface User {
 }
 export type { RatingValue, RecipeRating, PatchRecipeRatingsInput, RatingSummary } from "./recipeRatings";
 export type { RecipeComment, RecipeComments } from "./recipeComments";
-// export type ApiErrorPayload = {
-//     code: string;
-//     message: string;
-// };
 
 export type ApiSuccessResponse<T> = {
     ok: true;
