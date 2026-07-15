@@ -1,43 +1,46 @@
-import { ApiErrorPayload } from "@/models/apiResponse";
+// import { ApiErrorPayload } from "@/models/apiResponse";
 
-export type ErrorHandlerMap = Partial<Record<string, (message: string) => void>>;
-type TransportError = { type: "NETWORK_ERROR"; message: string } | { type: "PARSE_ERROR"; message: string } | { type: "ABORTED"; message: string };
+// export type ErrorHandlerMap = Partial<Record<string, (message: string) => void>>;
+// type TransportError = { type: "NETWORK_ERROR"; message: string } | { type: "PARSE_ERROR"; message: string } | { type: "ABORTED"; message: string };
 
-function isTransportError(err: unknown): err is TransportError {
-    return typeof err === "object" && err !== null && "type" in err && typeof (err as { type?: unknown }).type === "string";
-}
-export function isApiErrorPayload(err: unknown): err is ApiErrorPayload {
-    return typeof err === "object" && err !== null && "code" in err && "message" in err;
-}
+// function isTransportError(err: unknown): err is TransportError {
+//     return typeof err === "object" && err !== null && "type" in err && typeof (err as { type?: unknown }).type === "string";
+// }
+// export function isApiErrorPayload(err: unknown): err is ApiErrorPayload {
+//     return typeof err === "object" && err !== null && "code" in err && "message" in err;
+// }
 
-export function handleApiError(err: unknown, map: Record<string, (msg: string) => void>, fallback?: (msg: string) => void) {
-    console.log(err);
-    // 🟡 transport errors (fetch / parse)
-    if (isTransportError(err)) {
-        switch (err.type) {
-            case "NETWORK_ERROR":
-                fallback?.("Brak połączenia z internetem");
-                return;
-            case "PARSE_ERROR":
-                fallback?.("Błąd odpowiedzi serwera");
-                return;
-            case "ABORTED":
-                fallback?.("Zapytanie przerwane");
-                return;
-        }
-    }
+// export function handleApiError(err: unknown, map: Record<string, (msg: string) => void>, fallback?: (msg: string) => void) {
+//     console.log(err);
+//     // 🟡 transport errors (fetch / parse)
+//     if (isTransportError(err)) {
+//         switch (err.type) {
+//             case "NETWORK_ERROR":
+//                 fallback?.("Brak połączenia z internetem");
+//                 return;
+//             case "PARSE_ERROR":
+//                 fallback?.("Błąd odpowiedzi serwera");
+//                 return;
+//             case "ABORTED":
+//                 fallback?.("Zapytanie przerwane");
+//                 return;
+//         }
+//     }
 
-    if (!isApiErrorPayload(err)) {
-        fallback?.("Nieoczekiwany błąd");
-        return;
-    }
+//     if (!isApiErrorPayload(err)) {
+//         fallback?.("Nieoczekiwany błąd");
+//         return;
+//     }
 
-    const handler = map[err.code];
+//     const handler = map[err.code];
 
-    if (handler) {
-        handler(err.message);
-        return;
-    }
+//     if (handler) {
+//         handler(err.message);
+//         return;
+//     }
 
-    fallback?.(err.message);
-}
+//     fallback?.(err.message);
+// }
+
+// TODO:
+// Jedyna różnica funkcjonalna jest taka, że stary handleApiError pozwalał przekazać dowolną funkcję dla konkretnego kodu błędu,Natomiast useApiResponseErrorHandler obsługuje konkretnie komunikaty przez useMessage

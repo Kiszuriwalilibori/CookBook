@@ -11,7 +11,7 @@ import { useReplyComment } from "./useReplyComment";
 import { useShortComment } from "./useShortComment";
 import { useScrollFocusOnOpen } from "./useScrollFocusOnOpen";
 import { useCreateCommentTree } from "./useCreateCommentTree";
-import { handleApiError } from "./handleApiError";
+// import { handleApiError } from "./handleApiError";
 import { useRepliesVisibility } from "./useRepliesVisibility";
 import { useCommentsSorting } from "./useCommentsSorting";
 
@@ -21,7 +21,7 @@ export {
     useLikeComment,
     useCommentsSorting,
     useRepliesVisibility,
-    handleApiError,
+    // handleApiError,
     useCreateCommentTree,
     useScrollFocusOnOpen,
     useReplyComment,

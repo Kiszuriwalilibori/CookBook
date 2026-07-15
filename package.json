@@ -10,7 +10,8 @@
         "test": "jest",
         "test:watch": "jest --watch",
         "tw": "jest --watch",
-        "studio-dev": "npx sanity dev"
+        "studio-dev": "npx sanity dev",
+        "type-check": "tsc --noEmit"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",

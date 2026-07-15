@@ -2,9 +2,10 @@
 
 import { useCallback } from "react";
 
-import { handleApiError } from "./handleApiError";
+// import { handleApiError } from "./handleApiError";
 
 import { useOptimisticMutation } from "./useOptimisticMutation";
+import { useApiResponseErrorHandler } from "@/hooks";
 
 type UseShortCommentParams = {
     initialShortComment?: string;
@@ -30,7 +31,7 @@ type ShortCommentResponse = {
 
 export function useShortComment({ initialShortComment = "", showMessage }: UseShortCommentParams) {
     const { state: shortComment, setState: setShortComment, isPending: isShortCommentSubmitting, run } = useOptimisticMutation<string>(initialShortComment);
-
+    const handleApiResponseError = useApiResponseErrorHandler();
     const handleAddShortComment = useCallback(
         async ({ commentId, shortContent }: { commentId: string; shortContent: string }) => {
             const trimmedContent = shortContent.trim();
@@ -78,21 +79,43 @@ export function useShortComment({ initialShortComment = "", showMessage }: UseSh
 
                 return true;
             } catch (error) {
-                handleApiError(
-                    error,
-                    {
-                        FORBIDDEN: () => showMessage.error("Brak uprawnień administratora"),
-
-                        INVALID_INPUT: () => showMessage.warning("Nieprawidłowe dane"),
-
-                        EMPTY_SHORT_COMMENT: () => showMessage.warning("Skrócony komentarz nie może być pusty"),
-
-                        SHORT_COMMENT_TOO_LONG: () => showMessage.warning("Skrócony komentarz jest za długi"),
-
-                        COMMENT_NOT_FOUND: () => showMessage.warning("Komentarz nie został znaleziony"),
+                handleApiResponseError(error, {
+                    FORBIDDEN: {
+                        type: "error",
+                        message: "Brak uprawnień administratora",
                     },
-                    msg => showMessage.error(msg || "Nie udało się dodać skróconego komentarza")
-                );
+                    INVALID_INPUT: {
+                        type: "warning",
+                        message: "Nieprawidłowe dane",
+                    },
+                    EMPTY_SHORT_COMMENT: {
+                        type: "warning",
+                        message: "Skrócony komentarz nie może być pusty",
+                    },
+                    SHORT_COMMENT_TOO_LONG: {
+                        type: "warning",
+                        message: "Skrócony komentarz jest za długi",
+                    },
+                    COMMENT_NOT_FOUND: {
+                        type: "warning",
+                        message: "Komentarz nie został znaleziony",
+                    },
+                });
+                // handleApiError(
+                //     error,
+                //     {
+                //         FORBIDDEN: () => showMessage.error("Brak uprawnień administratora"),
+
+                //         INVALID_INPUT: () => showMessage.warning("Nieprawidłowe dane"),
+
+                //         EMPTY_SHORT_COMMENT: () => showMessage.warning("Skrócony komentarz nie może być pusty"),
+
+                //         SHORT_COMMENT_TOO_LONG: () => showMessage.warning("Skrócony komentarz jest za długi"),
+
+                //         COMMENT_NOT_FOUND: () => showMessage.warning("Komentarz nie został znaleziony"),
+                //     },
+                //     msg => showMessage.error(msg || "Nie udało się dodać skróconego komentarza")
+                // );
 
                 return false;
             }
