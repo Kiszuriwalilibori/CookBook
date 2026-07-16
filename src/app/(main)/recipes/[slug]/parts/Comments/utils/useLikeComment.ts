@@ -91,17 +91,6 @@ export function useLikeComment({ commentId, fingerprint, initialLikes, showMessa
                     type: "error",
                 },
             });
-            // handleApiError(
-            //     error,
-            //     {
-            //         COMMENT_NOT_FOUND: msg => showMessage.error(String(msg)),
-
-            //         INVALID_INPUT: msg => showMessage.warning(String(msg)),
-
-            //         INTERNAL_ERROR: msg => showMessage.error(String(msg)),
-            //     },
-            //     msg => showMessage.error(msg)
-            // );
         }
     }, [alreadyLiked, commentId, fingerprint, isLiking, onLikeAnimation, run, showMessage]);
 

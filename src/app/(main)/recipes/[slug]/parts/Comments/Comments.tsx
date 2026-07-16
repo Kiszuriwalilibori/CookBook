@@ -10,11 +10,12 @@ import CommentItem from "./CommentItem";
 import CommentForm from "./CommentForm";
 import { useIsAdminLogged } from "@/stores/useAdminStore";
 import { useBoolean, useFingerprint, useMessage, useApiResponseErrorHandler } from "@/hooks";
-import type { ApiResponse, RecipeComment } from "@/types";
+import type { RecipeComment } from "@/types";
 import { commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
 import { useScrollFocusOnOpen, useCreateCommentTree, useCommentsVisibility } from "./utils";
 import { useCommentsState } from "./utils/useCommentsState";
 import { useCommentsSorting } from "./utils/useCommentsSorting";
+import { ApiResponse } from "@/models/apiResponse";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
     const { comments, setAllComments, resetComments, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment, isSubmittingComment, startSubmittingComment, stopSubmittingComment } = useCommentsState();

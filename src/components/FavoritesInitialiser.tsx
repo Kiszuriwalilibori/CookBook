@@ -3,9 +3,9 @@
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useEffect } from "react";
 
-import type { ApiSuccessResponse } from "@/types";
 import { ApiErrorResponse } from "@/app/api/comments/comment.service";
 import { useMessage } from "@/hooks";
+import { ApiSuccessResponse } from "@/models/apiResponse";
 
 export default function FavoritesInitializer() {
     const showMessage = useMessage();

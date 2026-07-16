@@ -1,18 +1,9 @@
-// type ApiSuccess<TData> = {
-//     ok: true;
-//     data: TData;
-// };
+export type ApiSuccessResponse<T> = {
+    ok: true;
+    data: T;
+};
 
-// type ApiError = {
-//     ok: false;
-//     error: {
-//         code: string;
-//         message: string;
-//     };
-// };
-
-// export type ApiResponse<TData> = ApiSuccess<TData> | ApiError;
-// export default ApiResponse;
+export type ApiResponse<T = unknown> = ApiSuccessResponse<T> | { ok: false; error: ApiErrorPayload };
 
 export type ApiErrorPayload = {
     code: string;

@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { Recipe, RecipeIngredient } from "./recipe";
-import { ApiErrorPayload } from "@/models/apiResponse";
 
 export interface MenuItem {
     label: string;
@@ -75,13 +74,6 @@ export interface User {
 }
 export type { RatingValue, RecipeRating, PatchRecipeRatingsInput, RatingSummary } from "./recipeRatings";
 export type { RecipeComment, RecipeComments } from "./recipeComments";
-
-export type ApiSuccessResponse<T> = {
-    ok: true;
-    data: T;
-};
-
-export type ApiResponse<T = unknown> = ApiSuccessResponse<T> | { ok: false; error: ApiErrorPayload };
 
 export type CreateCommentInput = {
     recipeId: string;

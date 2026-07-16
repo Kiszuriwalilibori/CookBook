@@ -165,4 +165,4 @@ export function RecipeCopyButton({ recipe }: RecipeCopyButtonProps) {
         </>
     );
 }
-// todo: okazalo się, że notatka jest pobierana dopiero
+// TODO przydalby się jakiś sensowny wskaźnik ładowania oczywiście dla notatek prywatnych a nie tego guzika
