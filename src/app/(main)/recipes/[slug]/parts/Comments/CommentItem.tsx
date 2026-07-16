@@ -75,7 +75,6 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
     const { shortComment, isShortCommentSubmitting, handleAddShortComment } = useShortComment({
         initialShortComment: comment.shortComment?.content ?? "",
-        showMessage,
     });
 
     if (!comment) return null;

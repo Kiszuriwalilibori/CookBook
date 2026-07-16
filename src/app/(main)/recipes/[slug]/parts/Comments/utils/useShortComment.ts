@@ -1,37 +1,25 @@
 "use client";
 
 import { useCallback } from "react";
+import { ApiResponse, ApiSuccessResponse } from "@/models/apiResponse";
 
-// import { handleApiError } from "./handleApiError";
+type ShortCommentData = {
+    shortComment: {
+        content: string;
+    };
+};
 
 import { useOptimisticMutation } from "./useOptimisticMutation";
-import { useApiResponseErrorHandler } from "@/hooks";
+import { useApiResponseErrorHandler, useMessage } from "@/hooks";
 
-type UseShortCommentParams = {
+type UseShortCommentArgs = {
     initialShortComment?: string;
-
-    showMessage: {
-        success: (msg: string) => void;
-        error: (msg: string) => void;
-        warning: (msg: string) => void;
-    };
 };
 
-type ShortCommentResponse = {
-    ok: boolean;
-
-    error?: unknown;
-
-    data: {
-        shortComment: {
-            content: string;
-        };
-    };
-};
-
-export function useShortComment({ initialShortComment = "", showMessage }: UseShortCommentParams) {
+export function useShortComment({ initialShortComment = "" }: UseShortCommentArgs) {
     const { state: shortComment, setState: setShortComment, isPending: isShortCommentSubmitting, run } = useOptimisticMutation<string>(initialShortComment);
     const handleApiResponseError = useApiResponseErrorHandler();
+    const showMessage = useMessage();
     const handleAddShortComment = useCallback(
         async ({ commentId, shortContent }: { commentId: string; shortContent: string }) => {
             const trimmedContent = shortContent.trim();
@@ -43,7 +31,7 @@ export function useShortComment({ initialShortComment = "", showMessage }: UseSh
             }
 
             try {
-                await run<ShortCommentResponse>({
+                await run<ApiSuccessResponse<ShortCommentData>>({
                     optimisticUpdate: () => trimmedContent,
 
                     mutation: async () => {
@@ -61,7 +49,7 @@ export function useShortComment({ initialShortComment = "", showMessage }: UseSh
                             }),
                         });
 
-                        const data = (await res.json()) as ShortCommentResponse;
+                        const data = (await res.json()) as ApiResponse<ShortCommentData>;
 
                         if (!data.ok) {
                             throw data.error;
