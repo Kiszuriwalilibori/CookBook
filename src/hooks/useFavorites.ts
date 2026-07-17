@@ -5,6 +5,7 @@ import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useResetFavoritesOnLogout } from "./useResetFavoritesOnLogout";
 import useMessage from "./useMessage";
 import { useApiResponseErrorHandler } from "@/hooks";
+import { ApiResponse } from "@/models/apiResponse";
 
 export const useFavorites = () => {
     const { favorites, add, remove } = useFavoritesStore();
@@ -12,6 +13,7 @@ export const useFavorites = () => {
     const showMessage = useMessage();
     const handleApiResponseError = useApiResponseErrorHandler();
     useResetFavoritesOnLogout();
+
     const startLoading = useCallback((recipeId: string) => {
         setLoadingIds(prev => {
             const next = new Set(prev);
@@ -44,13 +46,13 @@ export const useFavorites = () => {
                     headers: { "Content-Type": "application/json" },
                     credentials: "include",
                 });
+                const result: ApiResponse<{ title: string }> = await response.json();
 
-                const data = await response.json();
-
-                if (!response.ok || !data.ok) {
-                    throw data.error;
+                if (!result.ok) {
+                    throw result.error;
                 }
-                showMessage.success(`❤️ Dodano do ulubionych: "${data.data.title}" `);
+
+                showMessage.success(`❤️ Dodano do ulubionych: "${result.data.title}"`);
             } catch (error) {
                 remove(recipeId);
                 handleApiResponseError(error, {
@@ -66,15 +68,6 @@ export const useFavorites = () => {
                         type: "error",
                     },
                 });
-                // handleApiError(
-                //     error,
-                //     {
-                //         ALREADY_FAVORITE: msg => showMessage.warning(msg),
-                //         MISSING_USER: msg => showMessage.error(msg),
-                //         RECIPE_NOT_FOUND: msg => showMessage.error(msg),
-                //     },
-                //     msg => showMessage.error(msg)
-                // );
             } finally {
                 stopLoading(recipeId);
             }
@@ -114,14 +107,6 @@ export const useFavorites = () => {
                         type: "error",
                     },
                 });
-                // handleApiError(
-                //     error,
-                //     {
-                //         FAVORITE_NOT_FOUND: msg => showMessage.warning(msg),
-                //         MISSING_USER: msg => showMessage.error(msg),
-                //     },
-                //     msg => showMessage.error(msg)
-                // );
             } finally {
                 stopLoading(recipeId);
             }
@@ -131,5 +116,3 @@ export const useFavorites = () => {
 
     return { favorites, addFavorite, removeFavorite, isLoading };
 };
-
-// todo trzeba skonsumować odpowiedzi

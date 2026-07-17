@@ -1,11 +1,8 @@
 "use client";
-
-import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useEffect } from "react";
-
-import { ApiErrorResponse } from "@/app/api/comments/comment.service";
+import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useMessage } from "@/hooks";
-import { ApiSuccessResponse } from "@/models/apiResponse";
+import { ApiResponse } from "@/models/apiResponse";
 
 export default function FavoritesInitializer() {
     const showMessage = useMessage();
@@ -20,13 +17,12 @@ export default function FavoritesInitializer() {
                     credentials: "include",
                 });
 
-                const result: ApiSuccessResponse<string[]> | ApiErrorResponse = await res.json();
+                const result: ApiResponse<string[]> = await res.json();
 
-                if (!res.ok || !result.ok) {
-                    showMessage.error(result.ok ? "Nie udało się pobrać ulubionych." : result.error.message);
+                if (!result.ok) {
+                    showMessage.error(result.error.message);
                     return;
                 }
-
                 setFavorites(result.data);
             } catch {
                 showMessage.error("Nie udało się pobrać ulubionych.");

@@ -13,18 +13,6 @@ type CreateCommentInput = {
     website?: string;
 };
 
-// export class ApiError extends Error {
-//     status: number;
-//     code: string;
-
-//     constructor(code: string, message: string, status = 400) {
-//         super(message);
-//         Object.setPrototypeOf(this, ApiError.prototype);
-//         this.code = code;
-//         this.status = status;
-//     }
-// }
-
 function assertNotSpam(website?: string) {
     if (website) {
         throw new ApiError("SPAM_DETECTED", "Wykryto próbę spamu", 400);
@@ -113,10 +101,3 @@ export async function createComment(input: CreateCommentInput) {
 
     return { comment };
 }
-export type ApiErrorResponse = {
-    ok: false;
-    error: {
-        code: string;
-        message: string;
-    };
-};
