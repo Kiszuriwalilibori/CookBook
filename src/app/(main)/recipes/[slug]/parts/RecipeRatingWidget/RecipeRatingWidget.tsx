@@ -14,7 +14,7 @@ interface RecipeRatingWidgetProps {
     recipeId: string;
     averageRating: number | null;
     totalRatings: number;
-    onRatingUpdated?: () => void;
+    onRatingUpdated?: () => Promise<void>;
 }
 
 export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRatingUpdated }: RecipeRatingWidgetProps) {
@@ -99,7 +99,8 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
             // }, 3000);
 
             if (data.data.status === "updated") {
-                onRatingUpdated?.();
+                await onRatingUpdated?.();
+                setHasInteracted(false);
                 setMessage("Dziękuję za ocenę!");
                 setShowThanks(true);
                 return;
@@ -113,8 +114,14 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
     };
 
     const handleRatingChange = (newRating: number) => {
+        // setHasInteracted(true);
+        // submitRating(newRating as RatingValue);
+        const value = newRating as RatingValue;
+
+        setRating(value);
         setHasInteracted(true);
-        submitRating(newRating as RatingValue);
+
+        submitRating(value);
     };
 
     const handleOverwriteConfirm = () => {
@@ -123,8 +130,14 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
             setShowOverwriteDialog(false);
             setPendingRating(null);
             setExistingRating(null);
-            setRating(pendingRating);
         }
+        // if (pendingRating !== null) {
+        //     submitRating(pendingRating, true);
+        //     setShowOverwriteDialog(false);
+        //     setPendingRating(null);
+        //     setExistingRating(null);
+        //     setRating(pendingRating);
+        // }
     };
 
     const handleOverwriteCancel = () => {
@@ -156,6 +169,7 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
             </Typography>
 
             <ReactStars
+                key={`${averageRating}-${hasInteracted}`}
                 count={5}
                 onChange={handleRatingChange}
                 size={32}
