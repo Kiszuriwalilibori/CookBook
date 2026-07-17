@@ -6,6 +6,7 @@ import { containerStyles, textStyles } from "../../PrivateUserNotes.styles";
 import { useIsUserSet } from "@/stores/userStore";
 import { useApiResponseErrorHandler } from "@/hooks";
 import { useNotesState } from "./useNotesState";
+import { ApiResponse } from "@/models/apiResponse";
 
 interface PrivateUserNotesProps {
     recipeId: string;
@@ -22,19 +23,6 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
         setNotes(initialNotes || "");
     }, [initialNotes]);
 
-    //     if (!hasUser) {
-    //         setNotes("");
-    //         return;
-    //     }
-
-    //     // 🔥 KLUCZOWE: zawsze fetch przy zmianie loginStatus
-    //     setLoading(true);
-
-    //     fetch(`/api/recipe-notes?recipeId=${recipeId}`)
-    //         .then(res => res.json())
-    //         .then(data => setNotes(data.notes || ""))
-    //         .finally(() => setLoading(false));
-    // }, [recipeId, hasUser]);
     useEffect(() => {
         if (!hasUser) {
             clearNotes();
@@ -44,7 +32,7 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
         setLoading(true);
 
         fetch(`/api/recipe-notes?recipeId=${recipeId}`)
-            .then(res => res.json())
+            .then(res => res.json() as Promise<ApiResponse<{ notes: string }>>)
             .then(result => {
                 if (result.ok) {
                     setNotes(result.data.notes);

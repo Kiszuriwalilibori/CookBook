@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { recipeNotesModalStyles } from "./RecipeNotesModal.styles";
 import { MAX_PRIVATE_NOTE_LENGTH } from "@/setup";
 import { useApiResponseErrorHandler } from "@/hooks";
+import { ApiResponse } from "@/models/apiResponse";
 
 interface Props {
     open: boolean;
@@ -57,32 +58,6 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
         setNotes(value);
     };
 
-    //     if (!recipeId) return;
-    //     const sanitized = notes.trim();
-    //     if (!sanitized) {
-    //         alert("Notatka nie może być pusta!");
-    //         return;
-    //     }
-
-    //     setSaving(true);
-
-    //     try {
-    //         // zapis przez route /api/recipe-notes
-    //         await fetch("/api/recipe-notes", {
-    //             method: "POST",
-    //             headers: { "Content-Type": "application/json" },
-    //             body: JSON.stringify({ recipeId, notes: sanitized }),
-    //         });
-    //         router.refresh(); // 🔥 DODAJ TO
-    //         // callback opcjonalny
-    //     } catch (err) {
-    //         console.error("Nie udało się zapisać notatki:", err);
-    //         alert("Nie udało się zapisać notatki. Spróbuj ponownie.");
-    //     } finally {
-    //         setSaving(false);
-    //         onClose();
-    //     }
-    // };
     const handleSave = async () => {
         if (!recipeId) return;
 
@@ -102,7 +77,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                 body: JSON.stringify({ recipeId, notes: sanitized }),
             });
 
-            const result = await response.json();
+            const result: ApiResponse<null> = await response.json();
 
             if (!result.ok) {
                 throw result.error;
@@ -169,7 +144,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                 method: "DELETE",
             });
 
-            const result = await response.json();
+            const result: ApiResponse<null> = await response.json();
 
             if (!result.ok) {
                 throw result.error;

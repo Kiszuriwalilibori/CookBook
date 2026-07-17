@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useIsUserSet } from "@/stores/userStore";
 import { Recipe } from "@/types";
 import { styles } from "../styles";
+import { ApiResponse } from "@/models/apiResponse";
 
 interface RecipeCopyButtonProps {
     recipe: Recipe;
@@ -27,7 +28,7 @@ export function RecipeCopyButton({ recipe }: RecipeCopyButtonProps) {
         }
         try {
             const response = await fetch(`/api/recipe-notes?recipeId=${recipe._id}`);
-            const result = await response.json();
+            const result: ApiResponse<{ notes: string }> = await response.json();
 
             if (result.ok) {
                 const notes = result.data.notes ?? "";

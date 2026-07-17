@@ -9,7 +9,7 @@ function getRecipeNotesId(userId: string, recipeId: string) {
 
 import type { NextRequest } from "next/server";
 
-import { ApiError, apiErrorResponse } from "@/models/apiResponse";
+import { ApiError, apiErrorResponse, ApiSuccessResponse } from "@/models/apiResponse";
 
 async function parseBody(req: NextRequest): Promise<{
     recipeId?: string;
@@ -45,12 +45,19 @@ export async function GET(req: NextRequest) {
 
         const note = await writeClient.fetch(`*[_id == $id][0]{ notes }`, { id: docId });
 
-        return NextResponse.json({
+        return NextResponse.json<ApiSuccessResponse<{ notes: string }>>({
             ok: true,
             data: {
                 notes: note?.notes ?? "",
             },
         });
+
+        // return NextResponse.json({
+        //     ok: true,
+        //     data: {
+        //         notes: note?.notes ?? "",
+        //     },
+        // });
     } catch (err: unknown) {
         return apiErrorResponse(err);
     }
@@ -105,7 +112,14 @@ export async function POST(req: NextRequest) {
             })
             .commit();
 
-        return NextResponse.json({
+        // return NextResponse.json({
+        //     ok: true,
+        //     data: {
+        //         notes: sanitizedNotes,
+        //     },
+        // });
+
+        return NextResponse.json<ApiSuccessResponse<{ notes: string }>>({
             ok: true,
             data: {
                 notes: sanitizedNotes,
@@ -149,7 +163,7 @@ export async function DELETE(req: NextRequest) {
 
         await writeClient.delete(docId);
 
-        return NextResponse.json({
+        return NextResponse.json<ApiSuccessResponse<null>>({
             ok: true,
             data: null,
         });
