@@ -5,10 +5,10 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import ReactStars from "react-rating-stars-component";
 import type { ApiResponse } from "@/models/apiResponse";
 import type { RatingValue, RatingPayload, RatingMutationResult } from "@/types/recipeRatings";
-import { useFingerprint } from "@/hooks";
+import { useApiResponseErrorHandler, useFingerprint } from "@/hooks";
 import { getRatingsText } from "./getRatingText";
 
-import { containerSx, textSx, averageSx, countSx, errorSx, successSx, loaderContainerSx } from "./recipeRatingWidget.styles";
+import { containerSx, textSx, averageSx, countSx, successSx, loaderContainerSx } from "./recipeRatingWidget.styles";
 
 interface RecipeRatingWidgetProps {
     recipeId: string;
@@ -20,7 +20,9 @@ interface RecipeRatingWidgetProps {
 export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRatingUpdated }: RecipeRatingWidgetProps) {
     const [rating, setRating] = useState<RatingValue | 0>(0);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+
+    const handleApiResponseError = useApiResponseErrorHandler();
+
     const [showThanks, setShowThanks] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
     const [hasInteracted, setHasInteracted] = useState(false);
@@ -32,9 +34,7 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
 
     const submitRating = async (newRating: RatingValue, overwrite = false) => {
         if (!fingerprintHash) return;
-
         setIsLoading(true);
-        setError(null);
 
         try {
             const payload: RatingPayload = {
@@ -52,16 +52,11 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
 
             const data: ApiResponse<RatingMutationResult> = await res.json();
             if (!data.ok) {
-                setError(data.error.message);
+                handleApiResponseError(data.error);
+                // setError(data.error.message);
                 return;
             }
 
-            // if (res.status === 409) {
-            //     setExistingRating(data.existingRating);
-            //     setPendingRating(newRating);
-            //     setShowOverwriteDialog(true);
-            //     return;
-            // }
             if (data.data.status === "exists") {
                 setExistingRating(data.data.existingRating);
                 setPendingRating(newRating);
@@ -80,23 +75,6 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
 
                 return;
             }
-            // if (data.status === "noChange") {
-            //     setMessage("Nie zmieniono oceny");
-            //     setShowThanks(true);
-            //     setTimeout(() => {
-            //         setShowThanks(false);
-            //         setMessage(null);
-            //     }, 3000);
-            //     return;
-            // }
-
-            // onRatingUpdated?.();
-            // setMessage("Dziękuję za ocenę!");
-            // setShowThanks(true);
-            // setTimeout(() => {
-            //     setShowThanks(false);
-            //     setMessage(null);
-            // }, 3000);
 
             if (data.data.status === "updated") {
                 await onRatingUpdated?.();
@@ -106,21 +84,16 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                 return;
             }
         } catch (err) {
-            console.error("Error submitting rating:", err);
-            setError("Błąd podczas zapisywania oceny");
+            handleApiResponseError(err);
         } finally {
             setIsLoading(false);
         }
     };
 
     const handleRatingChange = (newRating: number) => {
-        // setHasInteracted(true);
-        // submitRating(newRating as RatingValue);
         const value = newRating as RatingValue;
-
         setRating(value);
         setHasInteracted(true);
-
         submitRating(value);
     };
 
@@ -131,13 +104,6 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
             setPendingRating(null);
             setExistingRating(null);
         }
-        // if (pendingRating !== null) {
-        //     submitRating(pendingRating, true);
-        //     setShowOverwriteDialog(false);
-        //     setPendingRating(null);
-        //     setExistingRating(null);
-        //     setRating(pendingRating);
-        // }
     };
 
     const handleOverwriteCancel = () => {
@@ -190,7 +156,7 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                 </Box>
             )}
 
-            {error && <Typography sx={errorSx}>{error}</Typography>}
+            {/* {error && <Typography sx={errorSx}>{error}</Typography>} */}
             {showThanks && <Typography sx={successSx}>✓ {message}</Typography>}
 
             <Dialog open={showOverwriteDialog} onClose={handleOverwriteCancel}>
