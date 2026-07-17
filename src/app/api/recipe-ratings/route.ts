@@ -1,26 +1,45 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeClient } from "@/utils";
 import { client } from "@/utils";
-import type { RatingPayload, RecipeRating } from "@/types/recipeRatings";
+import { ApiError, apiErrorResponse } from "@/models/apiResponse";
+import type { RatingPayload, RatingSummary, RecipeRating } from "@/types/recipeRatings";
 
 // Helper do generowania unikalnego _key
 function generateKey() {
     return Math.random().toString(36).substring(2, 10);
 }
 
+// async function parseBody(req: NextRequest): Promise<RatingPayload> {
+//     try {
+//         return await req.json();
+//     } catch {
+//         throw new ApiError("INVALID_JSON", "Nieprawidłowy format JSON", 400);
+//     }
+// }
+
 export async function POST(req: NextRequest) {
     try {
         const { recipeId, rating, fingerprint, overwrite }: RatingPayload = await req.json();
 
-        if (!recipeId || !rating || !fingerprint) {
-            return NextResponse.json({ error: "Niepoprawne dane" }, { status: 400 });
+        if (!recipeId) {
+            throw new ApiError("MISSING_RECIPE_ID", "Brak Id przepisu", 400);
+        }
+
+        if (!rating) {
+            throw new ApiError("MISSING_RATING", "Brak oceny", 400);
+        }
+
+        if (!fingerprint) {
+            throw new ApiError("MISSING_FINGERPRINT", "Brak identyfikatora użytkownika", 400);
         }
 
         // 1️⃣ Pobierz istniejące ratings dla przepisu
+
         const recipe = await writeClient.fetch<{ _id: string; ratings?: RecipeRating[] }>('*[_type == "recipe" && _id == $id][0]{ _id, ratings }', { id: recipeId });
 
         if (!recipe?._id) {
-            return NextResponse.json({ error: "Nie znaleziono przepisu" }, { status: 404 });
+            throw new ApiError("RECIPE_NOT_FOUND", "Nie znaleziono przepisu", 404);
+            // return NextResponse.json({ error: "Nie znaleziono przepisu" }, { status: 404 });
         }
 
         const existingRatings = recipe.ratings || [];
@@ -28,12 +47,29 @@ export async function POST(req: NextRequest) {
 
         // 2️⃣ Obsługa przypadku nowa ocena = stara ocena
         if (existingRating && existingRating.rating === rating) {
-            return NextResponse.json({ status: "noChange", existingRating, message: "Nie zmieniono oceny" });
+            // return NextResponse.json({ status: "noChange", existingRating, message: "Nie zmieniono oceny" });
+            return NextResponse.json({
+                ok: true,
+                data: {
+                    status: "noChange",
+                    existingRating,
+                },
+            });
         }
 
         // 3️⃣ Obsługa konfliktu: różna ocena, brak overwrite
         if (existingRating && !overwrite) {
-            return NextResponse.json({ status: "exists", existingRating }, { status: 409 });
+            return NextResponse.json(
+                {
+                    ok: true,
+                    data: {
+                        status: "exists",
+                        existingRating,
+                    },
+                },
+                { status: 409 }
+            );
+            // return NextResponse.json({ status: "exists", existingRating }, { status: 409 });
         }
 
         // 4️⃣ Przygotuj nową ocenę lub nadpisanie
@@ -62,10 +98,25 @@ export async function POST(req: NextRequest) {
         // 6️⃣ Patch w Sanity
         await writeClient.patch(recipe._id).set({ ratings: mergedRatings, ratingSummary }).commit();
 
-        return NextResponse.json({ status: "ok", ratingSummary, ratingSent: rating });
-    } catch (err) {
+        // return NextResponse.json({ status: "ok", ratingSummary, ratingSent: rating });
+
+        // return NextResponse.json({
+        //     ok: true,
+        //     data: ratingSummary,
+        // });
+
+        return NextResponse.json({
+            ok: true,
+            data: {
+                status: "updated",
+                ratingSummary,
+                ratingSent: rating,
+            },
+        });
+    } catch (err: unknown) {
         console.error("Error saving rating:", err);
-        return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
+        return apiErrorResponse(err);
+        // return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
     }
 }
 
@@ -74,11 +125,12 @@ export async function GET(req: NextRequest) {
         const recipeId = req.nextUrl.searchParams.get("recipeId");
 
         if (!recipeId) {
-            return NextResponse.json({ error: "Brak recipeId" }, { status: 400 });
+            throw new ApiError("RECIPE_NOT_FOUND", "Nie znaleziono przepisu", 404);
+            // return NextResponse.json({ error: "Brak recipeId" }, { status: 400 });
         }
 
         const recipe = await client.fetch<{
-            ratingSummary?: { average: number; count: number };
+            ratingSummary?: RatingSummary;
         }>(
             `*[_type == "recipe" && _id == $id][0]{
                 ratingSummary
@@ -87,11 +139,33 @@ export async function GET(req: NextRequest) {
         );
 
         return NextResponse.json({
-            averageRating: recipe?.ratingSummary?.average ?? null,
-            totalRatings: recipe?.ratingSummary?.count ?? 0,
+            ok: true,
+            data: {
+                average: recipe?.ratingSummary?.average ?? null,
+                count: recipe?.ratingSummary?.count ?? 0,
+            },
         });
-    } catch (err) {
+
+        // return NextResponse.json({
+        //     averageRating: recipe?.ratingSummary?.average ?? null,
+        //     totalRatings: recipe?.ratingSummary?.count ?? 0,
+        // });
+    } catch (err: unknown) {
         console.error("Error fetching ratings:", err);
-        return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
+        return apiErrorResponse(err);
+        // return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
     }
 }
+
+// TODO: recipe-ratings validation — rating value check
+
+// W endpointzie /api/recipe-ratings obecnie używamy prostego sprawdzenia if (!rating). Jest to akceptowalne tylko dlatego, że aktualny model ocen zakłada wartości wyłącznie od 1 do 5, więc 0 nie jest poprawną oceną.
+
+// Jeżeli w przyszłości zmieni się domena ocen (np. zostanie dopuszczone 0) albo walidacja będzie zaostrzana, należy zastąpić ten warunek bardziej precyzyjnym sprawdzeniem:
+
+// rozróżnienie braku wartości (undefined / null)
+// od niepoprawnej wartości (poza zakresem, zły typ).
+
+// Przy okazji sprawdzić, czy kody błędów powinny rozróżniać MISSING_RATING i INVALID_RATING.
+
+//todo czy wszędzie musi być writeclient???

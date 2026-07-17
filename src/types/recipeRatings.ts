@@ -12,9 +12,24 @@ export interface PatchRecipeRatingsInput {
 }
 
 export interface RatingSummary {
-    average: number;
+    average: number | null;
     count: number;
 }
+
+export type RatingMutationResult =
+    | {
+          status: "updated";
+          ratingSummary: RatingSummary;
+          ratingSent: RatingValue;
+      }
+    | {
+          status: "exists";
+          existingRating: RecipeRating;
+      }
+    | {
+          status: "noChange";
+          existingRating: RecipeRating;
+      };
 export interface RatingPayload extends Omit<RecipeRating, "_key" | "updatedAt"> {
     recipeId: string;
     overwrite?: boolean;

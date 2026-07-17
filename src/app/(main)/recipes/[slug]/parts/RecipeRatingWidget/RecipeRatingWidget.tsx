@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Box, Typography, CircularProgress } from "@mui/material";
 import ReactStars from "react-rating-stars-component";
-
-import type { RatingValue, RatingPayload } from "@/types/recipeRatings";
+import type { ApiResponse } from "@/models/apiResponse";
+import type { RatingValue, RatingPayload, RatingMutationResult } from "@/types/recipeRatings";
 import { useFingerprint } from "@/hooks";
 import { getRatingsText } from "./getRatingText";
 
@@ -50,33 +50,60 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                 body: JSON.stringify(payload),
             });
 
-            const data = await res.json();
+            const data: ApiResponse<RatingMutationResult> = await res.json();
+            if (!data.ok) {
+                setError(data.error.message);
+                return;
+            }
 
-            if (res.status === 409) {
-                setExistingRating(data.existingRating);
+            // if (res.status === 409) {
+            //     setExistingRating(data.existingRating);
+            //     setPendingRating(newRating);
+            //     setShowOverwriteDialog(true);
+            //     return;
+            // }
+            if (data.data.status === "exists") {
+                setExistingRating(data.data.existingRating);
                 setPendingRating(newRating);
                 setShowOverwriteDialog(true);
                 return;
             }
 
-            if (data.status === "noChange") {
+            if (data.data.status === "noChange") {
                 setMessage("Nie zmieniono oceny");
                 setShowThanks(true);
+
                 setTimeout(() => {
                     setShowThanks(false);
                     setMessage(null);
                 }, 3000);
+
                 return;
             }
+            // if (data.status === "noChange") {
+            //     setMessage("Nie zmieniono oceny");
+            //     setShowThanks(true);
+            //     setTimeout(() => {
+            //         setShowThanks(false);
+            //         setMessage(null);
+            //     }, 3000);
+            //     return;
+            // }
 
-            onRatingUpdated?.();
+            // onRatingUpdated?.();
+            // setMessage("Dziękuję za ocenę!");
+            // setShowThanks(true);
+            // setTimeout(() => {
+            //     setShowThanks(false);
+            //     setMessage(null);
+            // }, 3000);
 
-            setMessage("Dziękuję za ocenę!");
-            setShowThanks(true);
-            setTimeout(() => {
-                setShowThanks(false);
-                setMessage(null);
-            }, 3000);
+            if (data.data.status === "updated") {
+                onRatingUpdated?.();
+                setMessage("Dziękuję za ocenę!");
+                setShowThanks(true);
+                return;
+            }
         } catch (err) {
             console.error("Error submitting rating:", err);
             setError("Błąd podczas zapisywania oceny");
