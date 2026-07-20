@@ -48,4 +48,3 @@ export function RecipeRatingSection({ recipeId, averageRating, totalRatings }: R
 
 export default RecipeRatingSection;
 //todo: data.data żle wygląda
-// todo guzik do zmieniania oceny w widżecie fatalnie wygląda

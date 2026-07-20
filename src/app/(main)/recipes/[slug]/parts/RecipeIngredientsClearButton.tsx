@@ -11,5 +11,9 @@ interface Props {
 export function RecipeIngredientsClearButton({ recipeId }: Props) {
     const clearRecipe = useIngredientChecksStore(state => state.clearRecipe);
 
-    return <Button onClick={() => clearRecipe(recipeId)}>Odznacz wszystkie</Button>;
+    return (
+        <Button variant="outlined" onClick={() => clearRecipe(recipeId)}>
+            Odznacz wszystkie
+        </Button>
+    );
 }

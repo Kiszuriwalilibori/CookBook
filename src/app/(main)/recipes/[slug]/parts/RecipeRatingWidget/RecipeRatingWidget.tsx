@@ -53,7 +53,6 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
             const data: ApiResponse<RatingMutationResult> = await res.json();
             if (!data.ok) {
                 handleApiResponseError(data.error);
-                // setError(data.error.message);
                 return;
             }
 
@@ -167,8 +166,10 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleOverwriteCancel}>Nie, zostaw starą ocenę</Button>
-                    <Button onClick={handleOverwriteConfirm} autoFocus>
+                    <Button variant="outlined" onClick={handleOverwriteCancel}>
+                        Nie, zostaw starą ocenę
+                    </Button>
+                    <Button variant="contained" onClick={handleOverwriteConfirm} autoFocus>
                         Tak, zmień ocenę
                     </Button>
                 </DialogActions>

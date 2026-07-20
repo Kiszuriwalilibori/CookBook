@@ -166,4 +166,3 @@ export function RecipeCopyButton({ recipe }: RecipeCopyButtonProps) {
         </>
     );
 }
-// TODO przydalby się jakiś sensowny wskaźnik ładowania oczywiście dla notatek prywatnych a nie tego guzika

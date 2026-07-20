@@ -7,6 +7,7 @@ import { useIsUserSet } from "@/stores/userStore";
 import { useApiResponseErrorHandler } from "@/hooks";
 import { useNotesState } from "./useNotesState";
 import { ApiResponse } from "@/models/apiResponse";
+import { LoadingIndicator } from "@/components";
 
 interface PrivateUserNotesProps {
     recipeId: string;
@@ -66,7 +67,7 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
             </Typography>
 
             <Typography variant="body1" sx={textStyles}>
-                {loading ? "Ładowanie…" : notes}
+                {loading ? <LoadingIndicator open={loading} prompt="Trwa ładowanie notatek" /> : notes}
             </Typography>
         </Box>
     );
