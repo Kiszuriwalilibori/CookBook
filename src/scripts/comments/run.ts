@@ -3,7 +3,7 @@ import { importRecipeComments } from "./importRecipeComments";
 
 async function main() {
     await importRecipeComments({
-        recipeTitle: "Fasolka szparagowa z masłem i parmezanem",
+        recipeTitle: "Chłodnik litewski",
         comments,
         overwrite: false,
     });

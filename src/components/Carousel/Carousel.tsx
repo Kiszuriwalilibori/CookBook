@@ -8,12 +8,13 @@ import CarouselLib from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 import { EmptyState } from "@/components/EmptyState";
-import { CarouselError } from "./Carousel.states";
 import { Section } from "./Carousel.styles";
 import { Slide } from "./Carousel.types";
 
 import CarouselLoader from "./Carousel.loader";
 import CarouselItem from "./Carousel.item";
+import { ApiResponse } from "@/models/apiResponse";
+import { useApiResponseErrorHandler } from "@/hooks";
 
 interface CarouselProps {
     count?: number;
@@ -27,9 +28,21 @@ const responsive = {
     mobile: { breakpoint: { max: 900, min: 0 }, items: 1 },
 };
 
+async function parseApiResponse<T>(res: Response): Promise<ApiResponse<T>> {
+    try {
+        return await res.json();
+    } catch {
+        throw {
+            type: "PARSE_ERROR",
+            message: "Invalid JSON response",
+        };
+    }
+}
+
 export default function Carousel({ count = 5, intervalMs = 5000, initialSlides = null }: CarouselProps) {
     const [items, setItems] = useState<Slide[] | null>(initialSlides);
-    const [error, setError] = useState<string | null>(null);
+
+    const handleApiError = useApiResponseErrorHandler();
     // const [initialRenderReady, setInitialRenderReady] = useState(false);
     const router = useRouter();
 
@@ -44,6 +57,7 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
 
     // Fetch slides
     useEffect(() => {
+        // UWAGA: cały ten kod jest 'awaryjny w tym sensie, że zasadniczo początkowe slajdy powinny przychodzić jako propsy
         if (initialSlides) return;
 
         let mounted = true;
@@ -51,17 +65,19 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
         async function fetchSlides() {
             try {
                 const res = await fetch(`/api/recipes/random?count=${count}`, { cache: "no-store" });
-                const data = await res.json();
 
+                const result = await parseApiResponse<Slide[]>(res);
                 if (!mounted) return;
 
-                if (Array.isArray(data)) setItems(data);
-                else if (Array.isArray(data?.items)) setItems(data.items);
-                else setItems([]);
-            } catch (e) {
-                console.error(e);
+                if (!result.ok) {
+                    throw result.error;
+                }
+
+                setItems(result.data);
+            } catch (err) {
+                console.log(err);
+                handleApiError(err);
                 if (mounted) {
-                    setError("Failed to load carousel");
                     setItems([]);
                 }
             }
@@ -110,10 +126,6 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
         return <CarouselLoader />;
     }
 
-    if (error) {
-        return <CarouselError message={error} />;
-    }
-
     if (items.length === 0) {
         return <EmptyState icon={<SearchOffIcon />} title="No featured recipes" description="Check back later or explore all recipes" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />;
     }
@@ -128,3 +140,5 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
         </Section>
     );
 }
+
+// todo parseApiResponse są zbliżone funkcje tu i tam parseBody ujednolicić

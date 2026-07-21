@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import getRandomRecipes from "@/utils/getRandomRecipes";
+import { ApiResponse, apiErrorResponse } from "@/models/apiResponse";
 
 export async function GET(request: Request) {
     try {
@@ -9,10 +10,13 @@ export async function GET(request: Request) {
 
         const recipes = await getRandomRecipes(count);
 
-        // Zwracamy prostą tablicę MinimalRecipe (bez dodatkowego opakowania)
-        return NextResponse.json(recipes, { status: 200 });
+        const response: ApiResponse<typeof recipes> = {
+            ok: true,
+            data: recipes,
+        };
+        return NextResponse.json(response);
     } catch (err) {
         console.error("[/api/recipes/random] error:", err);
-        return NextResponse.json({ error: "server_error" }, { status: 500 });
+        return apiErrorResponse(err);
     }
 }
