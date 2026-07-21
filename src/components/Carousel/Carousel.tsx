@@ -11,11 +11,11 @@ import { EmptyState } from "@/components/EmptyState";
 import { Section } from "./Carousel.styles";
 import { Slide } from "./Carousel.types";
 
-// import CarouselLoader from "./Carousel.loader";
 import CarouselItem from "./Carousel.item";
 import { ApiResponse } from "@/models/apiResponse";
 import { useApiResponseErrorHandler } from "@/hooks";
 import { LoadingIndicator } from "@/components";
+import { useCarouselStatus } from "./useCarouselStatus";
 
 interface CarouselProps {
     count?: number;
@@ -39,12 +39,11 @@ async function parseApiResponse<T>(res: Response): Promise<ApiResponse<T>> {
         };
     }
 }
-type CarouselStatus = "loading" | "success" | "empty";
 
 export default function Carousel({ count = 5, intervalMs = 5000, initialSlides = null }: CarouselProps) {
     const [items, setItems] = useState<Slide[] | null>(initialSlides);
 
-    const [status, setStatus] = useState<CarouselStatus>(initialSlides === null ? "loading" : initialSlides.length === 0 ? "empty" : "success");
+    const { status, setCarouselStatusSuccess, setCarouselStatusEmpty, setCarouselStatusError } = useCarouselStatus(initialSlides === null ? "loading" : initialSlides.length === 0 ? "empty" : "success");
 
     const handleApiError = useApiResponseErrorHandler();
     // const [initialRenderReady, setInitialRenderReady] = useState(false);
@@ -78,13 +77,18 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
                 }
 
                 setItems(result.data);
-                setStatus(result.data.length === 0 ? "empty" : "success");
+
+                if (result.data.length === 0) {
+                    setCarouselStatusEmpty();
+                } else {
+                    setCarouselStatusSuccess();
+                }
             } catch (err) {
                 console.log(err);
                 handleApiError(err);
                 if (mounted) {
                     setItems([]);
-                    setStatus("empty");
+                    setCarouselStatusError();
                 }
             }
         }
@@ -132,17 +136,11 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
     //     return <CarouselLoader />;
     // }
 
-    // if (!items) {
-    //     return <LoadingIndicator prompt="Ładowanie przepisów..." centeredInParent={true} />;
-    // }
-    // if (items.length === 0) {
-    //     return <EmptyState icon={<SearchOffIcon />} title="Nie ma polecanych przepisów" description="Sprawdź później albo pobierz wszystkie" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />;
-    // }
-
     return (
         <Section>
             {status === "loading" && <LoadingIndicator prompt="Ładowanie przepisów..." centeredInParent={true} />}
             {status === "empty" && <EmptyState icon={<SearchOffIcon />} title="Nie ma polecanych przepisów" description="Sprawdź później albo pobierz wszystkie" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />}
+            {status === "error" && <EmptyState icon={<SearchOffIcon />} title="Nie udało się załadować przepisów" description="Spróbuj ponownie później" />}
             {status === "success" && items && (
                 <CarouselLib responsive={responsive} infinite autoPlay autoPlaySpeed={intervalMs} arrows keyBoardControl pauseOnHover>
                     {items.map(slide => (
