@@ -39,9 +39,12 @@ async function parseApiResponse<T>(res: Response): Promise<ApiResponse<T>> {
         };
     }
 }
+type CarouselStatus = "loading" | "success" | "empty";
 
 export default function Carousel({ count = 5, intervalMs = 5000, initialSlides = null }: CarouselProps) {
     const [items, setItems] = useState<Slide[] | null>(initialSlides);
+
+    const [status, setStatus] = useState<CarouselStatus>(initialSlides === null ? "loading" : initialSlides.length === 0 ? "empty" : "success");
 
     const handleApiError = useApiResponseErrorHandler();
     // const [initialRenderReady, setInitialRenderReady] = useState(false);
@@ -75,11 +78,13 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
                 }
 
                 setItems(result.data);
+                setStatus(result.data.length === 0 ? "empty" : "success");
             } catch (err) {
                 console.log(err);
                 handleApiError(err);
                 if (mounted) {
                     setItems([]);
+                    setStatus("empty");
                 }
             }
         }
@@ -127,23 +132,27 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
     //     return <CarouselLoader />;
     // }
 
-    if (!items) {
-        return <LoadingIndicator prompt="Ładowanie przepisów..." centeredInParent={true} />;
-    }
-    if (items.length === 0) {
-        return <EmptyState icon={<SearchOffIcon />} title="Nie ma polecanych przepisów" description="Sprawdź później albo pobierz wszystkie" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />;
-    }
+    // if (!items) {
+    //     return <LoadingIndicator prompt="Ładowanie przepisów..." centeredInParent={true} />;
+    // }
+    // if (items.length === 0) {
+    //     return <EmptyState icon={<SearchOffIcon />} title="Nie ma polecanych przepisów" description="Sprawdź później albo pobierz wszystkie" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />;
+    // }
 
     return (
         <Section>
-            <CarouselLib responsive={responsive} infinite autoPlay autoPlaySpeed={intervalMs} arrows keyBoardControl pauseOnHover>
-                {items.map(slide => (
-                    <CarouselItem key={slide._id} slide={slide} />
-                ))}
-            </CarouselLib>
+            {status === "loading" && <LoadingIndicator prompt="Ładowanie przepisów..." centeredInParent={true} />}
+            {status === "empty" && <EmptyState icon={<SearchOffIcon />} title="Nie ma polecanych przepisów" description="Sprawdź później albo pobierz wszystkie" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />}
+            {status === "success" && items && (
+                <CarouselLib responsive={responsive} infinite autoPlay autoPlaySpeed={intervalMs} arrows keyBoardControl pauseOnHover>
+                    {items.map(slide => (
+                        <CarouselItem key={slide._id} slide={slide} />
+                    ))}
+                </CarouselLib>
+            )}
         </Section>
     );
 }
 
 // todo parseApiResponse są zbliżone funkcje tu i tam parseBody ujednolicić
-// ogólnie to zarówno loadingindicator jak i empty powinny być w środku Section  i aktywizować się od propsów, ale w tym celu trzeba by dać loading state
+// todo pamiętać o renderConditionallyDelayed czy podobnym zabezpieczającym przed miganiem
