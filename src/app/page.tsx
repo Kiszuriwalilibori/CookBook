@@ -11,12 +11,12 @@ import ColumnHeader from "./recipes/pageColumnHeader";
 export const revalidate = 60;
 
 export default async function Page() {
-    const slides = await getRandomRecipes(5);
+    const slidesResponse = await getRandomRecipes(5);
 
     return (
         <Box sx={pageRootSx}>
             {/* Pass server-fetched slides to the client Slider*/}
-            <Slider initialSlides={slides} />
+            <Slider initialSlides={slidesResponse.ok ? slidesResponse.data : []} error={slidesResponse.ok ? null : slidesResponse.error.message} />
 
             <Box sx={contentWrapperSx}>
                 <Box id="left column" sx={leftColumnSx}>

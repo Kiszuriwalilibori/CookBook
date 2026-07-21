@@ -28,3 +28,26 @@ export const useMessage = (): MessageMethods => {
 };
 
 export default useMessage;
+
+// TODO: Ale uwaga: Twój useMessage za każdym renderem tworzy nowy obiekt:
+
+// const showMessage: MessageMethods = {
+//     info: ...,
+//     error: ...,
+// }
+
+// więc showMessage ma nową referencję przy każdym renderze.
+
+// To może powodować ponowne wykonanie efektu.
+
+// Na przyszłość rozważyłbym w useMessage:
+
+// const showMessage = useMemo(
+//     () => ({
+//         info: ...,
+//         error: ...,
+//         success: ...,
+//         warning: ...,
+//     }),
+//     [enqueueSnackbar]
+// );

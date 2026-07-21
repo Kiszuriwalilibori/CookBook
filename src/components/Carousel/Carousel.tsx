@@ -11,10 +11,11 @@ import { EmptyState } from "@/components/EmptyState";
 import { Section } from "./Carousel.styles";
 import { Slide } from "./Carousel.types";
 
-import CarouselLoader from "./Carousel.loader";
+// import CarouselLoader from "./Carousel.loader";
 import CarouselItem from "./Carousel.item";
 import { ApiResponse } from "@/models/apiResponse";
 import { useApiResponseErrorHandler } from "@/hooks";
+import { LoadingIndicator } from "@/components";
 
 interface CarouselProps {
     count?: number;
@@ -122,12 +123,15 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
     // }, [items]);
 
     // Spinner dopóki minimalna liczba obrazków się nie załaduje
-    if (!items /*|| !initialRenderReady*/) {
-        return <CarouselLoader />;
-    }
+    // if (!items /*|| !initialRenderReady*/) {
+    //     return <CarouselLoader />;
+    // }
 
+    if (!items) {
+        return <LoadingIndicator prompt="Ładowanie przepisów..." centeredInParent={true} />;
+    }
     if (items.length === 0) {
-        return <EmptyState icon={<SearchOffIcon />} title="No featured recipes" description="Check back later or explore all recipes" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />;
+        return <EmptyState icon={<SearchOffIcon />} title="Nie ma polecanych przepisów" description="Sprawdź później albo pobierz wszystkie" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />;
     }
 
     return (
@@ -142,3 +146,4 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
 }
 
 // todo parseApiResponse są zbliżone funkcje tu i tam parseBody ujednolicić
+// ogólnie to zarówno loadingindicator jak i empty powinny być w środku Section  i aktywizować się od propsów, ale w tym celu trzeba by dać loading state

@@ -1,6 +1,7 @@
 import { groq } from "next-sanity";
 import { client } from "./client";
 import { REGULAR_USER_STATUSES } from "@/types";
+import { ApiResponse } from "@/models/apiResponse";
 
 export type MinimalRecipe = {
     _id: string;
@@ -26,7 +27,7 @@ function shuffle<T>(arr: T[]) {
  *
  * Preferuje przepisy z description.image, ale dopełnia listę innymi przepisami jeśli potrzeba.
  */
-export async function getRandomRecipes(count = 5): Promise<MinimalRecipe[]> {
+export async function getRandomRecipes(count = 5): Promise<ApiResponse<MinimalRecipe[]>> {
     try {
         const statuses = REGULAR_USER_STATUSES.map(s => String(s).toLowerCase());
 
@@ -45,7 +46,22 @@ export async function getRandomRecipes(count = 5): Promise<MinimalRecipe[]> {
 
         const all = await client.fetch<MinimalRecipe[]>(query, { statuses });
 
-        if (!Array.isArray(all) || all.length === 0) return [];
+        if (!Array.isArray(all)) {
+            return {
+                ok: false,
+                error: {
+                    code: "INVALID_RESPONSE",
+                    message: "Nieprawidłowa odpowiedź serwera",
+                },
+            };
+        }
+
+        if (all.length === 0) {
+            return {
+                ok: true,
+                data: [],
+            };
+        }
 
         // Preferuj te z imageUrl
         const withImage = all.filter(r => r.imageUrl && typeof r.imageUrl === "string");
@@ -64,10 +80,20 @@ export async function getRandomRecipes(count = 5): Promise<MinimalRecipe[]> {
             result.push(item);
         }
 
-        return result;
+        return {
+            ok: true,
+            data: result,
+        };
     } catch (err) {
         console.error("[getRandomRecipes] error:", err);
-        return [];
+
+        return {
+            ok: false,
+            error: {
+                code: "INTERNAL_SERVER_ERROR",
+                message: "Nie udało się pobrać losowych przepisów",
+            },
+        };
     }
 }
 
