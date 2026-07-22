@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const DELAY = 1000;
+const DELAY = 500;
 const DURATION = 1000;
 
 export const useDelayedCondition = (condition: boolean, delay = DELAY, duration = DURATION) => {
@@ -12,15 +12,16 @@ export const useDelayedCondition = (condition: boolean, delay = DELAY, duration 
     const durationTimeout = useRef(undefined as undefined | NodeJS.Timeout);
 
     useEffect(() => {
+        const now = Date.now();
         if (condition) {
-            startTime.current = Date.now();
+            startTime.current = now;
             delayTimeout.current = setTimeout(() => {
                 setDelayedCondition(true);
             }, delay);
         }
         if (!condition) {
             if (startTime.current) {
-                if (Date.now() >= startTime.current + delay) {
+                if (now >= startTime.current + delay) {
                     durationTimeout.current = setTimeout(
                         () => {
                             if (delayTimeout.current) {
@@ -28,10 +29,10 @@ export const useDelayedCondition = (condition: boolean, delay = DELAY, duration 
                             }
                             setDelayedCondition(false);
                         },
-                        duration - (Date.now() - (startTime.current + DELAY))
+                        duration - (now - (startTime.current + delay)) //
                     );
                 }
-                if (Date.now() < startTime.current + delay) {
+                if (now < startTime.current + delay) {
                     if (delayTimeout.current) {
                         clearTimeout(delayTimeout.current);
                     }

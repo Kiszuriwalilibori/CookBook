@@ -14,6 +14,7 @@ import { Slide } from "./Carousel.types";
 import CarouselItem from "./Carousel.item";
 import { ApiResponse } from "@/models/apiResponse";
 import { useApiResponseErrorHandler } from "@/hooks";
+import useDelayedCondition from "@/hooks/useDelayedCondition";
 import { LoadingIndicator } from "@/components";
 import { useCarouselStatus } from "./useCarouselStatus";
 
@@ -40,10 +41,14 @@ async function parseApiResponse<T>(res: Response): Promise<ApiResponse<T>> {
     }
 }
 
+export const DELAY = 500;
+export const DURATION = 1000;
+
 export default function Carousel({ count = 5, intervalMs = 5000, initialSlides = null }: CarouselProps) {
     const [items, setItems] = useState<Slide[] | null>(initialSlides);
 
     const { status, setCarouselStatusSuccess, setCarouselStatusEmpty, setCarouselStatusError } = useCarouselStatus(initialSlides === null ? "loading" : initialSlides.length === 0 ? "empty" : "success");
+    const showLoading = useDelayedCondition(status === "loading", DELAY, DURATION);
 
     const handleApiError = useApiResponseErrorHandler();
     // const [initialRenderReady, setInitialRenderReady] = useState(false);
@@ -138,7 +143,7 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
 
     return (
         <Section>
-            {status === "loading" && <LoadingIndicator prompt="Ładowanie przepisów..." centeredInParent={true} />}
+            {showLoading && <LoadingIndicator prompt="Ładowanie przepisów..." centeredInParent={true} />}
             {status === "empty" && <EmptyState icon={<SearchOffIcon />} title="Nie ma polecanych przepisów" description="Sprawdź później albo pobierz wszystkie" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />}
             {status === "error" && <EmptyState icon={<SearchOffIcon />} title="Nie udało się załadować przepisów" description="Spróbuj ponownie później" />}
             {status === "success" && items && (

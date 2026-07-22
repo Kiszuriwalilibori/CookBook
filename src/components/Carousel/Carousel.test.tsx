@@ -1,6 +1,6 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 
-import Carousel from "./Carousel";
+import Carousel, { DELAY } from "./Carousel";
 
 const mockHandleApiError = jest.fn();
 
@@ -68,14 +68,41 @@ describe("Carousel", () => {
         expect(screen.getByTestId("carousel-item")).toBeInTheDocument();
     });
 
-    it("shows loading indicator while fetching slides", () => {
-        global.fetch = jest.fn(() => new Promise(() => {}));
+    it("shows loading indicator after delay", async () => {
+        jest.useFakeTimers();
+
+        global.fetch = jest.fn(
+            () =>
+                new Promise(() => {
+                    // fetch nigdy się nie kończy
+                })
+        );
 
         render(<Carousel />);
 
-        expect(screen.getByTestId("loading")).toHaveTextContent("Ładowanie przepisów...");
-    });
+        act(() => {
+            jest.advanceTimersByTime(DELAY);
+        });
 
+        expect(screen.getByTestId("loading")).toHaveTextContent("Ładowanie przepisów...");
+
+        jest.useRealTimers();
+    });
+    it("does not show loading indicator before delay", () => {
+        jest.useFakeTimers();
+
+        render(<Carousel />);
+
+        expect(screen.queryByTestId("loading")).not.toBeInTheDocument();
+
+        act(() => {
+            jest.advanceTimersByTime(DELAY - 1);
+        });
+
+        expect(screen.queryByTestId("loading")).not.toBeInTheDocument();
+
+        jest.useRealTimers();
+    });
     it("shows empty state when there are no slides", () => {
         render(<Carousel initialSlides={[]} />);
 
