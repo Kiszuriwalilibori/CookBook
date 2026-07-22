@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { groq } from "next-sanity";
 import { client } from "@/utils/client";
@@ -25,3 +24,5 @@ export async function GET(req: Request, context: { params: Promise<{ slug: strin
 
     return NextResponse.json(data);
 }
+
+// todo wątpliwe czy wykorzystywane
