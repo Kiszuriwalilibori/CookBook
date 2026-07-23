@@ -141,6 +141,9 @@ jest.mock("@/utils/writeClient", () => ({
 jest.mock("@/utils/getRecipesForCards", () => ({
     getRecipesForCards: jest.fn(),
 }));
+jest.mock("@/utils/getRecipeById", () => ({
+    getRecipeById: jest.fn(),
+}));
 
 jest.mock("./RecipesClient", () => ({
     __esModule: true,

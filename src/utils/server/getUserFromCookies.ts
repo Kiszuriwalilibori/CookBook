@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { verifyGoogle } from "@/utils";
+import { verifyGoogle } from "../googleAuth";
 import type { User } from "@/types";
 
 export async function getUserFromCookies(): Promise<(User & { isAdmin: boolean }) | null> {

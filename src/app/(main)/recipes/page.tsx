@@ -4,7 +4,7 @@ import { Status, type Recipe } from "@/types";
 import { FilterState } from "@/models/filters";
 
 // ⬇️ SSR favorites
-import { getUserFavorites } from "@/utils";
+import { getUserFavorites } from "@/utils/getUserFavorites";
 import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 

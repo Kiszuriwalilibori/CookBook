@@ -1,4 +1,4 @@
-import { writeClient } from "@/utils";
+import { writeClient } from "@/utils/writeClient";
 export async function getUserFavorites(userId: string): Promise<string[]> {
     if (!userId) return [];
 
