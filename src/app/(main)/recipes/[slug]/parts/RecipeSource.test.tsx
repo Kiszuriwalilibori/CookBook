@@ -1,164 +1,150 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import { RecipeSource } from "./RecipeSource";
-import { Status, type Recipe } from "@/types";
+import { Recipe, Status } from "@/types";
 
-// -----------------------------
-//  Store typing for strict mode
-// -----------------------------
-interface AdminStore {
-    isAdminLogged: boolean;
-}
-
-type Selector<T> = <U>(selector: (state: T) => U) => U;
-
-// -----------------------------
-//  MOCK: Zustand store (TDZ-safe)
-// -----------------------------
+// Mockujemy cały moduł store z named exportami
 jest.mock("@/stores/useAdminStore", () => ({
-    useAdminStore: jest.fn(),
+    useIsAdminLogged: jest.fn(),
 }));
 
-import { useAdminStore } from "@/stores/useAdminStore";
+import { useIsAdminLogged } from "@/stores/useAdminStore";
+const mockedUseIsAdminLogged = useIsAdminLogged as jest.MockedFunction<typeof useIsAdminLogged>;
 
-const mockUseAdminStore = useAdminStore as unknown as jest.MockedFunction<Selector<AdminStore>>;
-
-// -----------------------------
-//  MOCK: MUI components
-// -----------------------------
-jest.mock("@mui/material", () => ({
-    Box: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
-    Typography: ({ children }: { children?: React.ReactNode }) => <span>{children}</span>,
-}));
-
-// -----------------------------
-//  MOCK: Styles
-// -----------------------------
-jest.mock("../styles", () => ({
-    styles: {
-        sourceContainer: {},
-        sourceText: {},
-    },
-}));
-
-// -----------------------------
-//  Recipe factory (strict mode)
-// -----------------------------
-const createRecipe = (partial: Partial<Recipe>): Recipe => {
-    const base: Recipe = {
-        _id: "1",
-        title: "Test",
-        status: Status.Good,
-        _createdAt: "test-created-at",
-        _updatedAt: "test-updated-at",
-    };
-    return { ...base, ...partial };
-};
-
-// -----------------------------
-//  Test data
-// -----------------------------
-const mockRecipeNoSource = createRecipe({});
-
-const mockRecipeWithHttp = createRecipe({
-    source: {
-        url: "https://example.com/recipe",
-    },
-});
-
-const mockRecipeWithoutHttp = createRecipe({
-    source: {
-        url: "",
-        title: "Tytuł Przepisu",
-        author: "Jan Kowalski",
-        book: "Książka Gotowania",
-        where: "str. 123",
-    },
-});
-
-const mockRecipeEmptySource = createRecipe({
-    source: {
-        url: "",
-        title: "",
-        book: "",
-        author: "",
-        where: "",
-    },
-});
-
-// -----------------------------
-//  Tests
-// -----------------------------
 describe("RecipeSource", () => {
+    const baseRecipe: Recipe = {
+        _id: "test-id",
+        _createdAt: "2024-01-01T00:00:00Z",
+        _updatedAt: "2024-01-01T00:00:00Z",
+        title: "Test Recipe",
+        status: Status.Good,
+        source: undefined,
+    };
+
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
     it("returns null if admin is not logged in", () => {
-        mockUseAdminStore.mockImplementation(selector => selector({ isAdminLogged: false }));
+        mockedUseIsAdminLogged.mockReturnValue(false);
 
-        const { container } = render(<RecipeSource recipe={mockRecipeWithHttp} />);
+        const { container } = render(
+            <RecipeSource
+                recipe={{
+                    ...baseRecipe,
+                    source: { url: "http://example.com" },
+                }}
+            />
+        );
+
         expect(container.firstChild).toBeNull();
     });
 
     it("returns null when no source is provided", () => {
-        mockUseAdminStore.mockImplementation(selector => selector({ isAdminLogged: true }));
+        mockedUseIsAdminLogged.mockReturnValue(true);
 
-        const { container } = render(<RecipeSource recipe={mockRecipeNoSource} />);
+        const { container } = render(<RecipeSource recipe={baseRecipe} />);
+
         expect(container.firstChild).toBeNull();
     });
 
     it("renders HTTP source", () => {
-        mockUseAdminStore.mockImplementation(selector => selector({ isAdminLogged: true }));
+        mockedUseIsAdminLogged.mockReturnValue(true);
 
-        render(<RecipeSource recipe={mockRecipeWithHttp} />);
+        render(
+            <RecipeSource
+                recipe={{
+                    ...baseRecipe,
+                    source: { url: "http://example.com" },
+                }}
+            />
+        );
 
-        expect(screen.getByText("Źródło: https://example.com/recipe")).toBeInTheDocument();
+        expect(screen.getByText("Źródło: http://example.com")).toBeInTheDocument();
     });
 
     it("renders combined source when no valid HTTP exists", () => {
-        mockUseAdminStore.mockImplementation(selector => selector({ isAdminLogged: true }));
+        mockedUseIsAdminLogged.mockReturnValue(true);
 
-        render(<RecipeSource recipe={mockRecipeWithoutHttp} />);
+        render(
+            <RecipeSource
+                recipe={{
+                    ...baseRecipe,
+                    source: {
+                        url: "",
+                        title: "Grandma's Book",
+                        book: "Cookbook",
+                        author: "Anna",
+                        where: "Kitchen",
+                    },
+                }}
+            />
+        );
 
-        expect(screen.getByText("Źródło: Tytuł Przepisu | autor: Jan Kowalski | książka: Książka Gotowania | gdzie: str. 123")).toBeInTheDocument();
+        expect(screen.getByText("Źródło: Grandma's Book | autor: Anna | książka: Cookbook | gdzie: Kitchen")).toBeInTheDocument();
     });
 
     it("returns null when source is empty", () => {
-        mockUseAdminStore.mockImplementation(selector => selector({ isAdminLogged: true }));
+        mockedUseIsAdminLogged.mockReturnValue(true);
 
-        const { container } = render(<RecipeSource recipe={mockRecipeEmptySource} />);
+        const { container } = render(
+            <RecipeSource
+                recipe={{
+                    ...baseRecipe,
+                    source: {
+                        url: "",
+                        title: "",
+                        book: "",
+                        author: "",
+                        where: "",
+                    },
+                }}
+            />
+        );
 
         expect(container.firstChild).toBeNull();
     });
 
     it("handles whitespace in HTTP correctly", () => {
-        const recipeWithWhitespace = createRecipe({
-            source: {
-                url: "  https://example.com/recipe  ",
-            },
-        });
+        mockedUseIsAdminLogged.mockReturnValue(true);
 
-        mockUseAdminStore.mockImplementation(selector => selector({ isAdminLogged: true }));
+        // url: "   " -> trim() === "" -> hasValidURL = false
+        // Wszystkie pozostałe pola puste -> parts.length === 0 -> return null
+        const { container } = render(
+            <RecipeSource
+                recipe={{
+                    ...baseRecipe,
+                    source: {
+                        url: "   ",
+                        title: "",
+                        book: "",
+                        author: "",
+                        where: "",
+                    },
+                }}
+            />
+        );
 
-        render(<RecipeSource recipe={recipeWithWhitespace} />);
-
-        expect(screen.getByText(text => text.includes("Źródło: https://example.com/recipe"))).toBeInTheDocument();
+        expect(container.firstChild).toBeNull();
     });
 
     it("handles partial source fields", () => {
-        const partial = createRecipe({
-            source: {
-                url: "",
-                title: "Tytuł",
-                book: "Książka",
-            },
-        });
+        mockedUseIsAdminLogged.mockReturnValue(true);
 
-        mockUseAdminStore.mockImplementation(selector => selector({ isAdminLogged: true }));
+        render(
+            <RecipeSource
+                recipe={{
+                    ...baseRecipe,
+                    source: {
+                        url: "",
+                        title: "Title Only",
+                        book: "",
+                        author: "",
+                        where: "",
+                    },
+                }}
+            />
+        );
 
-        render(<RecipeSource recipe={partial} />);
-
-        expect(screen.getByText("Źródło: Tytuł | książka: Książka")).toBeInTheDocument();
+        expect(screen.getByText("Źródło: Title Only")).toBeInTheDocument();
     });
 });

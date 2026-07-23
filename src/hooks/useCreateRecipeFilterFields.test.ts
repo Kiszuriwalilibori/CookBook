@@ -365,8 +365,8 @@ describe("useCreateRecipeFilterFields", () => {
         const singleFields = result.current.filter(f => !f.multiple).map(f => f.key);
         const multipleFields = result.current.filter(f => f.multiple).map(f => f.key);
 
-        const expectedMultiple = ["tags", "dietary", "products", "cuisine"];
-        const expectedSingle = ["title", "kizia", "status", "source.url", "source.book", "source.title", "source.author", "source.where"];
+        const expectedMultiple = ["tags", "dietary", "products", "cuisine", "status"];
+        const expectedSingle = ["title", "kizia", "source.url", "source.book", "source.title", "source.author", "source.where"];
 
         expect(singleFields.sort()).toEqual(expectedSingle.sort());
         expect(multipleFields.sort()).toEqual(expectedMultiple.sort());

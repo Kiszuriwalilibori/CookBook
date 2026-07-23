@@ -119,11 +119,11 @@ describe("useFiltersStore", () => {
 
             act(() => {
                 result.current.handleChange("title", "pasta");
-                result.current.handleChange("cuisine", "italian");
+                result.current.handleChange("cuisine", ["italian"]);
             });
 
             expect(result.current.filters.title).toBe("pasta");
-            expect(result.current.filters.cuisine).toBe("italian");
+            expect(result.current.filters.cuisine).toEqual(["italian"]);
         });
     });
 
@@ -206,7 +206,7 @@ describe("useFiltersStore", () => {
             });
 
             expect(result.current.filters.title).toBe("pasta");
-            expect(result.current.filters.cuisine).toBe("italian");
+            expect(result.current.filters.cuisine).toEqual(["italian"]);
             expect(result.current.filters.tags).toEqual(initialFilters.tags);
         });
 
@@ -240,7 +240,7 @@ describe("useFiltersStore", () => {
             });
 
             expect(result.current.filters.title).toBe(titleValue);
-            expect(result.current.filters.cuisine).toBe("italian");
+            expect(result.current.filters.cuisine).toEqual(["italian"]);
         });
     });
 
@@ -298,12 +298,12 @@ describe("useFiltersStore", () => {
 
             act(() => {
                 result.current.handleChange("title", "pasta");
-                result.current.handleChange("cuisine", "italian");
+                result.current.handleChange("cuisine", ["italian"]);
                 result.current.handleChange("tags", ["quick", "easy"]);
             });
 
             expect(result.current.filters.title).toBe("pasta");
-            expect(result.current.filters.cuisine).toBe("italian");
+            expect(result.current.filters.cuisine).toEqual(["italian"]);
             expect(result.current.filters.tags).toEqual(["quick", "easy"]);
 
             act(() => {
