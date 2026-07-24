@@ -98,3 +98,7 @@ export async function getRandomRecipes(count = 5): Promise<ApiResponse<MinimalRe
 }
 
 export default getRandomRecipes;
+
+// todo czy tu nie pasowałby ten error na catch??
+// todo z innej beczki dodać jakiś deskryptor do ilości porcji bo czasami niejasne
+// komentarze powinny się ładować tak: najpierw 3 potem jak jest rozkaz reszta

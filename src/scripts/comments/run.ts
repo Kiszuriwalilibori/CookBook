@@ -3,7 +3,7 @@ import { importRecipeComments } from "./importRecipeComments";
 
 async function main() {
     await importRecipeComments({
-        recipeTitle: "Chłodnik litewski",
+        recipeTitle: "Placki z fasolki szparagowej i cukinii",
         comments,
         overwrite: false,
     });
