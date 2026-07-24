@@ -1,20 +1,17 @@
 import { NextResponse } from "next/server";
 import getRandomRecipes from "@/utils/getRandomRecipes";
-import { ApiResponse, apiErrorResponse } from "@/models/apiResponse";
+import { apiErrorResponse } from "@/models/apiResponse";
 
 export async function GET(request: Request) {
     try {
         const url = new URL(request.url);
         const countParam = url.searchParams.get("count");
-        const count = countParam ? Math.max(1, Math.min(20, parseInt(countParam, 10) || 5)) : 5;
+        const parsedCount = countParam ? parseInt(countParam, 10) : 5;
 
+        const count = Number.isNaN(parsedCount) ? 5 : Math.max(1, Math.min(20, parsedCount));
         const recipes = await getRandomRecipes(count);
 
-        const response: ApiResponse<typeof recipes> = {
-            ok: true,
-            data: recipes,
-        };
-        return NextResponse.json(response);
+        return NextResponse.json(recipes);
     } catch (err) {
         console.error("[/api/recipes/random] error:", err);
         return apiErrorResponse(err);

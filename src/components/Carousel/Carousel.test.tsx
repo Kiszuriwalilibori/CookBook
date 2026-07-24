@@ -88,6 +88,20 @@ describe("Carousel", () => {
 
         jest.useRealTimers();
     });
+    it("handles invalid JSON response", async () => {
+        global.fetch = jest.fn().mockResolvedValue({
+            json: jest.fn().mockRejectedValue(new Error("Invalid JSON")),
+        });
+
+        render(<Carousel />);
+
+        await waitFor(() => {
+            expect(mockHandleApiError).toHaveBeenCalledWith({
+                type: "PARSE_ERROR",
+                message: "Invalid JSON response",
+            });
+        });
+    });
     it("does not show loading indicator before delay", () => {
         jest.useFakeTimers();
 

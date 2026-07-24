@@ -8,6 +8,7 @@ const createJestConfig = nextJest({
 const customJestConfig: Config = {
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
     testEnvironment: "jest-environment-jsdom",
+    transformIgnorePatterns: ["node_modules/(?!(msw|@mswjs|until-async|isomorphic-fetch|rettime)/)"],
     moduleNameMapper: {
         // Opcjonalnie: Alias dla src/ (jeśli masz w tsconfig.json)
         "^@/(.*)$": "<rootDir>/src/$1",
@@ -27,8 +28,16 @@ const customJestConfig: Config = {
         "!lib/**/*.d.ts",
         "!src/**/*.d.ts",
     ],
+    // transform: {
+    //     "^.+\\.(ts|tsx)$": "ts-jest",
+    // },
     transform: {
-        "^.+\\.(ts|tsx)$": "ts-jest",
+        "^.+\\.(ts|tsx|js|jsx|mjs)$": [
+            "babel-jest",
+            {
+                presets: ["next/babel"],
+            },
+        ],
     },
 };
 
