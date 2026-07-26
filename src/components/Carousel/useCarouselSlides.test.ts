@@ -3,7 +3,6 @@
  */
 
 import { renderHook, waitFor } from "@testing-library/react";
-
 import { useCarouselSlides } from "./useCarouselSlides";
 
 const mockHandleApiError = jest.fn();
@@ -103,15 +102,22 @@ describe("useCarouselSlides", () => {
     });
 
     it("does not update state after unmount during fetch", async () => {
-        let resolveFetch!: (value: { json: () => Promise<unknown> }) => void;
+        // let resolveFetch!: (value: { json: () => Promise<unknown> }) => void;
+
+        // global.fetch = jest.fn(
+        //     () =>
+        //         new Promise(resolve => {
+        //             resolveFetch = resolve;
+        //         })
+        // );
+        let resolveFetch!: (value: unknown) => void;
 
         global.fetch = jest.fn(
             () =>
                 new Promise(resolve => {
                     resolveFetch = resolve;
                 })
-        );
-
+        ) as jest.Mock;
         const { unmount } = renderHook(() =>
             useCarouselSlides({
                 count: 5,
