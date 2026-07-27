@@ -4,6 +4,15 @@ import { SxProps, Theme } from "@mui/material";
 export const styles: { [key: string]: SxProps<Theme> } = {
     imageWrapper: {
         position: "relative",
+        height: { xs: 180, sm: 200 },
+        overflow: "hidden",
+        "& img": {
+            transition: "transform 0.3s ease-in-out",
+        },
+
+        "&:hover img": {
+            transform: "scale(1.05)",
+        },
     },
 
     card: {
@@ -52,7 +61,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         WebkitBoxOrient: "vertical",
         mb: 1,
     },
-    
+
     description: {
         fontFamily: "Playfair Display, serif",
         fontWeight: 400,

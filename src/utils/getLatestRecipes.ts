@@ -23,9 +23,9 @@ export default async function getLatestRecipes(limit = 6): Promise<Recipe[]> {
                 title,
                 firstBlockText,
                 image {
-                    asset->{_id, url},
+                    asset,
                     alt
-                }
+}
             }
         }
         `,

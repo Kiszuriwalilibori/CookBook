@@ -18,7 +18,7 @@ import { useIsFavorite } from "@/stores/useFavoritesStore";
 import { useFavorites } from "@/hooks";
 import { useConfirmDialog } from "@/hooks/useConfirmDialog";
 import ConfirmRemoveDialog from "../ConfirmRemoveDialog";
-
+import { urlFor } from "../../lib/sanity/imageUrl";
 interface RecipeCardProps {
     recipe: Recipe;
     onRemoved?: (recipeId: string) => void;
@@ -49,9 +49,7 @@ export const RecipeCard = React.memo(function RecipeCard({ recipe, onRemoved }: 
     } = useConfirmDialog<Recipe>({
         onConfirm: handleRemoveFavorite,
     });
-
-    const imageUrl = description?.image?.asset?.url || "/placeholder-image.jpg";
-
+    const imageUrl = description?.image ? urlFor(description.image).url() : "/placeholder-image.jpg";
     const handleFavorite = (e: React.MouseEvent) => {
         e.preventDefault();
         if (isLoading(recipe._id)) return;

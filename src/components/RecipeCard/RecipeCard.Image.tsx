@@ -1,6 +1,6 @@
 import React from "react";
-import { CardMedia, Box } from "@mui/material";
-import { styles } from "./styles";
+
+import Image from "next/image";
 
 interface RecipeCardImageProps {
     imageUrl: string;
@@ -9,8 +9,14 @@ interface RecipeCardImageProps {
 
 export const RecipeCardImage = React.memo(function RecipeCardImage({ imageUrl, title }: RecipeCardImageProps) {
     return (
-        <Box sx={styles.imageWrapper}>
-            <CardMedia component="img" height={200} image={imageUrl} alt={title ? `${title} - zdjęcie przepisu` : "Zdjęcie przepisu"} title={title} sx={styles.media} />
-        </Box>
+        <Image
+            src={imageUrl}
+            alt={title ? `${title} - zdjęcie przepisu` : "Zdjęcie przepisu"}
+            fill
+            sizes="(max-width: 600px) 100vw, 300px"
+            style={{
+                objectFit: "cover",
+            }}
+        />
     );
 });

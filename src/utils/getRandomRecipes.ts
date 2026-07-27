@@ -2,14 +2,16 @@ import { groq } from "next-sanity";
 import { client } from "./client";
 import { REGULAR_USER_STATUSES } from "@/types";
 import { ApiResponse } from "@/models/apiResponse";
+import { urlFor } from "../lib/sanity/imageUrl";
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 export type MinimalRecipe = {
     _id: string;
     slug?: string | null;
+    image?: SanityImageSource | null;
     imageUrl?: string | null;
     title?: string | null;
 };
-
 function shuffle<T>(arr: T[]) {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -39,7 +41,7 @@ export async function getRandomRecipes(count = 5): Promise<ApiResponse<MinimalRe
       ]{
         _id,
         "slug": slug.current,
-        "imageUrl": description.image.asset->url,
+        "image": description.image,
         "title": title
       }
     `;
@@ -64,19 +66,26 @@ export async function getRandomRecipes(count = 5): Promise<ApiResponse<MinimalRe
         }
 
         // Preferuj te z imageUrl
-        const withImage = all.filter(r => r.imageUrl && typeof r.imageUrl === "string");
-        const withoutImage = all.filter(r => !r.imageUrl);
+        const withImage = all.filter(r => r.image);
+        const withoutImage = all.filter(r => !r.image);
 
         const shuffledWithImage = shuffle(withImage);
         const shuffledWithoutImage = shuffle(withoutImage);
 
         const result: MinimalRecipe[] = [];
+
         for (const item of shuffledWithImage) {
             if (result.length >= count) break;
-            result.push(item);
+
+            result.push({
+                ...item,
+                imageUrl: item.image ? urlFor(item.image).width(640).height(400).quality(75).auto("format").url() : null,
+            });
         }
+
         for (const item of shuffledWithoutImage) {
             if (result.length >= count) break;
+
             result.push(item);
         }
 

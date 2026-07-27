@@ -21,9 +21,9 @@ export default async function getTopRatedRecipes(limit = 6): Promise<Recipe[]> {
                 title,
                 firstBlockText,
                 image {
-                    asset->{_id, url},
+                    asset,
                     alt
-                }
+}
             },
             ratingSummary {
                 average,

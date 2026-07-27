@@ -48,8 +48,8 @@ const Menu: React.FC<MenuProps> = ({ navItems, mobileOpen, onMobileOpen, onMobil
 
     // --- MOBILE DRAWER ---
     const drawer = (
-        <Box sx={drawerBoxStyle}>
-            <List>
+        <Box sx={drawerBoxStyle} id="drawerBox">
+            <List id="list">
                 {navItems.map(
                     item =>
                         !item.hidden && (
@@ -97,8 +97,8 @@ const Menu: React.FC<MenuProps> = ({ navItems, mobileOpen, onMobileOpen, onMobil
     return (
         <Box role="navigation" sx={navigationStyle}>
             <AppBar position="static" sx={menuAppBarStyle} elevation={0}>
-                <Toolbar sx={menuToolbarStyle}>
-                    <Box sx={desktopMenuContainerStyle}>
+                <Toolbar sx={menuToolbarStyle} id="Toolbar">
+                    <Box sx={desktopMenuContainerStyle} id="Box">
                         {navItems.map(
                             (item, index) =>
                                 !item.hidden && (
