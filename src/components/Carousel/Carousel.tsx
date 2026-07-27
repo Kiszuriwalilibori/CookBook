@@ -49,8 +49,8 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
                 {status === "error" && <EmptyState icon={<SearchOffIcon />} title="Nie udało się załadować przepisów" description="Spróbuj ponownie później" />}
                 {status === "success" && items && (
                     <CarouselLib responsive={responsive} infinite autoPlay autoPlaySpeed={intervalMs} arrows keyBoardControl pauseOnHover>
-                        {items.map(slide => (
-                            <CarouselItem key={slide._id} slide={slide} />
+                        {items.map((slide, index) => (
+                            <CarouselItem key={slide._id} slide={slide} priority={index === 0} />
                         ))}
                     </CarouselLib>
                 )}

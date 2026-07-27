@@ -64,3 +64,16 @@ export const CarouselContainer = styled(Box)(() => ({
 export const SlideImage = styled(Image)(() => ({
     objectFit: "cover",
 }));
+export const focusCardStyles = {
+    "&:focus-within": {
+        boxShadow: "0 0 0 3px #0d3a74, 0 0 0 5px white",
+        outline: "none",
+        borderRadius: "2px",
+    },
+    "&:focus-within:focus-visible": {
+        boxShadow: `
+            0 0 0 3px #0d3a74,
+            0 0 0 5px white
+        `,
+    },
+};

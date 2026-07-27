@@ -3,35 +3,21 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import { Slide } from "./Carousel.types";
-import { SlideWrapper, StyledCard, AspectBox, SlideImage, Overlay } from "./Carousel.styles";
-// import Image from "next/image";
+import { SlideWrapper, StyledCard, AspectBox, SlideImage, Overlay, focusCardStyles } from "./Carousel.styles";
 import SlideLink from "./SlideLink";
 
-interface SlideItemProps {
+interface CarouselItemProps {
     slide: Slide;
+    priority: boolean;
 }
 
-const CarouselItem: React.FC<SlideItemProps> = ({ slide }) => {
+const CarouselItem: React.FC<CarouselItemProps> = ({ slide, priority = false }) => {
     return (
         <SlideWrapper key={slide._id}>
-            <StyledCard
-                sx={{
-                    "&:focus-within": {
-                        boxShadow: "0 0 0 3px #0d3a74, 0 0 0 5px white",
-                        outline: "none",
-                        borderRadius: "2px",
-                    },
-                    "&:focus-within:focus-visible": {
-                        boxShadow: `
-            0 0 0 3px #0d3a74,
-            0 0 0 5px white
-        `,
-                    },
-                }}
-            >
+            <StyledCard sx={focusCardStyles}>
                 <SlideLink slide={slide}>
                     <AspectBox>
-                        <SlideImage src={slide.imageUrl || "/placeholder.png"} alt={slide.title ?? "Recipe"} fill sizes="(max-width: 900px) 100vw, (max-width: 1200px) 50vw, 33vw" priority={false} />
+                        <SlideImage src={slide.imageUrl || "/placeholder.png"} alt={slide.title ?? "Recipe"} fill sizes="(max-width: 900px) 100vw, (max-width: 1200px) 50vw, 33vw" priority={priority} />
                         <Overlay>
                             <Typography variant="subtitle1" fontWeight={700}>
                                 {slide.title ?? "Untitled"}
