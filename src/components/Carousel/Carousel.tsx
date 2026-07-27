@@ -8,7 +8,7 @@ import CarouselLib from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 import { EmptyState } from "@/components/EmptyState";
-import { Section } from "./Carousel.styles";
+import { CarouselContainer, Section } from "./Carousel.styles";
 import { Slide } from "./Carousel.types";
 
 import CarouselItem from "./Carousel.item";
@@ -42,17 +42,19 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
     const router = useRouter();
 
     return (
-        <Section>
-            {showLoading && <LoadingIndicator prompt="Ładowanie przepisów..." centeredInParent={true} />}
-            {status === "empty" && <EmptyState icon={<SearchOffIcon />} title="Nie ma polecanych przepisów" description="Sprawdź później albo pobierz wszystkie" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />}
-            {status === "error" && <EmptyState icon={<SearchOffIcon />} title="Nie udało się załadować przepisów" description="Spróbuj ponownie później" />}
-            {status === "success" && items && (
-                <CarouselLib responsive={responsive} infinite autoPlay autoPlaySpeed={intervalMs} arrows keyBoardControl pauseOnHover>
-                    {items.map(slide => (
-                        <CarouselItem key={slide._id} slide={slide} />
-                    ))}
-                </CarouselLib>
-            )}
+        <Section id={"Carousel.Section"}>
+            <CarouselContainer>
+                {showLoading && <LoadingIndicator prompt="Ładowanie przepisów..." centeredInParent={true} />}
+                {status === "empty" && <EmptyState icon={<SearchOffIcon />} title="Nie ma polecanych przepisów" description="Sprawdź później albo pobierz wszystkie" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />}
+                {status === "error" && <EmptyState icon={<SearchOffIcon />} title="Nie udało się załadować przepisów" description="Spróbuj ponownie później" />}
+                {status === "success" && items && (
+                    <CarouselLib responsive={responsive} infinite autoPlay autoPlaySpeed={intervalMs} arrows keyBoardControl pauseOnHover>
+                        {items.map(slide => (
+                            <CarouselItem key={slide._id} slide={slide} />
+                        ))}
+                    </CarouselLib>
+                )}
+            </CarouselContainer>
         </Section>
     );
 }

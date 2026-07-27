@@ -56,3 +56,6 @@ export const skeletonStyles: SxProps<Theme> = {
     position: "absolute",
     inset: 0,
 };
+export const CarouselContainer = styled(Box)(() => ({
+    minHeight: "346.03px",
+}));
