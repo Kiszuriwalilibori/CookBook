@@ -4,6 +4,7 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import { Slide } from "./Carousel.types";
 import { SlideWrapper, StyledCard, AspectBox, SlideImage, Overlay } from "./Carousel.styles";
+// import Image from "next/image";
 import SlideLink from "./SlideLink";
 
 interface SlideItemProps {
@@ -30,7 +31,8 @@ const CarouselItem: React.FC<SlideItemProps> = ({ slide }) => {
             >
                 <SlideLink slide={slide}>
                     <AspectBox>
-                        <SlideImage src={slide.imageUrl || "/placeholder.png"} alt={slide.title ?? "Recipe"} />
+                        {/* <SlideImage src={slide.imageUrl || "/placeholder.png"} alt={slide.title ?? "Recipe"} /> */}
+                        <SlideImage src={slide.imageUrl || "/placeholder.png"} alt={slide.title ?? "Recipe"} fill sizes="(max-width: 900px) 100vw, (max-width: 1200px) 50vw, 33vw" priority={false} />
                         <Overlay>
                             <Typography variant="subtitle1" fontWeight={700}>
                                 {slide.title ?? "Untitled"}
@@ -44,3 +46,5 @@ const CarouselItem: React.FC<SlideItemProps> = ({ slide }) => {
 };
 
 export default CarouselItem;
+
+// todo powinna być obsługa błędu odczytania obrazka

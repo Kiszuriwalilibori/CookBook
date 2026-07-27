@@ -1,4 +1,5 @@
 import { SxProps, Theme } from "@mui/material";
+import Image from "next/image";
 
 import { Box, Card, CardContent } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -26,14 +27,14 @@ export const AspectBox = styled(Box)(() => ({
     backgroundColor: "#f4f4f4",
 }));
 
-export const SlideImage = styled("img")(() => ({
-    position: "absolute",
-    inset: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    display: "block",
-}));
+// export const SlideImage = styled("img")(() => ({
+//     position: "absolute",
+//     inset: 0,
+//     width: "100%",
+//     height: "100%",
+//     objectFit: "cover",
+//     display: "block",
+// }));
 
 export const Overlay = styled(CardContent)(({ theme }) => ({
     position: "absolute",
@@ -58,4 +59,8 @@ export const skeletonStyles: SxProps<Theme> = {
 };
 export const CarouselContainer = styled(Box)(() => ({
     minHeight: "346.03px",
+}));
+
+export const SlideImage = styled(Image)(() => ({
+    objectFit: "cover",
 }));
