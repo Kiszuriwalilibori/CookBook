@@ -1,3 +1,117 @@
+// import { groq } from "next-sanity";
+// import { client } from "./client";
+// import { REGULAR_USER_STATUSES } from "@/types";
+// import { ApiResponse } from "@/models/apiResponse";
+// import { urlFor } from "../lib/sanity/imageUrl";
+// import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+
+// export type MinimalRecipe = {
+//     _id: string;
+//     slug?: string | null;
+//     image?: SanityImageSource | null;
+//     imageUrl?: string | null;
+//     title?: string | null;
+// };
+// function shuffle<T>(arr: T[]) {
+//     const a = arr.slice();
+//     for (let i = a.length - 1; i > 0; i--) {
+//         const j = Math.floor(Math.random() * (i + 1));
+//         [a[i], a[j]] = [a[j], a[i]];
+//     }
+//     return a;
+// }
+
+// /**
+//  * Pobiera `count` losowych przepisów:
+//  *  - status ∈ REGULAR_USER_STATUSES
+//  *  - posiada slug.current (wymagane)
+//  *  - imageUrl pobierane WYŁĄCZNIE z description.image.asset->url
+//  *
+//  * Preferuje przepisy z description.image, ale dopełnia listę innymi przepisami jeśli potrzeba.
+//  */
+// export async function getRandomRecipes(count = 5): Promise<ApiResponse<MinimalRecipe[]>> {
+//     try {
+//         const statuses = REGULAR_USER_STATUSES.map(s => String(s).toLowerCase());
+
+//         const query = groq`
+//       *[
+//         _type == "recipe"
+//         && defined(slug.current)
+//         && lower(status) in $statuses
+//       ]{
+//         _id,
+//         "slug": slug.current,
+//         "image": description.image,
+//         "title": title
+//       }
+//     `;
+
+//         const all = await client.fetch<MinimalRecipe[]>(query, { statuses });
+
+//         if (!Array.isArray(all)) {
+//             return {
+//                 ok: false,
+//                 error: {
+//                     code: "INVALID_RESPONSE",
+//                     message: "Nieprawidłowa odpowiedź serwera",
+//                 },
+//             };
+//         }
+
+//         if (all.length === 0) {
+//             return {
+//                 ok: true,
+//                 data: [],
+//             };
+//         }
+
+//         // Preferuj te z imageUrl
+//         const withImage = all.filter(r => r.image);
+//         const withoutImage = all.filter(r => !r.image);
+
+//         const shuffledWithImage = shuffle(withImage);
+//         const shuffledWithoutImage = shuffle(withoutImage);
+
+//         const result: MinimalRecipe[] = [];
+
+//         for (const item of shuffledWithImage) {
+//             if (result.length >= count) break;
+
+//             result.push({
+//                 ...item,
+//                 imageUrl: item.image ? urlFor(item.image).width(640).height(400).quality(75).auto("format").url() : null,
+//             });
+//         }
+
+//         for (const item of shuffledWithoutImage) {
+//             if (result.length >= count) break;
+
+//             result.push(item);
+//         }
+
+//         return {
+//             ok: true,
+//             data: result,
+//         };
+//     } catch (err) {
+//         console.error("[getRandomRecipes] error:", err);
+
+//         return {
+//             ok: false,
+//             error: {
+//                 code: "INTERNAL_SERVER_ERROR",
+//                 message: "Nie udało się pobrać losowych przepisów",
+//             },
+//         };
+//     }
+// }
+
+// export default getRandomRecipes;
+
+// // todo czy tu nie pasowałby ten error na catch??
+// // todo z innej beczki dodać jakiś deskryptor do ilości porcji bo czasami niejasne
+// // komentarze powinny się ładować tak: najpierw 3 potem jak jest rozkaz reszta
+
 import { groq } from "next-sanity";
 import { client } from "./client";
 import { REGULAR_USER_STATUSES } from "@/types";
@@ -12,39 +126,42 @@ export type MinimalRecipe = {
     imageUrl?: string | null;
     title?: string | null;
 };
+
 function shuffle<T>(arr: T[]) {
     const a = arr.slice();
+
     for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [a[i], a[j]] = [a[j], a[i]];
     }
+
     return a;
 }
 
 /**
  * Pobiera `count` losowych przepisów:
  *  - status ∈ REGULAR_USER_STATUSES
- *  - posiada slug.current (wymagane)
- *  - imageUrl pobierane WYŁĄCZNIE z description.image.asset->url
- *
- * Preferuje przepisy z description.image, ale dopełnia listę innymi przepisami jeśli potrzeba.
+ *  - posiada slug.current
+ *  - posiada description.image.asset
+ *  - zwraca gotowy imageUrl dla karuzeli
  */
 export async function getRandomRecipes(count = 5): Promise<ApiResponse<MinimalRecipe[]>> {
     try {
         const statuses = REGULAR_USER_STATUSES.map(s => String(s).toLowerCase());
 
         const query = groq`
-      *[
-        _type == "recipe"
-        && defined(slug.current)
-        && lower(status) in $statuses
-      ]{
-        _id,
-        "slug": slug.current,
-        "image": description.image,
-        "title": title
-      }
-    `;
+            *[
+                _type == "recipe"
+                && defined(slug.current)
+                && lower(status) in $statuses
+                && defined(description.image.asset)
+            ]{
+                _id,
+                "slug": slug.current,
+                "image": description.image,
+                title
+            }
+        `;
 
         const all = await client.fetch<MinimalRecipe[]>(query, { statuses });
 
@@ -65,29 +182,14 @@ export async function getRandomRecipes(count = 5): Promise<ApiResponse<MinimalRe
             };
         }
 
-        // Preferuj te z imageUrl
-        const withImage = all.filter(r => r.image);
-        const withoutImage = all.filter(r => !r.image);
-
-        const shuffledWithImage = shuffle(withImage);
-        const shuffledWithoutImage = shuffle(withoutImage);
-
-        const result: MinimalRecipe[] = [];
-
-        for (const item of shuffledWithImage) {
-            if (result.length >= count) break;
-
-            result.push({
-                ...item,
-                imageUrl: item.image ? urlFor(item.image).width(640).height(400).quality(75).auto("format").url() : null,
-            });
-        }
-
-        for (const item of shuffledWithoutImage) {
-            if (result.length >= count) break;
-
-            result.push(item);
-        }
+        const result = shuffle(all)
+            .slice(0, count)
+            .map(recipe => ({
+                _id: recipe._id,
+                slug: recipe.slug,
+                title: recipe.title,
+                imageUrl: recipe.image ? urlFor(recipe.image).width(640).height(400).quality(75).auto("format").url() : null,
+            }));
 
         return {
             ok: true,
@@ -107,7 +209,3 @@ export async function getRandomRecipes(count = 5): Promise<ApiResponse<MinimalRe
 }
 
 export default getRandomRecipes;
-
-// todo czy tu nie pasowałby ten error na catch??
-// todo z innej beczki dodać jakiś deskryptor do ilości porcji bo czasami niejasne
-// komentarze powinny się ładować tak: najpierw 3 potem jak jest rozkaz reszta

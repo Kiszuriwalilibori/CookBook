@@ -57,6 +57,7 @@ export const desktopMenuContainerStyle: SxProps<Theme> = {
     display: { xs: "none", md: "flex" },
     alignItems: "center",
     height: "100%",
+    margin: "0 auto",
     animation: "slideInFromLeft 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards",
     "@keyframes slideInFromLeft": {
         from: {

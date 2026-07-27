@@ -31,7 +31,6 @@ const CarouselItem: React.FC<SlideItemProps> = ({ slide }) => {
             >
                 <SlideLink slide={slide}>
                     <AspectBox>
-                        {/* <SlideImage src={slide.imageUrl || "/placeholder.png"} alt={slide.title ?? "Recipe"} /> */}
                         <SlideImage src={slide.imageUrl || "/placeholder.png"} alt={slide.title ?? "Recipe"} fill sizes="(max-width: 900px) 100vw, (max-width: 1200px) 50vw, 33vw" priority={false} />
                         <Overlay>
                             <Typography variant="subtitle1" fontWeight={700}>
