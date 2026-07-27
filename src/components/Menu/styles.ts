@@ -1,7 +1,10 @@
 import { SxProps, Theme } from "@mui/material/styles";
 
-const MENU_HEIGHT = 64;
-
+// const MENU_HEIGHT = 64;
+const MENU_HEIGHT = {
+    xs: 56,
+    md: 64,
+} as const;
 export const navigationStyle: SxProps<Theme> = { flexGrow: 0, height: MENU_HEIGHT };
 
 export const desktopItemStyles = (currentPathname: string, href: string, hidden?: boolean): SxProps<Theme> => ({
@@ -125,7 +128,15 @@ export const drawerStyle: SxProps<Theme> = {
 export const menuToolbarStyle: SxProps<Theme> = {
     justifyContent: { xs: "flex-start", md: "center" },
     paddingY: 0,
+    minHeight: MENU_HEIGHT,
     height: "100%",
+    "@media (min-width:0px)": {
+        minHeight: MENU_HEIGHT.xs,
+    },
+
+    "@media (min-width:900px)": {
+        minHeight: MENU_HEIGHT.md,
+    },
 };
 export const mobileMenuItemButtonStyle = (currentPathname: string, hidden?: boolean): SxProps<Theme> => ({
     // Merge mobileMenuItemStyle with button-specific styles

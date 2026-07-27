@@ -3,6 +3,7 @@ import { IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { favoriteIcon } from "./styles";
 import { useIsUserSet } from "@/stores/userStore";
+import { touchableSx } from "@/styles/utilityStyles";
 interface RecipeCardFavoriteButtonProps {
     disabled?: boolean;
     isFavorite: boolean;
@@ -14,7 +15,7 @@ export const RecipeCardFavoriteButton = React.memo(function RecipeCardFavoriteBu
 
     if (!isUserSet) return null;
     return (
-        <IconButton disabled={disabled} onClick={onClick} sx={favoriteIcon(isFavorite)} aria-label={`${isFavorite ? "Remove from" : "Add to"} favorites`}>
+        <IconButton id={"RecipeCard.FavoriteButton"} disabled={disabled} onClick={onClick} sx={{ ...favoriteIcon(isFavorite), ...touchableSx }} aria-label={`${isFavorite ? "Remove from" : "Add to"} favorites`}>
             <FavoriteIcon />
         </IconButton>
     );

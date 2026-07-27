@@ -427,3 +427,15 @@ body {
         0 0 0 4px yellow,
         0 0 0 6px #0d3a74 !important;
 }
+
+.react-multiple-carousel__arrow {
+    min-width: 48px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.react-multiple-carousel__arrow::before {
+    font-size: 24px;
+}
