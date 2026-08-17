@@ -47,3 +47,4 @@ export default function AuthorImage() {
     );
 }
 
+// todo guzik odznacz wszystkie jest widoczny choć nic nie jest zaznaczone (dotyczy spisu składników)
