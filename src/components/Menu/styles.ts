@@ -1,7 +1,6 @@
 import { SxProps, Theme } from "@mui/material/styles";
 
-// const MENU_HEIGHT = 64;
-const MENU_HEIGHT = {
+export const MENU_HEIGHT = {
     xs: 56,
     md: 64,
 } as const;

@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-
 import { useTheme } from "@mui/material/styles";
 
 type LoadingIndicatorProps = {
@@ -27,8 +26,14 @@ export default function LoadingIndicator({ open = true, prompt = "Ładowanie..."
                 zIndex: theme.zIndex.modal + 999,
                 backgroundColor: "transparent",
             }}
+            // a11y
+            tabIndex={-1}
         >
             <Box
+                role="status"
+                aria-live="polite"
+                aria-busy={open}
+                aria-label={prompt}
                 sx={{
                     position: "relative",
                     width: size,
@@ -38,9 +43,11 @@ export default function LoadingIndicator({ open = true, prompt = "Ładowanie..."
                     justifyContent: "center",
                 }}
             >
+                {/* Kolorowy spinner – dekoracyjny */}
                 <CircularProgress
                     size={size}
                     thickness={3}
+                    aria-hidden="true"
                     sx={{
                         position: "absolute",
                         color: "transparent",
@@ -52,32 +59,33 @@ export default function LoadingIndicator({ open = true, prompt = "Ładowanie..."
                     }}
                 />
 
+                {/* Szkliste wnętrze */}
                 <Paper
                     elevation={0}
+                    aria-hidden="true"
                     sx={{
                         width: size * 0.82,
                         height: size * 0.82,
                         borderRadius: "50%",
-                        boxSizing: "border-box",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         textAlign: "center",
-                        p: "4px",
+                        px: 2,
                         background: "rgba(255,255,255,0.12)",
                         border: "1px solid rgba(255,255,255,0.2)",
                         backdropFilter: "blur(14px)",
                         WebkitBackdropFilter: "blur(14px)",
                         boxShadow: `
-                            inset 0 1px 1px rgba(255,255,255,0.22),
-                            0 8px 24px rgba(0,0,0,0.18)
-                        `,
+              inset 0 1px 1px rgba(255,255,255,0.22),
+              0 8px 24px rgba(0,0,0,0.18)
+            `,
                     }}
                 >
                     <Typography
+                        variant="caption"
                         sx={{
                             color: "#111",
-                            fontSize: "1rem",
                             fontWeight: 600,
                             lineHeight: 1.3,
                             letterSpacing: 0.3,
@@ -88,7 +96,8 @@ export default function LoadingIndicator({ open = true, prompt = "Ładowanie..."
                     </Typography>
                 </Paper>
 
-                <svg width="0" height="0">
+                {/* SVG gradient */}
+                <svg width="0" height="0" aria-hidden="true" focusable="false">
                     <defs>
                         <linearGradient id="mui-spinner-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stopColor="#00E5FF" />
@@ -103,14 +112,3 @@ export default function LoadingIndicator({ open = true, prompt = "Ładowanie..."
         </Backdrop>
     );
 }
-
-/* =========================
-   PRZYKŁAD UŻYCIA
-========================= */
-
-/*
-<LoadingIndicator
-    open={loading}
-    prompt="Generowanie odpowiedzi"
-/>
-*/

@@ -100,43 +100,12 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
 
     return (
         <Box id="RecipePreparationSteps" sx={styles.preparationContainer}>
-            <Box
-                sx={{
-                    position: "sticky",
-                    top: 0,
-                    zIndex: 10,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 2,
-                    py: 1.5,
-                    px: 2,
-                    mb: 2,
-                    backgroundColor: "background.paper",
-                    borderBottom: "1px solid",
-                    borderColor: "divider",
-                }}
-            >
-                <Typography
-                    variant="body1"
-                    component="span"
-                    sx={{
-                        flexShrink: 0,
-                        fontWeight: 600,
-                        whiteSpace: "nowrap",
-                    }}
-                >
+            <Box sx={styles.preparationProgressBar}>
+                <Typography variant="body1" component="span" sx={styles.preparationProgressLabel}>
                     Krok {activeStep + 1} / {totalSteps}
                 </Typography>
 
-                <LinearProgress
-                    variant="determinate"
-                    value={progress}
-                    aria-label={`Postęp przygotowania: krok ${activeStep + 1} z ${totalSteps}`}
-                    sx={{
-                        flex: 1,
-                        minWidth: 0,
-                    }}
-                />
+                <LinearProgress variant="determinate" value={progress} aria-label={`Postęp przygotowania: krok ${activeStep + 1} z ${totalSteps}`} sx={styles.preparationProgress} />
             </Box>
 
             <Typography variant="h2" sx={styles.preparationTitle}>
@@ -152,7 +121,7 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
                     data-step-index={i}
                 >
                     <Accordion id={`RecipePreparationStep-${i + 1}`} defaultExpanded sx={styles.recipeStepAccordion}>
-                        <AccordionSummary expandIcon={null} sx={styles.recipeStepAccordionSummary}>
+                        <AccordionSummary expandIcon={null} sx={styles.recipeStepAccordionSummary} aria-label={`Krok ${i + 1} — szczegóły przygotowania`}>
                             <Typography variant="h3" sx={styles.recipeStepIndex}>
                                 {i + 1}
                             </Typography>
