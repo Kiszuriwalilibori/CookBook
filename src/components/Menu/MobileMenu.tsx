@@ -21,6 +21,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
     const mobileItemRefs = useRef<Array<HTMLElement | null>>([]);
 
     const isCurrentItem = (href?: string) => Boolean(href && currentPathname === href);
+    const handleDrawerEntered = () => {
+        const firstItem = mobileItemRefs.current.find(Boolean);
+        firstItem?.focus();
+    };
 
     const moveFocus = (currentIndex: number, direction: "next" | "previous" | "first" | "last") => {
         const items = mobileItemRefs.current.filter(Boolean) as HTMLElement[];
@@ -91,9 +95,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
             return;
         }
 
-        const firstItem = mobileItemRefs.current.find(Boolean);
+        const frame = requestAnimationFrame(() => {
+            const firstItem = mobileItemRefs.current.find(Boolean);
+            firstItem?.focus();
+        });
 
-        firstItem?.focus();
+        return () => cancelAnimationFrame(frame);
     }, [open]);
 
     const handleItemClick = (action?: () => void) => {
@@ -176,7 +183,21 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
     };
 
     return (
-        <Drawer id="navigation-drawer" anchor="top" aria-label="Navigation menu" open={open} onClose={onClose} sx={drawerStyle}>
+        <Drawer
+            id="navigation-drawer"
+            anchor="top"
+            aria-label="Navigation menu"
+            open={open}
+            onClose={onClose}
+            sx={drawerStyle}
+            disableEnforceFocus
+            disableAutoFocus
+            slotProps={{
+                transition: {
+                    onEntered: handleDrawerEntered,
+                },
+            }}
+        >
             <Box sx={drawerBoxStyle}>
                 <List>{navItems.map(renderItem)}</List>
             </Box>

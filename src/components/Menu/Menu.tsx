@@ -303,8 +303,9 @@ import { AppBar, Box, IconButton, Toolbar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
 import { drawerButtonStyle, menuAppBarStyle, menuToolbarStyle, navigationStyle } from "./styles";
-import DesktopMenu from "./DektopMenu";
+
 import MobileMenu from "./MobileMenu";
+import DesktopMenu from "./DesktopMenu";
 
 export interface NavItem {
     label: string;
