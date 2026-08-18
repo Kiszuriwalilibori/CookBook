@@ -341,7 +341,7 @@ const Menu: React.FC<MenuProps> = ({ navItems, mobileOpen, onMobileOpen, onMobil
                 <Toolbar sx={menuToolbarStyle}>
                     <DesktopMenu navItems={visibleNavItems} />
 
-                    <IconButton ref={drawerButtonRef} aria-label="Open navigation menu" aria-expanded={mobileOpen} aria-controls={mobileOpen ? "navigation-drawer" : undefined} edge="end" onClick={onMobileOpen} sx={drawerButtonStyle}>
+                    <IconButton id="hamburger" ref={drawerButtonRef} aria-label="Open navigation menu" aria-expanded={mobileOpen} aria-controls={mobileOpen ? "navigation-drawer" : undefined} edge="end" onClick={onMobileOpen} sx={drawerButtonStyle}>
                         <MenuIcon />
                     </IconButton>
                 </Toolbar>
