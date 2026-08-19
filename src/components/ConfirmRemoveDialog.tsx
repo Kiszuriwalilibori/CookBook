@@ -22,6 +22,14 @@ export const ConfirmRemoveDialog: React.FC<ConfirmRemoveDialogProps> = ({ open, 
             slotProps={{
                 transition: {
                     direction: "up",
+                    timeout: {
+                        enter: 400,
+                        exit: 350,
+                    },
+                    easing: {
+                        enter: "cubic-bezier(0.22, 1, 0.36, 1)",
+                        exit: "cubic-bezier(0.4, 0, 0.2, 1)",
+                    },
                     onExited,
                 },
             }}
