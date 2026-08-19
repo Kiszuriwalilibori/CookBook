@@ -15,7 +15,23 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         },
     },
 
+    // card: {
+    //     height: "100%",
+    //     display: "flex",
+    //     flexDirection: "column",
+    //     transition: "transform 0.2s ease-in-out",
+    //     backgroundColor: "secondary.light",
+    //     "&:hover": {
+    //         transform: "translateY(-4px)",
+    //         boxShadow: 3,
+    //     },
+    //     // Responsywność: Pełna szerokość na mobile, mniejsza na desktop
+    //     width: { xs: "100%", sm: "auto" },
+    //     maxWidth: { xs: "none", sm: 330 },
+    // },
+
     card: {
+        position: "relative",
         height: "100%",
         display: "flex",
         flexDirection: "column",
@@ -25,7 +41,6 @@ export const styles: { [key: string]: SxProps<Theme> } = {
             transform: "translateY(-4px)",
             boxShadow: 3,
         },
-        // Responsywność: Pełna szerokość na mobile, mniejsza na desktop
         width: { xs: "100%", sm: "auto" },
         maxWidth: { xs: "none", sm: 330 },
     },

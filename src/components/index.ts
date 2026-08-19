@@ -3,7 +3,7 @@ import Footer from "./Footer/Footer";
 import Header from "./Header/Header";
 import Menu from "./Menu";
 import PageTitle from "./PageTitle";
-import RecipeCard from "./RecipeCard";
+
 import RecipeFilters from "./RecipeFilters";
 import Separator from "./Common/Separator/Separator";
 import Carousel from "./Carousel/Carousel";
@@ -14,4 +14,4 @@ import Providers from "./AppProvider";
 import LoadingIndicator from "./LoadingIndicator";
 import UserInitialiser from "./UserInitialiser";
 
-export { UserInitialiser, ConfirmRemoveDialog, LoadingIndicator, Providers, TopRatedRecipesSection, LatestRecipesSection, RecipeNotesModal, Footer, Header, Carousel, Menu, PageTitle, RecipeCard, RecipeFilters, Separator };
+export { UserInitialiser, ConfirmRemoveDialog, LoadingIndicator, Providers, TopRatedRecipesSection, LatestRecipesSection, RecipeNotesModal, Footer, Header, Carousel, Menu, PageTitle, RecipeFilters, Separator };

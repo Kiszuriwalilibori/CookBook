@@ -9,6 +9,34 @@ import { useIsFavorite } from "@/stores/useFavoritesStore";
 import { useFavorites } from "@/hooks";
 import { useConfirmDialog } from "@/hooks/useConfirmDialog";
 
+/*Komponent wyświetla tytuł przepisu.
+
+Komponent wyświetla opis przepisu.
+
+Link prowadzi do właściwej strony przepisu.
+
+Dla przepisu bez zdjęcia wyświetlany jest obraz zastępczy.
+
+Kliknięcie przycisku dodania do ulubionych dodaje przepis do ulubionych.
+
+Kliknięcie przycisku usunięcia z ulubionych otwiera dialog potwierdzenia.
+
+Podczas ładowania operacji przycisk ulubionych nie wywołuje żadnej akcji.
+
+Otwarty dialog potwierdzenia jest renderowany z tytułem usuwanego przepisu.
+
+Dialog potwierdzenia nie jest renderowany, gdy nie ma aktywnego payloadu.
+
+Potwierdzenie usunięcia wywołuje usunięcie przepisu z ulubionych.
+
+Anulowanie usunięcia zamyka dialog bez usuwania przepisu.
+
+Kliknięcie przycisku ulubionych podczas ładowania nie dodaje ani nie usuwa przepisu z ulubionych.
+
+Przycisk ulubionych jest niezależnym elementem button i nie znajduje się wewnątrz linku.
+
+*/
+
 jest.mock("../../lib/sanity/imageUrl", () => ({
     urlFor: jest.fn(() => ({
         url: jest.fn(() => "/mock-recipe-image.jpg"),
@@ -311,5 +339,19 @@ describe("RecipeCard", () => {
         expect(openDialog).not.toHaveBeenCalled();
         expect(addFavorite).not.toHaveBeenCalled();
         expect(removeFavorite).not.toHaveBeenCalled();
+    });
+    it("renders the favorite button outside the recipe link", () => {
+        render(<RecipeCard recipe={recipe} />);
+
+        const link = screen.getByRole("link", {
+            name: /Kurczak z imbirem/i,
+        });
+
+        const favoriteButton = screen.getByRole("button", {
+            name: "Usuń przepis z ulubionych",
+        });
+
+        expect(link).not.toContainElement(favoriteButton);
+        expect(favoriteButton).toBeInTheDocument();
     });
 });
