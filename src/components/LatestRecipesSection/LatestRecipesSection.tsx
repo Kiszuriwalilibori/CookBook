@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import RecipeCard from "@/components/RecipeCard";
-
+import RecipeCard from "@/components/RecipeCard/RecipeCard";
 import { styles } from "./LatestRecipeSection.styles";
 import getLatestRecipes from "@/utils/getLatestRecipes";
 

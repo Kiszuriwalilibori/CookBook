@@ -2,7 +2,7 @@
 
 import { Box, Grid } from "@mui/material";
 import { useCallback, useState } from "react";
-import { RecipeCard } from "@/components";
+import { RecipeCard } from "@/components/RecipeCard/RecipeCard";
 import { gridSize, pageContainerStyle } from "./styles";
 import type { Recipe } from "@/types";
 

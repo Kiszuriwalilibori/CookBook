@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { Grid, Box, Typography } from "@mui/material";
 
-import { PageTitle, RecipeCard } from "@/components";
+import { PageTitle } from "@/components";
+import { RecipeCard } from "@/components/RecipeCard/RecipeCard";
+
 import { gridSize, pageContainerStyle } from "./styles";
 
 import type { Recipe } from "@/types";
