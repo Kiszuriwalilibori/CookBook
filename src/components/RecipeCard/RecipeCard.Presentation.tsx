@@ -17,9 +17,10 @@ interface RecipeCardPresentationProps {
     isFavorite: boolean;
     imageUrl: string;
     onFavorite: () => void;
+    isLoading: boolean;
 }
 
-export const RecipeCardPresentation = React.memo(function RecipeCardPresentation({ recipe, isFavorite, imageUrl, onFavorite }: RecipeCardPresentationProps) {
+export const RecipeCardPresentation = React.memo(function RecipeCardPresentation({ recipe, isFavorite, imageUrl, onFavorite, isLoading }: RecipeCardPresentationProps) {
     const { title, description, slug } = recipe;
 
     return (
@@ -47,7 +48,7 @@ export const RecipeCardPresentation = React.memo(function RecipeCardPresentation
                 </CardContent>
             </NextLink>
 
-            <RecipeCardFavoriteButton isFavorite={isFavorite} onClick={onFavorite} />
+            <RecipeCardFavoriteButton isFavorite={isFavorite} onClick={onFavorite} isLoading={isLoading} />
         </Card>
     );
 });

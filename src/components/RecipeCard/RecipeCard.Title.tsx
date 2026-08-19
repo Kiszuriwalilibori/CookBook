@@ -8,7 +8,7 @@ interface RecipeCardTitleProps {
 
 export const RecipeCardTitle = React.memo(function RecipeCardTitle({ title }: RecipeCardTitleProps) {
     return (
-        <Typography variant="h6" gutterBottom sx={styles.title} aria-label={title}>
+        <Typography variant="h6" gutterBottom sx={styles.title} aria-label={title} title={title}>
             {title}
         </Typography>
     );

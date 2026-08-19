@@ -1,4 +1,5 @@
 // components/styles.ts
+import theme from "@/themes/theme";
 import { SxProps, Theme } from "@mui/material";
 
 export const styles: { [key: string]: SxProps<Theme> } = {
@@ -137,5 +138,5 @@ export const favoriteIcon = (isFavorite: boolean): SxProps => ({
     position: "absolute",
     top: 8,
     right: 8,
-    color: isFavorite ? "red" : "#9e9e9e",
+    color: isFavorite ? "red" : theme.palette.grey[600],
 });

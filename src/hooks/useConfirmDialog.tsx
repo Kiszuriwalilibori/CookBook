@@ -25,19 +25,33 @@ export function useConfirmDialog<T>({ onConfirm }: UseConfirmDialogOptions<T>) {
     }, [loading]);
 
     // Potwierdza dialog
+    // const confirm = useCallback(async () => {
+    //     if (!payload || loading) return; // blokada podwójnego kliknięcia
+
+    //     setLoading(true);
+    //     try {
+    //         await onConfirm(payload);
+    //     } finally {
+    //         setLoading(false);
+    //         setIsOpen(false);
+    //         setPayload(null);
+    //     }
+    // }, [payload, onConfirm, loading]);
     const confirm = useCallback(async () => {
-        if (!payload || loading) return; // blokada podwójnego kliknięcia
+        if (!payload || loading) return;
+
+        const currentPayload = payload;
 
         setLoading(true);
+        setIsOpen(false);
+        setPayload(null);
+
         try {
-            await onConfirm(payload);
+            await onConfirm(currentPayload);
         } finally {
             setLoading(false);
-            setIsOpen(false);
-            setPayload(null);
         }
     }, [payload, onConfirm, loading]);
-
     return {
         isOpen,
         payload,

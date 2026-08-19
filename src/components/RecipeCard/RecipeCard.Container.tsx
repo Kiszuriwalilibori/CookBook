@@ -54,7 +54,7 @@ export const RecipeCardContainer = React.memo(function RecipeCardContainer({ rec
 
     return (
         <>
-            <RecipeCardPresentation recipe={recipe} isFavorite={isFavorite} imageUrl={imageUrl} onFavorite={handleFavorite} />
+            <RecipeCardPresentation isLoading={isLoading} recipe={recipe} isFavorite={isFavorite} imageUrl={imageUrl} onFavorite={handleFavorite} />
 
             {payload && <ConfirmRemoveDialog open={isOpen} loading={dialogLoading} title={payload.title} onCancel={cancel} onConfirm={confirm} />}
         </>
