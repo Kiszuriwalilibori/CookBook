@@ -128,17 +128,21 @@ import { useApiResponseErrorHandler } from "@/hooks";
 import { ApiResponse } from "@/models/apiResponse";
 
 export const useFavorites = (recipeId: string) => {
-    const { favorites, add, remove } = useFavoritesStore();
+    const isFavorite = useFavoritesStore(state => state.favorites.has(recipeId));
+    const add = useFavoritesStore(state => state.add);
+    const remove = useFavoritesStore(state => state.remove);
 
     const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
+
+    const isLoading = loadingIds.has(recipeId);
 
     const showMessage = useMessage();
     const handleApiResponseError = useApiResponseErrorHandler();
 
     useResetFavoritesOnLogout();
 
-    const isFavorite = favorites.has(recipeId);
-    const isLoading = loadingIds.has(recipeId);
+    // const isFavorite = favorites.has(recipeId);
+    // const isLoading = loadingIds.has(recipeId);
 
     const startLoading = useCallback((id: string) => {
         setLoadingIds(prev => {

@@ -22,10 +22,11 @@ export default function RecipesClient({ initialRecipes, initialFavorites }: Reci
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
 
     useHydrateSSR(initialRecipes, setDisplayRecipes);
+
     useNonAdminRefetch(setDisplayRecipes);
     useAdminRefetch(setDisplayRecipes);
-
-    const { hydrated, setFavorites } = useFavoritesStore();
+    const hydrated = useFavoritesStore(state => state.hydrated);
+    const setFavorites = useFavoritesStore(state => state.setFavorites);
 
     useEffect(() => {
         if (!hydrated && initialFavorites.length > 0) {
