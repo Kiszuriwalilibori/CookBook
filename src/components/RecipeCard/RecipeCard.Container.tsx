@@ -33,6 +33,7 @@ export const RecipeCardContainer = React.memo(function RecipeCardContainer({ rec
         openDialog,
         cancel,
         confirm,
+        afterClose,
     } = useConfirmDialog<Recipe>({
         onConfirm: handleRemoveFavorite,
     });
@@ -55,8 +56,7 @@ export const RecipeCardContainer = React.memo(function RecipeCardContainer({ rec
     return (
         <>
             <RecipeCardPresentation isLoading={isLoading} recipe={recipe} isFavorite={isFavorite} imageUrl={imageUrl} onFavorite={handleFavorite} />
-
-            {payload && <ConfirmRemoveDialog open={isOpen} loading={dialogLoading} title={payload.title} onCancel={cancel} onConfirm={confirm} />}
+            <ConfirmRemoveDialog onExited={afterClose} open={isOpen} loading={dialogLoading} title={payload?.title ?? ""} onCancel={cancel} onConfirm={confirm} />
         </>
     );
 });

@@ -19,39 +19,32 @@ export function useConfirmDialog<T>({ onConfirm }: UseConfirmDialogOptions<T>) {
 
     // Anuluje dialog
     const cancel = useCallback(() => {
-        if (loading) return; // blokada anulowania w trakcie akcji
+        if (loading) return;
+
         setIsOpen(false);
-        setPayload(null);
     }, [loading]);
 
     // Potwierdza dialog
-    // const confirm = useCallback(async () => {
-    //     if (!payload || loading) return; // blokada podwójnego kliknięcia
-
-    //     setLoading(true);
-    //     try {
-    //         await onConfirm(payload);
-    //     } finally {
-    //         setLoading(false);
-    //         setIsOpen(false);
-    //         setPayload(null);
-    //     }
-    // }, [payload, onConfirm, loading]);
     const confirm = useCallback(async () => {
         if (!payload || loading) return;
 
         const currentPayload = payload;
 
         setLoading(true);
-        setIsOpen(false);
-        setPayload(null);
 
         try {
             await onConfirm(currentPayload);
         } finally {
             setLoading(false);
+            setIsOpen(false);
         }
     }, [payload, onConfirm, loading]);
+
+    // Czyści dane dopiero po zakończeniu animacji zamykania
+    const afterClose = useCallback(() => {
+        setPayload(null);
+    }, []);
+
     return {
         isOpen,
         payload,
@@ -59,5 +52,6 @@ export function useConfirmDialog<T>({ onConfirm }: UseConfirmDialogOptions<T>) {
         openDialog,
         cancel,
         confirm,
+        afterClose,
     } as const;
 }
