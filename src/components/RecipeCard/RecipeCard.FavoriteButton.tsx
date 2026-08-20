@@ -26,4 +26,3 @@ export const RecipeCardFavoriteButton = React.memo(function RecipeCardFavoriteBu
         </IconButton>
     );
 });
-// todo: głupio wygląda w tym miejscu loading ind. ale w rodzicu "skacze, zapewne ze względu na rerendery rodzica"

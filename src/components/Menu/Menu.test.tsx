@@ -23,6 +23,7 @@ Po zamknięciu mobilnego menu fokus wraca na przycisk otwierający menu.
 */
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+// import { usePathname } from "next/navigation";
 import { ThemeProvider } from "@mui/material/styles";
 
 import Menu, { NavItem } from "./Menu";
@@ -58,8 +59,12 @@ jest.mock("./MobileMenu", () => ({
     ),
 }));
 
+// jest.mock("next/navigation", () => ({
+//     usePathname: jest.fn(() => "/"),
+// }));
+
 jest.mock("next/navigation", () => ({
-    usePathname: jest.fn(() => "/"),
+    usePathname: jest.fn(),
 }));
 
 describe("Menu", () => {
@@ -227,4 +232,21 @@ describe("Menu", () => {
             expect(trigger).toHaveFocus();
         });
     });
+    // it("marks „Szukaj” as the current page on the search page", () => {
+    //     (usePathname as jest.Mock).mockReturnValue("/search");
+
+    //     renderMenu({
+    //         navItems: [
+    //             ...navItems,
+    //             {
+    //                 label: "Szukaj",
+    //                 href: "/search",
+    //                 icon: <span>S</span>,
+    //             },
+    //         ],
+    //     });
+
+    //     expect(screen.getByRole("link", { name: "Szukaj" })).toHaveAttribute("aria-current", "page");
+    // });
 });
+//todo ten test trzeba będzie dorobić

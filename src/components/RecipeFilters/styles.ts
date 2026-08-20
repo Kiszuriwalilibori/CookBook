@@ -6,6 +6,7 @@ export const containerSx: SxProps = {
     maxWidth: 400,
     width: "100%",
     position: "relative",
+    mx: "auto",
 };
 
 export const fieldBoxSx: SxProps = {
@@ -69,7 +70,6 @@ export const limitedChipBoxSx = (isScrollable: boolean): SxProps<Theme> => ({
     ...chipContainerSx,
     overflowY: isScrollable ? "auto" : "visible",
 });
-
 
 export const popupIndicatorSx: SxProps<Theme> = {
     color: "var(--foreground)",

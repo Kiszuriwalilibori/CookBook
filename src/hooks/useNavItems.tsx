@@ -31,9 +31,15 @@ export const useNavItems = (initialSummary?: RecipeFilter | null, onSearchClick?
         { label: "O mnie", href: "/about", icon: <InfoIcon /> },
         {
             label: "Szukaj",
+            href: "/search",
             icon: <SearchIcon />,
-            onClick: onSearchClick,
             hidden: !isFiltersLoaded,
         },
+        // {
+        //     label: "Szukaj",
+        //     icon: <SearchIcon />,
+        //     onClick: onSearchClick,
+        //     hidden: !isFiltersLoaded,
+        // },
     ];
 };

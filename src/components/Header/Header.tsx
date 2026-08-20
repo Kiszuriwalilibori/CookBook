@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { Menu } from "@/components";
 
-import { useEscapeKey, useRecipesSummary, useGoogleSignIn, useNavItems } from "@/hooks";
+import { useGoogleSignIn, useNavItems } from "@/hooks";
 import { RecipeFilter } from "@/types";
 
 // import GoogleSignInButton from "./GoogleSignInButton";
-import { RecipeFiltersModal } from "./RecipeFiltersModal";
+
 import GoogleLogoutButton from "@/app/(main)/kiszuriwalilibori-admin-jestem/GoogleLogoutButton";
 
 interface HeaderProps {
@@ -18,10 +18,7 @@ interface HeaderProps {
 const Header = ({ initialSummary, fetchError }: HeaderProps) => {
     const [ui, setUI] = useState({
         mobileMenuOpen: false,
-        filterOpen: false,
     });
-
-    const { summary: options } = useRecipesSummary(initialSummary || undefined);
 
     useGoogleSignIn();
 
@@ -29,13 +26,7 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
 
     const closeMobileMenu = () => setUI(s => ({ ...s, mobileMenuOpen: false }));
 
-    const openFilters = () => setUI({ mobileMenuOpen: false, filterOpen: true });
-
-    const closeFilters = () => setUI(s => ({ ...s, filterOpen: false }));
-
-    const navItems = useNavItems(initialSummary, openFilters);
-
-    useEscapeKey(ui.filterOpen, closeFilters);
+    const navItems = useNavItems(initialSummary);
 
     useEffect(() => {
         if (fetchError) {
@@ -46,9 +37,7 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
     return (
         <>
             <Menu navItems={navItems} mobileOpen={ui.mobileMenuOpen} onMobileOpen={openMobileMenu} onMobileClose={closeMobileMenu} />
-
             <GoogleLogoutButton />
-            <RecipeFiltersModal open={ui.filterOpen} onClose={closeFilters} options={options} />
         </>
     );
 };

@@ -114,7 +114,7 @@
 // }
 
 "use client";
-
+import Portal from "@mui/material/Portal";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -235,18 +235,52 @@ export default function LoadingIndicator({ open = true, prompt = "Ładowanie..."
         );
     }
 
+    // return (
+    //     <Backdrop
+    //         open={open}
+    //         sx={{
+    //             position: centeredInParent ? "absolute" : "fixed",
+    //             inset: 0,
+    //             zIndex: theme.zIndex.modal + 999,
+    //             backgroundColor: "transparent",
+    //         }}
+    //         tabIndex={-1}
+    //     >
+    //         {content}
+    //     </Backdrop>
+    // );
+    if (centeredInParent) {
+        return (
+            <Backdrop
+                open={open}
+                sx={{
+                    position: "absolute",
+                    inset: 0,
+                    zIndex: theme.zIndex.modal + 999,
+                    backgroundColor: "transparent",
+                }}
+                tabIndex={-1}
+            >
+                {content}
+            </Backdrop>
+        );
+    }
+
     return (
-        <Backdrop
-            open={open}
-            sx={{
-                position: centeredInParent ? "absolute" : "fixed",
-                inset: 0,
-                zIndex: theme.zIndex.modal + 999,
-                backgroundColor: "transparent",
-            }}
-            tabIndex={-1}
-        >
-            {content}
-        </Backdrop>
+        <Portal>
+            <Backdrop
+                open={open}
+                sx={{
+                    position: "fixed",
+                    inset: 0,
+                    zIndex: theme.zIndex.modal + 999,
+                    backgroundColor: "transparent",
+                }}
+                tabIndex={-1}
+            >
+                {content}
+            </Backdrop>
+        </Portal>
     );
 }
+//todo przemyśleć czy jednak nie dać fixed pozycji po całości
