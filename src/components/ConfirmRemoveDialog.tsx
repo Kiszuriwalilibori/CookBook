@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Fade, Typography } from "@mui/material";
 
 interface ConfirmRemoveDialogProps {
     open: boolean;
@@ -17,18 +17,11 @@ export const ConfirmRemoveDialog: React.FC<ConfirmRemoveDialogProps> = ({ open, 
             open={open}
             onClose={onCancel}
             slots={{
-                transition: Slide,
+                transition: Fade,
             }}
             slotProps={{
                 transition: {
-                    direction: "up",
-                    timeout: {
-                        enter: 400,
-                    },
-                    easing: {
-                        enter: "cubic-bezier(0.22, 1, 0.36, 1)",
-                        exit: "cubic-bezier(0.4, 0, 0.2, 1)",
-                    },
+                    timeout: 700,
                     onExited,
                 },
             }}

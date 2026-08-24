@@ -95,21 +95,20 @@ describe("useCarouselSlides", () => {
 
         expect(result.current.items).toEqual([]);
 
-        expect(mockHandleApiError).toHaveBeenCalledWith({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "Server error",
-        });
+        // expect(mockHandleApiError).toHaveBeenCalledWith({
+        //     code: "INTERNAL_SERVER_ERROR",
+        //     message: "Server error",
+        // });
+
+        expect(mockHandleApiError).toHaveBeenCalledWith(
+            expect.objectContaining({
+                code: "INTERNAL_SERVER_ERROR",
+                message: "Server error",
+            })
+        );
     });
 
     it("does not update state after unmount during fetch", async () => {
-        // let resolveFetch!: (value: { json: () => Promise<unknown> }) => void;
-
-        // global.fetch = jest.fn(
-        //     () =>
-        //         new Promise(resolve => {
-        //             resolveFetch = resolve;
-        //         })
-        // );
         let resolveFetch!: (value: unknown) => void;
 
         global.fetch = jest.fn(

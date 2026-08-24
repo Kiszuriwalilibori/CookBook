@@ -1,4 +1,5 @@
 import { ApiErrorPayload } from "@/models/apiResponse";
+import { useCallback } from "react";
 import useMessage, { MessageMethods } from "@/hooks/useMessage";
 
 export type MessageType = keyof MessageMethods;
@@ -26,40 +27,43 @@ function isApiErrorPayload(err: unknown): err is ApiErrorPayload {
 export function useApiResponseErrorHandler() {
     const showMessage = useMessage();
 
-    return (err: unknown, map: ErrorHandlerMap = {}) => {
-        console.log(err);
+    return useCallback(
+        (err: unknown, map: ErrorHandlerMap = {}) => {
+            console.log(err);
 
-        // Transport errors (fetch / parse)
-        if (isTransportError(err)) {
-            switch (err.type) {
-                case "NETWORK_ERROR":
-                    showMessage.error("Brak połączenia z internetem");
-                    return;
+            // Transport errors (fetch / parse)
+            if (isTransportError(err)) {
+                switch (err.type) {
+                    case "NETWORK_ERROR":
+                        showMessage.error("Brak połączenia z internetem");
+                        return;
 
-                case "PARSE_ERROR":
-                    showMessage.error("Błąd odpowiedzi serwera");
-                    return;
+                    case "PARSE_ERROR":
+                        showMessage.error("Błąd odpowiedzi serwera");
+                        return;
 
-                case "ABORTED":
-                    showMessage.info("Zapytanie przerwane");
-                    return;
+                    case "ABORTED":
+                        showMessage.info("Zapytanie przerwane");
+                        return;
+                }
             }
-        }
 
-        // Unknown error
-        if (!isApiErrorPayload(err)) {
-            showMessage.error("Nieoczekiwany błąd");
-            return;
-        }
+            // Unknown error
+            if (!isApiErrorPayload(err)) {
+                showMessage.error("Nieoczekiwany błąd");
+                return;
+            }
 
-        // API error
-        const config = map[err.code];
+            // API error
+            const config = map[err.code];
 
-        if (!config) {
-            showMessage.error(err.message);
-            return;
-        }
+            if (!config) {
+                showMessage.error(err.message);
+                return;
+            }
 
-        showMessage[config.type](config.message ?? err.message);
-    };
+            showMessage[config.type](config.message ?? err.message);
+        },
+        [showMessage]
+    );
 }

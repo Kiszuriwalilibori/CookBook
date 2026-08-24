@@ -102,38 +102,12 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                     type: "warning",
                 },
             });
-            // handleApiError(
-            //     err,
-            //     {
-            //         EMPTY_NOTES: msg => showMessage.warning(msg),
-            //         RECIPE_NOT_FOUND: msg => showMessage.warning(msg),
-            //         MISSING_RECIPE_ID: msg => showMessage.warning(msg),
-            //         MISSING_USER: () => showMessage.warning("Nie można zidentyfikować użytkownika."),
-            //     },
-            //     msg => showMessage.error(msg)
-            // );
         } finally {
             setSaving(false);
             onClose();
         }
     };
 
-    //     if (!notes?.trim()) return; // nie pozwalamy na delete pustej notatki
-    //     const confirmDelete = confirm("Czy na pewno chcesz usunąć notatkę?");
-    //     if (!confirmDelete) return;
-
-    //     setSaving(true);
-    //     try {
-    //         await fetch(`/api/recipe-notes?recipeId=${recipeId}`, { method: "DELETE" });
-    //         router.refresh();
-    //         onClose();
-    //     } catch (err) {
-    //         console.error("Nie udało się usunąć notatki:", err);
-    //         alert("Nie udało się usunąć notatki. Spróbuj ponownie.");
-    //     } finally {
-    //         setSaving(false);
-    //     }
-    // };
     const handleDelete = async () => {
         if (!notes?.trim()) return;
 
@@ -166,15 +140,6 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                     type: "warning",
                 },
             });
-            // handleApiError(
-            //     err,
-            //     {
-            //         NOTE_NOT_FOUND: msg => showMessage.warning(msg),
-            //         MISSING_RECIPE_ID: msg => showMessage.warning(msg),
-            //         MISSING_USER: msg => showMessage.warning(msg),
-            //     },
-            //     msg => showMessage.error(msg)
-            // );
         } finally {
             setSaving(false);
         }

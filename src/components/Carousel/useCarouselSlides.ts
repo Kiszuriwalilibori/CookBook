@@ -1,7 +1,7 @@
 import { useApiResponseErrorHandler } from "@/hooks";
 import { useState, useEffect } from "react";
 import { Slide } from "./Carousel.types";
-import { ApiError, ApiResponse } from "@/models/apiResponse";
+import { ApiResponse } from "@/models/apiResponse";
 
 interface UseCarouselSlidesProps {
     count: number;
@@ -41,11 +41,13 @@ export function useCarouselSlides({ count, initialSlides }: UseCarouselSlidesPro
                 if (!mounted) return;
 
                 if (!result.ok) {
-                    throw new ApiError(result.error.code, result.error.message);
+                    handleApiError(result.error);
+                    setItems([]);
+                    setStatus("error");
+                    return;
                 }
 
                 setItems(result.data);
-
                 setStatus(result.data.length ? "success" : "empty");
             } catch (error) {
                 if (!mounted) return;

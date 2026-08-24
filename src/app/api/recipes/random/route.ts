@@ -7,7 +7,6 @@ export async function GET(request: Request) {
         const url = new URL(request.url);
         const countParam = url.searchParams.get("count");
         const parsedCount = countParam ? parseInt(countParam, 10) : 5;
-
         const count = Number.isNaN(parsedCount) ? 5 : Math.max(1, Math.min(20, parsedCount));
         const recipes = await getRandomRecipes(count);
 

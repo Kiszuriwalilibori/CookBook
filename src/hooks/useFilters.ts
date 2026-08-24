@@ -50,7 +50,6 @@ export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: Fil
     const normalizers = useMemo<Normalizers>(
         () => ({
             title: val => (val as string).trim().toLowerCase(),
-            // cuisine: val => (val as string).trim().toLowerCase(),
             cuisine: val => normalizeMultiple(val as string[], options.cuisine),
             tags: val => normalizeMultiple(val as string[], options.tags),
             dietary: val => normalizeMultiple(val as string[], options.dietary),

@@ -47,7 +47,6 @@ export async function POST(req: NextRequest) {
 
         // 2️⃣ Obsługa przypadku nowa ocena = stara ocena
         if (existingRating && existingRating.rating === rating) {
-            // return NextResponse.json({ status: "noChange", existingRating, message: "Nie zmieniono oceny" });
             return NextResponse.json({
                 ok: true,
                 data: {
@@ -69,7 +68,6 @@ export async function POST(req: NextRequest) {
                 },
                 { status: 409 }
             );
-            // return NextResponse.json({ status: "exists", existingRating }, { status: 409 });
         }
 
         // 4️⃣ Przygotuj nową ocenę lub nadpisanie
@@ -98,13 +96,6 @@ export async function POST(req: NextRequest) {
         // 6️⃣ Patch w Sanity
         await writeClient.patch(recipe._id).set({ ratings: mergedRatings, ratingSummary }).commit();
 
-        // return NextResponse.json({ status: "ok", ratingSummary, ratingSent: rating });
-
-        // return NextResponse.json({
-        //     ok: true,
-        //     data: ratingSummary,
-        // });
-
         return NextResponse.json({
             ok: true,
             data: {
@@ -116,7 +107,6 @@ export async function POST(req: NextRequest) {
     } catch (err: unknown) {
         console.error("Error saving rating:", err);
         return apiErrorResponse(err);
-        // return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
     }
 }
 
@@ -126,7 +116,6 @@ export async function GET(req: NextRequest) {
 
         if (!recipeId) {
             throw new ApiError("RECIPE_NOT_FOUND", "Nie znaleziono przepisu", 404);
-            // return NextResponse.json({ error: "Brak recipeId" }, { status: 400 });
         }
 
         const recipe = await client.fetch<{
@@ -145,15 +134,9 @@ export async function GET(req: NextRequest) {
                 count: recipe?.ratingSummary?.count ?? 0,
             },
         });
-
-        // return NextResponse.json({
-        //     averageRating: recipe?.ratingSummary?.average ?? null,
-        //     totalRatings: recipe?.ratingSummary?.count ?? 0,
-        // });
     } catch (err: unknown) {
         console.error("Error fetching ratings:", err);
         return apiErrorResponse(err);
-        // return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
     }
 }
 
