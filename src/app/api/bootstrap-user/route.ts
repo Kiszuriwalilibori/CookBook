@@ -1,5 +1,7 @@
 import { cookies } from "next/headers";
 import { randomUUID } from "crypto";
+import { NextResponse } from "next/server";
+import { ApiSuccessResponse } from "@/models/apiResponse";
 
 export async function GET() {
     const cookieStore = await cookies();
@@ -18,5 +20,10 @@ export async function GET() {
         });
     }
 
-    return Response.json({ userId });
+    return NextResponse.json<ApiSuccessResponse<{ userId: string }>>({
+        ok: true,
+        data: {
+            userId,
+        },
+    });
 }

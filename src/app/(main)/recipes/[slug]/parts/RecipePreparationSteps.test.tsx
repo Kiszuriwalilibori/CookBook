@@ -111,7 +111,7 @@ describe("RecipePreparationSteps", () => {
         expect(mockObserve).toHaveBeenCalledTimes(3);
     });
 
-    it("updates the active step when IntersectionObserver detects another step", () => {
+    it("updates the active step when another step becomes visible", () => {
         const steps = [createStep(1), createStep(2), createStep(3)];
 
         render(<RecipePreparationSteps recipe={createRecipe(steps)} />);
@@ -128,9 +128,6 @@ describe("RecipePreparationSteps", () => {
                     {
                         isIntersecting: true,
                         target: stepTwo!,
-                        boundingClientRect: {
-                            top: 120,
-                        } as DOMRect,
                     } as IntersectionObserverEntry,
                 ],
                 {} as IntersectionObserver
@@ -141,13 +138,12 @@ describe("RecipePreparationSteps", () => {
         expect(screen.queryByText("Krok 1 / 3")).not.toBeInTheDocument();
     });
 
-    it("uses the step closest to the top when multiple steps are visible", () => {
+    it("uses the highest visible step when multiple steps are visible", () => {
         const steps = [createStep(1), createStep(2), createStep(3)];
 
         render(<RecipePreparationSteps recipe={createRecipe(steps)} />);
 
         const stepTwo = document.querySelector('[data-step-index="1"]');
-
         const stepThree = document.querySelector('[data-step-index="2"]');
 
         expect(stepTwo).not.toBeNull();
@@ -159,16 +155,10 @@ describe("RecipePreparationSteps", () => {
                     {
                         isIntersecting: true,
                         target: stepTwo!,
-                        boundingClientRect: {
-                            top: 180,
-                        } as DOMRect,
                     } as IntersectionObserverEntry,
                     {
                         isIntersecting: true,
                         target: stepThree!,
-                        boundingClientRect: {
-                            top: 100,
-                        } as DOMRect,
                     } as IntersectionObserverEntry,
                 ],
                 {} as IntersectionObserver
@@ -178,27 +168,86 @@ describe("RecipePreparationSteps", () => {
         expect(screen.getByText("Krok 3 / 3")).toBeInTheDocument();
     });
 
-    it("does not change the active step when no steps are intersecting", () => {
-        const steps = [createStep(1), createStep(2)];
+    it("keeps the previous visible step active when the highest visible step leaves the viewport", () => {
+        const steps = [createStep(1), createStep(2), createStep(3)];
 
         render(<RecipePreparationSteps recipe={createRecipe(steps)} />);
+
+        const stepTwo = document.querySelector('[data-step-index="1"]');
+        const stepThree = document.querySelector('[data-step-index="2"]');
+
+        expect(stepTwo).not.toBeNull();
+        expect(stepThree).not.toBeNull();
 
         act(() => {
             intersectionObserverCallback?.(
                 [
                     {
-                        isIntersecting: false,
-                        target: document.querySelector('[data-step-index="1"]')!,
-                        boundingClientRect: {
-                            top: 100,
-                        } as DOMRect,
+                        isIntersecting: true,
+                        target: stepTwo!,
+                    } as IntersectionObserverEntry,
+                    {
+                        isIntersecting: true,
+                        target: stepThree!,
                     } as IntersectionObserverEntry,
                 ],
                 {} as IntersectionObserver
             );
         });
 
-        expect(screen.getByText("Krok 1 / 2")).toBeInTheDocument();
+        expect(screen.getByText("Krok 3 / 3")).toBeInTheDocument();
+
+        act(() => {
+            intersectionObserverCallback?.(
+                [
+                    {
+                        isIntersecting: false,
+                        target: stepThree!,
+                    } as IntersectionObserverEntry,
+                ],
+                {} as IntersectionObserver
+            );
+        });
+
+        expect(screen.getByText("Krok 2 / 3")).toBeInTheDocument();
+    });
+
+    it("does not change the active step when all visible steps leave the viewport", () => {
+        const steps = [createStep(1), createStep(2)];
+
+        render(<RecipePreparationSteps recipe={createRecipe(steps)} />);
+
+        const stepTwo = document.querySelector('[data-step-index="1"]');
+
+        expect(stepTwo).not.toBeNull();
+
+        act(() => {
+            intersectionObserverCallback?.(
+                [
+                    {
+                        isIntersecting: true,
+                        target: stepTwo!,
+                    } as IntersectionObserverEntry,
+                ],
+                {} as IntersectionObserver
+            );
+        });
+
+        expect(screen.getByText("Krok 2 / 2")).toBeInTheDocument();
+
+        act(() => {
+            intersectionObserverCallback?.(
+                [
+                    {
+                        isIntersecting: false,
+                        target: stepTwo!,
+                    } as IntersectionObserverEntry,
+                ],
+                {} as IntersectionObserver
+            );
+        });
+
+        expect(screen.getByText("Krok 2 / 2")).toBeInTheDocument();
     });
 
     it("updates the progress bar when the active step changes", () => {
@@ -220,9 +269,6 @@ describe("RecipePreparationSteps", () => {
                     {
                         isIntersecting: true,
                         target: stepThree!,
-                        boundingClientRect: {
-                            top: 100,
-                        } as DOMRect,
                     } as IntersectionObserverEntry,
                 ],
                 {} as IntersectionObserver

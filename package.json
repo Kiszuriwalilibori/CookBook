@@ -41,7 +41,8 @@
         "react-dom": "^19.1.2",
         "react-multi-carousel": "^2.8.6",
         "react-rating-stars-component": "^2.2.0",
-        "styled-components": "^6.1.19"
+        "styled-components": "^6.1.19",
+        "undici": "^8.10.0"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3",

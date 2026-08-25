@@ -1,6 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useAdminStore } from "@/stores/useAdminStore";
+import { ApiResponse } from "@/models/apiResponse";
 
 export const useGoogleSignIn = () => {
     const { setLoginStatus } = useAdminStore();
@@ -24,9 +25,16 @@ export const useGoogleSignIn = () => {
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ idToken: response.credential }),
                         });
-                        const { loginStatus } = await res.json();
+                        const data = (await res.json()) as ApiResponse<{
+                            isAdminLogged: boolean;
+                            loginStatus: "admin" | "user";
+                        }>;
 
-                        setLoginStatus(loginStatus, "google login");
+                        if (!data.ok) {
+                            throw data.error;
+                        }
+
+                        setLoginStatus(data.data.loginStatus, "google login");
                     } catch {
                         setLoginStatus("not_logged", "google error");
                     }

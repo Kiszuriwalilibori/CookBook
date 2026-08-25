@@ -34,3 +34,4 @@ export const GoogleLogoutButton = () => {
 };
 
 export default GoogleLogoutButton;
+//  todo w sumie powinien iść jakiś komunikat o wylogowaniu chyba
