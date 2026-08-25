@@ -71,4 +71,3 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
         </Box>
     );
 }
-// todo powinien się blokować "sticky" na górze a nie robi tego
