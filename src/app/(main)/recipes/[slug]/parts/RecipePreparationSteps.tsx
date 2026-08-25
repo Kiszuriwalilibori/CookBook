@@ -1,52 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-
 import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from "@mui/material";
 import { PortableText } from "@portabletext/react";
-import type { PortableTextComponents } from "@portabletext/react";
+
 import Image from "next/image";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { Recipe } from "@/types";
-import { styles, portableTextSx } from "../styles";
+import { styles } from "../styles";
 import { RecipePreparationProgressBar } from "./RecipePreparationProgessBar";
-
-// Custom PortableText components
-const PortableTextComponents: Partial<PortableTextComponents> = {
-    block: ({ children }) => (
-        <Typography variant="body1" sx={portableTextSx.block}>
-            {children}
-        </Typography>
-    ),
-    list: ({ children }) => (
-        <Box component="ul" sx={portableTextSx.list}>
-            {children}
-        </Box>
-    ),
-    listItem: ({ children }) => (
-        <Box component="li" sx={portableTextSx.listItem}>
-            {children}
-        </Box>
-    ),
-    marks: {
-        strong: ({ children }) => (
-            <Typography component="strong" sx={portableTextSx.strong}>
-                {children}
-            </Typography>
-        ),
-        em: ({ children }) => (
-            <Typography component="em" sx={portableTextSx.em}>
-                {children}
-            </Typography>
-        ),
-        link: ({ children, value }) => (
-            <Typography component="a" href={value?.href || "#"} target="_blank" rel="noopener noreferrer" sx={portableTextSx.link}>
-                {children}
-            </Typography>
-        ),
-    },
-};
+import { PortableContentComponents } from "./PortableContentComponents";
+import { useRecipePreparationProgress } from "./useRecipePreparationProgress";
 
 interface RecipePreparationStepsProps {
     recipe: Recipe;
@@ -54,44 +18,8 @@ interface RecipePreparationStepsProps {
 
 export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) {
     const preparationSteps = recipe.preparationSteps ?? [];
-    const [activeStep, setActiveStep] = useState(0);
-    const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-    useEffect(() => {
-        const steps = stepRefs.current.filter((step): step is HTMLDivElement => step !== null);
-
-        if (steps.length === 0) {
-            return;
-        }
-
-        const observer = new IntersectionObserver(
-            entries => {
-                const visibleSteps = entries
-                    .filter(entry => entry.isIntersecting)
-                    .map(entry => ({
-                        index: Number(entry.target.getAttribute("data-step-index")),
-                        top: entry.boundingClientRect.top,
-                    }));
-
-                if (visibleSteps.length === 0) {
-                    return;
-                }
-
-                const closestStep = visibleSteps.reduce((closest, current) => (Math.abs(current.top) < Math.abs(closest.top) ? current : closest));
-
-                setActiveStep(closestStep.index);
-            },
-            {
-                rootMargin: "-96px 0px -60% 0px",
-                threshold: 0,
-            }
-        );
-
-        steps.forEach(step => observer.observe(step));
-
-        return () => observer.disconnect();
-    }, [preparationSteps.length]);
-
+    const { activeStep, stepRefs } = useRecipePreparationProgress(preparationSteps.length);
     if (preparationSteps.length === 0) {
         return null;
     }
@@ -129,7 +57,7 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
                                 </Box>
                             )}
 
-                            {step.content && <PortableText value={step.content} components={PortableTextComponents} />}
+                            {step.content && <PortableText value={step.content} components={PortableContentComponents} />}
 
                             {step.notes && (
                                 <Typography variant="body2" sx={styles.stepNotes}>
