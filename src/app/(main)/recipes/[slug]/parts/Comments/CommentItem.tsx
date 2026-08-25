@@ -5,7 +5,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Avatar, Box, Button, Typography } from "@mui/material";
 
 import { LoadingIndicator } from "@/components";
-import { useFingerprint, useMessage } from "@/hooks";
+import { useFingerprint } from "@/hooks";
 import { RecipeComment } from "@/types";
 
 import CommentForm from "./CommentForm";
@@ -37,12 +37,9 @@ interface CommentItemProps {
 
 export default function CommentItem({ comment, recipeId, depth = 0, handleAddComment }: CommentItemProps) {
     const fingerprint = useFingerprint();
-    const showMessage = useMessage();
     const { showReplies, visibleReplies, hiddenRepliesCount, toggleRepliesVisibility } = useRepliesVisibility(comment.replies);
-    // const [showReplies, setShowReplies] = useState(false);
     const replyFormRef = useRef<HTMLDivElement>(null);
     const isAdminComment = comment.isAdmin === true;
-
     const isOwnComment = checkIsOwnComment(fingerprint, comment.fingerprint);
 
     const { animateLike, triggerLikeAnimation } = useLikeAnimation(300);
@@ -55,7 +52,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
         commentId: comment._id,
         fingerprint,
         initialLikes: comment.likes,
-        showMessage,
+
         onLikeAnimation: triggerLikeAnimation,
     });
 
@@ -79,7 +76,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
     if (!comment) return null;
     if (!fingerprint) {
-        return null; // lub skeleton / loading fragment
+        return null; // todo lub skeleton / loading fragment
     }
 
     return (
@@ -115,8 +112,7 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
 
                         <ReplyButton onToggle={toggleReplyForm} commentId={comment._id} author={comment.author} />
                     </Box>
-                    {/* </Box> */}
-                    {/* tu granica card */}
+
                     <ReplyCollapse open={formOpen} commentId={comment._id}>
                         <CommentForm
                             formContainerRef={replyFormRef}
@@ -153,7 +149,6 @@ export default function CommentItem({ comment, recipeId, depth = 0, handleAddCom
                     </Box>
                 </Box>
             </Box>
-            {/* tu wywalić jednego boxa jak kombinujemy z card */}
         </Box>
     );
 }

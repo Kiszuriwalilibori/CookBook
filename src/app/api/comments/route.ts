@@ -3,7 +3,7 @@ import { writeClient } from "@/utils";
 import { handleShortComment } from "./handleShortComment.service";
 import { handleLike } from "./like.service";
 import { createComment } from "./comment.service";
-import { ApiError } from "@/models/apiResponse";
+import { ApiError, apiErrorResponse } from "@/models/apiResponse";
 
 export async function GET(req: Request) {
     try {
@@ -33,16 +33,7 @@ export async function GET(req: Request) {
         );
     } catch (err) {
         console.error("[COMMENTS][GET]", err);
-        return NextResponse.json(
-            {
-                ok: false,
-                error: {
-                    code: "FETCH_COMMENTS_FAILED",
-                    message: "Nie udało się pobrać komentarzy",
-                },
-            },
-            { status: 500 }
-        );
+        return apiErrorResponse(err);
     }
 }
 export async function POST(req: Request) {
@@ -52,29 +43,7 @@ export async function POST(req: Request) {
 
         return NextResponse.json({ ok: true, data: result }, { status: 200 });
     } catch (err: unknown) {
-        if (err instanceof ApiError) {
-            return NextResponse.json(
-                {
-                    ok: false,
-                    error: {
-                        code: err.code,
-                        message: err.message,
-                    },
-                },
-                { status: err.status ?? 500 }
-            );
-        } else {
-            return NextResponse.json(
-                {
-                    ok: false,
-                    error: {
-                        code: "INTERNAL_SERVER_ERROR",
-                        message: "Wystąpił nieoczekiwany błąd serwera",
-                    },
-                },
-                { status: 500 }
-            );
-        }
+        return apiErrorResponse(err);
     }
 }
 
@@ -99,28 +68,6 @@ export async function PATCH(req: Request) {
         }
     } catch (err: unknown) {
         console.error("[COMMENTS][PATCH]", err);
-        if (err instanceof ApiError) {
-            return NextResponse.json(
-                {
-                    ok: false,
-                    error: {
-                        code: err.code,
-                        message: err.message,
-                    },
-                },
-                { status: err.status ?? 500 }
-            );
-        } else {
-            return NextResponse.json(
-                {
-                    ok: false,
-                    error: {
-                        code: "INTERNAL_ERROR",
-                        message: "Failed to process request",
-                    },
-                },
-                { status: 500 }
-            );
-        }
+        return apiErrorResponse(err);
     }
 }

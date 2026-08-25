@@ -5,31 +5,20 @@ import { useCallback, useMemo } from "react";
 import { useApiResponseErrorHandler } from "@/hooks";
 
 import { useOptimisticMutation } from "./useOptimisticMutation";
+import { ApiResponse } from "@/models/apiResponse";
+
+type LikeCommentData = {
+    likes: string[];
+};
 
 type UseLikeCommentParams = {
     commentId: string;
     fingerprint: string;
     initialLikes: string[];
-
-    showMessage: {
-        error: (msg: string) => void;
-        warning: (msg: string) => void;
-    };
-
     onLikeAnimation?: () => void;
 };
 
-type LikeCommentResponse = {
-    ok: boolean;
-
-    error?: unknown;
-
-    data: {
-        likes: string[];
-    };
-};
-
-export function useLikeComment({ commentId, fingerprint, initialLikes, showMessage, onLikeAnimation }: UseLikeCommentParams) {
+export function useLikeComment({ commentId, fingerprint, initialLikes, onLikeAnimation }: UseLikeCommentParams) {
     const { state: likes, setState: setLikes, isPending: isLiking, run } = useOptimisticMutation<string[]>(initialLikes);
     const handleApiResponseError = useApiResponseErrorHandler();
     const alreadyLiked = useMemo(() => likes.includes(fingerprint), [likes, fingerprint]);
@@ -48,7 +37,7 @@ export function useLikeComment({ commentId, fingerprint, initialLikes, showMessa
         }
 
         try {
-            await run<LikeCommentResponse>({
+            await run<LikeCommentData>({
                 optimisticUpdate: prev => (wasLiked ? prev.filter(id => id !== fingerprint) : [...prev, fingerprint]),
 
                 mutation: async () => {
@@ -66,16 +55,15 @@ export function useLikeComment({ commentId, fingerprint, initialLikes, showMessa
                         }),
                     });
 
-                    const data = (await res.json()) as LikeCommentResponse;
+                    const data = (await res.json()) as ApiResponse<LikeCommentData>;
 
                     if (!data.ok) {
                         throw data.error;
                     }
 
-                    return data;
+                    return data.data;
                 },
-
-                onSuccess: result => result.data.likes,
+                onSuccess: result => result.likes,
             });
         } catch (error) {
             handleApiResponseError(error, {
@@ -92,7 +80,7 @@ export function useLikeComment({ commentId, fingerprint, initialLikes, showMessa
                 },
             });
         }
-    }, [alreadyLiked, commentId, fingerprint, isLiking, onLikeAnimation, run, showMessage]);
+    }, [alreadyLiked, commentId, fingerprint, isLiking, onLikeAnimation, run, handleApiResponseError]);
 
     return {
         likes,
@@ -102,13 +90,3 @@ export function useLikeComment({ commentId, fingerprint, initialLikes, showMessa
         handleLike,
     };
 }
-// todo uwaga tu jest jakiś stary format type LikeCommentResponse = {
-//     ok: boolean;
-
-//     error?: unknown;
-
-//     data: {
-//         likes: string[];
-//     };
-// };
-// niezgodny z obecną doktryną
