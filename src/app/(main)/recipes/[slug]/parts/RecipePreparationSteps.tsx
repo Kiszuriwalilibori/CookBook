@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { Accordion, AccordionDetails, AccordionSummary, Box, LinearProgress, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Typography } from "@mui/material";
 import { PortableText } from "@portabletext/react";
 import type { PortableTextComponents } from "@portabletext/react";
 import Image from "next/image";
@@ -10,6 +10,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { Recipe } from "@/types";
 import { styles, portableTextSx } from "../styles";
+import { RecipePreparationProgressBar } from "./RecipePreparationProgessBar";
 
 // Custom PortableText components
 const PortableTextComponents: Partial<PortableTextComponents> = {
@@ -96,18 +97,10 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
     }
 
     const totalSteps = preparationSteps.length;
-    const progress = ((activeStep + 1) / totalSteps) * 100;
 
     return (
         <Box id="RecipePreparationSteps" sx={styles.preparationContainer}>
-            <Box sx={styles.preparationProgressBar}>
-                <Typography variant="body1" component="span" sx={styles.preparationProgressLabel}>
-                    Krok {activeStep + 1} / {totalSteps}
-                </Typography>
-
-                <LinearProgress variant="determinate" value={progress} aria-label={`Postęp przygotowania: krok ${activeStep + 1} z ${totalSteps}`} sx={styles.preparationProgress} />
-            </Box>
-
+            <RecipePreparationProgressBar activeStep={activeStep} totalSteps={totalSteps} />
             <Typography variant="h2" sx={styles.preparationTitle}>
                 Przygotowanie
             </Typography>
