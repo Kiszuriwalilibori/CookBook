@@ -4,24 +4,49 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useLoginStatus, useSetLoginStatus } from "@/stores/useAdminStore";
 import { useRouter, usePathname } from "next/navigation";
 import { logoutButtonWrapper } from "./styles";
+import { useApiResponseErrorHandler, useMessage } from "@/hooks";
+import { ApiResponse } from "@/models/apiResponse";
 
 export const GoogleLogoutButton = () => {
     const loginStatus = useLoginStatus();
     const setLoginStatus = useSetLoginStatus();
+    const handleApiResponseError = useApiResponseErrorHandler();
+    const showMessage = useMessage();
     const router = useRouter();
     const pathname = usePathname();
 
+    // const handleLogout = async () => {
+    //     // 0. Usunięcie cookie
+    //     await fetch("/api/logout", { method: "POST" });
+    //     // 1. Wylogowanie
+    //     setLoginStatus("not_logged", "wylogowanie ręczne");
+
+    //     // 2. Czyścimy query params (zostajemy na tej samej ścieżce)
+    //     router.replace(pathname, { scroll: false });
+
+    //     // 3. Wymuszamy odświeżenie danych (Server Components)
+    //     router.refresh();
+    // };
+
     const handleLogout = async () => {
-        // 0. Usunięcie cookie
-        await fetch("/api/logout", { method: "POST" });
-        // 1. Wylogowanie
-        setLoginStatus("not_logged", "wylogowanie ręczne");
+        try {
+            const res = await fetch("/api/logout", {
+                method: "POST",
+            });
 
-        // 2. Czyścimy query params (zostajemy na tej samej ścieżce)
-        router.replace(pathname, { scroll: false });
+            const data: ApiResponse<null> = await res.json();
 
-        // 3. Wymuszamy odświeżenie danych (Server Components)
-        router.refresh();
+            if (!data.ok) {
+                throw data.error;
+            }
+
+            setLoginStatus("not_logged", "wylogowanie ręczne");
+            showMessage.success("Zostałeś wylogowany");
+            router.replace(pathname, { scroll: false });
+            router.refresh();
+        } catch (error) {
+            handleApiResponseError(error);
+        }
     };
 
     if (loginStatus === "not_logged") return null;
