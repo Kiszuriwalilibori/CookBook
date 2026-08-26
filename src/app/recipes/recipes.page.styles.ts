@@ -1,4 +1,5 @@
 // page.styles.ts
+
 import type { SxProps, Theme } from "@mui/material/styles";
 
 export const pageRootSx: SxProps<Theme> = {
@@ -27,11 +28,13 @@ const columnBaseSx: SxProps<Theme> = {
 
 export const leftColumnSx: SxProps<Theme> = {
     ...columnBaseSx,
-    backgroundColor: "#D6E2CF",
+    // backgroundColor: "#D6E2CF",
+    backgroundColor: "secondary.light",
     borderRight: { xs: "none", md: "1px solid #ccc" },
 };
 
 export const rightColumnSx: SxProps<Theme> = {
     ...columnBaseSx,
-    backgroundColor: "#b88e8d",
+    // backgroundColor: "#b88e8d",
+    backgroundColor: "secondary.dark",
 };

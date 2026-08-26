@@ -56,11 +56,11 @@ const baseTheme = createTheme({
             paper: "#ffffff",
         },
         // ⬇️ Surface retained (do not remove)
-        surface: {
-            main: "#F6723D",
-            light: "#FF9F41",
-            dark: "#F44F0C",
-        },
+        // surface: {
+        //     main: "#F6723D",
+        //     light: "#FF9F41",
+        //     dark: "#F44F0C",
+        // },
     },
 
     typography: {

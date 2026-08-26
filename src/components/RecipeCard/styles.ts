@@ -83,8 +83,9 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         gap: 0.5,
     },
     chip: {
+        // prawdopodobnie nieużywany
         fontSize: { xs: "0.7rem", sm: "0.8rem" },
-        backgroundColor: "surface.main",
+        backgroundColor: "primary.main",
         color: "text.primary", // Ensure text is visible on yellow bg
         "& .MuiChip-label": {
             padding: "2px 8px", // Minimal padding inside chip

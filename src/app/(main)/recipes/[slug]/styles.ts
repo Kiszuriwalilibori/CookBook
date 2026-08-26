@@ -222,34 +222,36 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         justifyContent: "center",
         mb: 2,
     },
-    copyButton: {
-        fontSize: { xs: "0.875rem", sm: "1rem" }, // Responsive font sizing for readability
-        padding: { xs: "8px 16px", sm: "12px 24px" }, // Responsive padding for touch targets (min ~44px height)
-        minHeight: "44px", // WCAG touch target minimum
-        color: theme => theme.palette.surface.main, // Menu background color for text
-        borderColor: theme => theme.palette.surface.main, // Menu background color for border
-        transition: "all 0.2s ease-in-out", // Smooth hover transition
-        "&:hover": {
-            borderColor: theme => theme.palette.primary.light,
-            color: theme => theme.palette.primary.light,
-            backgroundColor: "transparent", // No grey hover background
-            borderRadius: "50%", // Round hover background
-        },
-        "&:focus-visible": {
-            // WCAG focus ring (2px primary color outline)
-            outline: "2px solid",
-            outlineColor: theme => theme.palette.primary.main,
-            outlineOffset: 2,
-            borderRadius: theme => `${theme.shape.borderRadius}px`,
-        },
-    },
+    // copyButton: {
+    //     fontSize: { xs: "0.875rem", sm: "1rem" }, // Responsive font sizing for readability
+    //     padding: { xs: "8px 16px", sm: "12px 24px" }, // Responsive padding for touch targets (min ~44px height)
+    //     minHeight: "44px", // WCAG touch target minimum
+    //     color: theme => theme.palette.surface.main, // Menu background color for text
+
+    //     borderColor: theme => theme.palette.surface.main, // Menu background color for border
+    //     transition: "all 0.2s ease-in-out", // Smooth hover transition
+    //     "&:hover": {
+    //         borderColor: theme => theme.palette.primary.light,
+    //         color: theme => theme.palette.primary.light,
+    //         backgroundColor: "transparent", // No grey hover background
+    //         borderRadius: "50%", // Round hover background
+    //     },
+    //     "&:focus-visible": {
+    //         // WCAG focus ring (2px primary color outline)
+    //         outline: "2px solid",
+    //         outlineColor: theme => theme.palette.primary.main,
+    //         outlineOffset: 2,
+    //         borderRadius: theme => `${theme.shape.borderRadius}px`,
+    //     },
+    // },
     recipeButton: {
         color: theme => theme.palette.primary.main,
 
         fontSize: { xs: "0.875rem", sm: "1rem" }, // Responsive font sizing for readability
         padding: { xs: "8px 16px", sm: "12px 24px" }, // Responsive padding for touch targets (min ~44px height)
         minHeight: "44px", // WCAG touch target minimum
-        borderColor: theme => theme.palette.surface.main, // Menu background color for border
+        borderColor: theme => theme.palette.primary.main, // Menu background color for border
+        // borderColor: theme => theme.palette.surface.main, // usunięty w związku zplanami zmian palette.surface
         transition: "all 0.2s ease-in-out", // Smooth hover transition
         "&:hover": {
             borderColor: theme => theme.palette.primary.light,

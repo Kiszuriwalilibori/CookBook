@@ -386,46 +386,42 @@ body {
         padding: 0;
     }
 }
-/* GLOBAL FOCUS SYSTEM */
+/* GLOBAL FOCUS SYSTEM
 
 /* reset default focus (tylko gdy nie focus-visible) */
-:focus {
+/* :focus {
     outline: none;
-}
+} */
 
 /* standard HTML elements */
 :focus-visible {
     outline: none;
     box-shadow:
-        0 0 0 2px #0d3a74,
-        0 0 0 4px yellow,
-        0 0 0 6px #0d3a74 !important;
-    border-radius: 2px;
+        0 0 0 2px #ffffff,
+        0 0 0 4px #f6723d !important;
+    /* border-radius: 2px; */
 }
 
 /* MUI components (Button, Link, ListItem, etc.) */
 .Mui-focusVisible {
     outline: none;
     box-shadow:
-        0 0 0 2px #0d3a74,
-        0 0 0 4px yellow,
-        0 0 0 6px #0d3a74 !important;
-    border-radius: 2px;
+        0 0 0 2px #ffffff,
+        0 0 0 4px #f6723d !important;
+    /* border-radius: 2px; */
 }
 
 /* optional: inputs (MUI TextField, OutlinedInput) */
-/* .MuiOutlinedInput-root.Mui-focused {
+.MuiOutlinedInput-root.Mui-focused {
     box-shadow:
-        0 0 0 2px #0d3a74,
-        0 0 0 4px yellow,
-        0 0 0 6px #0d3a74 !important;
-    border-radius: 2px;
-} */
+        0 0 0 2px #ffffff,
+        0 0 0 4px #f6723d !important;
+    /* border-radius: 2px; */
+}
 .MuiButtonBase-root.Mui-focusVisible {
     box-shadow:
-        0 0 0 2px #0d3a74,
-        0 0 0 4px yellow,
-        0 0 0 6px #0d3a74 !important;
+        0 0 0 2px #ffffff,
+        0 0 0 4px #f6723d !important;
 }
 
 .react-multiple-carousel__arrow {
@@ -438,4 +434,20 @@ body {
 
 .react-multiple-carousel__arrow::before {
     font-size: 24px;
+}
+
+/* GLOBAL FOCUS SYSTEM */
+
+/* Reset default focus */
+:focus {
+    outline: none;
+}
+
+/* Standard HTML elements + MUI components */
+:focus-visible,
+.Mui-focusVisible {
+    outline: none;
+    box-shadow:
+        0 0 0 2px #ffffff,
+        0 0 0 4px #f6723d !important;
 }
