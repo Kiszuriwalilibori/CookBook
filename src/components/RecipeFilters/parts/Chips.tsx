@@ -1,4 +1,4 @@
-import { Box, Chip } from "@mui/material";
+import { Box, Chip, Grow } from "@mui/material";
 import type { Theme } from "@mui/material/styles";
 import { limitedChipBoxSx, chipSx, hiddenChipSx } from "../styles";
 import type { ChipFieldKey } from "../RecipeFilters";
@@ -18,20 +18,26 @@ export const Chips = (value: readonly string[], key: ChipFieldKey, theme: Theme,
     return (
         <Box sx={limitedChipBoxSx(isScrollable)}>
             {visible.map(option => (
-                <Chip
-                    key={option}
-                    label={option}
-                    onDelete={() =>
-                        handleChange(
-                            key,
-                            value.filter(v => v !== option)
-                        )
-                    }
-                    sx={chipSx(theme)}
-                    aria-label={`Usuń filtr: ${option}`}
-                />
+                <Grow key={option} in timeout={180}>
+                    <Chip
+                        key={option}
+                        label={option}
+                        onDelete={() =>
+                            handleChange(
+                                key,
+                                value.filter(v => v !== option)
+                            )
+                        }
+                        sx={chipSx(theme)}
+                        aria-label={`Usuń filtr: ${option}`}
+                    />
+                </Grow>
             ))}
-            {hiddenCount > 0 && <Chip label={`+${hiddenCount} więcej`} sx={hiddenChipSx(theme)} />}
+            {hiddenCount > 0 && (
+                <Grow in timeout={180}>
+                    <Chip label={`+${hiddenCount} więcej`} sx={hiddenChipSx(theme)} />
+                </Grow>
+            )}
         </Box>
     );
 };

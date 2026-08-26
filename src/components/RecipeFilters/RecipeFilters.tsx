@@ -89,7 +89,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
     };
 
     return (
-        <Box sx={containerSx}>
+        <Box sx={containerSx} id="RecipeFilters">
             <Typography variant="h6" gutterBottom align="center">
                 Filtruj Przepisy
             </Typography>
