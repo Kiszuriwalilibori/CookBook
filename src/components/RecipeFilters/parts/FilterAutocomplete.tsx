@@ -14,9 +14,10 @@ interface FilterAutocompleteProps<T = string> {
     helperText?: string;
     renderTags?: (value: T[]) => React.ReactNode;
     getOptionLabel?: (option: T) => string;
+    id?: string;
 }
 
-export default function FilterAutocomplete<T = string>({ label, placeholder = "Wszystkie", options, value, onChange, multiple = false, error, helperText, renderTags, getOptionLabel }: FilterAutocompleteProps<T>) {
+export default function FilterAutocomplete<T = string>({ id, label, placeholder = "Wszystkie", options, value, onChange, multiple = false, error, helperText, renderTags, getOptionLabel }: FilterAutocompleteProps<T>) {
     const theme = useTheme();
 
     const defaultGetOptionLabel = (option: T): string => (typeof option === "string" ? option : String(option));
@@ -25,7 +26,7 @@ export default function FilterAutocomplete<T = string>({ label, placeholder = "W
 
     return (
         <Autocomplete<T, boolean, false, false>
-            id="filter_autocomplete"
+            id={id}
             fullWidth
             multiple={multiple}
             options={options}
@@ -36,7 +37,7 @@ export default function FilterAutocomplete<T = string>({ label, placeholder = "W
             }}
             value={value as T | T[] | null}
             onChange={(_, newValue) => onChange(newValue)}
-            renderTags={multiple && renderTags ? (v: readonly T[]) => renderTags([...v]) : undefined}
+            renderValue={multiple ? (renderTags ? value => renderTags([...(value as T[])]) : () => null) : undefined}
             renderOption={(props, option, { inputValue }) => {
                 const label = finalGetOptionLabel(option);
                 const matchIndex = label.toLowerCase().indexOf(inputValue.toLowerCase());
@@ -68,7 +69,21 @@ export default function FilterAutocomplete<T = string>({ label, placeholder = "W
                     </li>
                 );
             }}
-            renderInput={params => <TextField {...params} id="text_field" label={label} placeholder={placeholder} InputLabelProps={{ shrink: true }} sx={labelSx(theme)} error={error} helperText={helperText} />}
+            renderInput={params => (
+                <TextField
+                    {...params}
+                    label={label}
+                    placeholder={placeholder}
+                    slotProps={{
+                        inputLabel: {
+                            shrink: true,
+                        },
+                    }}
+                    sx={labelSx(theme)}
+                    error={error}
+                    helperText={helperText}
+                />
+            )}
         />
     );
 }

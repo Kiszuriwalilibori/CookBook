@@ -355,6 +355,7 @@ template {
 :root {
     --background: #ffffff;
     --foreground: #171717;
+    --focus-color: #1976d2;
 }
 
 @theme inline {
@@ -398,7 +399,7 @@ body {
     outline: none;
     box-shadow:
         0 0 0 2px #ffffff,
-        0 0 0 4px #f6723d !important;
+        0 0 0 4px var(--focus-color) !important;
     /* border-radius: 2px; */
 }
 
@@ -407,7 +408,7 @@ body {
     outline: none;
     box-shadow:
         0 0 0 2px #ffffff,
-        0 0 0 4px #f6723d !important;
+        0 0 0 4px var(--focus-color) !important;
     /* border-radius: 2px; */
 }
 
@@ -415,13 +416,13 @@ body {
 .MuiOutlinedInput-root.Mui-focused {
     box-shadow:
         0 0 0 2px #ffffff,
-        0 0 0 4px #f6723d !important;
+        0 0 0 4px var(--focus-color) !important;
     /* border-radius: 2px; */
 }
 .MuiButtonBase-root.Mui-focusVisible {
     box-shadow:
         0 0 0 2px #ffffff,
-        0 0 0 4px #f6723d !important;
+        0 0 0 4px var(--focus-color) !important;
 }
 
 .react-multiple-carousel__arrow {
@@ -449,5 +450,5 @@ body {
     outline: none;
     box-shadow:
         0 0 0 2px #ffffff,
-        0 0 0 4px #f6723d !important;
+        0 0 0 4px var(--focus-color) !important;
 }

@@ -20,16 +20,19 @@ export const buttonGroupSx: SxProps = {
     flexWrap: "wrap",
 };
 
-export const chipContainerSx: SxProps = {
+export const chipContainerSx: SxProps<Theme> = {
     display: "flex",
     flexWrap: "wrap",
-    gap: 0.5,
-    maxHeight: 100,
+    gap: 0.75,
+    mt: 0.75,
 };
-
 export const chipSx = (theme: Theme): SxProps => ({
     backgroundColor: theme.palette.primary.light,
     color: "white",
+    "& .MuiChip-deleteIcon": {
+        width: 24,
+        height: 24,
+    },
 });
 
 export const hiddenChipSx = (theme: Theme): SxProps => ({

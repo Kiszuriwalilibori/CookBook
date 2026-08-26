@@ -7,13 +7,14 @@ import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
 
 import { ChipFieldKey } from "../RecipeFilters";
 import { fieldBoxSx } from "../styles";
-import { createRenderTags } from "../utils/createRenderTags";
 import { Chips } from "./Chips";
 
 import FilterAutocomplete from "./FilterAutocomplete";
 import FilterSwitch from "./FilterSwitch";
 import StatusFilter from "./FilterCheckbox";
+
 import { useIsAdminLogged } from "@/stores/useAdminStore";
+
 interface Props {
     field: FilterField;
     filters: FilterState;
@@ -33,10 +34,15 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
     if (field.key === "kizia" && !isAdminLogged) return null;
 
     switch (field.component) {
-        case "autocomplete":
+        case "autocomplete": {
+            const hasChips = field.chips && ["tags", "products", "dietary", "cuisine"].includes(field.key);
+
+            const chipValue = hasChips ? ((filters[field.key] as string[]) ?? []) : [];
+
             return (
-                <Box sx={fieldBoxSx} key={field.key} id="filter_field_renderer">
+                <Box sx={fieldBoxSx} key={field.key}>
                     <FilterAutocomplete
+                        id={`filter-${field.key}`}
                         label={field.label}
                         options={field.options}
                         value={filters[field.key] as string | string[]}
@@ -44,13 +50,16 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
                         placeholder={field.placeholder}
                         onChange={(newValue: string | string[] | null) => {
                             const normalized = newValue ?? (field.multiple ? [] : "");
+
                             handleChange(field.key, normalized);
                         }}
-                        renderTags={createRenderTags(field.key, !!field.chips, theme, handleChange)}
                         {...getErrorProps(field.key)}
                     />
+
+                    {hasChips && Chips(chipValue, field.key as ChipFieldKey, theme, (chipKey, value) => handleChange(chipKey, value))}
                 </Box>
             );
+        }
 
         case "switch":
             return (
@@ -77,9 +86,9 @@ export const FilterFieldRendrerer = ({ field, filters, handleChange, getErrorPro
                         placeholder={field.placeholder}
                         onChange={(newValue: string | string[] | null) => {
                             const normalized = newValue ?? (field.multiple ? [] : "");
+
                             handleChange(field.key, normalized);
                         }}
-                        renderTags={field.chips && ["tags", "products", "dietary"].includes(field.key) ? value => Chips(value, field.key as ChipFieldKey, theme, handleChange) : undefined}
                         {...getErrorProps(field.key)}
                     />
                 </Box>

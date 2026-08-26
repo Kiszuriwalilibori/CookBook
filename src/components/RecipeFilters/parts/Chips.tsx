@@ -1,26 +1,20 @@
-import { Box, Chip, Grow } from "@mui/material";
+import { Box, Chip, Grow, useMediaQuery } from "@mui/material";
+
 import type { Theme } from "@mui/material/styles";
-import { limitedChipBoxSx, chipSx, hiddenChipSx } from "../styles";
+
+import { chipContainerSx, chipSx } from "../styles";
+
 import type { ChipFieldKey } from "../RecipeFilters";
 
-/**
- * Renders a limited number of chips for a multi-select filter field.
- * Shows up to MAX_VISIBLE_CHIPS and a "+N więcej" indicator if hidden chips exist.
- */
 export const Chips = (value: readonly string[], key: ChipFieldKey, theme: Theme, handleChange: (key: ChipFieldKey, value: string[]) => void) => {
+    const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
     if (!value.length) return null;
 
-    const MAX_VISIBLE_CHIPS = 3;
-    const visible = value.slice(0, MAX_VISIBLE_CHIPS);
-    const hiddenCount = value.length - visible.length;
-    const isScrollable = value.length > MAX_VISIBLE_CHIPS;
-
     return (
-        <Box sx={limitedChipBoxSx(isScrollable)}>
-            {visible.map(option => (
-                <Grow key={option} in timeout={180}>
+        <Box sx={chipContainerSx}>
+            {value.map(option => (
+                <Grow key={option} in timeout={prefersReducedMotion ? 0 : 180}>
                     <Chip
-                        key={option}
                         label={option}
                         onDelete={() =>
                             handleChange(
@@ -33,11 +27,6 @@ export const Chips = (value: readonly string[], key: ChipFieldKey, theme: Theme,
                     />
                 </Grow>
             ))}
-            {hiddenCount > 0 && (
-                <Grow in timeout={180}>
-                    <Chip label={`+${hiddenCount} więcej`} sx={hiddenChipSx(theme)} />
-                </Grow>
-            )}
         </Box>
     );
 };
