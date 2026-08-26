@@ -24,7 +24,7 @@ interface RecipeFiltersProps {
 
 export default function RecipeFilters({ onFiltersChange, onClose, options }: RecipeFiltersProps) {
     const router = useRouter();
-
+    const [isApplying, setIsApplying] = React.useState(false);
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
     const { setFilters } = useFiltersStore();
 
@@ -72,9 +72,26 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
     const filterFields = useCreateRecipeFilterFields(options);
 
     // Simple loading state while searching for direct recipe
-    const [checkingDirect, setCheckingDirect] = React.useState(false);
+    const [isSearchingByTitle, setIsSearchingByTitle] = React.useState(false);
 
+    // const enhancedHandleApply = async () => {
+    //     const hasOnlyTitle =
+    //         !!filters.title &&
+    //         Object.entries(filters).every(([k, v]) => {
+    //             if (k === "title") return true;
+    //             if (k === "status") return true;
+    //             return Array.isArray(v) ? v.length === 0 : !v;
+    //         });
+
+    //     if (hasOnlyTitle) setCheckingDirect(true);
+    //     await handleApply();
+    //     setCheckingDirect(false);
+    // };
     const enhancedHandleApply = async () => {
+        if (isApplying) return;
+
+        setIsApplying(true);
+
         const hasOnlyTitle =
             !!filters.title &&
             Object.entries(filters).every(([k, v]) => {
@@ -83,11 +100,15 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
                 return Array.isArray(v) ? v.length === 0 : !v;
             });
 
-        if (hasOnlyTitle) setCheckingDirect(true);
-        await handleApply();
-        setCheckingDirect(false);
-    };
+        if (hasOnlyTitle) setIsSearchingByTitle(true);
 
+        try {
+            await handleApply();
+        } finally {
+            setIsSearchingByTitle(false);
+            setIsApplying(false);
+        }
+    };
     return (
         <Box sx={containerSx} id="RecipeFilters">
             <Typography variant="h6" gutterBottom align="center">
@@ -104,8 +125,8 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
                     Wyczyść
                 </Button>
 
-                <Button variant="contained" onClick={enhancedHandleApply} size="small" disabled={checkingDirect} startIcon={checkingDirect ? <CircularProgress size={16} /> : null}>
-                    {checkingDirect ? "Sprawdzam..." : "Zastosuj"}
+                <Button variant="contained" onClick={enhancedHandleApply} size="small" disabled={isSearchingByTitle || isApplying} startIcon={isSearchingByTitle ? <CircularProgress size={16} /> : null}>
+                    {isSearchingByTitle ? "Sprawdzam..." : "Zastosuj"}
                 </Button>
 
                 {onClose && (
