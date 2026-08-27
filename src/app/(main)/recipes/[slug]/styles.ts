@@ -251,8 +251,10 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         padding: { xs: "8px 16px", sm: "12px 24px" }, // Responsive padding for touch targets (min ~44px height)
         minHeight: "44px", // WCAG touch target minimum
         borderColor: theme => theme.palette.primary.main, // Menu background color for border
-        // borderColor: theme => theme.palette.surface.main, // usunięty w związku zplanami zmian palette.surface
         transition: "all 0.2s ease-in-out", // Smooth hover transition
+        "@media (prefers-reduced-motion: reduce)": {
+            transition: "none",
+        },
         "&:hover": {
             borderColor: theme => theme.palette.primary.light,
             color: theme => theme.palette.primary.light,

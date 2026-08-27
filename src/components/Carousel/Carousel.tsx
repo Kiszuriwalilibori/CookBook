@@ -16,6 +16,7 @@ import CarouselItem from "./Carousel.item";
 import useDelayedCondition from "@/hooks/useDelayedCondition";
 import { LoadingIndicator } from "@/components";
 import { useCarouselSlides } from "./useCarouselSlides";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 interface CarouselProps {
     count?: number;
@@ -37,6 +38,7 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
         count,
         initialSlides,
     });
+    const prefersReducedMotion = useReducedMotion();
     const showLoading = useDelayedCondition(status === "loading", DELAY, DURATION);
 
     const router = useRouter();
@@ -48,7 +50,7 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
                 {status === "empty" && <EmptyState icon={<SearchOffIcon />} title="Nie ma polecanych przepisów" description="Sprawdź później albo pobierz wszystkie" actionLabel="Browse recipes" onAction={() => router.push("/recipes")} />}
                 {status === "error" && <EmptyState icon={<SearchOffIcon />} title="Nie udało się załadować przepisów" description="Spróbuj ponownie później" />}
                 {status === "success" && items && (
-                    <CarouselLib responsive={responsive} infinite autoPlay autoPlaySpeed={intervalMs} arrows keyBoardControl pauseOnHover>
+                    <CarouselLib responsive={responsive} infinite autoPlay={!prefersReducedMotion} autoPlaySpeed={intervalMs} transitionDuration={prefersReducedMotion ? 0 : 300} arrows keyBoardControl pauseOnHover>
                         {items.map((slide, index) => (
                             <CarouselItem key={slide._id} slide={slide} priority={index === 0} />
                         ))}

@@ -25,5 +25,10 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     preparationProgress: {
         flex: 1,
         minWidth: 0,
+        "@media (prefers-reduced-motion: reduce)": {
+            "& .MuiLinearProgress-bar": {
+                transition: "none",
+            },
+        },
     },
 };

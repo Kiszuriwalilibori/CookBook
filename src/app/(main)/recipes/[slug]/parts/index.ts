@@ -1,5 +1,3 @@
-// import RecipeRatingWidget from "./RecipeRatingWidget";
-
 export { default } from "./RecipeMetadata";
 
 export { RecipeCopyButton } from "./RecipeCopyButton";

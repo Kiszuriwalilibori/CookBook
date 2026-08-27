@@ -1,8 +1,11 @@
 "use client";
 
 import { SnackbarProvider } from "notistack";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export function Providers({ children }: { children: React.ReactNode }) {
+    const prefersReducedMotion = useReducedMotion();
+
     return (
         <SnackbarProvider
             maxSnack={3}
@@ -11,6 +14,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 vertical: "top",
                 horizontal: "center",
             }}
+            transitionDuration={prefersReducedMotion ? 0 : undefined}
         >
             {children}
         </SnackbarProvider>

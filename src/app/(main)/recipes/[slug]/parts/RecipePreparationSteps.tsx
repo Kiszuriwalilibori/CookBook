@@ -8,7 +8,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { Recipe } from "@/types";
 import { styles } from "../styles";
-import { RecipePreparationProgressBar } from "./RecipePreparationProgessBar";
+import { RecipePreparationProgressBar } from "./RecipePreparationProgressBar";
 import { PortableContentComponents } from "./PortableContentComponents";
 import { useRecipePreparationProgress } from "./useRecipePreparationProgress";
 

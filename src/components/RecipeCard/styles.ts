@@ -27,6 +27,12 @@ export const styles: { [key: string]: SxProps<Theme> } = {
             transform: "translateY(-4px)",
             boxShadow: 3,
         },
+        "@media (prefers-reduced-motion: reduce)": {
+            transition: "none",
+            "&:hover": {
+                transform: "none",
+            },
+        },
         width: { xs: "100%", sm: "auto" },
         maxWidth: { xs: "none", sm: 330 },
     },

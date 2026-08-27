@@ -9,6 +9,7 @@ import { recipeNotesModalStyles } from "./RecipeNotesModal.styles";
 import { MAX_PRIVATE_NOTE_LENGTH } from "@/setup";
 import { useApiResponseErrorHandler } from "@/hooks";
 import { ApiResponse } from "@/models/apiResponse";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 interface Props {
     open: boolean;
@@ -27,6 +28,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
     const [hasOpenedOnce, setHasOpenedOnce] = useState(false);
 
     const router = useRouter();
+    const prefersReducedMotion = useReducedMotion();
     const handleApiResponseError = useApiResponseErrorHandler();
     useEscapeKey(open, onClose);
 
@@ -155,13 +157,13 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
             slots={{ backdrop: Backdrop }}
             slotProps={{
                 backdrop: {
-                    timeout: 600,
+                    timeout: prefersReducedMotion ? 0 : 600,
                     sx: recipeNotesModalStyles.backdrop,
                 },
             }}
         >
             <>
-                <Fade in={open} timeout={600}>
+                <Fade in={open} timeout={prefersReducedMotion ? 0 : 600}>
                     <Box sx={modalStyles} role="dialog" aria-modal="true" aria-labelledby="notes-modal-title" tabIndex={-1}>
                         <Box id="notes-modal-title" sx={visuallyHidden}>
                             Notatki do przepisu

@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Fade, Typography } from "@mui/material";
 
 interface ConfirmRemoveDialogProps {
@@ -12,6 +13,7 @@ interface ConfirmRemoveDialogProps {
 }
 
 export const ConfirmRemoveDialog: React.FC<ConfirmRemoveDialogProps> = ({ open, loading, title, onCancel, onConfirm, onExited }) => {
+    const prefersReducedMotion = useReducedMotion();
     return (
         <Dialog
             open={open}
@@ -21,7 +23,7 @@ export const ConfirmRemoveDialog: React.FC<ConfirmRemoveDialogProps> = ({ open, 
             }}
             slotProps={{
                 transition: {
-                    timeout: 700,
+                    timeout: prefersReducedMotion ? 0 : 700,
                     onExited,
                 },
             }}

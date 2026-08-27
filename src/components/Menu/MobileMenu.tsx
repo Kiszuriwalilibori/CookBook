@@ -9,6 +9,7 @@ import { drawerBoxStyle, drawerStyle, mobileMenuIconStyle, mobileMenuItemButtonS
 import { desktopMenuLabelStyle } from "./styles";
 import { focusableSx, touchableSx } from "@/styles/utilityStyles";
 import type { NavItem } from "./Menu";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 interface MobileMenuProps {
     navItems: NavItem[];
@@ -19,6 +20,7 @@ interface MobileMenuProps {
 const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
     const currentPathname = usePathname();
     const mobileItemRefs = useRef<Array<HTMLElement | null>>([]);
+    const prefersReducedMotion = useReducedMotion();
 
     const isCurrentItem = (href?: string) => Boolean(href && currentPathname === href);
     const handleDrawerEntered = () => {
@@ -196,6 +198,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
             sx={drawerStyle}
             // disableEnforceFocus
             disableAutoFocus
+            transitionDuration={prefersReducedMotion ? { enter: 0, exit: 0 } : undefined}
             slotProps={{
                 transition: {
                     onEntered: handleDrawerEntered,

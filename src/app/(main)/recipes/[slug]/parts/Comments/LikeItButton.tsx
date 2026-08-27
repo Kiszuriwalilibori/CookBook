@@ -2,6 +2,7 @@ import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { useEffect, useState } from "react";
 import { likeButtonSx, likeButtonWrapperSx, likeIconSx, likesCounterSx } from "./commentStyles";
+import useReducedMotion from "@/hooks/useReducedMotion";
 
 type LikeItButtonProps = {
     alreadyLiked: boolean;
@@ -13,6 +14,7 @@ type LikeItButtonProps = {
 
 export function LikeItButton({ alreadyLiked, likesCount, isLiking, animate, onLike }: LikeItButtonProps) {
     const [animateCounter, setAnimateCounter] = useState(false);
+    const prefersReducedMotion = useReducedMotion();
 
     useEffect(() => {
         if (animate) {
@@ -26,11 +28,11 @@ export function LikeItButton({ alreadyLiked, likesCount, isLiking, animate, onLi
         <Box sx={likeButtonWrapperSx}>
             <Tooltip title={alreadyLiked ? "Cofnij polubienie" : "Polub komentarz"} arrow>
                 <IconButton aria-label={alreadyLiked ? "Cofnij polubienie komentarza" : "Polub komentarz"} size="medium" color="primary" disableRipple onClick={onLike} disabled={isLiking} sx={likeButtonSx}>
-                    <ThumbUpIcon fontSize="medium" sx={likeIconSx(alreadyLiked, animate)} />
+                    <ThumbUpIcon fontSize="medium" sx={likeIconSx(alreadyLiked, prefersReducedMotion ? false : animate)} />
                 </IconButton>
             </Tooltip>
 
-            <Typography variant="body2" sx={likesCounterSx(animateCounter)}>
+            <Typography variant="body2" sx={likesCounterSx(prefersReducedMotion ? false : animateCounter)}>
                 {likesCount}
             </Typography>
         </Box>
