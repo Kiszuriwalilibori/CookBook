@@ -194,7 +194,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
             open={open}
             onClose={onClose}
             sx={drawerStyle}
-            disableEnforceFocus
+            // disableEnforceFocus
             disableAutoFocus
             slotProps={{
                 transition: {
