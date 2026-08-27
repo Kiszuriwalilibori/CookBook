@@ -3,6 +3,7 @@ import CarouselItem from "./Carousel.item";
 
 // Sprawdza, czy obraz początkowo korzysta z adresu podanego w slajdzie.
 // Sprawdza, czy po błędzie ładowania obraz zostaje zastąpiony placeholderem /placeholder.png.
+// Sprawdza, czy przy braku adresu obrazka używany jest placeholder /placeholder.jpg.
 
 jest.mock("./Carousel.styles", () => ({
     SlideWrapper: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
@@ -41,6 +42,23 @@ describe("CarouselItem", () => {
 
         fireEvent.error(image);
 
-        expect(image).toHaveAttribute("src", "/placeholder.png");
+        expect(image).toHaveAttribute("src", "/placeholder.jpg");
+    });
+    it("uses placeholder image when imageUrl is missing", () => {
+        render(
+            <CarouselItem
+                slide={{
+                    _id: "1",
+                    title: "Recipe",
+                    slug: "recipe",
+                    imageUrl: null,
+                }}
+                priority={false}
+            />
+        );
+
+        const image = screen.getByTestId("slide-image");
+
+        expect(image).toHaveAttribute("src", "/placeholder.jpg");
     });
 });

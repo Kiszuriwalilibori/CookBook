@@ -74,19 +74,6 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
     // Simple loading state while searching for direct recipe
     const [isSearchingByTitle, setIsSearchingByTitle] = React.useState(false);
 
-    // const enhancedHandleApply = async () => {
-    //     const hasOnlyTitle =
-    //         !!filters.title &&
-    //         Object.entries(filters).every(([k, v]) => {
-    //             if (k === "title") return true;
-    //             if (k === "status") return true;
-    //             return Array.isArray(v) ? v.length === 0 : !v;
-    //         });
-
-    //     if (hasOnlyTitle) setCheckingDirect(true);
-    //     await handleApply();
-    //     setCheckingDirect(false);
-    // };
     const enhancedHandleApply = async () => {
         if (isApplying) return;
 
@@ -121,11 +108,11 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
             ))}
 
             <Box sx={buttonGroupSx}>
-                <Button variant="outlined" onClick={handleClear} size="small">
+                <Button variant="outlined" onClick={handleClear} size="small" disableRipple>
                     Wyczyść
                 </Button>
 
-                <Button variant="contained" onClick={enhancedHandleApply} size="small" disabled={isSearchingByTitle || isApplying} startIcon={isSearchingByTitle ? <CircularProgress size={16} /> : null}>
+                <Button disableRipple variant="contained" onClick={enhancedHandleApply} size="small" disabled={isSearchingByTitle || isApplying} startIcon={isSearchingByTitle ? <CircularProgress size={16} /> : null}>
                     {isSearchingByTitle ? "Sprawdzam..." : "Zastosuj"}
                 </Button>
 

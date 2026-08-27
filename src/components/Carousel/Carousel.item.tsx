@@ -12,13 +12,13 @@ interface CarouselItemProps {
 }
 
 const CarouselItem: React.FC<CarouselItemProps> = ({ slide, priority = false }) => {
-    const [imageSrc, setImageSrc] = useState(slide.imageUrl || "/placeholder.png");
+    const [imageSrc, setImageSrc] = useState(slide.imageUrl || "/placeholder.jpg");
     return (
         <SlideWrapper key={slide._id}>
             <StyledCard sx={focusCardStyles}>
                 <SlideLink slide={slide}>
                     <AspectBox>
-                        <SlideImage /*src={slide.imageUrl || "/placeholder.png"}*/ src={imageSrc} alt={slide.title ?? "Recipe"} fill sizes="(max-width: 900px) 100vw, (max-width: 1200px) 50vw, 33vw" priority={priority} onError={() => setImageSrc("/placeholder.png")} />
+                        <SlideImage src={imageSrc} alt={slide.title ?? "Recipe"} fill sizes="(max-width: 900px) 100vw, (max-width: 1200px) 50vw, 33vw" priority={priority} onError={() => setImageSrc("/placeholder.jpg")} />
                         <Overlay>
                             <Typography variant="subtitle1" fontWeight={700}>
                                 {slide.title ?? "Untitled"}
@@ -32,5 +32,3 @@ const CarouselItem: React.FC<CarouselItemProps> = ({ slide, priority = false }) 
 };
 
 export default CarouselItem;
-
-// todo powinna być obsługa błędu odczytania obrazka
