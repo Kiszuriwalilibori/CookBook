@@ -17,11 +17,11 @@ export function defineField(config: Partial<FilterField> & { key: FilterableReci
 }
 
 export const FILTER_FIELDS_CONFIG: FilterField[] = [
-    defineField({ key: "title", multiple: false }),
-    defineField({ key: "cuisine", multiple: true, chips: true }),
-    defineField({ key: "tags", multiple: true, chips: true }),
-    defineField({ key: "dietary", multiple: true, chips: true, placeholder: "Bez ograniczeń" }),
-    defineField({ key: "products", multiple: true, chips: true }),
+    defineField({ key: "title", multiple: false, placeholder: "np bigos" }),
+    defineField({ key: "cuisine", multiple: true, chips: true, placeholder: "np europejska, francuska" }),
+    defineField({ key: "tags", multiple: true, chips: true, placeholder: "np smażone, makaron" }),
+    defineField({ key: "dietary", multiple: true, chips: true, placeholder: "np wegańska" }),
+    defineField({ key: "products", multiple: true, chips: true, placeholder: "np bakłażan, wołowina" }),
     defineField({ key: "kizia", multiple: false, component: "switch", requiredAdmin: true, placeholder: "Kizia to lubi?" }),
     defineField({ key: "status", multiple: true, component: "checkbox", requiredAdmin: true, placeholder: "Status" }),
     defineField({ key: "source.url", multiple: false, requiredAdmin: true, placeholder: "Link" }),
