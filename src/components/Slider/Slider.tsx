@@ -26,7 +26,7 @@ const Slider: React.FC<SliderProps> = ({ initialSlides = null, error }) => {
         }
     }, [error, showMessage]);
     return (
-        <Box id="HomeContent" sx={styles.root}>
+        <Box id="Slider" sx={styles.root}>
             <Carousel initialSlides={initialSlides} count={5} intervalMs={5000} />
         </Box>
     );
