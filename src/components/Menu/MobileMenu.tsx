@@ -133,7 +133,9 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
                             ...itemSx,
                         }}
                     >
-                        <ListItemIcon sx={mobileMenuIconStyle}>{item.icon}</ListItemIcon>
+                        <ListItemIcon sx={mobileMenuIconStyle} aria-hidden="true">
+                            {item.icon}
+                        </ListItemIcon>
 
                         <ListItemText
                             primary={item.label.trim()}
@@ -164,7 +166,9 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
                         ...itemSx,
                     }}
                 >
-                    <ListItemIcon sx={mobileMenuIconStyle}>{item.icon}</ListItemIcon>
+                    <ListItemIcon sx={mobileMenuIconStyle} aria-hidden="true">
+                        {item.icon}
+                    </ListItemIcon>
 
                     <ListItemText
                         primary={item.label.trim()}

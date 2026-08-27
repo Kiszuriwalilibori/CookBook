@@ -44,7 +44,7 @@ const Menu: React.FC<MenuProps> = ({ navItems, mobileOpen, onMobileOpen, onMobil
                     <DesktopMenu navItems={visibleNavItems} />
 
                     <IconButton id="hamburger" ref={drawerButtonRef} aria-label="Open navigation menu" aria-expanded={mobileOpen} aria-controls={mobileOpen ? "navigation-drawer" : undefined} edge="end" onClick={onMobileOpen} sx={drawerButtonStyle}>
-                        <MenuIcon />
+                        <MenuIcon aria-hidden="true" />
                     </IconButton>
                 </Toolbar>
             </AppBar>

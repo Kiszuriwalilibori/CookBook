@@ -103,11 +103,11 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
                                     ...focusableSx,
                                 }}
                             >
-                                <Box component="span" sx={desktopMenuIconStyle}>
+                                <Box component="span" sx={desktopMenuIconStyle} aria-hidden="true">
                                     {item.icon}
                                 </Box>
 
-                                <Typography component="span" sx={desktopMenuLabelStyle}>
+                                <Typography component="span" sx={desktopMenuLabelStyle} aria-hidden="true">
                                     {item.label.trim()}
                                 </Typography>
                             </Box>
@@ -120,11 +120,11 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
                                 }}
                                 onClick={item.onClick}
                             >
-                                <Box component="span" sx={desktopMenuIconStyle}>
+                                <Box component="span" sx={desktopMenuIconStyle} aria-hidden="true">
                                     {item.icon}
                                 </Box>
 
-                                <Typography component="span" sx={desktopMenuLabelStyle}>
+                                <Typography component="span" sx={desktopMenuLabelStyle} aria-hidden="true">
                                     {item.label.trim()}
                                 </Typography>
                             </ButtonBase>
