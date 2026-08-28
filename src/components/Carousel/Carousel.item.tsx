@@ -18,7 +18,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({ slide, priority = false }) 
             <StyledCard sx={focusCardStyles}>
                 <SlideLink slide={slide}>
                     <AspectBox>
-                        <SlideImage src={imageSrc} alt={slide.title ?? "Recipe"} fill sizes="(max-width: 900px) 100vw, (max-width: 1200px) 50vw, 33vw" priority={priority} onError={() => setImageSrc("/placeholder.jpg")} />
+                        <SlideImage fetchPriority={priority ? "high" : "auto"} quality={75} src={imageSrc} alt={slide.title ?? "Recipe"} fill sizes="(max-width: 900px) 100vw, (max-width: 1200px) 50vw, 33vw" priority={priority} onError={() => setImageSrc("/placeholder.jpg")} />
                         <Overlay>
                             <Typography variant="subtitle1" fontWeight={700}>
                                 {slide.title ?? "Untitled"}

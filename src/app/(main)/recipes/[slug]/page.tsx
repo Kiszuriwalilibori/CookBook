@@ -1,25 +1,3 @@
-// import { Box } from "@mui/material";
-// import { notFound, redirect } from "next/navigation";
-
-// import { Separator } from "@/components";
-// import { styles } from "./styles";
-// import { mapRecipeToMetadata } from "./parts/RecipeMetadata/RecipeMetadata.utils";
-
-// import { RecipeHero, RecipeMetadata, RecipeDescription, RecipeIngredients, RecipePreparationSteps, RecipeSource, RecipeCopyButton, RecipePrintButton, RecipePdfButton, RecipeKeepAwakeButton, RecipeNotesButton, RecipeRatingSection, RecipeShareButton } from "./parts";
-
-// import { generateRecipeMetadata } from "@/utils/generateRecipeMetadata";
-// import { generateRecipeSchema } from "@/utils/schema-org";
-
-// import { resolveRecipeIdFromSlug } from "@/utils/resolveRecipeIdFromSlug";
-// import { getRecipeById } from "@/utils/getRecipeById";
-// import { RecipeNutrition } from "./parts";
-// import { getUserRecipeNote } from "@/utils";
-// import PrivateUserNotes from "./parts/Comments/PrivateUserNotes";
-// import Comments from "./parts/Comments";
-// import { RecipeCommentsButton } from "./parts/RecipeCommentsButton";
-// import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
-// import { RecipeOptionalIngredients } from "./parts/RecipeOptionalIngredients";
-// import { RecipeIngredientsNotes } from "./parts/RecipeIngredientsNotes";
 import { Box } from "@mui/material";
 import { notFound, redirect } from "next/navigation";
 

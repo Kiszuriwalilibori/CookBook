@@ -13,7 +13,7 @@ export const styles = {
         gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
         gap: 2,
         flex: 1,
-        justifyContent: "center", // centrowanie całego gridu
+        justifyContent: "center",
         justifyItems: "center",
         width: "100%",
     } as SxProps<Theme>,
