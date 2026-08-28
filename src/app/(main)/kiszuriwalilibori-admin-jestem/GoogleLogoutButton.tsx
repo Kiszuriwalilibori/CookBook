@@ -3,9 +3,10 @@ import { Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useLoginStatus, useSetLoginStatus } from "@/stores/useAdminStore";
 import { useRouter, usePathname } from "next/navigation";
-import { logoutButtonWrapper } from "./styles";
+
 import { useApiResponseErrorHandler, useMessage } from "@/hooks";
 import { ApiResponse } from "@/models/apiResponse";
+import { logoutButton } from "./GoogleLogoutButton.styles";
 
 export const GoogleLogoutButton = () => {
     const loginStatus = useLoginStatus();
@@ -14,19 +15,6 @@ export const GoogleLogoutButton = () => {
     const showMessage = useMessage();
     const router = useRouter();
     const pathname = usePathname();
-
-    // const handleLogout = async () => {
-    //     // 0. Usunięcie cookie
-    //     await fetch("/api/logout", { method: "POST" });
-    //     // 1. Wylogowanie
-    //     setLoginStatus("not_logged", "wylogowanie ręczne");
-
-    //     // 2. Czyścimy query params (zostajemy na tej samej ścieżce)
-    //     router.replace(pathname, { scroll: false });
-
-    //     // 3. Wymuszamy odświeżenie danych (Server Components)
-    //     router.refresh();
-    // };
 
     const handleLogout = async () => {
         try {
@@ -51,8 +39,14 @@ export const GoogleLogoutButton = () => {
 
     if (loginStatus === "not_logged") return null;
 
+    // return (
+    //     <Button id="GoogleLogoutButton" sx={logoutButtonWrapper} variant="contained" color="error" size="small" startIcon={<LogoutIcon />} onClick={handleLogout}>
+    //         Wyloguj
+    //     </Button>
+    // );
+
     return (
-        <Button id="GoogleLogoutButton" sx={logoutButtonWrapper} variant="contained" color="error" size="small" startIcon={<LogoutIcon />} onClick={handleLogout}>
+        <Button id="GoogleLogoutButton" sx={logoutButton} variant="contained" size="small" startIcon={<LogoutIcon />} onClick={handleLogout}>
             Wyloguj
         </Button>
     );

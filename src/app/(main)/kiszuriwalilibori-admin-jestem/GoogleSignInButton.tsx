@@ -1,10 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { useIsAdminLogged } from "@/stores/useAdminStore";
+
 import { Box, Button, Paper } from "@mui/material";
+
 import { focusableSx } from "@/styles/utilityStyles";
-import { closeButtonSx, signinButtonWrapperStyles } from "./styles";
+
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+
+import { closeButtonSx, googleSignInPaperSx, googleSignInStatusSx, signinButtonWrapperStyles } from "./styles";
 
 export default function GoogleSignInButton() {
     const isAdminLogged = useIsAdminLogged();
@@ -38,27 +44,18 @@ export default function GoogleSignInButton() {
 
     return (
         <Box sx={signinButtonWrapperStyles} role="group" aria-label="Logowanie" aria-live="polite">
-            <Paper
-                elevation={0}
-                sx={{
-                    display: "flex",
-                    flexDirection: { xs: "column", sm: "row" },
-                    width: { xs: "100%", sm: "auto" },
-                    alignItems: "center",
-                    gap: 1,
-                    backgroundColor: "transparent",
-                }}
-            >
+            <Paper elevation={0} sx={googleSignInPaperSx}>
                 {loaded && (
-                    <Box aria-live="polite" sx={{ position: "absolute", left: -9999 }}>
+                    <Box aria-live="polite" sx={googleSignInStatusSx}>
                         Opcja kontynuacji bez logowania jest dostępna
                     </Box>
                 )}
+
                 {/* Google button */}
                 <div id="google-signin-button" aria-label="Zaloguj się przez Google" />
 
                 {/* {loaded && ( */}
-                <Button aria-label="Kontynuuj bez logowania i pomiń logowanie konta" fullWidth onClick={() => setVisible(false)} sx={{ ...closeButtonSx, ...focusableSx }}>
+                <Button aria-label="Kontynuuj bez logowania" fullWidth endIcon={<ArrowForwardIcon />} onClick={() => setVisible(false)} sx={{ ...closeButtonSx, ...focusableSx }}>
                     Kontynuuj bez logowania
                 </Button>
                 {/* )} */}

@@ -120,7 +120,7 @@ const baseTheme = createTheme({
         MuiInputLabel: {
             styleOverrides: {
                 root: {
-                    color: "#F6723D",
+                    color: "primary.main",
                     // "&.Mui-focused": {
                     //     color: "#F44F0C",
                     // },
@@ -132,7 +132,7 @@ const baseTheme = createTheme({
                 notchedOutline: {},
                 root: {
                     "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#FF9F41",
+                        borderColor: "primary.light",
                     },
                 },
             },
@@ -140,7 +140,7 @@ const baseTheme = createTheme({
         MuiTooltip: {
             styleOverrides: {
                 tooltip: {
-                    backgroundColor: "#A8BBA3", // secondary.main
+                    backgroundColor: "secondary.main",
                     color: "#000",
                     fontSize: "0.75rem",
                 },
