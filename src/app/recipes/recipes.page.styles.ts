@@ -28,13 +28,11 @@ const columnBaseSx: SxProps<Theme> = {
 
 export const leftColumnSx: SxProps<Theme> = {
     ...columnBaseSx,
-    // backgroundColor: "#D6E2CF",
     backgroundColor: "secondary.light",
     borderRight: { xs: "none", md: "1px solid #ccc" },
 };
 
 export const rightColumnSx: SxProps<Theme> = {
     ...columnBaseSx,
-    // backgroundColor: "#b88e8d",
     backgroundColor: "secondary.dark",
 };

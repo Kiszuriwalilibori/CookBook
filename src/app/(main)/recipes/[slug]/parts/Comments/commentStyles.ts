@@ -93,7 +93,7 @@ export const submitButtonSx = (theme: Theme) => ({
     backgroundColor: theme.palette.secondary.dark,
     flex: { sm: 1 },
     minWidth: { sm: 140 },
-    color: "#fff",
+    color: theme.palette.primary.contrastText,
     "&:hover": {
         backgroundColor: darken(theme.palette.secondary.dark, 0.15),
     },

@@ -30,6 +30,16 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
     const [existingRating, setExistingRating] = useState<{ rating: number; updatedAt: string } | null>(null);
     const [pendingRating, setPendingRating] = useState<RatingValue | null>(null);
 
+    const showTemporaryMessage = (text: string) => {
+        setMessage(text);
+        setShowThanks(true);
+
+        setTimeout(() => {
+            setShowThanks(false);
+            setMessage(null);
+        }, 5000);
+    };
+
     const fingerprintHash = useFingerprint();
 
     const submitRating = async (newRating: RatingValue, overwrite = false) => {
@@ -63,25 +73,37 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                 return;
             }
 
+            // if (data.data.status === "noChange") {
+            //     setMessage("Nie zmieniono oceny");
+            //     setShowThanks(true);
+
+            //     setTimeout(() => {
+            //         setShowThanks(false);
+            //         setMessage(null);
+            //     }, 3000);
+
+            //     return;
+            // }
+
             if (data.data.status === "noChange") {
-                setMessage("Nie zmieniono oceny");
-                setShowThanks(true);
-
-                setTimeout(() => {
-                    setShowThanks(false);
-                    setMessage(null);
-                }, 3000);
-
+                showTemporaryMessage("Nie zmieniono oceny");
                 return;
             }
 
             if (data.data.status === "updated") {
                 await onRatingUpdated?.();
                 setHasInteracted(false);
-                setMessage("Dziękuję za ocenę!");
-                setShowThanks(true);
+                showTemporaryMessage("Dziękuję za ocenę!");
                 return;
             }
+
+            // if (data.data.status === "updated") {
+            //     await onRatingUpdated?.();
+            //     setHasInteracted(false);
+            //     setMessage("Dziękuję za ocenę!");
+            //     setShowThanks(true);
+            //     return;
+            // }
         } catch (err) {
             handleApiResponseError(err);
         } finally {

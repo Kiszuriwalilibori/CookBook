@@ -1,5 +1,5 @@
 import { SxProps, Theme } from "@mui/material";
-import { BUTTON_HEIGHT } from "./styles";
+import { BUTTON_HEIGHT } from "./GoogleSignInButton.styles";
 
 export const logoutButton: SxProps<Theme> = {
     position: "fixed",

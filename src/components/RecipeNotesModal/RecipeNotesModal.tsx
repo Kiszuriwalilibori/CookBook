@@ -3,9 +3,8 @@
 import { Modal, Fade, Backdrop, Box, TextField, Button, Stack, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import useEscapeKey from "@/hooks/useEscapeKey";
-import { modalStyles, visuallyHidden } from "../Header/Header.styles";
 import { useRouter } from "next/navigation";
-import { recipeNotesModalStyles } from "./RecipeNotesModal.styles";
+import { recipeNotesModalStyles, modalStyles, visuallyHidden } from "./RecipeNotesModal.styles";
 import { MAX_PRIVATE_NOTE_LENGTH } from "@/setup";
 import { useApiResponseErrorHandler } from "@/hooks";
 import { ApiResponse } from "@/models/apiResponse";
