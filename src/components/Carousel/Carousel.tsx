@@ -60,5 +60,3 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
         </Section>
     );
 }
-
-// todo parseApiResponse są zbliżone funkcje tu i tam parseBody ujednolicić

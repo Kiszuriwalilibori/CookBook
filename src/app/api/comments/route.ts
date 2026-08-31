@@ -1,11 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { writeClient } from "@/utils";
-import { handleShortComment } from "./handleShortComment.service";
-import { handleLike } from "./like.service";
-import { createComment } from "./comment.service";
-import { ApiError, apiErrorResponse } from "@/models/apiResponse";
+import { handleShortComment, HandleShortCommentArgs } from "./handleShortComment.service";
+import { handleLike, HandleLikeArgs } from "./like.service";
+import { createComment, CreateCommentInput } from "./comment.service";
+import { ApiError, apiErrorResponse, parseBody } from "@/models/apiResponse";
 
-export async function GET(req: Request) {
+type CommentPatchBody = (HandleLikeArgs & { option: "HANDLE_LIKE" }) | (HandleShortCommentArgs & { option: "HANDLE_SHORT_COMMENT" });
+
+export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
         const recipeId = searchParams.get("recipeId");
@@ -36,9 +38,9 @@ export async function GET(req: Request) {
         return apiErrorResponse(err);
     }
 }
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     try {
-        const body = await req.json();
+        const body = await parseBody<CreateCommentInput>(req);
         const result = await createComment(body);
 
         return NextResponse.json({ ok: true, data: result }, { status: 200 });
@@ -47,9 +49,9 @@ export async function POST(req: Request) {
     }
 }
 
-export async function PATCH(req: Request) {
+export async function PATCH(req: NextRequest) {
     try {
-        const body = await req.json();
+        const body = await parseBody<CommentPatchBody>(req);
         const { option } = body;
         if (!option) {
             throw new ApiError("MISSING_OPTION", "Brak parametru 'option'", 400);

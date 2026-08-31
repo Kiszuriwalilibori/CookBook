@@ -4,16 +4,8 @@ import { NextResponse } from "next/server";
 import { getUserFavorites, writeClient, client } from "@/utils";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 
-import { ApiError, apiErrorResponse } from "@/models/apiResponse";
+import { ApiError, apiErrorResponse, parseBody } from "@/models/apiResponse";
 
-async function parseBody(req: NextRequest): Promise<{ recipeId?: string }> {
-    try {
-        return await req.json();
-    } catch {
-        throw new ApiError("INVALID_JSON", "Nieprawidłowy format JSON", 400);
-    }
-}
-// POST → dodanie ulubionego
 export async function POST(req: NextRequest) {
     try {
         const user = await getUserIdFromCookies();
@@ -22,7 +14,7 @@ export async function POST(req: NextRequest) {
             throw new ApiError("MISSING_USER", "Nie zdefiniowano użytkownika", 401);
         }
 
-        const { recipeId } = await parseBody(req);
+        const { recipeId } = await parseBody<{ recipeId?: string }>(req);
 
         if (!recipeId) {
             throw new ApiError("MISSING_RECIPE_ID", "Brak Id przepisu", 400);
@@ -72,7 +64,8 @@ export async function POST(req: NextRequest) {
 // DELETE → usunięcie ulubionego
 export async function DELETE(req: NextRequest) {
     try {
-        const { recipeId } = await parseBody(req);
+        const { recipeId } = await parseBody<{ recipeId?: string }>(req);
+        // const { recipeId } = await parseBody(req);
 
         if (!recipeId) {
             throw new ApiError("MISSING_RECIPE_ID", "Brak Id przepisu", 400);

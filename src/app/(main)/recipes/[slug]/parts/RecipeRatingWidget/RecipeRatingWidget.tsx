@@ -73,18 +73,6 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                 return;
             }
 
-            // if (data.data.status === "noChange") {
-            //     setMessage("Nie zmieniono oceny");
-            //     setShowThanks(true);
-
-            //     setTimeout(() => {
-            //         setShowThanks(false);
-            //         setMessage(null);
-            //     }, 3000);
-
-            //     return;
-            // }
-
             if (data.data.status === "noChange") {
                 showTemporaryMessage("Nie zmieniono oceny");
                 return;
@@ -96,14 +84,6 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                 showTemporaryMessage("Dziękuję za ocenę!");
                 return;
             }
-
-            // if (data.data.status === "updated") {
-            //     await onRatingUpdated?.();
-            //     setHasInteracted(false);
-            //     setMessage("Dziękuję za ocenę!");
-            //     setShowThanks(true);
-            //     return;
-            // }
         } catch (err) {
             handleApiResponseError(err);
         } finally {

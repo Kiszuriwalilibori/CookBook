@@ -2,7 +2,7 @@ import { ApiError } from "@/models/apiResponse";
 import { writeClient, client } from "@/utils";
 import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 
-type HandleShortCommentArgs = {
+export type HandleShortCommentArgs = {
     commentId: string;
     shortContent: string;
 };

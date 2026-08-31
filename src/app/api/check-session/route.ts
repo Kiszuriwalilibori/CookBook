@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { google } from "googleapis";
 
-import { ApiError, ApiSuccessResponse, apiErrorResponse } from "@/models/apiResponse";
+import { ApiError, ApiSuccessResponse, apiErrorResponse, parseBody } from "@/models/apiResponse";
 
 const ALLOWED_ADMIN_EMAILS = [process.env.MY_EMAIL] as string[];
 
@@ -13,9 +13,13 @@ type CheckSessionData = {
     loginStatus: "admin" | "user";
 };
 
+type CheckSessionRequest = {
+    idToken?: string;
+};
+
 export async function POST(request: NextRequest) {
     try {
-        const { idToken } = await request.json();
+        const { idToken } = await parseBody<CheckSessionRequest>(request);
 
         if (typeof idToken !== "string") {
             throw new ApiError("INVALID_ID_TOKEN", "Nieprawidłowy idToken", 400);
@@ -58,3 +62,24 @@ export async function POST(request: NextRequest) {
         return apiErrorResponse(err);
     }
 }
+// todo rozważyć przejście na schema validation bo nie ma innego spozobu, żeby  nie powtarzać
+// if (typeof idToken !== "string") {
+//     throw new ApiError("INVALID_ID_TOKEN", "Nieprawidłowy idToken", 400);
+// }
+// stringa w tym miejscu
+
+// Jeśli chcesz naprawdę jedno źródło prawdy
+
+// Wtedy potrzebujesz schematu runtime, np. Zod:
+
+// const CheckSessionRequestSchema = z.object({
+//     idToken: z.string(),
+// });
+
+// i z niego możesz uzyskać typ:
+
+// type CheckSessionRequest = z.infer<typeof CheckSessionRequestSchema>;
+
+// Wtedy schemat jest rzeczywiście jednym źródłem prawdy dla struktury danych.
+
+// Ale to jest większy refaktor i przy tym, co teraz robimy z parseBody, nie wprowadzałbym Zoda tylko dla tego jednego endpointu.

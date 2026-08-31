@@ -1,7 +1,7 @@
 import { ApiError } from "@/models/apiResponse";
 import { writeClient } from "@/utils";
 
-type HandleLikeArgs = {
+export type HandleLikeArgs = {
     commentId: string;
     fingerprint: string;
 };
@@ -62,3 +62,6 @@ export async function handleLike(args: HandleLikeArgs) {
         liked: !alreadyLiked,
     };
 }
+
+//todo czy sortowanie komentarzy na pewno działa, bo nabrałem wątpliwości
+// poza tym rozważyć sensowność guzika moje. Nie do końca wiadomo co on robi albo co powinien robić: czy filtruje czy pokazuje moje na początku

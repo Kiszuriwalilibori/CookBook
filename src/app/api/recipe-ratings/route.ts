@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeClient } from "@/utils";
 import { client } from "@/utils";
-import { ApiError, apiErrorResponse } from "@/models/apiResponse";
+import { ApiError, apiErrorResponse, parseBody } from "@/models/apiResponse";
 import type { RatingPayload, RatingSummary, RecipeRating } from "@/types/recipeRatings";
 
 // Helper do generowania unikalnego _key
@@ -9,18 +9,9 @@ function generateKey() {
     return Math.random().toString(36).substring(2, 10);
 }
 
-// async function parseBody(req: NextRequest): Promise<RatingPayload> {
-//     try {
-//         return await req.json();
-//     } catch {
-//         throw new ApiError("INVALID_JSON", "Nieprawidłowy format JSON", 400);
-//     }
-// }
-
 export async function POST(req: NextRequest) {
     try {
-        const { recipeId, rating, fingerprint, overwrite }: RatingPayload = await req.json();
-
+        const { recipeId, rating, fingerprint, overwrite } = await parseBody<RatingPayload>(req);
         if (!recipeId) {
             throw new ApiError("MISSING_RECIPE_ID", "Brak Id przepisu", 400);
         }
@@ -142,13 +133,13 @@ export async function GET(req: NextRequest) {
 
 // TODO: recipe-ratings validation — rating value check
 
-// W endpointzie /api/recipe-ratings obecnie używamy prostego sprawdzenia if (!rating). Jest to akceptowalne tylko dlatego, że aktualny model ocen zakłada wartości wyłącznie od 1 do 5, więc 0 nie jest poprawną oceną.
+// todo W endpointzie /api/recipe-ratings obecnie używamy prostego sprawdzenia if (!rating). Jest to akceptowalne tylko dlatego, że aktualny model ocen zakłada wartości wyłącznie od 1 do 5, więc 0 nie jest poprawną oceną.
 
-// Jeżeli w przyszłości zmieni się domena ocen (np. zostanie dopuszczone 0) albo walidacja będzie zaostrzana, należy zastąpić ten warunek bardziej precyzyjnym sprawdzeniem:
+// todo Jeżeli w przyszłości zmieni się domena ocen (np. zostanie dopuszczone 0) albo walidacja będzie zaostrzana, należy zastąpić ten warunek bardziej precyzyjnym sprawdzeniem:
 
-// rozróżnienie braku wartości (undefined / null)
+// todo rozróżnienie braku wartości (undefined / null)
 // od niepoprawnej wartości (poza zakresem, zły typ).
 
-// Przy okazji sprawdzić, czy kody błędów powinny rozróżniać MISSING_RATING i INVALID_RATING.
+//  todo Przy okazji sprawdzić, czy kody błędów powinny rozróżniać MISSING_RATING i INVALID_RATING.
 
 //todo czy wszędzie musi być writeclient???

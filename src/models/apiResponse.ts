@@ -21,7 +21,7 @@ export class ApiError extends Error implements ApiErrorPayload {
     }
 }
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export function apiErrorResponse(err: unknown) {
     if (err instanceof ApiError) {
@@ -47,4 +47,12 @@ export function apiErrorResponse(err: unknown) {
         },
         { status: 500 }
     );
+}
+
+export async function parseBody<T>(req: NextRequest): Promise<T> {
+    try {
+        return await req.json();
+    } catch {
+        throw new ApiError("INVALID_JSON", "Nieprawidłowy format JSON", 400);
+    }
 }

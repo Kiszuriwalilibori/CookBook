@@ -4,7 +4,7 @@ import { checkCommentCooldown } from "@/app/(main)/recipes/[slug]/parts/Comments
 import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 import { ApiError } from "@/models/apiResponse";
 
-type CreateCommentInput = {
+export type CreateCommentInput = {
     recipeId: string;
     content: string;
     author: string;

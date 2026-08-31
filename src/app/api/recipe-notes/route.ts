@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 import { client, writeClient } from "@/utils";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
@@ -7,20 +7,7 @@ function getRecipeNotesId(userId: string, recipeId: string) {
     return `recipeNotes_${userId}_${recipeId}`;
 }
 
-import type { NextRequest } from "next/server";
-
-import { ApiError, apiErrorResponse, ApiSuccessResponse } from "@/models/apiResponse";
-
-async function parseBody(req: NextRequest): Promise<{
-    recipeId?: string;
-    notes?: string;
-}> {
-    try {
-        return await req.json();
-    } catch {
-        throw new ApiError("INVALID_JSON", "Nieprawidłowy format JSON", 400);
-    }
-}
+import { ApiError, apiErrorResponse, ApiSuccessResponse, parseBody } from "@/models/apiResponse";
 
 //
 // GET — pobranie notatki
@@ -73,7 +60,11 @@ export async function POST(req: NextRequest) {
             throw new ApiError("MISSING_USER", "Nie można zidentyfikować użytkownika", 401);
         }
 
-        const { recipeId, notes } = await parseBody(req);
+        // const { recipeId, notes } = await parseBody(req);
+        const { recipeId, notes } = await parseBody<{
+            recipeId?: string;
+            notes?: string;
+        }>(req);
 
         if (!recipeId) {
             throw new ApiError("MISSING_RECIPE_ID", "Brak ID przepisu", 400);
