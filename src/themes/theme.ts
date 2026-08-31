@@ -41,7 +41,8 @@ const roboto = Roboto({
 const baseTheme = createTheme({
     palette: {
         primary: {
-            main: "#F6723D", // brand orange
+            // main: "#F6723D", // brand orange
+            main: "#C64F3D",
             light: "#FF9F41",
             dark: "#F44F0C",
             contrastText: "#fff",

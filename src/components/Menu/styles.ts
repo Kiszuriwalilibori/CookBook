@@ -10,7 +10,7 @@ export const desktopItemStyles = (currentPathname: string, href: string, hidden?
     display: "flex",
     alignItems: "center",
     padding: "8px 16px",
-    color: "var(--menu-color)",
+    color: theme => `${theme.custom.menuColor}`,
     cursor: "pointer",
     minWidth: "64px",
     textDecoration: "none",
@@ -31,7 +31,16 @@ export const desktopItemStyles = (currentPathname: string, href: string, hidden?
 export const desktopMenuIconStyle: SxProps<Theme> = {
     fontSize: "1.125rem",
     marginRight: "0.5rem",
-    color: "var(--menu-color)", // Already set
+    // color: theme => `${theme.custom.menuColor}`,
+    color: theme => `${theme.custom.menuColor}`, // Already set
+    "& svg": {
+        color: "#000000",
+        fill: "#000000",
+    },
+
+    "& path": {
+        fill: "#000000",
+    },
 };
 
 export const desktopMenuLabelStyle: SxProps<Theme> = {
@@ -40,7 +49,7 @@ export const desktopMenuLabelStyle: SxProps<Theme> = {
     fontWeight: 500,
     textTransform: "uppercase",
     letterSpacing: "0.05em",
-    color: "var(--menu-color)",
+    color: theme => `${theme.custom.menuColor}`,
     "&::after": {
         content: "none",
     },
@@ -49,7 +58,7 @@ export const desktopMenuLabelStyle: SxProps<Theme> = {
 export const desktopMenuSeparatorStyle: SxProps<Theme> = {
     height: "1.5rem",
     width: "1px",
-    backgroundColor: "var(--menu-color)",
+    backgroundcolor: theme => `${theme.custom.menuColor}`,
 };
 
 export const desktopMenuContainerStyle: SxProps<Theme> = {
@@ -77,12 +86,12 @@ export const desktopMenuContainerStyle: SxProps<Theme> = {
 };
 
 export const mobileMenuIconStyle: SxProps<Theme> = {
-    color: "var(--menu-color)",
+    color: theme => `${theme.custom.menuColor}`,
     minWidth: "40px",
 };
 
 export const mobileMenuItemStyle = (currentPathname: string, href: string, hidden?: boolean): SxProps<Theme> => ({
-    color: "var(--menu-color)",
+    color: theme => `${theme.custom.menuColor}`,
     backgroundColor: currentPathname === href ? theme => theme.palette.primary.light : "transparent",
     textDecoration: "none",
     opacity: hidden ? 0 : 1,
@@ -96,24 +105,24 @@ export const mobileMenuItemStyle = (currentPathname: string, href: string, hidde
 
 export const drawerButtonStyle: SxProps<Theme> = {
     display: { md: "none" },
-    color: "var(--menu-color)",
+    color: theme => `${theme.custom.menuColor}`,
 };
 
 export const menuAppBarStyle: SxProps<Theme> = {
     backgroundColor: theme => theme.palette.primary.main,
-    color: "var(--menu-color)",
+    color: theme => `${theme.custom.menuColor}`,
     boxShadow: "none",
     "& .MuiToolbar-root": {
-        color: "var(--menu-color)",
+        color: theme => `${theme.custom.menuColor}`,
     },
     "& .MuiIconButton-root": {
-        color: "var(--menu-color)",
+        color: theme => `${theme.custom.menuColor}`,
     },
 };
 
 export const drawerBoxStyle: SxProps<Theme> = {
     width: "100%",
-    color: "var(--menu-color)",
+    color: theme => `${theme.custom.menuColor}`,
 
     backgroundColor: theme => theme.palette.primary.main,
 };
@@ -122,7 +131,7 @@ export const drawerStyle: SxProps<Theme> = {
     display: { md: "none" },
     "& .MuiDrawer-paper": {
         backgroundColor: theme => theme.palette.primary.main,
-        color: "var(--menu-color)",
+        color: theme => `${theme.custom.menuColor}`,
         width: "100%",
         height: "auto",
         overflowY: "auto",
