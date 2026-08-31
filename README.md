@@ -132,5 +132,4 @@ Ale na teraz — jesteś dosłownie 1 linijkę od działającego drzewa 👍
 
 test
 
-//todo admin nie powinien mieć 1 minuty ograniczenia w komentowaniu
 // po przełaczeniu z jakiegokolwiek wyszukiwania na potrawę miga loading indicator jakby nie był przez usedelayedcośtam To duża strona trza by przejrzeć wszystkie komponenty albo leipie przejrzeć wszystkie użycia loading indictaora w apce

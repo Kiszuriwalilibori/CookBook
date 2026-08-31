@@ -83,12 +83,14 @@ export async function createComment(input: CreateCommentInput) {
     // 3. relations
     await assertParentValid(input.parentId, input.recipeId);
 
-    // 4. rate limit
-    await assertCooldown(input.fingerprint);
-
-    // 5. auth
+    // 4. auth
     const currentUser = await getUserFromCookies();
     const isAdmin = currentUser?.isAdmin ?? false;
+
+    // 5. rate limit
+    if (!isAdmin) {
+        await assertCooldown(input.fingerprint);
+    }
 
     // 6. moderation
     await moderate(input.content);
