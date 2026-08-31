@@ -5,8 +5,7 @@ export const footerContainer: SxProps<Theme> = {
     py: 3,
     px: 2,
     mt: "auto",
-    // backgroundColor: theme => theme.palette.secondary.main,
-    backgroundColor: "rgb(247, 225, 155)",
+    backgroundColor: "#E0A966",
 };
 
 export const footerContent: SxProps<Theme> = {

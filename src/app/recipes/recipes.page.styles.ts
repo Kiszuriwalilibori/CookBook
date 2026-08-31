@@ -34,5 +34,5 @@ export const leftColumnSx: SxProps<Theme> = {
 
 export const rightColumnSx: SxProps<Theme> = {
     ...columnBaseSx,
-    backgroundColor: "secondary.dark",
+    backgroundColor: "secondary.light",
 };

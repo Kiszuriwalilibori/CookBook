@@ -41,16 +41,15 @@ const roboto = Roboto({
 const baseTheme = createTheme({
     palette: {
         primary: {
-            // main: "#F6723D", // brand orange
-            main: "#C64F3D",
-            light: "#FF9F41",
-            dark: "#F44F0C",
+            main: "#BC5A3C",
+            light: "#C97B63",
+            dark: "#8E3F29",
             contrastText: "#fff",
         },
         secondary: {
-            main: "#A8BBA3",
-            light: "#EAF0E1",
-            dark: "#5A7257",
+            main: "#677B67",
+            light: "#859585",
+            dark: "#485648",
         },
         background: {
             default: "#f5f5f5",
@@ -142,7 +141,7 @@ const baseTheme = createTheme({
             styleOverrides: {
                 tooltip: {
                     backgroundColor: "secondary.main",
-                    color: "#000",
+                    color: "secondary.contrastText",
                     fontSize: "0.75rem",
                 },
                 arrow: {
