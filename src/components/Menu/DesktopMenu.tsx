@@ -107,7 +107,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
                                     {item.icon}
                                 </Box>
 
-                                <Typography component="span" sx={desktopMenuLabelStyle} aria-hidden="true">
+                                <Typography component="span" sx={desktopMenuLabelStyle}>
                                     {item.label.trim()}
                                 </Typography>
                             </Box>
@@ -124,7 +124,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
                                     {item.icon}
                                 </Box>
 
-                                <Typography component="span" sx={desktopMenuLabelStyle} aria-hidden="true">
+                                <Typography component="span" sx={desktopMenuLabelStyle}>
                                     {item.label.trim()}
                                 </Typography>
                             </ButtonBase>

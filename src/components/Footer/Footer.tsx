@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -11,18 +10,18 @@ const Footer = () => {
         <Box component="footer" sx={footerContainer}>
             <Container maxWidth="lg">
                 <Box sx={footerContent}>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="common.black">
                         © {new Date().getFullYear()} CookBook. All rights reserved.
                     </Typography>
 
                     <Box sx={linkContainer}>
-                        <MuiLink component={Link} href="/privacy" color="text.secondary" variant="body2" sx={linkStyle}>
+                        <MuiLink component={Link} href="/privacy" color="common.black" variant="body2" sx={linkStyle}>
                             Privacy Policy
                         </MuiLink>
-                        <MuiLink component={Link} href="/terms" color="text.secondary" variant="body2" sx={linkStyle}>
+                        <MuiLink component={Link} href="/terms" color="common.black" variant="body2" sx={linkStyle}>
                             Terms of Service
                         </MuiLink>
-                        <MuiLink component={Link} href="/contact" color="text.secondary" variant="body2" sx={linkStyle}>
+                        <MuiLink component={Link} href="/contact" color="common.black" variant="body2" sx={linkStyle}>
                             Contact Us
                         </MuiLink>
                     </Box>

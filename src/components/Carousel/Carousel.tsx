@@ -62,3 +62,5 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
         </Section>
     );
 }
+
+// Ta biblioteka ma w sobie jakieś dramatyczne opóźnienie które morduje metryki, napisać własną
