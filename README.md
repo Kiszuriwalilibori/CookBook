@@ -133,3 +133,5 @@ Ale na teraz — jesteś dosłownie 1 linijkę od działającego drzewa 👍
 test
 
 // po przełaczeniu z jakiegokolwiek wyszukiwania na potrawę miga loading indicator jakby nie był przez usedelayedcośtam To duża strona trza by przejrzeć wszystkie komponenty albo leipie przejrzeć wszystkie użycia loading indictaora w apce
+
+// todo dodać jakiś deskryptor do ilości porcji bo czasami niejasne

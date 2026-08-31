@@ -51,4 +51,4 @@ export const ConfirmRemoveDialog: React.FC<ConfirmRemoveDialogProps> = ({ open, 
 
 export default ConfirmRemoveDialog;
 
-//todo: tranzycja dodana i działa. jednak choć audyt o tym nie pisze prawdopodbnie jest potrzebna w recipenotesmodal i recipefiletrsmodal
+//todo: tranzycja dodana i działa. Może być jednak potrzebna w innych modalach

@@ -6,7 +6,7 @@ import { generateRecipeMetadata } from "./generateRecipeMetadata";
 import { generateRecipeSchema } from "./schema-org";
 import { getOptions } from "./getOptions";
 import { getRecipeById } from "./getRecipeById";
-import { getRecipeBySlug } from "./getRecipeBySlug";
+// import { getRecipeBySlug } from "./getRecipeBySlug";
 import { getRecipesForCards } from "./getRecipesForCards";
 import { getSessionUser } from "./session";
 import { getUserFavorites } from "./getUserFavorites";
@@ -26,7 +26,7 @@ export {
     generateRecipeSchema,
     getOptions,
     getRecipeById,
-    getRecipeBySlug,
+    // getRecipeBySlug,
     getRecipesForCards,
     getSessionUser,
     getUserFavorites,

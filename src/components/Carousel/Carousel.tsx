@@ -17,6 +17,7 @@ import useDelayedCondition from "@/hooks/useDelayedCondition";
 import { LoadingIndicator } from "@/components";
 import { useCarouselSlides } from "./useCarouselSlides";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useCarouselAccessibility } from "./useCarouselAccessibility";
 
 interface CarouselProps {
     count?: number;
@@ -42,6 +43,7 @@ export default function Carousel({ count = 5, intervalMs = 5000, initialSlides =
     const showLoading = useDelayedCondition(status === "loading", DELAY, DURATION);
 
     const router = useRouter();
+    useCarouselAccessibility();
 
     return (
         <Section id={"Carousel.Section"}>

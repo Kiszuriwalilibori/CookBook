@@ -1,7 +1,3 @@
-//TODO uwaga, hook otej nazwie już jest ale w innej lokalizacji tutaj!
-
-
-
 import { useRef, useCallback, useEffect } from "react";
 
 type DebounceOptions = {

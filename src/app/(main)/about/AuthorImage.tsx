@@ -23,5 +23,3 @@ export default function AuthorImage() {
         </Box>
     );
 }
-
-// todo guzik odznacz wszystkie jest widoczny choć nic nie jest zaznaczone (dotyczy spisu składników)

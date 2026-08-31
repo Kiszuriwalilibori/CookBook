@@ -6,6 +6,8 @@ import ReactStars from "react-rating-stars-component";
 import type { ApiResponse } from "@/models/apiResponse";
 import type { RatingValue, RatingPayload, RatingMutationResult } from "@/types/recipeRatings";
 import { useApiResponseErrorHandler, useFingerprint } from "@/hooks";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+
 import { getRatingsText } from "./getRatingText";
 
 import { containerSx, textSx, averageSx, countSx, successSx, loaderContainerSx } from "./recipeRatingWidget.styles";
@@ -20,7 +22,7 @@ interface RecipeRatingWidgetProps {
 export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRatingUpdated }: RecipeRatingWidgetProps) {
     const [rating, setRating] = useState<RatingValue | 0>(0);
     const [isLoading, setIsLoading] = useState(false);
-
+    const prefersReducedMotion = useReducedMotion();
     const handleApiResponseError = useApiResponseErrorHandler();
 
     const [showThanks, setShowThanks] = useState(false);
@@ -160,7 +162,15 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
             {/* {error && <Typography sx={errorSx}>{error}</Typography>} */}
             {showThanks && <Typography sx={successSx}>✓ {message}</Typography>}
 
-            <Dialog open={showOverwriteDialog} onClose={handleOverwriteCancel}>
+            <Dialog
+                open={showOverwriteDialog}
+                onClose={handleOverwriteCancel}
+                slotProps={{
+                    transition: {
+                        timeout: prefersReducedMotion ? 0 : 700,
+                    },
+                }}
+            >
                 <DialogTitle>Już oceniałeś ten przepis</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -168,10 +178,10 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="outlined" onClick={handleOverwriteCancel}>
+                    <Button variant="outlined" onClick={handleOverwriteCancel} disableFocusRipple>
                         Nie, zostaw starą ocenę
                     </Button>
-                    <Button variant="contained" onClick={handleOverwriteConfirm} autoFocus>
+                    <Button variant="contained" onClick={handleOverwriteConfirm} autoFocus disableFocusRipple>
                         Tak, zmień ocenę
                     </Button>
                 </DialogActions>
