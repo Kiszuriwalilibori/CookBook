@@ -162,25 +162,9 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 <Accordion expanded={accordionOpen} onChange={(_, expanded) => setAccordionOpen(expanded)} elevation={0}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography variant="h5">Komentarze ({commentsCount})</Typography>
-
-                        {/* <Box onClick={e => e.stopPropagation()} sx={{ margin: "0 auto", display: "flex", gap: 2 }}>
-                            <Button size="small" variant={sortMode === "newest" ? "contained" : "outlined"} onClick={() => setSortMode("newest")}>
-                                Najnowsze
-                            </Button>
-
-                            <Button size="small" variant={sortMode === "most_liked" ? "contained" : "outlined"} onClick={() => setSortMode("most_liked")}>
-                                Polubienia
-                            </Button>
-
-                            <Button size="small" variant={sortMode === "my_comments" ? "contained" : "outlined"} onClick={() => setSortMode("my_comments")}>
-                                Moje
-                            </Button>
-                        </Box> */}
                     </AccordionSummary>
 
                     <AccordionDetails>
-                        {/* FORM */}
-                        {/* <Box ref={formContainerRef}> */}
                         <CommentForm
                             formContainerRef={formContainerRef}
                             isFormOpen={isFormOpen}
@@ -192,13 +176,12 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                             }}
                             onCancel={() => closeForm()}
                         />
-                        {/* </Box> */}
 
                         {isLoading ? (
                             <LoadingIndicator open={isLoading} prompt="Trwa pobieranie komentarzy" />
                         ) : (
                             <Box sx={commentsContainerSx}>
-                                <Box onClick={e => e.stopPropagation()} sx={{ margin: "0 auto", display: "flex", gap: 2 }}>
+                                <Box onClick={e => e.stopPropagation()} sx={{ margin: "0 auto", display: "flex", gap: 2, padding: "8px 0 8px 0" }}>
                                     <Button size="small" variant={sortMode === "newest" ? "contained" : "outlined"} onClick={() => setSortMode("newest")}>
                                         Najnowsze
                                     </Button>

@@ -413,12 +413,12 @@ body {
 }
 
 /* optional: inputs (MUI TextField, OutlinedInput) */
-.MuiOutlinedInput-root.Mui-focused {
+/* .MuiOutlinedInput-root.Mui-focused {
     box-shadow:
         0 0 0 2px #ffffff,
-        0 0 0 4px var(--focus-color) !important;
+        0 0 0 4px var(--focus-color) !important; */
     /* border-radius: 2px; */
-}
+/* } */
 .MuiButtonBase-root.Mui-focusVisible {
     box-shadow:
         0 0 0 2px #ffffff,

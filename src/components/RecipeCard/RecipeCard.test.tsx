@@ -788,3 +788,5 @@ describe("RecipeCard", () => {
         expect(favoriteButton).toBeInTheDocument();
     });
 });
+
+// todo znowu coś się pozmieniało i krzyczy

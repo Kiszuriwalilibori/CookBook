@@ -1,10 +1,10 @@
 // commentStyles.ts
-import { alpha, darken, Theme } from "@mui/material/styles";
+import { alpha, Theme } from "@mui/material/styles";
 
 /* -------- CommentForm -------- */
 
 export const paperSx = (theme: Theme) => ({
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: theme.palette.background.default,
     border: `1px solid ${theme.palette.secondary.dark}`,
     borderRadius: 2,
     p: 2,
@@ -90,13 +90,8 @@ export const errorBoxSx = {
     textAlign: "center",
 };
 export const submitButtonSx = (theme: Theme) => ({
-    backgroundColor: theme.palette.secondary.dark,
     flex: { sm: 1 },
     minWidth: { sm: 140 },
-    color: theme.palette.primary.contrastText,
-    "&:hover": {
-        backgroundColor: darken(theme.palette.secondary.dark, 0.15),
-    },
 });
 
 /* -------- Comments -------- */

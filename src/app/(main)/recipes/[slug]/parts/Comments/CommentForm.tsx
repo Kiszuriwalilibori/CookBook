@@ -126,9 +126,9 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
 
     return (
         <Box ref={formContainerRef}>
-            <Collapse in={isFormOpen} timeout={400} sx={collapseSx}>
-                <Paper elevation={1} sx={paperSx}>
-                    <Box sx={{ position: "relative" }}>
+            <Collapse in={isFormOpen} timeout={400} sx={collapseSx} id="collapse">
+                <Paper elevation={1} sx={paperSx} id="paper">
+                    <Box sx={{ position: "relative" }} id="box">
                         <Honeypot />
 
                         {!isAdminLogged && (
@@ -198,10 +198,10 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
                             </Box>
                         )}
                         <Box sx={actionsBoxSx}>
-                            <Button fullWidth variant="contained" onClick={isShortComment ? handleSubmitShortComment : handleSubmitNormalComment} disabled={baseDisabled || !validation.isValid} sx={submitButtonSx}>
+                            {onCancel && <CommentFormCancelButton onReset={handleReset} />}
+                            <Button color="primary" variant="contained" onClick={isShortComment ? handleSubmitShortComment : handleSubmitNormalComment} disabled={baseDisabled || !validation.isValid} sx={submitButtonSx}>
                                 {submitLabel}
                             </Button>
-                            {onCancel && <CommentFormCancelButton onReset={handleReset} />}
                         </Box>
                     </Box>
                 </Paper>

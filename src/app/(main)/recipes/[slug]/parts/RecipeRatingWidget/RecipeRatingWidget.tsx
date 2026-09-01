@@ -178,10 +178,10 @@ export function RecipeRatingWidget({ recipeId, averageRating, totalRatings, onRa
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="outlined" onClick={handleOverwriteCancel} disableFocusRipple>
+                    <Button variant="contained" onClick={handleOverwriteCancel} disableFocusRipple color="secondary">
                         Nie, zostaw starą ocenę
                     </Button>
-                    <Button variant="contained" onClick={handleOverwriteConfirm} autoFocus disableFocusRipple>
+                    <Button variant="contained" onClick={handleOverwriteConfirm} color="primary" autoFocus disableFocusRipple>
                         Tak, zmień ocenę
                     </Button>
                 </DialogActions>

@@ -174,13 +174,13 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                                 {notes.length} /{MAX_PRIVATE_NOTE_LENGTH} znaków (pozostało {MAX_PRIVATE_NOTE_LENGTH - notes.length})
                             </Box>
                             <Stack direction="row" spacing={2} justifyContent="flex-end">
-                                <Button variant="outlined" onClick={onClose} disabled={saving}>
+                                <Button variant="contained" color="secondary" onClick={onClose} disabled={saving}>
                                     Anuluj
                                 </Button>
                                 <Box id={NOTES_SAVE_STATUS_ID} aria-live="polite" sx={visuallyHidden}>
                                     {saving ? "Notatka jest zapisywana" : "Możesz zapisać notatkę"}
                                 </Box>
-                                <Button variant="contained" onClick={handleSave} disabled={saving} aria-describedby={NOTES_SAVE_STATUS_ID}>
+                                <Button variant="contained" onClick={handleSave} disabled={saving} aria-describedby={NOTES_SAVE_STATUS_ID} color="primary">
                                     {saving ? <CircularProgress size={20} color="inherit" /> : "Zapisz"}
                                 </Button>
                                 <Button
@@ -203,11 +203,11 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                     </DialogContent>
 
                     <DialogActions>
-                        <Button onClick={() => setDeleteDialogOpen(false)} disabled={saving}>
+                        <Button onClick={() => setDeleteDialogOpen(false)} disabled={saving} color="secondary">
                             Anuluj
                         </Button>
 
-                        <Button color="error" variant="contained" onClick={handleDelete} disabled={saving}>
+                        <Button color="primary" variant="contained" onClick={handleDelete} disabled={saving}>
                             Usuń
                         </Button>
                     </DialogActions>
@@ -218,3 +218,6 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
 };
 
 export default RecipeNotesModal;
+
+// todo rzuca błędy ## Invalid prop `tabIndex` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.
+// todo poza tym, jeżeli w poprzednim ruchu usunęliśmy notatkę, to po ponownym wejściu w edytuj notatke od razu włącza się modal Usuń notatkę Czy na pewno chcesz usunąć tę notatkę?
