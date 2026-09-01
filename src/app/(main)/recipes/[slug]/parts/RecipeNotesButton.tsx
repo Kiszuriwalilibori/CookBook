@@ -21,7 +21,7 @@ export function RecipeNotesButton({ recipeId, initialNotes = "" }: Props) {
     return (
         <>
             <Tooltip title="Edytuj swoje notatki do przepisu" placement="top">
-                <IconButton id="RecipeNotesButton" onClick={() => setOpen(true)} sx={styles.recipeButton}>
+                <IconButton disableRipple id="RecipeNotesButton" onClick={() => setOpen(true)} sx={styles.recipeButton}>
                     <NotesIcon sx={styles.recipeButtonIcon} />
                 </IconButton>
             </Tooltip>

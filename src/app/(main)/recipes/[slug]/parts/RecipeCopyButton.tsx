@@ -44,58 +44,6 @@ export function RecipeCopyButton({ recipe }: RecipeCopyButtonProps) {
         }
     };
 
-    // useEffect(() => {
-    //     if (!hasUser) {
-    //         setPrivateNotes("");
-    //         return;
-    //     }
-
-    //     fetch(`/api/recipe-notes?recipeId=${recipe._id}`)
-    //         .then(res => res.json())
-    //         .then(result => {
-    //             if (result.ok) {
-    //                 setPrivateNotes(result.data.notes ?? "");
-    //             } else {
-    //                 setPrivateNotes("");
-    //             }
-    //         })
-    //         .catch(() => {
-    //             setPrivateNotes("");
-    //         });
-    // }, [recipe._id, hasUser]);
-
-    // const generateCopyableText = (): string => {
-    //     let text = `${recipe.title}\n\n`;
-
-    //     // Ingredients
-    //     text += "Składniki:\n";
-    //     recipe.ingredients?.forEach(ing => {
-    //         text += `- ${ing.quantity}${ing.unit ? ` ${ing.unit}` : ""} ${ing.name}\n`;
-    //     });
-
-    //     // Preparation steps
-    //     text += "\nPrzygotowanie:\n";
-    //     recipe.preparationSteps?.forEach((step, i) => {
-    //         text += `${i + 1}. `;
-    //         if (step.content) {
-    //             step.content.forEach(block => {
-    //                 block.children?.forEach(child => {
-    //                     if (child.text) text += child.text + " ";
-    //                 });
-    //             });
-    //         }
-    //         if (step.notes) {
-    //             text += `(${step.notes})`;
-    //         }
-    //         text += "\n";
-    //     });
-
-    //     // Recipe URL (internal)
-    //     const slugPath = recipe.slug?.current || "unknown-slug";
-    //     text += `\nŹródło: ${BASE_URL}/recipes/${slugPath}`;
-
-    //     return text;
-    // };
     const generateCopyableText = (notes = privateNotes): string => {
         let text = `${recipe.title}\n\n`;
 
@@ -153,7 +101,7 @@ export function RecipeCopyButton({ recipe }: RecipeCopyButtonProps) {
     return (
         <>
             <Tooltip title="Kopiuj składniki i przygotowanie do dokumentu" placement="top">
-                <IconButton id="RecipeCopyButton" onClick={handleCopy} sx={styles.recipeButton}>
+                <IconButton disableRipple id="RecipeCopyButton" onClick={handleCopy} sx={styles.recipeButton}>
                     <CopyAllIcon sx={styles.recipeButtonIcon} />
                 </IconButton>
             </Tooltip>

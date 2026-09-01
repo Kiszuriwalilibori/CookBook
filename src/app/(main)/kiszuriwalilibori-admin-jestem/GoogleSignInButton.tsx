@@ -50,14 +50,12 @@ export default function GoogleSignInButton() {
                         Opcja kontynuacji bez logowania jest dostępna
                     </Box>
                 )}
-
-                {/* Google button */}
-                <div id="google-signin-button" aria-label="Zaloguj się przez Google" />
-
                 {/* {loaded && ( */}
                 <Button aria-label="Kontynuuj bez logowania" fullWidth endIcon={<ArrowForwardIcon />} onClick={() => setVisible(false)} sx={{ ...closeButtonSx, ...focusableSx }}>
                     Kontynuuj bez logowania
                 </Button>
+                {/* Google button */}
+                <div id="google-signin-button" aria-label="Zaloguj się przez Google" />
             </Paper>
         </Box>
     );

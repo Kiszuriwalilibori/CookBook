@@ -141,7 +141,7 @@ export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
 
     return (
         <Tooltip title="Eksportuj do PDF" placement="top">
-            <IconButton id="RecipePdfButton" onClick={handlePdfExport} sx={styles.recipeButton}>
+            <IconButton disableRipple id="RecipePdfButton" onClick={handlePdfExport} sx={styles.recipeButton}>
                 <PictureAsPdfIcon sx={styles.recipeButtonIcon} />
             </IconButton>
         </Tooltip>

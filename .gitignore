@@ -24,6 +24,8 @@
 .DS_Store
 *.pem
 audyty
+/prompty/
+/audyty/
 
 # debug
 npm-debug.log*

@@ -65,7 +65,7 @@ export function RecipeShareButton({ title }: Props) {
     return (
         <>
             <Tooltip title="Udostępnij przepis">
-                <IconButton onClick={handleShareClick} sx={styles.recipeButton}>
+                <IconButton disableRipple onClick={handleShareClick} sx={styles.recipeButton}>
                     <ShareIcon />
                 </IconButton>
             </Tooltip>
