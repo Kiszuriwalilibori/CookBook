@@ -17,15 +17,24 @@ export const modalStyles: SxProps<Theme> = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
+
     bgcolor: "background.paper",
     p: 4,
+
     borderRadius: 3,
-    maxWidth: 440,
+
     width: "90%",
-    maxHeight: "85vh",
-    overflowY: "auto",
+    maxWidth: 440,
+
+    overflow: "hidden",
+
     boxShadow: 24,
-    outline: "none", // usuwa niebieską ramkę fokusu (dla dostępności)
+    outline: "none",
+
+    "@media (max-height: 600px)": {
+        maxHeight: "90vh",
+        overflowY: "auto",
+    },
 };
 export const visuallyHidden: SxProps<Theme> = {
     position: "absolute",
