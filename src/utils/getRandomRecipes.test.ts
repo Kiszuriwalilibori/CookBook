@@ -2,22 +2,45 @@ jest.mock("next-sanity", () => ({
     groq: jest.fn(),
 }));
 
-import { client } from "./client";
-import getRandomRecipes from "./getRandomRecipes";
-
 jest.mock("./client", () => ({
     client: {
         fetch: jest.fn(),
     },
 }));
 
+jest.mock("../lib/sanity/imageUrl", () => ({
+    urlFor: jest.fn(() => ({
+        width: jest.fn(() => ({
+            height: jest.fn(() => ({
+                quality: jest.fn(() => ({
+                    auto: jest.fn(() => ({
+                        url: jest.fn(() => "image.jpg"),
+                    })),
+                })),
+            })),
+        })),
+    })),
+}));
+
+import { client } from "./client";
+import getRandomRecipes from "./getRandomRecipes";
+
 describe("getRandomRecipes", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     it("returns successful ApiResponse with recipes", async () => {
         (client.fetch as jest.Mock).mockResolvedValue([
             {
                 _id: "1",
                 slug: "test-recipe",
-                imageUrl: "image.jpg",
+                image: {
+                    _type: "image",
+                    asset: {
+                        _ref: "image-test",
+                    },
+                },
                 title: "Test recipe",
             },
         ]);
@@ -36,30 +59,62 @@ describe("getRandomRecipes", () => {
             });
         }
     });
-    it("prefers recipes with images", async () => {
+
+    it("generates imageUrl from Sanity image", async () => {
         (client.fetch as jest.Mock).mockResolvedValue([
             {
                 _id: "1",
-                imageUrl: null,
-                title: "No image",
-            },
-            {
-                _id: "2",
-                imageUrl: "image.jpg",
+                slug: "test-recipe",
+                image: {
+                    _type: "image",
+                    asset: {
+                        _ref: "image-test",
+                    },
+                },
                 title: "With image",
             },
         ]);
 
         const result = await getRandomRecipes(1);
 
+        expect(result.ok).toBe(true);
+
         if (result.ok) {
-            expect(result.data[0]._id).toBe("2");
+            expect(result.data[0].imageUrl).toBe("image.jpg");
         }
     });
+
     it("limits number of recipes", async () => {
-        (client.fetch as jest.Mock).mockResolvedValue([{ _id: "1" }, { _id: "2" }, { _id: "3" }]);
+        (client.fetch as jest.Mock).mockResolvedValue([
+            {
+                _id: "1",
+                slug: "recipe-1",
+                image: {
+                    _type: "image",
+                    asset: { _ref: "image-1" },
+                },
+            },
+            {
+                _id: "2",
+                slug: "recipe-2",
+                image: {
+                    _type: "image",
+                    asset: { _ref: "image-2" },
+                },
+            },
+            {
+                _id: "3",
+                slug: "recipe-3",
+                image: {
+                    _type: "image",
+                    asset: { _ref: "image-3" },
+                },
+            },
+        ]);
 
         const result = await getRandomRecipes(2);
+
+        expect(result.ok).toBe(true);
 
         if (result.ok) {
             expect(result.data).toHaveLength(2);

@@ -15,27 +15,29 @@ export const styles: { [key: string]: SxProps<Theme> } = {
             transform: "scale(1.05)",
         },
     },
-
     card: {
         position: "relative",
         height: "100%",
+        width: "100%",
+        maxWidth: 330,
         display: "flex",
         flexDirection: "column",
         transition: "transform 0.2s ease-in-out",
         backgroundColor: "background.default",
+
         "&:hover": {
             transform: "translateY(-4px)",
             boxShadow: 3,
         },
+
         "@media (prefers-reduced-motion: reduce)": {
             transition: "none",
             "&:hover": {
                 transform: "none",
             },
         },
-        width: { xs: "100%", sm: "auto" },
-        maxWidth: { xs: "none", sm: 330 },
     },
+
     media: {
         // Aspect ratio responsywny: Wyższy na mobile dla lepszego UX
         height: { xs: 180, sm: 200 },

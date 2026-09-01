@@ -509,7 +509,7 @@ const recipe = {
 describe("RecipeCard", () => {
     const addFavorite = jest.fn();
     const removeFavorite = jest.fn();
-
+    const afterClose = jest.fn();
     const openDialog = jest.fn();
     const cancel = jest.fn();
     const confirm = jest.fn();
@@ -540,6 +540,7 @@ describe("RecipeCard", () => {
             openDialog,
             cancel,
             confirm,
+            afterClose,
         });
     });
 
@@ -656,6 +657,7 @@ describe("RecipeCard", () => {
             openDialog,
             cancel,
             confirm,
+            afterClose,
         });
 
         render(<RecipeCard recipe={recipe} />);
@@ -697,6 +699,7 @@ describe("RecipeCard", () => {
             openDialog,
             cancel,
             confirm,
+            afterClose,
         });
 
         render(<RecipeCard recipe={recipe} />);
@@ -727,6 +730,7 @@ describe("RecipeCard", () => {
             openDialog,
             cancel,
             confirm,
+            afterClose,
         });
 
         render(<RecipeCard recipe={recipe} />);
@@ -788,5 +792,3 @@ describe("RecipeCard", () => {
         expect(favoriteButton).toBeInTheDocument();
     });
 });
-
-// todo znowu coś się pozmieniało i krzyczy
