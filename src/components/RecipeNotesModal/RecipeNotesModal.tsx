@@ -24,7 +24,8 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
     const [saving, setSaving] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const textFieldRef = useRef<HTMLInputElement | null>(null);
-    const [hasOpenedOnce, setHasOpenedOnce] = useState(false);
+
+    const hasOpenedOnce = useRef(false);
 
     const router = useRouter();
     const prefersReducedMotion = useReducedMotion();
@@ -35,50 +36,28 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
     };
     useEscapeKey(open, handleClose);
 
-    // useEffect(() => {
-    //     if (!open) return;
-
-    //     setNotes(initialValue);
-
-    //     if (!hasOpenedOnce) {
-    //         setHasOpenedOnce(true);
-
-    //         // mały delay żeby poczekać na animację i render
-    //         setTimeout(() => {
-    //             const input = textFieldRef.current;
-
-    //             if (input) {
-    //                 input.focus();
-
-    //                 // ustawienie kursora na końcu tekstu
-    //                 const length = input.value.length;
-    //                 input.setSelectionRange(length, length);
-    //             }
-    //         }, 100);
-    //     }
-    // }, [open, initialValue, hasOpenedOnce]);
     useEffect(() => {
         if (!open) return;
 
         setNotes(initialValue);
 
-        if (!hasOpenedOnce) {
-            setHasOpenedOnce(true);
+        if (hasOpenedOnce.current) return;
 
-            const timeoutId = setTimeout(() => {
-                const input = textFieldRef.current;
+        hasOpenedOnce.current = true;
 
-                if (input) {
-                    input.focus();
-                    const length = input.value.length;
-                    input.setSelectionRange(length, length);
-                }
-            }, 100);
+        const timeoutId = setTimeout(() => {
+            const input = textFieldRef.current;
 
-            return () => clearTimeout(timeoutId);
-        }
-    }, [open, initialValue, hasOpenedOnce]);
+            if (input) {
+                input.focus();
 
+                const length = input.value.length;
+                input.setSelectionRange(length, length);
+            }
+        }, 100);
+
+        return () => clearTimeout(timeoutId);
+    }, [open, initialValue]);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const value = e.target.value.slice(0, MAX_PRIVATE_NOTE_LENGTH);
         setNotes(value);
@@ -182,6 +161,8 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                 onClose={handleClose}
                 closeAfterTransition
                 slots={{ backdrop: Backdrop }}
+                disableAutoFocus
+                disableEnforceFocus
                 slotProps={{
                     backdrop: {
                         timeout: prefersReducedMotion ? 0 : 600,
@@ -245,6 +226,3 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
 };
 
 export default RecipeNotesModal;
-
-// todo rzuca błędy ## Invalid prop `tabIndex` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.
-// todo poza tym, jeżeli w poprzednim ruchu usunęliśmy notatkę, to po ponownym wejściu w edytuj notatke od razu włącza się modal Usuń notatkę Czy na pewno chcesz usunąć tę notatkę?
