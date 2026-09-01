@@ -8,7 +8,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         mx: "auto",
         px: { xs: 2, md: 3 },
         py: 3,
-        backgroundColor: "secondary.light",
+        backgroundColor: "background.default",
         height: "100%",
     },
     paragraph: {

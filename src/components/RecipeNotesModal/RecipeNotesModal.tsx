@@ -207,3 +207,4 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
 };
 
 export default RecipeNotesModal;
+//todo kontynuować refaktor
