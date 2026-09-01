@@ -110,23 +110,13 @@ const baseTheme = createTheme({
             },
         },
 
-        // ---- NEW global overrides for orange form elements ----
         MuiTextField: {
             defaultProps: {
                 color: "primary",
                 variant: "outlined",
             },
         },
-        MuiInputLabel: {
-            styleOverrides: {
-                root: {
-                    color: "primary.main",
-                    // "&.Mui-focused": {
-                    //     color: "#F44F0C",
-                    // },
-                },
-            },
-        },
+
         MuiOutlinedInput: {
             styleOverrides: {
                 notchedOutline: {},
@@ -146,14 +136,6 @@ const baseTheme = createTheme({
                 },
                 arrow: {
                     color: "#A8BBA3",
-                },
-            },
-        },
-        MuiDivider: {
-            styleOverrides: {
-                root: {
-                    borderColor: "#F6723D",
-                    opacity: 0.6,
                 },
             },
         },

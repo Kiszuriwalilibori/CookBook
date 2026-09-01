@@ -182,15 +182,15 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                         ) : (
                             <Box sx={commentsContainerSx}>
                                 <Box onClick={e => e.stopPropagation()} sx={{ margin: "0 auto", display: "flex", gap: 2, padding: "8px 0 8px 0" }}>
-                                    <Button size="small" variant={sortMode === "newest" ? "contained" : "outlined"} onClick={() => setSortMode("newest")}>
+                                    <Button size="small" color="secondary" variant={sortMode === "newest" ? "contained" : "outlined"} onClick={() => setSortMode("newest")}>
                                         Najnowsze
                                     </Button>
 
-                                    <Button size="small" variant={sortMode === "most_liked" ? "contained" : "outlined"} onClick={() => setSortMode("most_liked")}>
+                                    <Button size="small" color="secondary" variant={sortMode === "most_liked" ? "contained" : "outlined"} onClick={() => setSortMode("most_liked")}>
                                         Polubienia
                                     </Button>
 
-                                    <Button size="small" variant={sortMode === "my_comments" ? "contained" : "outlined"} onClick={() => setSortMode("my_comments")}>
+                                    <Button size="small" color="secondary" variant={sortMode === "my_comments" ? "contained" : "outlined"} onClick={() => setSortMode("my_comments")}>
                                         Moje
                                     </Button>
                                 </Box>

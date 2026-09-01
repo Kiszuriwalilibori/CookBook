@@ -42,6 +42,7 @@ export function RecipeIngredientItem({ recipeId, ingredient }: RecipeIngredientI
                     p: 0,
                     mr: 1,
                 }}
+                color="primary"
                 checked={checked}
                 onChange={() => toggle(key)}
                 slotProps={{
