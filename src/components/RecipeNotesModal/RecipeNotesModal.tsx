@@ -29,8 +29,34 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
     const router = useRouter();
     const prefersReducedMotion = useReducedMotion();
     const handleApiResponseError = useApiResponseErrorHandler();
-    useEscapeKey(open, onClose);
+    const handleClose = () => {
+        setDeleteDialogOpen(false);
+        onClose();
+    };
+    useEscapeKey(open, handleClose);
 
+    // useEffect(() => {
+    //     if (!open) return;
+
+    //     setNotes(initialValue);
+
+    //     if (!hasOpenedOnce) {
+    //         setHasOpenedOnce(true);
+
+    //         // mały delay żeby poczekać na animację i render
+    //         setTimeout(() => {
+    //             const input = textFieldRef.current;
+
+    //             if (input) {
+    //                 input.focus();
+
+    //                 // ustawienie kursora na końcu tekstu
+    //                 const length = input.value.length;
+    //                 input.setSelectionRange(length, length);
+    //             }
+    //         }, 100);
+    //     }
+    // }, [open, initialValue, hasOpenedOnce]);
     useEffect(() => {
         if (!open) return;
 
@@ -39,18 +65,17 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
         if (!hasOpenedOnce) {
             setHasOpenedOnce(true);
 
-            // mały delay żeby poczekać na animację i render
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
                 const input = textFieldRef.current;
 
                 if (input) {
                     input.focus();
-
-                    // ustawienie kursora na końcu tekstu
                     const length = input.value.length;
                     input.setSelectionRange(length, length);
                 }
             }, 100);
+
+            return () => clearTimeout(timeoutId);
         }
     }, [open, initialValue, hasOpenedOnce]);
 
@@ -85,6 +110,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
             }
 
             router.refresh();
+            handleClose();
         } catch (err) {
             handleApiResponseError(err, {
                 EMPTY_NOTES: {
@@ -105,7 +131,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
             });
         } finally {
             setSaving(false);
-            onClose();
+            // onClose();
         }
     };
 
@@ -126,7 +152,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
             }
 
             router.refresh();
-            onClose();
+            handleClose();
         } catch (err) {
             handleApiResponseError(err, {
                 NOTE_NOT_FOUND: {
@@ -148,20 +174,21 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
     const openDeleteDialog = () => {
         setDeleteDialogOpen(true);
     };
+
     return (
-        <Modal
-            open={open}
-            onClose={onClose}
-            closeAfterTransition
-            slots={{ backdrop: Backdrop }}
-            slotProps={{
-                backdrop: {
-                    timeout: prefersReducedMotion ? 0 : 600,
-                    sx: recipeNotesModalStyles.backdrop,
-                },
-            }}
-        >
-            <>
+        <Box>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                    backdrop: {
+                        timeout: prefersReducedMotion ? 0 : 600,
+                        sx: recipeNotesModalStyles.backdrop,
+                    },
+                }}
+            >
                 <Fade in={open} timeout={prefersReducedMotion ? 0 : 600}>
                     <Box sx={modalStyles} role="dialog" aria-modal="true" aria-labelledby="notes-modal-title" tabIndex={-1}>
                         <Box id="notes-modal-title" sx={visuallyHidden}>
@@ -195,25 +222,25 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                         </Stack>
                     </Box>
                 </Fade>
-                <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-                    <DialogTitle>Usuń notatkę</DialogTitle>
+            </Modal>
+            <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+                <DialogTitle>Usuń notatkę</DialogTitle>
 
-                    <DialogContent>
-                        <DialogContentText>Czy na pewno chcesz usunąć tę notatkę?</DialogContentText>
-                    </DialogContent>
+                <DialogContent>
+                    <DialogContentText>Czy na pewno chcesz usunąć tę notatkę?</DialogContentText>
+                </DialogContent>
 
-                    <DialogActions>
-                        <Button onClick={() => setDeleteDialogOpen(false)} disabled={saving} color="secondary">
-                            Anuluj
-                        </Button>
+                <DialogActions>
+                    <Button onClick={() => setDeleteDialogOpen(false)} disabled={saving} color="secondary">
+                        Anuluj
+                    </Button>
 
-                        <Button color="primary" variant="contained" onClick={handleDelete} disabled={saving}>
-                            Usuń
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </>
-        </Modal>
+                    <Button color="primary" variant="contained" onClick={handleDelete} disabled={saving}>
+                        Usuń
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </Box>
     );
 };
 

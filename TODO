@@ -216,4 +216,3 @@ Reszta to dodatki.
 powinno być gram za masą potrawy a nie ma
 
 // TODO gdzieś jest test który do wyrenderowania potrzebuje theme i strasznie marudził ze zmockowaniem tego. Rzecz w tym, że najprawdopodobniej jest to komponent zrobiony przez mui na bazie mojego stylu. Prawdopodobnie dałoby się to uprościć przez normalne mui + sx
-// TODO gdzieniegdzie są podwójne fokusy
