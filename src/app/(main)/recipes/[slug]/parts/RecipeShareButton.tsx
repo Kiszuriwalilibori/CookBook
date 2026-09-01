@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import ShareIcon from "@mui/icons-material/Share";
+import ShareIcon from "@mui/icons-material/ShareOutlined";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import XIcon from "@mui/icons-material/X";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
@@ -66,7 +66,7 @@ export function RecipeShareButton({ title }: Props) {
         <>
             <Tooltip title="Udostępnij przepis">
                 <IconButton disableRipple onClick={handleShareClick} sx={styles.recipeButton}>
-                    <ShareIcon />
+                    <ShareIcon sx={styles.recipeButtonIcon} />
                 </IconButton>
             </Tooltip>
 
