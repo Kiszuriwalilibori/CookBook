@@ -1,14 +1,15 @@
 "use client";
 
 import { Modal, Fade, Backdrop, Box, TextField, Button, Stack, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import useEscapeKey from "@/hooks/useEscapeKey";
 import { useRouter } from "next/navigation";
 import { recipeNotesModalStyles, modalStyles, visuallyHidden } from "./RecipeNotesModal.styles";
 import { MAX_PRIVATE_NOTE_LENGTH } from "@/setup";
 import { useApiResponseErrorHandler } from "@/hooks";
-import { ApiResponse } from "@/models/apiResponse";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { deleteRecipeNote, saveRecipeNote } from "./RecipeNotesModal.api";
+import { useRecipeNotesModalFocus } from "./useRecipeNotesModalFocus";
 
 interface Props {
     open: boolean;
@@ -23,10 +24,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
     const [notes, setNotes] = useState(initialValue);
     const [saving, setSaving] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const textFieldRef = useRef<HTMLInputElement | null>(null);
-
-    const hasOpenedOnce = useRef(false);
-
+    const textFieldRef = useRecipeNotesModalFocus(open);
     const router = useRouter();
     const prefersReducedMotion = useReducedMotion();
     const handleApiResponseError = useApiResponseErrorHandler();
@@ -36,32 +34,36 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
     };
     useEscapeKey(open, handleClose);
 
-    useEffect(() => {
-        if (!open) return;
+    //     if (!open) return;
 
-        setNotes(initialValue);
+    //     setNotes(initialValue);
 
-        if (hasOpenedOnce.current) return;
+    //     if (hasOpenedOnce.current) return;
 
-        hasOpenedOnce.current = true;
+    //     hasOpenedOnce.current = true;
 
-        const timeoutId = setTimeout(() => {
-            const input = textFieldRef.current;
+    //     const timeoutId = setTimeout(() => {
+    //         const input = textFieldRef.current;
 
-            if (input) {
-                input.focus();
+    //         if (input) {
+    //             input.focus();
 
-                const length = input.value.length;
-                input.setSelectionRange(length, length);
-            }
-        }, 100);
+    //             const length = input.value.length;
+    //             input.setSelectionRange(length, length);
+    //         }
+    //     }, 100);
 
-        return () => clearTimeout(timeoutId);
-    }, [open, initialValue]);
+    //     return () => clearTimeout(timeoutId);
+    // }, [open, initialValue]);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const value = e.target.value.slice(0, MAX_PRIVATE_NOTE_LENGTH);
         setNotes(value);
     };
+    useEffect(() => {
+        if (!open) return;
+
+        setNotes(initialValue);
+    }, [open, initialValue]);
 
     const handleSave = async () => {
         if (!recipeId) return;
@@ -76,18 +78,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
         setSaving(true);
 
         try {
-            const response = await fetch("/api/recipe-notes", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ recipeId, notes: sanitized }),
-            });
-
-            const result: ApiResponse<null> = await response.json();
-
-            if (!result.ok) {
-                throw result.error;
-            }
-
+            await saveRecipeNote(recipeId, sanitized);
             router.refresh();
             handleClose();
         } catch (err) {
@@ -110,7 +101,6 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
             });
         } finally {
             setSaving(false);
-            // onClose();
         }
     };
 
@@ -120,16 +110,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
         setSaving(true);
 
         try {
-            const response = await fetch(`/api/recipe-notes?recipeId=${recipeId}`, {
-                method: "DELETE",
-            });
-
-            const result: ApiResponse<null> = await response.json();
-
-            if (!result.ok) {
-                throw result.error;
-            }
-
+            await deleteRecipeNote(recipeId);
             router.refresh();
             handleClose();
         } catch (err) {
