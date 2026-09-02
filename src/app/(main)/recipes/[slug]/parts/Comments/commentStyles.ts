@@ -41,9 +41,14 @@ export const fieldRowSx = {
 };
 export const textFieldSx = (theme: Theme) => ({
     mb: 2,
+    "& .MuiOutlinedInput-input::placeholder": {
+        color: theme.palette.secondary.dark,
+        opacity: 1,
+    },
 
     "& .MuiOutlinedInput-root": {
         position: "relative",
+        backgroundColor: theme.palette.background.paper,
 
         "& fieldset": {
             borderColor: theme.palette.secondary.dark,
@@ -53,34 +58,34 @@ export const textFieldSx = (theme: Theme) => ({
             borderColor: theme.palette.secondary.dark,
         },
 
-        "&.Mui-focused fieldset": {
-            borderColor: theme.palette.secondary.dark,
-            borderWidth: 2,
-        },
+        // "&.Mui-focused fieldset": {
+        //     borderColor: theme.palette.secondary.dark,
+        //     borderWidth: 2,
+        // },
 
-        "&.Mui-focused": {
-            boxShadow: `0 0 0 2px ${theme.palette.secondary.light}`,
-        },
-        "&.Mui-focused.MuiOutlinedInput-notchedOutline": {
-            borderColor: `${theme.palette.secondary.light} !important`,
-        },
+        // "&.Mui-focused": {
+        //     boxShadow: `0 0 0 2px ${theme.palette.secondary.light}`,
+        // },
+        // "&.Mui-focused.MuiOutlinedInput-notchedOutline": {
+        //     borderColor: `${theme.palette.secondary.light} !important`,
+        // },
     },
 
     "& .MuiInputLabel-root": {
         color: theme.palette.secondary.dark,
     },
 
-    "& .MuiInputLabel-root.Mui-focused": {
-        color: theme.palette.secondary.dark,
-    },
-    "& .MuiOutlinedInput-root.Mui-focused fieldset": {
-        borderWidth: 2,
-        borderColor: theme.palette.secondary.main,
-    },
+    // "& .MuiInputLabel-root.Mui-focused": {
+    //     color: theme.palette.secondary.dark,
+    // },
+    // "& .MuiOutlinedInput-root.Mui-focused fieldset": {
+    //     borderWidth: 2,
+    //     borderColor: theme.palette.secondary.main,
+    // },
 
-    "& .MuiOutlinedInput-root.Mui-focused": {
-        boxShadow: `0 0 0 3px ${alpha(theme.palette.secondary.main, 0.35)}`,
-    },
+    // "& .MuiOutlinedInput-root.Mui-focused": {
+    //     boxShadow: `0 0 0 3px ${alpha(theme.palette.secondary.main, 0.35)}`,
+    // },
 });
 export const errorBoxSx = {
     minHeight: "24px",
@@ -278,10 +283,10 @@ export const replyButtonSx = (theme: Theme) => ({
         color: theme.palette.text.primary,
     },
 
-    "&:focus-visible": {
-        outline: `2px solid ${theme.palette.text.primary}`,
-        outlineOffset: 2,
-    },
+    // "&:focus-visible": {
+    //     outline: `2px solid ${theme.palette.text.primary}`,
+    //     outlineOffset: 2,
+    // },
     "& .MuiButton-icon": {
         marginRight: 0,
         marginLeft: 0,
@@ -363,12 +368,14 @@ export const honeypotSx = {
 export const shortCommentWrapperSx = {
     display: "flex",
     justifyContent: "end",
+    // border: "2px solid",
 };
 
 export const shortCommentCardSx = (theme: Theme) => ({
     ...commentCardSx(0, false)(theme),
     display: "flex",
     gap: 1,
+    border: "1px solid",
 });
 export const commentContentSx = {
     mb: 0.5,

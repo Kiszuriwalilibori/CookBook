@@ -9,7 +9,7 @@ type Props = {
 
 export function CommentFormCancelButton({ onReset }: Props) {
     return (
-        <Button variant="contained" color="secondary" onClick={onReset} fullWidth sx={cancelButtonSx}>
+        <Button disableRipple variant="contained" color="secondary" onClick={onReset} fullWidth sx={cancelButtonSx}>
             Anuluj
         </Button>
     );

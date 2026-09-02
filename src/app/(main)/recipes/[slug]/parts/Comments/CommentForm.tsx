@@ -199,7 +199,7 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
                         )}
                         <Box sx={actionsBoxSx}>
                             {onCancel && <CommentFormCancelButton onReset={handleReset} />}
-                            <Button color="primary" variant="contained" onClick={isShortComment ? handleSubmitShortComment : handleSubmitNormalComment} disabled={baseDisabled || !validation.isValid} sx={submitButtonSx}>
+                            <Button disableRipple color="primary" variant="contained" onClick={isShortComment ? handleSubmitShortComment : handleSubmitNormalComment} disabled={baseDisabled || !validation.isValid} sx={submitButtonSx}>
                                 {submitLabel}
                             </Button>
                         </Box>
@@ -209,3 +209,4 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
         </Box>
     );
 }
+// todo przedstaw się i skomentuj bardzo nierówno ustawione względem fieldset

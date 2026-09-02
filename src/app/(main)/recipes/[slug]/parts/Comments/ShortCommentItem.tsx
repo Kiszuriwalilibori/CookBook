@@ -36,7 +36,6 @@ export default function ShortCommentItem({ comment }: Props) {
                 <Typography
                     variant="body1"
                     sx={{
-                        // 🔥 ważne: NIE inline (flex już to ogarnia)
                         m: 0,
                         whiteSpace: "normal",
                         wordBreak: "break-word",

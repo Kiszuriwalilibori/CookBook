@@ -395,6 +395,18 @@ body {
 } */
 
 /* standard HTML elements */
+.MuiOutlinedInput-root:has(input:focus-visible),
+.MuiOutlinedInput-root:has(textarea:focus-visible) {
+    box-shadow:
+        0 0 0 2px #ffffff,
+        0 0 0 4px var(--focus-color) !important;
+}
+
+.MuiOutlinedInput-root input:focus-visible,
+.MuiOutlinedInput-root textarea:focus-visible {
+    box-shadow: none !important;
+}
+
 :focus-visible {
     outline: none;
     box-shadow:
@@ -417,7 +429,7 @@ body {
     box-shadow:
         0 0 0 2px #ffffff,
         0 0 0 4px var(--focus-color) !important; */
-    /* border-radius: 2px; */
+/* border-radius: 2px; */
 /* } */
 .MuiButtonBase-root.Mui-focusVisible {
     box-shadow:

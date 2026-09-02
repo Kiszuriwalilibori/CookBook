@@ -135,3 +135,7 @@ test
 // po przełaczeniu z jakiegokolwiek wyszukiwania na potrawę miga loading indicator jakby nie był przez usedelayedcośtam To duża strona trza by przejrzeć wszystkie komponenty albo leipie przejrzeć wszystkie użycia loading indictaora w apce
 
 // todo dodać jakiś deskryptor do ilości porcji bo czasami niejasne
+
+// todo do konsoli przeciska się błąd upstream image response timed out for https://cdn.sanity.io/images/mextu0pu/production/b28ce14fa81f8c1e218e4cff558bb49ef836c472-1280x720.jpg
+w sytuacji kiedy nie uda się wczytać obrazka dla którejś z recipecards
+Nie wiem czy tak powinno być

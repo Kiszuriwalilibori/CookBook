@@ -219,3 +219,29 @@ powinno być gram za masą potrawy a nie ma
 
 
 // kratki w ingredients brzydko wyglądają przy focusie, jakiegoś cienia dostają
+
+// todo ujednolicić: sałatka jarzynowa -sałatka warzywna
+
+// todo lepiej ogarnąć diety
+
+a sałatka spełnia wymagania następujących diet / sposobów odżywiania:
+
+Wegańska – wszystkie składniki są roślinne (ciecierzyca, warzywa, zioła, oliwa, przyprawy, cukier).
+Wegetariańska – brak mięsa, ryb i produktów pochodzenia zwierzęcego.
+Bezglutenowa – nie zawiera żadnych źródeł glutenu.
+Bez laktozy / bez nabiału – brak mleka, sera, jogurtu itp.
+Bez jajek
+Bez orzechów i nasion (poza samą ciecierzycą) – nie ma orzechów, migdałów, sezamu itp.
+Bez soi
+Halal i koszerna (roślinna, bez zakazanych składników)
+
+Czego nie spełnia / ograniczenia:
+
+Nie jest paleo – zawiera rośliny strączkowe (ciecierzyca) i cukier.
+Nie jest ketogeniczna / low-carb – ciecierzyca dostarcza sporo węglowodanów.
+Nie jest Whole30 – cukier i strączki są wykluczone.
+Nie jest low-FODMAP (w tej ilości) – duża porcja ciecierzycy + czosnek + cebula to składniki wysokofodmapowe.
+
+//todo krótki komentarz ma niewłaściwe tło
+
+//todo badżi z bakłażana nie ma składników ani komentarzy
