@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const UNSPLASH_AUTOCOMPLETE_URL = "https://unsplash.com/nautocomplete";
+
 export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
-        const query = searchParams.get("query");
+        const query = searchParams.get("query")?.trim();
 
         if (!query) {
             return NextResponse.json(
@@ -18,7 +20,7 @@ export async function GET(req: NextRequest) {
             );
         }
 
-        const response = await fetch(`https://unsplash.com/nautocomplete/${encodeURIComponent(query)}`, {
+        const response = await fetch(`${UNSPLASH_AUTOCOMPLETE_URL}/${encodeURIComponent(query)}`, {
             headers: {
                 Accept: "application/json",
             },
