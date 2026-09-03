@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
             headers: {
                 Accept: "application/json",
             },
+
             cache: "no-store",
         });
 
@@ -47,7 +48,12 @@ export async function GET(req: NextRequest) {
                 ok: true,
                 data,
             },
-            { status: 200 }
+            {
+                status: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                },
+            }
         );
     } catch (err) {
         console.error("[UNSPLASH][AUTOCOMPLETE]", err);
