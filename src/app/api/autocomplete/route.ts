@@ -1,0 +1,64 @@
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(req: NextRequest) {
+    try {
+        const { searchParams } = new URL(req.url);
+        const query = searchParams.get("query");
+
+        if (!query) {
+            return NextResponse.json(
+                {
+                    ok: false,
+                    error: {
+                        code: "MISSING_QUERY",
+                        message: "Brak parametru query",
+                    },
+                },
+                { status: 400 }
+            );
+        }
+
+        const response = await fetch(`https://unsplash.com/nautocomplete/${encodeURIComponent(query)}`, {
+            headers: {
+                Accept: "application/json",
+            },
+            cache: "no-store",
+        });
+
+        if (!response.ok) {
+            return NextResponse.json(
+                {
+                    ok: false,
+                    error: {
+                        code: "UNSPLASH_AUTOCOMPLETE_ERROR",
+                        message: `Unsplash zwrócił status ${response.status}`,
+                    },
+                },
+                { status: response.status }
+            );
+        }
+
+        const data = await response.json();
+
+        return NextResponse.json(
+            {
+                ok: true,
+                data,
+            },
+            { status: 200 }
+        );
+    } catch (err) {
+        console.error("[UNSPLASH][AUTOCOMPLETE]", err);
+
+        return NextResponse.json(
+            {
+                ok: false,
+                error: {
+                    code: "UNSPLASH_AUTOCOMPLETE_FETCH_ERROR",
+                    message: "Nie udało się pobrać podpowiedzi z Unsplash",
+                },
+            },
+            { status: 500 }
+        );
+    }
+}
