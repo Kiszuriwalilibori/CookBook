@@ -59,7 +59,18 @@ export function RecipeKeepAwakeButton() {
 
     return (
         <Tooltip title={isActive ? "Wyłącz zapobieganie ciemnieniu ekranu" : "Zapobiegaj ciemnieniu ekranu (aktywuj jasność)"} placement="top">
-            <IconButton disableFocusRipple id="RecipeKeepAwakeButton" onClick={handleToggle} sx={styles.recipeButton}>
+            <IconButton
+                aria-pressed={isActive}
+                disableFocusRipple
+                id="RecipeKeepAwakeButton"
+                onClick={handleToggle}
+                sx={{
+                    ...styles.recipeButton,
+                    ...(isActive && {
+                        color: theme => theme.palette.primary.main,
+                    }),
+                }}
+            >
                 <BrightnessHighIcon sx={styles.recipeButtonIcon} /> {/* Twice bigger icon (default 24px → 48px) */}
             </IconButton>
         </Tooltip>

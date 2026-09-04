@@ -232,19 +232,21 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         borderRadius: 1,
 
         borderColor: theme => theme.palette.secondary.main,
-        transition: "all 0.2s ease-in-out", // Smooth hover transition
+        transition: "all 0.2s ease-in-out",
         "@media (prefers-reduced-motion: reduce)": {
             transition: "none",
         },
         "&:hover": {
             borderColor: theme => theme.palette.secondary.light,
             color: theme => theme.palette.secondary.light,
-            backgroundColor: "transparent", // No grey hover background
+            backgroundColor: "transparent",
         },
     },
+
     recipeButtonIcon: {
         fontSize: "48px",
     },
+
     ingredientsQuantity: {
         fontSize: FONT_SIZE,
         textAlign: "right",

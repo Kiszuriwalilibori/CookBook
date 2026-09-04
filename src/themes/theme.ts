@@ -80,7 +80,11 @@ const baseTheme = createTheme({
     },
 
     components: {
-        // ---- Existing styles ----
+        MuiButtonBase: {
+            defaultProps: {
+                disableRipple: true,
+            },
+        },
         MuiButton: {
             styleOverrides: {
                 root: {
@@ -117,14 +121,38 @@ const baseTheme = createTheme({
             },
         },
 
+        // MuiOutlinedInput: {
+        //     styleOverrides: {
+        //         notchedOutline: {},
+        //         root: {
+        //             "&:hover .MuiOutlinedInput-notchedOutline": {
+        //                 borderColor: "primary.light",
+        //             },
+        //             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+        //                 borderColor: theme.palette.divider,
+        //             },
+        //         },
+        //     },
+        // },
         MuiOutlinedInput: {
             styleOverrides: {
-                notchedOutline: {},
-                root: {
+                root: ({ theme }) => ({
                     "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "primary.light",
+                        borderColor: theme.palette.primary.light,
                     },
-                },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: theme.palette.divider,
+                    },
+                }),
+            },
+        },
+        MuiInputLabel: {
+            styleOverrides: {
+                root: ({ theme }) => ({
+                    "&.Mui-focused": {
+                        color: theme.palette.text.primary,
+                    },
+                }),
             },
         },
         MuiTooltip: {

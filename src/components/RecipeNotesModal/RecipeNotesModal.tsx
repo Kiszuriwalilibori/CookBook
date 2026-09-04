@@ -158,7 +158,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                         </Box>
 
                         <Stack spacing={3}>
-                            <TextField label="Twoje notatki" multiline minRows={6} fullWidth value={notes} onChange={handleChange} inputRef={textFieldRef} />
+                            <TextField id=" TextField" label="Twoje notatki" multiline minRows={6} fullWidth value={notes} onChange={handleChange} inputRef={textFieldRef} />
                             <Box sx={recipeNotesModalStyles.counterText}>
                                 {notes.length} /{MAX_PRIVATE_NOTE_LENGTH} znaków (pozostało {MAX_PRIVATE_NOTE_LENGTH - notes.length})
                             </Box>
@@ -169,9 +169,7 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                                 <Box id={NOTES_SAVE_STATUS_ID} aria-live="polite" sx={visuallyHidden}>
                                     {saving ? "Notatka jest zapisywana" : "Możesz zapisać notatkę"}
                                 </Box>
-                                <Button variant="contained" onClick={handleSave} disabled={saving} aria-describedby={NOTES_SAVE_STATUS_ID} color="primary">
-                                    {saving ? <CircularProgress size={20} color="inherit" /> : "Zapisz"}
-                                </Button>
+
                                 <Button
                                     variant="contained"
                                     color="error"
@@ -179,6 +177,9 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                                     disabled={saving || !notes?.trim()} // opcjonalnie blokuj jeśli brak treści
                                 >
                                     Usuń
+                                </Button>
+                                <Button variant="contained" onClick={handleSave} disabled={saving} aria-describedby={NOTES_SAVE_STATUS_ID} color="primary">
+                                    {saving ? <CircularProgress size={20} color="inherit" /> : "Zapisz"}
                                 </Button>
                             </Stack>
                         </Stack>

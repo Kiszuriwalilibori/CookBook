@@ -204,7 +204,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                                 {/* MORE BUTTON */}
                                 {hasAny && (
                                     <Box sx={showMoreButtonWrapperSx}>
-                                        <Button variant="contained" onClick={toggleCommentsVisibility}>
+                                        <Button variant="contained" color="secondary" onClick={toggleCommentsVisibility}>
                                             {buttonLabel}
                                         </Button>
                                     </Box>

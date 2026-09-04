@@ -139,3 +139,7 @@ test
 // todo do konsoli przeciska się błąd upstream image response timed out for https://cdn.sanity.io/images/mextu0pu/production/b28ce14fa81f8c1e218e4cff558bb49ef836c472-1280x720.jpg
 w sytuacji kiedy nie uda się wczytać obrazka dla którejś z recipecards
 Nie wiem czy tak powinno być
+
+// todo po naciśnięciu sortowania komentarzy najnowsze/ moje/polubienia jakoś tak skacze
+
+// formularz do kontaktu chyba jednak w modalu bo idiotycznie wygląda
