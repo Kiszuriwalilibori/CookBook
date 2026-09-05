@@ -94,7 +94,12 @@ export const errorBoxSx = {
     alignItems: "center",
     textAlign: "center",
 };
+// export const submitButtonSx = (theme: Theme) => ({
+//     flex: { sm: 1 },
+//     minWidth: { sm: 140 },
+// });
 export const submitButtonSx = (theme: Theme) => ({
+    width: { xs: "100%", sm: "auto" },
     flex: { sm: 1 },
     minWidth: { sm: 140 },
 });
@@ -344,12 +349,18 @@ export const actionsBoxSx = {
     display: "flex",
     flexDirection: { xs: "column-reverse", sm: "row" },
     justifyContent: { xs: "stretch", sm: "space-evenly" },
-    alignItems: "center",
+    // alignItems: "center",
+    alignItems: { xs: "stretch", sm: "center" },
     gap: 1,
     mt: 1,
 };
 
+// export const cancelButtonSx = {
+//     flex: { sm: 1 },
+//     minWidth: { sm: 140 },
+// };
 export const cancelButtonSx = {
+    width: { xs: "100%", sm: "auto" },
     flex: { sm: 1 },
     minWidth: { sm: 140 },
 };

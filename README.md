@@ -143,3 +143,5 @@ Nie wiem czy tak powinno być
 // todo po naciśnięciu sortowania komentarzy najnowsze/ moje/polubienia jakoś tak skacze
 
 // formularz do kontaktu chyba jednak w modalu bo idiotycznie wygląda
+
+// czy form komentarza nie powinien mieć guzika do mówienia?
