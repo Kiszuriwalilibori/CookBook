@@ -157,12 +157,12 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                             Notatki do przepisu
                         </Box>
 
-                        <Stack spacing={3}>
+                        <Stack spacing={2}>
                             <TextField id=" TextField" label="Twoje notatki" multiline minRows={6} fullWidth value={notes} onChange={handleChange} inputRef={textFieldRef} />
                             <Box sx={recipeNotesModalStyles.counterText}>
                                 {notes.length} /{MAX_PRIVATE_NOTE_LENGTH} znaków (pozostało {MAX_PRIVATE_NOTE_LENGTH - notes.length})
                             </Box>
-                            <Stack direction="row" spacing={2} justifyContent="flex-end">
+                            <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap">
                                 <Button variant="contained" color="secondary" onClick={onClose} disabled={saving}>
                                     Anuluj
                                 </Button>

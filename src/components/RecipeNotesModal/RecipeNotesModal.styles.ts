@@ -11,7 +11,6 @@ export const recipeNotesModalStyles = {
         textAlign: "right",
     },
 };
-
 export const modalStyles: SxProps<Theme> = {
     position: "absolute",
     top: "50%",
@@ -19,23 +18,17 @@ export const modalStyles: SxProps<Theme> = {
     transform: "translate(-50%, -50%)",
 
     bgcolor: "background.paper",
-    p: 4,
+    p: 3,
 
     borderRadius: 3,
 
     width: "90%",
     maxWidth: 440,
 
-    overflow: "hidden",
-
     boxShadow: 24,
     outline: "none",
-
-    "@media (max-height: 600px)": {
-        maxHeight: "90vh",
-        overflowY: "auto",
-    },
 };
+
 export const visuallyHidden: SxProps<Theme> = {
     position: "absolute",
     width: 1,
