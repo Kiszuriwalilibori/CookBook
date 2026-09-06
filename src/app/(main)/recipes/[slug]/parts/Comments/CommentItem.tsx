@@ -8,7 +8,7 @@ import { LoadingIndicator } from "@/components";
 import { useFingerprint } from "@/hooks";
 import { RecipeComment } from "@/types";
 
-import CommentForm from "./CommentForm";
+import CommentForm from "./CommentForm/CommentForm";
 import CommentItemHeader from "./CommentItemHeader";
 import LikeItButton from "./LikeItButton";
 import ReplyCollapse from "./ReplyCollapse";

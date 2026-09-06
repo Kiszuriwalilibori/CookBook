@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@mui/material";
-import { cancelButtonSx } from "./commentStyles";
+import { cancelButtonSx } from "./CommentFormParts.styles";
 
 type Props = {
     onReset: () => void;

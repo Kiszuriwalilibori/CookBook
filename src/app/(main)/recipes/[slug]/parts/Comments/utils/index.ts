@@ -1,5 +1,3 @@
-import validateComment from "./validateComment";
-import errorMessages from "./errorMessages";
 import { useCommentsVisibility } from "./useCommentsVisibility";
 import { useSetInitialFocusInCommentItem } from "./useSetInitialFocusInCommentItem";
 import { getRelativeTime } from "./getRelativeTime";
@@ -11,27 +9,10 @@ import { useReplyComment } from "./useReplyComment";
 import { useShortComment } from "./useShortComment";
 import { useScrollFocusOnOpen } from "./useScrollFocusOnOpen";
 import { useCreateCommentTree } from "./useCreateCommentTree";
-// import { handleApiError } from "./handleApiError";
+
 import { useRepliesVisibility } from "./useRepliesVisibility";
 import { useCommentsSorting } from "./useCommentsSorting";
 
 export { checkCommentCooldown } from "./checkCommentCooldown";
 
-export {
-    useLikeComment,
-    useCommentsSorting,
-    useRepliesVisibility,
-    // handleApiError,
-    useCreateCommentTree,
-    useScrollFocusOnOpen,
-    useReplyComment,
-    useShortComment,
-    validateComment,
-    getAbsoluteCommentDate,
-    useLikeAnimation,
-    checkIsOwnComment,
-    getRelativeTime,
-    useSetInitialFocusInCommentItem,
-    errorMessages,
-    useCommentsVisibility,
-};
+export { useLikeComment, useCommentsSorting, useRepliesVisibility, useCreateCommentTree, useScrollFocusOnOpen, useReplyComment, useShortComment, getAbsoluteCommentDate, useLikeAnimation, checkIsOwnComment, getRelativeTime, useSetInitialFocusInCommentItem, useCommentsVisibility };

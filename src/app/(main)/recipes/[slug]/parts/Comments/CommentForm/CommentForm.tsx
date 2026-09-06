@@ -6,10 +6,6 @@ import { Box, TextField, Button, Paper, FormLabel, FormControlLabel, Checkbox, C
 
 import { useIsAdminLogged } from "@/stores";
 
-import { errorMessages, validateComment } from "./utils";
-
-import { paperSx, textFieldSx, submitButtonSx, formLabelSx, actionsBoxSx, collapseSx, characterHintSx } from "./commentStyles";
-
 import { Honeypot } from "./Honeypot";
 
 import { ValidationErrorBox } from "./ValidationErrorBox";
@@ -19,6 +15,9 @@ import { TextFieldRow } from "./TextFieldRow";
 import { CommentFormCancelButton } from "./CommentFormCancelButton";
 
 import { useMessage } from "@/hooks";
+import { validateComment } from "./validateComment";
+import { errorMessages } from "./errorMessages";
+import { actionsBoxSx, characterHintSx, collapseSx, formLabelSx, paperSx, submitButtonSx, textFieldSx } from "./CommentForm.styles";
 
 export interface CommentFormProps {
     /** Ref do pola tekstowego (używany m.in. do focusa po błędzie) */

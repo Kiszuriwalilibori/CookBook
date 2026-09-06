@@ -3,26 +3,26 @@ import { alpha, Theme } from "@mui/material/styles";
 
 /* -------- CommentForm -------- */
 
-export const paperSx = (theme: Theme) => ({
-    backgroundColor: theme.palette.background.default,
-    border: `1px solid ${theme.palette.secondary.dark}`,
-    borderRadius: 2,
-    p: 2,
-});
+// export const paperSx = (theme: Theme) => ({
+//     backgroundColor: theme.palette.background.default,
+//     border: `1px solid ${theme.palette.secondary.dark}`,
+//     borderRadius: 2,
+//     p: 2,
+// });
 
-export const formLabelSx = {
-    fontWeight: 600,
+// export const formLabelSx = {
+//     fontWeight: 600,
 
-    color: "text.primary",
+//     color: "text.primary",
 
-    textAlign: {
-        sm: "right",
-    },
+//     textAlign: {
+//         sm: "right",
+//     },
 
-    "& .MuiFormLabel-asterisk": {
-        color: "error.main",
-    },
-};
+//     "& .MuiFormLabel-asterisk": {
+//         color: "error.main",
+//     },
+// };
 export const fieldRowSx = {
     display: "grid",
 
@@ -39,75 +39,69 @@ export const fieldRowSx = {
 
     mb: 2,
 };
-export const characterHintSx = {
-    mt: 0.5,
-    fontSize: "0.75rem",
-    color: "text.secondary",
-};
+// export const characterHintSx = {
+//     mt: 0.5,
+//     fontSize: "0.75rem",
+//     color: "text.secondary",
+// };
 
-export const textFieldSx = (theme: Theme) => ({
-    "& .MuiOutlinedInput-input::placeholder": {
-        color: theme.palette.secondary.dark,
-        opacity: 1,
-    },
+// export const textFieldSx = (theme: Theme) => ({
+//     "& .MuiOutlinedInput-input::placeholder": {
+//         color: theme.palette.secondary.dark,
+//         opacity: 1,
+//     },
 
-    "& .MuiOutlinedInput-root": {
-        position: "relative",
-        backgroundColor: theme.palette.background.paper,
+//     "& .MuiOutlinedInput-root": {
+//         position: "relative",
+//         backgroundColor: theme.palette.background.paper,
 
-        "& fieldset": {
-            borderColor: theme.palette.secondary.dark,
-        },
+//         "& fieldset": {
+//             borderColor: theme.palette.secondary.dark,
+//         },
 
-        "&:hover fieldset": {
-            borderColor: theme.palette.secondary.dark,
-        },
+//         "&:hover fieldset": {
+//             borderColor: theme.palette.secondary.dark,
+//         },
 
-        // "&.Mui-focused fieldset": {
-        //     borderColor: theme.palette.secondary.dark,
-        //     borderWidth: 2,
-        // },
+//         // "&.Mui-focused fieldset": {
+//         //     borderColor: theme.palette.secondary.dark,
+//         //     borderWidth: 2,
+//         // },
 
-        // "&.Mui-focused": {
-        //     boxShadow: `0 0 0 2px ${theme.palette.secondary.light}`,
-        // },
-        // "&.Mui-focused.MuiOutlinedInput-notchedOutline": {
-        //     borderColor: `${theme.palette.secondary.light} !important`,
-        // },
-    },
+//         // "&.Mui-focused": {
+//         //     boxShadow: `0 0 0 2px ${theme.palette.secondary.light}`,
+//         // },
+//         // "&.Mui-focused.MuiOutlinedInput-notchedOutline": {
+//         //     borderColor: `${theme.palette.secondary.light} !important`,
+//         // },
+//     },
 
-    "& .MuiInputLabel-root": {
-        color: theme.palette.secondary.dark,
-    },
+//     "& .MuiInputLabel-root": {
+//         color: theme.palette.secondary.dark,
+//     },
 
-    // "& .MuiInputLabel-root.Mui-focused": {
-    //     color: theme.palette.secondary.dark,
-    // },
-    // "& .MuiOutlinedInput-root.Mui-focused fieldset": {
-    //     borderWidth: 2,
-    //     borderColor: theme.palette.secondary.main,
-    // },
+//     // "& .MuiInputLabel-root.Mui-focused": {
+//     //     color: theme.palette.secondary.dark,
+//     // },
+//     // "& .MuiOutlinedInput-root.Mui-focused fieldset": {
+//     //     borderWidth: 2,
+//     //     borderColor: theme.palette.secondary.main,
+//     // },
 
-    // "& .MuiOutlinedInput-root.Mui-focused": {
-    //     boxShadow: `0 0 0 3px ${alpha(theme.palette.secondary.main, 0.35)}`,
-    // },
-});
-export const errorBoxSx = {
-    minHeight: "24px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
-};
+//     // "& .MuiOutlinedInput-root.Mui-focused": {
+//     //     boxShadow: `0 0 0 3px ${alpha(theme.palette.secondary.main, 0.35)}`,
+//     // },
+// });
+
 // export const submitButtonSx = (theme: Theme) => ({
 //     flex: { sm: 1 },
 //     minWidth: { sm: 140 },
 // });
-export const submitButtonSx = (theme: Theme) => ({
-    width: { xs: "100%", sm: "auto" },
-    flex: { sm: 1 },
-    minWidth: { sm: 140 },
-});
+// export const submitButtonSx = (theme: Theme) => ({
+//     width: { xs: "100%", sm: "auto" },
+//     flex: { sm: 1 },
+//     minWidth: { sm: 140 },
+// });
 
 /* -------- Comments -------- */
 
@@ -308,9 +302,9 @@ export const replyButtonSx = (theme: Theme) => ({
 
 //Comments
 
-export const collapseSx = {
-    mt: 1,
-};
+// export const collapseSx = {
+//     mt: 1,
+// };
 
 export const commentsContainerSx = {
     display: "flex",
@@ -350,36 +344,36 @@ export const desktopCommentButtonWrapperSx = {
     display: { xs: "none", md: "flex" },
     zIndex: 1300,
 };
-export const actionsBoxSx = {
-    display: "flex",
-    flexDirection: { xs: "column-reverse", sm: "row" },
-    justifyContent: { xs: "stretch", sm: "space-evenly" },
-    // alignItems: "center",
-    alignItems: { xs: "stretch", sm: "center" },
-    gap: 1,
-    mt: 1,
-};
+// export const actionsBoxSx = {
+//     display: "flex",
+//     flexDirection: { xs: "column-reverse", sm: "row" },
+//     justifyContent: { xs: "stretch", sm: "space-evenly" },
+//     // alignItems: "center",
+//     alignItems: { xs: "stretch", sm: "center" },
+//     gap: 1,
+//     mt: 1,
+// };
 
 // export const cancelButtonSx = {
 //     flex: { sm: 1 },
 //     minWidth: { sm: 140 },
 // };
-export const cancelButtonSx = {
-    width: { xs: "100%", sm: "auto" },
-    flex: { sm: 1 },
-    minWidth: { sm: 140 },
-};
+// export const cancelButtonSx = {
+//     width: { xs: "100%", sm: "auto" },
+//     flex: { sm: 1 },
+//     minWidth: { sm: 140 },
+// };
 
 export const dotSx = { mx: 0.75, fontSize: "1.5rem", lineHeight: 0, verticalAlign: "middle" };
 
-export const honeypotSx = {
-    position: "absolute",
-    left: "-9999px",
-    width: "1px",
-    height: "1px",
-    overflow: "hidden",
-    opacity: 0,
-};
+// export const honeypotSx = {
+//     position: "absolute",
+//     left: "-9999px",
+//     width: "1px",
+//     height: "1px",
+//     overflow: "hidden",
+//     opacity: 0,
+// };
 
 export const shortCommentWrapperSx = {
     display: "flex",

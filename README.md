@@ -144,4 +144,4 @@ Nie wiem czy tak powinno być
 
 // formularz do kontaktu chyba jednak w modalu bo idiotycznie wygląda
 
-// czy form komentarza nie powinien mieć guzika do mówienia?
+// czy formy nie powinny mieć mówienia

@@ -7,7 +7,7 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import LoadingIndicator from "@/components/LoadingIndicator";
 
 import CommentItem from "./CommentItem";
-import CommentForm from "./CommentForm";
+import CommentForm from "./CommentForm/CommentForm";
 import { useIsAdminLogged } from "@/stores/useAdminStore";
 import { useBoolean, useFingerprint, useMessage, useApiResponseErrorHandler } from "@/hooks";
 import type { RecipeComment } from "@/types";

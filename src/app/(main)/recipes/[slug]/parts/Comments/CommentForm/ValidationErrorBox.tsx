@@ -1,7 +1,7 @@
 // ValidationErrorBox.tsx
 
 import { Box, Typography } from "@mui/material";
-import { errorBoxSx } from "./commentStyles";
+import { validationErrorBoxSx } from "./CommentFormParts.styles";
 
 type ValidationErrorBoxProps = {
     showErrors: boolean;
@@ -12,7 +12,7 @@ type ValidationErrorBoxProps = {
 
 export function ValidationErrorBox({ showErrors, hasErrors, errorText, id }: ValidationErrorBoxProps) {
     return (
-        <Box mt={0.5} sx={errorBoxSx}>
+        <Box mt={0.5} sx={validationErrorBoxSx}>
             {showErrors && hasErrors ? (
                 <Typography variant="caption" color="error" id={id}>
                     {errorText}
