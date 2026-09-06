@@ -7,6 +7,7 @@ export const honeypotSx = {
     pointerEvents: "none",
 };
 export const textFieldRowSx = {
+    marginTop: 1,
     display: "grid",
     gridTemplateColumns: {
         xs: "1fr",

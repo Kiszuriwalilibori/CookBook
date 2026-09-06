@@ -1,40 +1,313 @@
+// "use client";
+
+// import { useEffect, useState, useCallback, useRef } from "react";
+// import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+// import LoadingIndicator from "@/components/LoadingIndicator";
+
+// import CommentItem from "./CommentItem";
+// import CommentForm from "./CommentForm/CommentForm";
+// import { useIsAdminLogged } from "@/stores/useAdminStore";
+// import { useBoolean, useFingerprint, useMessage, useApiResponseErrorHandler } from "@/hooks";
+// import type { RecipeComment } from "@/types";
+// import { commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
+// import { useScrollFocusOnOpen, useCreateCommentTree, useCommentsVisibility } from "./utils";
+// import { useCommentsState } from "./utils/useCommentsState";
+// import { useCommentsSorting } from "./utils/useCommentsSorting";
+// import { ApiResponse } from "@/models/apiResponse";
+
+// export default function Comments({ recipeId }: { recipeId: string }) {
+//     const { comments, setAllComments, resetComments, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment, isSubmittingComment, startSubmittingComment, stopSubmittingComment } = useCommentsState();
+//     const [accordionOpen, setAccordionOpen] = useState(true);
+//     const [isFormOpen, openForm, closeForm] = useBoolean(false);
+//     const isAdminLogged = useIsAdminLogged();
+//     const showMessage = useMessage();
+//     const handleApiResponseError = useApiResponseErrorHandler();
+//     const { sortMode, setSortMode, sortedComments } = useCommentsSorting(comments);
+//     const openCommentForm = () => {
+//         openForm();
+//         setAccordionOpen(true);
+//     };
+//     const formContainerRef = useRef<HTMLDivElement>(null);
+//     const textareaRef = useRef<HTMLTextAreaElement>(null);
+//     const fingerprint = useFingerprint();
+
+//     const handleAddComment = useCallback(
+//         async ({ author, content, parentId, website = "" }: { author: string; content: string; parentId?: string | null; website?: string }, options?: { onSuccess?: () => void; onError?: () => void }) => {
+//             const tempId = crypto.randomUUID();
+
+//             const optimisticComment: RecipeComment = {
+//                 _id: tempId,
+//                 recipeId,
+//                 content,
+//                 author,
+//                 isAdmin: isAdminLogged,
+//                 parentId: parentId ?? null,
+//                 createdAt: new Date().toISOString(),
+//                 fingerprint,
+//                 likes: [],
+//             };
+//             startSubmittingComment();
+//             options?.onSuccess?.();
+//             addOptimisticComment(optimisticComment);
+
+//             try {
+//                 const res = await fetch("/api/comments", {
+//                     method: "POST",
+//                     headers: { "Content-Type": "application/json" },
+//                     body: JSON.stringify({
+//                         recipeId,
+//                         content,
+//                         author,
+//                         parentId: parentId ?? null,
+//                         fingerprint,
+//                         website: website || "",
+//                     }),
+//                 });
+
+//                 const data = await res.json();
+//                 if (!data.ok) {
+//                     removeOptimisticComment(tempId);
+//                     handleApiResponseError(data.error, {
+//                         COMMENT_COOLDOWN: {
+//                             type: "warning",
+//                         },
+
+//                         COMMENT_REJECTED: {
+//                             type: "error",
+//                         },
+
+//                         INTERNAL_ERROR: {
+//                             type: "error",
+//                         },
+
+//                         INVALID_PARENT: {
+//                             type: "error",
+//                         },
+//                     });
+//                 } else {
+//                     const newComment = data.data.comment;
+
+//                     replaceOptimisticWithReal(tempId, newComment);
+//                     showMessage.success("Twój komentarz został dodany");
+//                 }
+//             } catch (err) {
+//                 showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
+//                 removeOptimisticComment(tempId);
+//                 options?.onError?.();
+//             } finally {
+//                 stopSubmittingComment();
+//             }
+//         },
+//         [recipeId, fingerprint, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment]
+//     );
+
+//     const fetchComments = useCallback(async () => {
+//         try {
+//             const res = await fetch(`/api/comments?recipeId=${recipeId}`);
+//             const data: ApiResponse<{ comments: RecipeComment[] }> = await res.json();
+//             if (!data.ok) {
+//                 const error = data.error;
+//                 switch (error.code) {
+//                     case "MISSING_RECIPE_ID":
+//                         showMessage.warning(error.message);
+//                         break;
+
+//                     case "FETCH_COMMENTS_FAILED":
+//                         showMessage.error(error.message);
+//                         break;
+
+//                     default:
+//                         showMessage.error(error.message || "Wystąpił nieznany błąd");
+//                 }
+
+//                 resetComments();
+//                 return;
+//             }
+//             const safeComments: RecipeComment[] = Array.isArray(data.data.comments) ? data.data.comments.filter(Boolean) : [];
+
+//             setAllComments(safeComments);
+//         } catch (err) {
+//             console.error("[COMMENTS][GET]", {
+//                 error: err,
+//                 recipeId,
+//             });
+//             resetComments();
+//             showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
+//         }
+//     }, [recipeId]);
+
+//     useEffect(() => {
+//         fetchComments();
+//     }, [fetchComments]);
+
+//     useScrollFocusOnOpen({
+//         isOpen: isFormOpen,
+//         ref: formContainerRef,
+//         inputRef: textareaRef,
+//     });
+//     const isLoading = comments === null;
+//     const { commentTree, commentsCount } = useCreateCommentTree(sortedComments);
+//     const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny } = useCommentsVisibility(commentTree, 3);
+//     if (!comments) return [];
+//     if (!fingerprint) {
+//         return null; // lub skeleton / loading fragment
+//     }
+
+//     return (
+//         <>
+//             <Box id="comments">
+//                 <LoadingIndicator open={isSubmittingComment} prompt="Dodawanie komentarza w toku" />
+//                 <Accordion expanded={accordionOpen} onChange={(_, expanded) => setAccordionOpen(expanded)} elevation={0}>
+//                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+//                         <Typography variant="h5">Komentarze ({commentsCount})</Typography>
+//                     </AccordionSummary>
+
+//                     <AccordionDetails>
+//                         <CommentForm
+//                             formContainerRef={formContainerRef}
+//                             isFormOpen={isFormOpen}
+//                             textAreaRef={textareaRef}
+//                             submitLabel="Dodaj"
+//                             onSubmitNormalComment={async data => {
+//                                 closeForm();
+//                                 await handleAddComment(data);
+//                             }}
+//                             onCancel={() => closeForm()}
+//                         />
+
+//                         {isLoading ? (
+//                             <LoadingIndicator open={isLoading} prompt="Trwa pobieranie komentarzy" />
+//                         ) : (
+//                             <Box sx={commentsContainerSx}>
+//                                 <Box onClick={e => e.stopPropagation()} sx={{ margin: "0 auto", display: "flex", gap: 2, padding: "8px 0 8px 0" }}>
+//                                     <Button disableRipple size="small" color="secondary" variant={sortMode === "newest" ? "contained" : "outlined"} onClick={() => setSortMode("newest")}>
+//                                         Najnowsze
+//                                     </Button>
+
+//                                     <Button disableRipple size="small" color="secondary" variant={sortMode === "most_liked" ? "contained" : "outlined"} onClick={() => setSortMode("most_liked")}>
+//                                         Polubienia
+//                                     </Button>
+
+//                                     <Button disableRipple size="small" color="secondary" variant={sortMode === "my_comments" ? "contained" : "outlined"} onClick={() => setSortMode("my_comments")}>
+//                                         Moje
+//                                     </Button>
+//                                 </Box>
+//                                 {/* FIRST COMMENTS */}
+//                                 <Box key={viewMode} sx={commentsListSx}>
+//                                     {visibleItems.map(comment => (
+//                                         <CommentItem key={comment._id} comment={comment} recipeId={recipeId} handleAddComment={handleAddComment} />
+//                                     ))}
+//                                 </Box>
+
+//                                 {/* MORE BUTTON */}
+//                                 {hasAny && (
+//                                     <Box sx={showMoreButtonWrapperSx}>
+//                                         <Button variant="contained" color="secondary" onClick={toggleCommentsVisibility}>
+//                                             {buttonLabel}
+//                                         </Button>
+//                                     </Box>
+//                                 )}
+//                             </Box>
+//                         )}
+//                     </AccordionDetails>
+//                 </Accordion>
+//             </Box>
+
+//             {/* 🔥 MOBILE STICKY CTA */}
+//             {!isFormOpen && (
+//                 <Box sx={mobileCommentButtonWrapperSx}>
+//                     <Button sx={mobileCommentButtonSx} variant="contained" color="primary" onClick={openCommentForm}>
+//                         Dodaj komentarz
+//                     </Button>
+//                 </Box>
+//             )}
+
+//             {/* 🔥 DESKTOP FLOATING CTA */}
+//             {!isFormOpen && (
+//                 <Box sx={desktopCommentButtonWrapperSx}>
+//                     <Button variant="contained" color="primary" startIcon={<ChatBubbleOutlineIcon />} onClick={openCommentForm}>
+//                         Skomentuj
+//                     </Button>
+//                 </Box>
+//             )}
+//         </>
+//     );
+// }
+
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+
+import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails, Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
+
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import CloseIcon from "@mui/icons-material/Close";
+
 import LoadingIndicator from "@/components/LoadingIndicator";
 
 import CommentItem from "./CommentItem";
 import CommentForm from "./CommentForm/CommentForm";
+
 import { useIsAdminLogged } from "@/stores/useAdminStore";
+
 import { useBoolean, useFingerprint, useMessage, useApiResponseErrorHandler } from "@/hooks";
+
 import type { RecipeComment } from "@/types";
+
 import { commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
-import { useScrollFocusOnOpen, useCreateCommentTree, useCommentsVisibility } from "./utils";
+
+import { useCreateCommentTree, useCommentsVisibility } from "./utils";
+
 import { useCommentsState } from "./utils/useCommentsState";
 import { useCommentsSorting } from "./utils/useCommentsSorting";
+
 import { ApiResponse } from "@/models/apiResponse";
 
 export default function Comments({ recipeId }: { recipeId: string }) {
     const { comments, setAllComments, resetComments, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment, isSubmittingComment, startSubmittingComment, stopSubmittingComment } = useCommentsState();
+
     const [accordionOpen, setAccordionOpen] = useState(true);
+
     const [isFormOpen, openForm, closeForm] = useBoolean(false);
+
     const isAdminLogged = useIsAdminLogged();
+
     const showMessage = useMessage();
+
     const handleApiResponseError = useApiResponseErrorHandler();
+
     const { sortMode, setSortMode, sortedComments } = useCommentsSorting(comments);
+
     const openCommentForm = () => {
         openForm();
         setAccordionOpen(true);
     };
-    const formContainerRef = useRef<HTMLDivElement>(null);
+
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+
     const fingerprint = useFingerprint();
 
     const handleAddComment = useCallback(
-        async ({ author, content, parentId, website = "" }: { author: string; content: string; parentId?: string | null; website?: string }, options?: { onSuccess?: () => void; onError?: () => void }) => {
+        async (
+            {
+                author,
+                content,
+                parentId,
+                website = "",
+            }: {
+                author: string;
+                content: string;
+                parentId?: string | null;
+                website?: string;
+            },
+            options?: {
+                onSuccess?: () => void;
+                onError?: () => void;
+            }
+        ) => {
             const tempId = crypto.randomUUID();
 
             const optimisticComment: RecipeComment = {
@@ -48,14 +321,19 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 fingerprint,
                 likes: [],
             };
+
             startSubmittingComment();
+
             options?.onSuccess?.();
+
             addOptimisticComment(optimisticComment);
 
             try {
                 const res = await fetch("/api/comments", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                     body: JSON.stringify({
                         recipeId,
                         content,
@@ -67,21 +345,20 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 });
 
                 const data = await res.json();
+
                 if (!data.ok) {
                     removeOptimisticComment(tempId);
+
                     handleApiResponseError(data.error, {
                         COMMENT_COOLDOWN: {
                             type: "warning",
                         },
-
                         COMMENT_REJECTED: {
                             type: "error",
                         },
-
                         INTERNAL_ERROR: {
                             type: "error",
                         },
-
                         INVALID_PARENT: {
                             type: "error",
                         },
@@ -90,25 +367,33 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     const newComment = data.data.comment;
 
                     replaceOptimisticWithReal(tempId, newComment);
+
                     showMessage.success("Twój komentarz został dodany");
                 }
             } catch (err) {
                 showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
+
                 removeOptimisticComment(tempId);
+
                 options?.onError?.();
             } finally {
                 stopSubmittingComment();
             }
         },
-        [recipeId, fingerprint, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment]
+        [recipeId, fingerprint, isAdminLogged, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment, startSubmittingComment, stopSubmittingComment, handleApiResponseError, showMessage]
     );
 
     const fetchComments = useCallback(async () => {
         try {
             const res = await fetch(`/api/comments?recipeId=${recipeId}`);
-            const data: ApiResponse<{ comments: RecipeComment[] }> = await res.json();
+
+            const data: ApiResponse<{
+                comments: RecipeComment[];
+            }> = await res.json();
+
             if (!data.ok) {
                 const error = data.error;
+
                 switch (error.code) {
                     case "MISSING_RECIPE_ID":
                         showMessage.warning(error.message);
@@ -123,8 +408,10 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 }
 
                 resetComments();
+
                 return;
             }
+
             const safeComments: RecipeComment[] = Array.isArray(data.data.comments) ? data.data.comments.filter(Boolean) : [];
 
             setAllComments(safeComments);
@@ -133,55 +420,53 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 error: err,
                 recipeId,
             });
+
             resetComments();
+
             showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
         }
-    }, [recipeId]);
+    }, [recipeId, resetComments, setAllComments, showMessage]);
 
     useEffect(() => {
         fetchComments();
     }, [fetchComments]);
 
-    useScrollFocusOnOpen({
-        isOpen: isFormOpen,
-        ref: formContainerRef,
-        inputRef: textareaRef,
-    });
     const isLoading = comments === null;
+
     const { commentTree, commentsCount } = useCreateCommentTree(sortedComments);
+
     const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny } = useCommentsVisibility(commentTree, 3);
+
     if (!comments) return [];
+
     if (!fingerprint) {
-        return null; // lub skeleton / loading fragment
+        return null;
     }
 
     return (
         <>
             <Box id="comments">
                 <LoadingIndicator open={isSubmittingComment} prompt="Dodawanie komentarza w toku" />
+
                 <Accordion expanded={accordionOpen} onChange={(_, expanded) => setAccordionOpen(expanded)} elevation={0}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography variant="h5">Komentarze ({commentsCount})</Typography>
                     </AccordionSummary>
 
                     <AccordionDetails>
-                        <CommentForm
-                            formContainerRef={formContainerRef}
-                            isFormOpen={isFormOpen}
-                            textAreaRef={textareaRef}
-                            submitLabel="Dodaj"
-                            onSubmitNormalComment={async data => {
-                                closeForm();
-                                await handleAddComment(data);
-                            }}
-                            onCancel={() => closeForm()}
-                        />
-
                         {isLoading ? (
                             <LoadingIndicator open={isLoading} prompt="Trwa pobieranie komentarzy" />
                         ) : (
                             <Box sx={commentsContainerSx}>
-                                <Box onClick={e => e.stopPropagation()} sx={{ margin: "0 auto", display: "flex", gap: 2, padding: "8px 0 8px 0" }}>
+                                <Box
+                                    onClick={e => e.stopPropagation()}
+                                    sx={{
+                                        margin: "0 auto",
+                                        display: "flex",
+                                        gap: 2,
+                                        padding: "8px 0 8px 0",
+                                    }}
+                                >
                                     <Button disableRipple size="small" color="secondary" variant={sortMode === "newest" ? "contained" : "outlined"} onClick={() => setSortMode("newest")}>
                                         Najnowsze
                                     </Button>
@@ -194,14 +479,13 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                                         Moje
                                     </Button>
                                 </Box>
-                                {/* FIRST COMMENTS */}
+
                                 <Box key={viewMode} sx={commentsListSx}>
                                     {visibleItems.map(comment => (
                                         <CommentItem key={comment._id} comment={comment} recipeId={recipeId} handleAddComment={handleAddComment} />
                                     ))}
                                 </Box>
 
-                                {/* MORE BUTTON */}
                                 {hasAny && (
                                     <Box sx={showMoreButtonWrapperSx}>
                                         <Button variant="contained" color="secondary" onClick={toggleCommentsVisibility}>
@@ -215,7 +499,43 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 </Accordion>
             </Box>
 
-            {/* 🔥 MOBILE STICKY CTA */}
+            {/* ADD NEW COMMENT DIALOG */}
+            <Dialog open={isFormOpen} onClose={closeForm} fullWidth maxWidth="sm" aria-labelledby="add-comment-dialog-title">
+                <DialogTitle
+                    id="add-comment-dialog-title"
+                    sx={{
+                        pr: 6,
+                    }}
+                >
+                    Dodaj komentarz
+                    <IconButton
+                        aria-label="Zamknij formularz komentarza"
+                        onClick={closeForm}
+                        sx={{
+                            position: "absolute",
+                            right: 8,
+                            top: 8,
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+
+                <DialogContent>
+                    <CommentForm
+                        textAreaRef={textareaRef}
+                        renderAsModal
+                        submitLabel="Dodaj"
+                        onSubmitNormalComment={async data => {
+                            closeForm();
+                            await handleAddComment(data);
+                        }}
+                        onCancel={closeForm}
+                    />
+                </DialogContent>
+            </Dialog>
+
+            {/* MOBILE STICKY CTA */}
             {!isFormOpen && (
                 <Box sx={mobileCommentButtonWrapperSx}>
                     <Button sx={mobileCommentButtonSx} variant="contained" color="primary" onClick={openCommentForm}>
@@ -224,7 +544,7 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                 </Box>
             )}
 
-            {/* 🔥 DESKTOP FLOATING CTA */}
+            {/* DESKTOP FLOATING CTA */}
             {!isFormOpen && (
                 <Box sx={desktopCommentButtonWrapperSx}>
                     <Button variant="contained" color="primary" startIcon={<ChatBubbleOutlineIcon />} onClick={openCommentForm}>

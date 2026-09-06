@@ -64,7 +64,7 @@ jest.mock("./ReplyCollapse", () => ({
     default: ({ open, children }: { open: boolean; children: React.ReactNode; commentId: string }) => (open ? <div data-testid="reply-collapse">{children}</div> : null),
 }));
 
-jest.mock("./CommentForm", () => ({
+jest.mock("./commentForm/CommentForm", () => ({
     __esModule: true,
     default: () => <div data-testid="comment-form">Comment form</div>,
 }));
