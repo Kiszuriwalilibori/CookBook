@@ -1,4 +1,29 @@
-// TextFieldRow.tsx
+// // TextFieldRow.tsx
+
+// import { Box } from "@mui/material";
+// import type { ReactNode } from "react";
+// import { fieldRowSx } from "./commentStyles";
+
+// type TextFieldRowProps = {
+//     id: string;
+//     activated: boolean;
+//     onShowErrors: () => void;
+//     children: ReactNode;
+// };
+
+// export function TextFieldRow({ id, activated, onShowErrors, children }: TextFieldRowProps) {
+//     return (
+//         <Box
+//             id={id}
+//             sx={fieldRowSx}
+//             onMouseLeave={() => {
+//                 if (activated) onShowErrors();
+//             }}
+//         >
+//             {children}
+//         </Box>
+//     );
+// }
 
 import { Box } from "@mui/material";
 import type { ReactNode } from "react";
@@ -9,9 +34,10 @@ type TextFieldRowProps = {
     activated: boolean;
     onShowErrors: () => void;
     children: ReactNode;
+    hint?: ReactNode;
 };
 
-export function TextFieldRow({ id, activated, onShowErrors, children }: TextFieldRowProps) {
+export function TextFieldRow({ id, activated, onShowErrors, children, hint }: TextFieldRowProps) {
     return (
         <Box
             id={id}
@@ -21,6 +47,12 @@ export function TextFieldRow({ id, activated, onShowErrors, children }: TextFiel
             }}
         >
             {children}
+            {hint && (
+                <>
+                    <Box />
+                    <Box>{hint}</Box>
+                </>
+            )}
         </Box>
     );
 }

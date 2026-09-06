@@ -39,8 +39,13 @@ export const fieldRowSx = {
 
     mb: 2,
 };
+export const characterHintSx = {
+    mt: 0.5,
+    fontSize: "0.75rem",
+    color: "text.secondary",
+};
+
 export const textFieldSx = (theme: Theme) => ({
-    mb: 2,
     "& .MuiOutlinedInput-input::placeholder": {
         color: theme.palette.secondary.dark,
         opacity: 1,
