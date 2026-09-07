@@ -140,8 +140,4 @@ test
 w sytuacji kiedy nie uda się wczytać obrazka dla którejś z recipecards
 Nie wiem czy tak powinno być
 
-// todo po naciśnięciu sortowania komentarzy najnowsze/ moje/polubienia jakoś tak skacze
-
-// formularz do kontaktu chyba jednak w modalu bo idiotycznie wygląda
-
-// czy formy nie powinny mieć mówienia
+// todo czy formy nie powinny mieć obsługi głosu

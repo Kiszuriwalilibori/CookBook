@@ -220,6 +220,8 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         width: "100%",
         display: "flex",
         justifyContent: "center",
+        flexWrap: "wrap",
+        gap: 1,
         mb: 2,
     },
 
