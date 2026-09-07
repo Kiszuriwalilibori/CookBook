@@ -20,12 +20,13 @@ export const desktopItemStyles = (currentPathname: string, href: string, hidden?
         ? "opacity 0.4s ease, transform 0.4s ease, background-color 200ms ease" // Połączone: dla hidden + zawsze background
         : "background-color 200ms ease",
     pointerEvents: hidden ? "none" : "auto",
+    height: MENU_HEIGHT,
+
+    backgroundColor: currentPathname === href ? theme => theme.palette.secondary.light : "transparent",
     "&:hover": {
-        color: "gray",
+        backgroundColor: theme => theme.palette.primary.light,
         textDecoration: "none",
     },
-    height: MENU_HEIGHT,
-    backgroundColor: currentPathname === href ? theme => theme.palette.primary.light : "transparent",
 });
 
 export const desktopMenuIconStyle: SxProps<Theme> = {

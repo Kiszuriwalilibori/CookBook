@@ -99,7 +99,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
                                 href={item.href}
                                 aria-current={current ? "page" : undefined}
                                 sx={{
-                                    ...desktopItemStyles(currentPathname, ""),
+                                    ...desktopItemStyles(currentPathname, item.href),
                                     ...focusableSx,
                                 }}
                             >
@@ -139,3 +139,5 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
 };
 
 export default DesktopMenu;
+
+// todo jest tu wyliczane iscurrent to możnaby uprościć i zastosować
