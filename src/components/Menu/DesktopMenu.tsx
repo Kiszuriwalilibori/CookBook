@@ -99,7 +99,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
                                 href={item.href}
                                 aria-current={current ? "page" : undefined}
                                 sx={{
-                                    ...desktopItemStyles(currentPathname, item.href),
+                                    ...desktopItemStyles(current),
                                     ...focusableSx,
                                 }}
                             >
@@ -115,7 +115,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
                             <ButtonBase
                                 {...commonProps}
                                 sx={{
-                                    ...desktopItemStyles(currentPathname, ""),
+                                    ...desktopItemStyles(current),
                                     ...focusableSx,
                                 }}
                                 onClick={item.onClick}

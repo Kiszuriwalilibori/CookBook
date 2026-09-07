@@ -131,7 +131,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
                         onClick={() => handleItemClick()}
                         onKeyDown={event => handleKeyDown(event, index)}
                         sx={{
-                            ...mobileMenuItemStyle(currentPathname, item.href),
+                            ...mobileMenuItemStyle(current),
                             ...itemSx,
                         }}
                     >
@@ -164,7 +164,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
                     onClick={() => handleItemClick(item.onClick)}
                     onKeyDown={event => handleKeyDown(event, index)}
                     sx={{
-                        ...mobileMenuItemButtonStyle(currentPathname),
+                        ...mobileMenuItemButtonStyle(current),
                         ...itemSx,
                     }}
                 >

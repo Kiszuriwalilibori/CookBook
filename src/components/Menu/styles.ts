@@ -6,23 +6,47 @@ export const MENU_HEIGHT = {
 } as const;
 export const navigationStyle: SxProps<Theme> = { flexGrow: 0, height: MENU_HEIGHT };
 
-export const desktopItemStyles = (currentPathname: string, href: string, hidden?: boolean): SxProps<Theme> => ({
+// export const desktopItemStyles = (currentPathname: string, href: string, hidden?: boolean): SxProps<Theme> => ({
+//     display: "flex",
+//     alignItems: "center",
+//     padding: "8px 16px",
+//     color: theme => `${theme.custom.menuColor}`,
+//     cursor: "pointer",
+//     minWidth: "64px",
+//     textDecoration: "none",
+//     opacity: hidden ? 0 : 1,
+//     transform: hidden ? "translateX(20px)" : "translateX(0)",
+//     transition: hidden
+//         ? "opacity 0.4s ease, transform 0.4s ease, background-color 200ms ease" // Połączone: dla hidden + zawsze background
+//         : "background-color 200ms ease",
+//     pointerEvents: hidden ? "none" : "auto",
+//     height: MENU_HEIGHT,
+
+//     backgroundColor: currentPathname === href ? theme => theme.palette.secondary.light : "transparent",
+//     "&:hover": {
+//         backgroundColor: theme => theme.palette.primary.light,
+//         textDecoration: "none",
+//     },
+// });
+export const desktopItemStyles = (isCurrentItem: boolean, hidden?: boolean): SxProps<Theme> => ({
     display: "flex",
     alignItems: "center",
     padding: "8px 16px",
-    color: theme => `${theme.custom.menuColor}`,
+    color: theme => theme.custom.menuColor,
     cursor: "pointer",
     minWidth: "64px",
     textDecoration: "none",
+
     opacity: hidden ? 0 : 1,
     transform: hidden ? "translateX(20px)" : "translateX(0)",
-    transition: hidden
-        ? "opacity 0.4s ease, transform 0.4s ease, background-color 200ms ease" // Połączone: dla hidden + zawsze background
-        : "background-color 200ms ease",
+    transition: hidden ? "opacity 0.4s ease, transform 0.4s ease, background-color 200ms ease" : "background-color 200ms ease",
+
     pointerEvents: hidden ? "none" : "auto",
+
     height: MENU_HEIGHT,
 
-    backgroundColor: currentPathname === href ? theme => theme.palette.secondary.light : "transparent",
+    backgroundColor: isCurrentItem ? theme => theme.palette.secondary.light : "transparent",
+
     "&:hover": {
         backgroundColor: theme => theme.palette.primary.light,
         textDecoration: "none",
@@ -91,18 +115,18 @@ export const mobileMenuIconStyle: SxProps<Theme> = {
     minWidth: "40px",
 };
 
-export const mobileMenuItemStyle = (currentPathname: string, href: string, hidden?: boolean): SxProps<Theme> => ({
-    color: theme => `${theme.custom.menuColor}`,
-    backgroundColor: currentPathname === href ? theme => theme.palette.primary.light : "transparent",
-    textDecoration: "none",
-    opacity: hidden ? 0 : 1,
-    transform: hidden ? "translateX(20px)" : "translateX(0)",
-    transition: "opacity 0.4s ease, transform 0.4s ease",
-    pointerEvents: hidden ? "none" : "auto",
-    "&:hover": {
-        textDecoration: "none",
-    },
-});
+// export const mobileMenuItemStyle = (currentPathname: string, href: string, hidden?: boolean): SxProps<Theme> => ({
+//     color: theme => `${theme.custom.menuColor}`,
+//     backgroundColor: currentPathname === href ? theme => theme.palette.primary.light : "transparent",
+//     textDecoration: "none",
+//     opacity: hidden ? 0 : 1,
+//     transform: hidden ? "translateX(20px)" : "translateX(0)",
+//     transition: "opacity 0.4s ease, transform 0.4s ease",
+//     pointerEvents: hidden ? "none" : "auto",
+//     "&:hover": {
+//         textDecoration: "none",
+//     },
+// });
 
 export const drawerButtonStyle: SxProps<Theme> = {
     display: { md: "none" },
@@ -152,11 +176,31 @@ export const menuToolbarStyle: SxProps<Theme> = {
         minHeight: MENU_HEIGHT.md,
     },
 };
-export const mobileMenuItemButtonStyle = (currentPathname: string, hidden?: boolean): SxProps<Theme> => ({
-    // Merge mobileMenuItemStyle with button-specific styles
-    ...mobileMenuItemStyle(currentPathname, "", hidden),
+// export const mobileMenuItemButtonStyle = (currentPathname: string, hidden?: boolean): SxProps<Theme> => ({
+//     // Merge mobileMenuItemStyle with button-specific styles
+//     ...mobileMenuItemStyle(currentPathname, "", hidden),
+//     opacity: hidden ? 0 : 1,
+//     transform: hidden ? "translateX(20px)" : "translateX(0)",
+//     transition: "opacity 0.4s ease, transform 0.4s ease",
+//     pointerEvents: hidden ? "none" : "auto",
+// });
+export const mobileMenuItemStyle = (isCurrentItem: boolean, hidden?: boolean): SxProps<Theme> => ({
+    color: theme => theme.custom.menuColor,
+
+    backgroundColor: isCurrentItem ? theme => theme.palette.primary.light : "transparent",
+
+    textDecoration: "none",
+
     opacity: hidden ? 0 : 1,
     transform: hidden ? "translateX(20px)" : "translateX(0)",
     transition: "opacity 0.4s ease, transform 0.4s ease",
     pointerEvents: hidden ? "none" : "auto",
+
+    "&:hover": {
+        textDecoration: "none",
+    },
+});
+
+export const mobileMenuItemButtonStyle = (isCurrentItem: boolean, hidden?: boolean): SxProps<Theme> => ({
+    ...mobileMenuItemStyle(isCurrentItem, hidden),
 });
