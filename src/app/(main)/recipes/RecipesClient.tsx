@@ -50,7 +50,14 @@ export default function RecipesClient({ initialRecipes, initialFavorites }: Reci
             <PageTitle title="Przepisy" />
             <Grid container spacing={3} justifyContent="center">
                 {displayRecipes.map(recipe => (
-                    <Grid size={gridSize} key={recipe._id}>
+                    <Grid
+                        size={gridSize}
+                        key={recipe._id}
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                        }}
+                    >
                         <RecipeCard recipe={recipe} />
                     </Grid>
                 ))}

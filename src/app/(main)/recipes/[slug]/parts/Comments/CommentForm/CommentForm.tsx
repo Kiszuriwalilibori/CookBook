@@ -161,12 +161,13 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
             {!isAdminLogged && (
                 <>
                     <TextFieldRow id="Author Text Field Row" activated={authorActivated} onShowErrors={() => setAuthorShowErrors(true)} hint={<Box sx={characterHintSx}>2–40 znaków</Box>}>
-                        <FormLabel required sx={formLabelSx}>
+                        <FormLabel required sx={formLabelSx} htmlFor="comment-author">
                             Przedstaw się
                         </FormLabel>
 
                         <Box>
                             <TextField
+                                id="comment-author"
                                 inputRef={textAreaRef}
                                 slotProps={{
                                     htmlInput: {
@@ -193,12 +194,13 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
             )}
 
             <TextFieldRow id="Content Text Field Row" activated={contentActivated} onShowErrors={() => setContentShowErrors(true)} hint={<Box sx={characterHintSx}>3–1000 znaków</Box>}>
-                <FormLabel id="Content Form Label" required sx={formLabelSx}>
+                <FormLabel id="Content Form Label" required sx={formLabelSx} htmlFor="comment-content">
                     Skomentuj
                 </FormLabel>
 
                 <Box>
                     <TextField
+                        id="comment-content"
                         slotProps={{
                             htmlInput: {
                                 "aria-label": "Treść komentarza",
