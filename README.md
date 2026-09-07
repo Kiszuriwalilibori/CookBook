@@ -143,3 +143,4 @@ Nie wiem czy tak powinno być
 // todo czy formy nie powinny mieć obsługi głosu
 
 // pozzycje w desktopmenu powinny zmieniaćwygląd na hover
+// strona przepisy ma Heading elements are not in a sequentially-descending order co redukuje do 98

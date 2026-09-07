@@ -126,6 +126,11 @@ export const metadata: {
         description: "Poznaj autora bloga kulinarnego i książki kucharskiej. Pasja do gotowania, sprawdzone przepisy i kulinarne inspiracje.",
         keywords: ["o mnie", "autor bloga kulinarnego", "Piotr Maksymiuk"],
     }),
+    search: createPageMetadata("search", {
+        title: "Wyszukiwarka przepisów – Książka Kucharska Piotra",
+        description: "Wyszukuj przepisy kulinarne według nazwy, składników, kuchni, diety i innych kryteriów. Znajdź przepis dopasowany do swoich potrzeb.",
+        keywords: ["wyszukiwarka przepisów", "szukanie przepisów", "przepisy kulinarne", "wyszukiwanie przepisów"],
+    }),
 
     blog: createPageMetadata("blog", {
         title: "Blog kulinarny – Książka Kucharska Piotra",
