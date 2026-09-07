@@ -2,7 +2,11 @@
 
 import React, { useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Button, Typography, Divider, CircularProgress } from "@mui/material";
+import { Box, Button, Typography, Divider } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
+import CloseIcon from "@mui/icons-material/Close";
+import { touchableSx } from "@/styles/utilityStyles";
 
 import { FilterFieldRenderer, FilterSummary } from "./parts";
 import { containerSx, buttonGroupSx, dividerSx } from "./styles";
@@ -108,16 +112,16 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
             ))}
 
             <Box sx={buttonGroupSx}>
-                <Button variant="outlined" onClick={handleClear} size="small">
+                <Button variant="contained" onClick={handleClear} size="large" color="secondary" startIcon={<ClearIcon />} sx={touchableSx}>
                     Wyczyść
                 </Button>
 
-                <Button variant="contained" onClick={enhancedHandleApply} size="small" disabled={isSearchingByTitle || isApplying} startIcon={isSearchingByTitle ? <CircularProgress size={16} /> : null}>
-                    {isSearchingByTitle ? "Sprawdzam..." : "Zastosuj"}
+                <Button variant="contained" onClick={enhancedHandleApply} size="large" disabled={isSearchingByTitle || isApplying} startIcon={<SearchIcon />} sx={touchableSx}>
+                    Zastosuj
                 </Button>
 
                 {onClose && (
-                    <Button variant="outlined" onClick={onClose} size="small">
+                    <Button variant="outlined" onClick={onClose} size="large" startIcon={<CloseIcon />} sx={touchableSx}>
                         Zamknij
                     </Button>
                 )}
