@@ -108,11 +108,11 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
             ))}
 
             <Box sx={buttonGroupSx}>
-                <Button variant="outlined" onClick={handleClear} size="small" disableRipple>
+                <Button variant="outlined" onClick={handleClear} size="small">
                     Wyczyść
                 </Button>
 
-                <Button disableRipple variant="contained" onClick={enhancedHandleApply} size="small" disabled={isSearchingByTitle || isApplying} startIcon={isSearchingByTitle ? <CircularProgress size={16} /> : null}>
+                <Button variant="contained" onClick={enhancedHandleApply} size="small" disabled={isSearchingByTitle || isApplying} startIcon={isSearchingByTitle ? <CircularProgress size={16} /> : null}>
                     {isSearchingByTitle ? "Sprawdzam..." : "Zastosuj"}
                 </Button>
 

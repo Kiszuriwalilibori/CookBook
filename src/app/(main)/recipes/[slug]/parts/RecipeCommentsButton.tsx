@@ -9,7 +9,6 @@ export function RecipeCommentsButton() {
         <Tooltip title="Pokaż komentarze" placement="top">
             <IconButton
                 id="RecipeCommentsButton"
-                disableRipple
                 onClick={() => {
                     document.getElementById("comments")?.scrollIntoView({ behavior: "smooth" });
                 }}

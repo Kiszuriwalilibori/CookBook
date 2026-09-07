@@ -83,6 +83,7 @@ const baseTheme = createTheme({
         MuiButtonBase: {
             defaultProps: {
                 disableRipple: true,
+                // disableFocusRipple: true,
             },
         },
         MuiButton: {

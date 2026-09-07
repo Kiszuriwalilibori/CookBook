@@ -27,7 +27,7 @@ export function LikeItButton({ alreadyLiked, likesCount, isLiking, animate, onLi
     return (
         <Box sx={likeButtonWrapperSx}>
             <Tooltip title={alreadyLiked ? "Cofnij polubienie" : "Polub komentarz"} arrow>
-                <IconButton aria-label={alreadyLiked ? "Cofnij polubienie komentarza" : "Polub komentarz"} size="medium" color="primary" disableRipple onClick={onLike} disabled={isLiking} sx={likeButtonSx}>
+                <IconButton aria-label={alreadyLiked ? "Cofnij polubienie komentarza" : "Polub komentarz"} size="medium" color="primary" onClick={onLike} disabled={isLiking} sx={likeButtonSx}>
                     <ThumbUpIcon fontSize="medium" sx={likeIconSx(alreadyLiked, prefersReducedMotion ? false : animate)} />
                 </IconButton>
             </Tooltip>

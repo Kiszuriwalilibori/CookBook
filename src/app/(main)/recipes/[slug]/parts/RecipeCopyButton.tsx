@@ -101,7 +101,7 @@ export function RecipeCopyButton({ recipe }: RecipeCopyButtonProps) {
     return (
         <>
             <Tooltip title="Kopiuj składniki i przygotowanie do dokumentu" placement="top">
-                <IconButton disableRipple id="RecipeCopyButton" onClick={handleCopy} sx={styles.recipeButton}>
+                <IconButton id="RecipeCopyButton" onClick={handleCopy} sx={styles.recipeButton}>
                     <CopyAllIcon sx={styles.recipeButtonIcon} />
                 </IconButton>
             </Tooltip>
