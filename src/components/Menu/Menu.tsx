@@ -4,7 +4,7 @@ import React, { useRef } from "react";
 import { AppBar, Box, IconButton, Toolbar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { drawerButtonStyle, menuAppBarStyle, menuToolbarStyle, navigationStyle } from "./styles";
+import { drawerButtonStyle, menuAppBarStyle, menuToolbarStyle, navigationStyle } from "./Menu.styles";
 
 import MobileMenu from "./MobileMenu";
 import DesktopMenu from "./DesktopMenu";

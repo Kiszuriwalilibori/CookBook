@@ -5,7 +5,7 @@ import { Box, ButtonBase, Typography } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { desktopItemStyles, desktopMenuContainerStyle, desktopMenuIconStyle, desktopMenuLabelStyle, desktopMenuSeparatorStyle } from "./styles";
+import { desktopItemStyles, desktopMenuContainerStyle, desktopMenuIconStyle, desktopMenuLabelStyle, desktopMenuSeparatorStyle } from "./DesktopMenu.styles";
 import { focusableSx } from "@/styles/utilityStyles";
 import type { NavItem } from "./Menu";
 

@@ -5,8 +5,8 @@ import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { drawerBoxStyle, drawerStyle, mobileMenuIconStyle, mobileMenuItemButtonStyle, mobileMenuItemStyle } from "./styles";
-import { desktopMenuLabelStyle } from "./styles";
+import { drawerBoxStyle, drawerStyle, mobileMenuIconStyle, mobileMenuItemButtonStyle, mobileMenuItemStyle } from "./MobileMenu.styles";
+import { desktopMenuLabelStyle } from "./DesktopMenu.styles";
 import { focusableSx, touchableSx } from "@/styles/utilityStyles";
 import type { NavItem } from "./Menu";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
