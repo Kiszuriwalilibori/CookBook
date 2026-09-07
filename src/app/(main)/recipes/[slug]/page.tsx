@@ -136,5 +136,3 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
         </>
     );
 }
-
-//todo

@@ -1,6 +1,6 @@
 "use client";
 
-import { RefObject, useState } from "react";
+import { RefObject, useState, useId } from "react";
 
 import { Box, TextField, Button, Paper, FormLabel, FormControlLabel, Checkbox, Collapse } from "@mui/material";
 
@@ -65,6 +65,10 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
     const isAdminLogged = useIsAdminLogged();
 
     const isShortCommentModeAvailable = !!commentId;
+    const formId = useId();
+
+    const authorId = `${formId}-author`;
+    const contentId = `${formId}-content`;
 
     // Single source of truth for validation
     const validation = validateComment({
@@ -161,13 +165,14 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
             {!isAdminLogged && (
                 <>
                     <TextFieldRow id="Author Text Field Row" activated={authorActivated} onShowErrors={() => setAuthorShowErrors(true)} hint={<Box sx={characterHintSx}>2–40 znaków</Box>}>
-                        <FormLabel required sx={formLabelSx} htmlFor="comment-author">
+                        <FormLabel required sx={formLabelSx} htmlFor={authorId}>
                             Przedstaw się
                         </FormLabel>
 
                         <Box>
                             <TextField
-                                id="comment-author"
+                                name="author"
+                                id={authorId}
                                 inputRef={textAreaRef}
                                 slotProps={{
                                     htmlInput: {
@@ -194,13 +199,14 @@ export default function CommentForm({ textAreaRef, formContainerRef, commentId, 
             )}
 
             <TextFieldRow id="Content Text Field Row" activated={contentActivated} onShowErrors={() => setContentShowErrors(true)} hint={<Box sx={characterHintSx}>3–1000 znaków</Box>}>
-                <FormLabel id="Content Form Label" required sx={formLabelSx} htmlFor="comment-content">
+                <FormLabel id="Content Form Label" required sx={formLabelSx} htmlFor={contentId}>
                     Skomentuj
                 </FormLabel>
 
                 <Box>
                     <TextField
-                        id="comment-content"
+                        id={contentId}
+                        name="content"
                         slotProps={{
                             htmlInput: {
                                 "aria-label": "Treść komentarza",
