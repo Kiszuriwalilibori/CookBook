@@ -2,6 +2,7 @@
 
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { Roboto } from "next/font/google";
+import { designSystem } from "./designSystem";
 
 // Extend Theme and ThemeOptions to include palette.surface and custom.menuColor
 declare module "@mui/material/styles" {
@@ -49,7 +50,7 @@ const customThemeValues = {
 const baseTheme = createTheme({
     palette: {
         primary: {
-            main: "#BC5A3C",
+            main: designSystem.primary.main,
             light: "#C97B63",
             dark: "#8E3F29",
             contrastText: "#fff",

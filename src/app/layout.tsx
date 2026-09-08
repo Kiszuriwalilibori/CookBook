@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import { Box, ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "@/themes/theme";
+import { designSystem } from "@/themes/designSystem";
 import { Footer, Header, Providers } from "@/components";
 import { headers } from "next/headers";
 import "./globals.css";
@@ -20,7 +21,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const viewport = {
     width: "device-width",
     initialScale: 1,
-    themeColor: theme.palette.primary.main,
+    themeColor: designSystem.primary.main,
 };
 
 export async function generateMetadata() {
