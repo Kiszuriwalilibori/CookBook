@@ -1,12 +1,6 @@
-import type { Metadata, Viewport } from 'next';
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'CookBook - Your Recipe Collection',
-  description: 'Discover and share delicious recipes',
-};
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  themeColor: '#1976d2',
+    title: "CookBook - Your Recipe Collection",
+    description: "Discover and share delicious recipes",
 };

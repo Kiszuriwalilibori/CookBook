@@ -22,11 +22,14 @@ declare module "@mui/material/styles" {
     interface Theme {
         custom: {
             menuColor: string;
+            focusColor: string;
         };
     }
+
     interface ThemeOptions {
         custom?: {
             menuColor?: string;
+            focusColor?: string;
         };
     }
 }
@@ -37,6 +40,11 @@ const roboto = Roboto({
     display: "swap",
     fallback: ["Helvetica", "Arial", "sans-serif"],
 });
+
+const customThemeValues = {
+    menuColor: "#000000",
+    focusColor: "#1976d2",
+};
 
 const baseTheme = createTheme({
     palette: {
@@ -83,7 +91,6 @@ const baseTheme = createTheme({
         MuiButtonBase: {
             defaultProps: {
                 disableRipple: true,
-                // disableFocusRipple: true,
             },
         },
         MuiButton: {
@@ -110,7 +117,8 @@ const baseTheme = createTheme({
         MuiCssBaseline: {
             styleOverrides: {
                 ":root": {
-                    "--menu-color": "#000000",
+                    "--menu-color": customThemeValues.menuColor,
+                    "--focus-color": customThemeValues.focusColor,
                 },
             },
         },
@@ -122,19 +130,6 @@ const baseTheme = createTheme({
             },
         },
 
-        // MuiOutlinedInput: {
-        //     styleOverrides: {
-        //         notchedOutline: {},
-        //         root: {
-        //             "&:hover .MuiOutlinedInput-notchedOutline": {
-        //                 borderColor: "primary.light",
-        //             },
-        //             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        //                 borderColor: theme.palette.divider,
-        //             },
-        //         },
-        //     },
-        // },
         MuiOutlinedInput: {
             styleOverrides: {
                 root: ({ theme }) => ({
@@ -170,13 +165,9 @@ const baseTheme = createTheme({
         },
     },
 
-    custom: {
-        menuColor: "#000000",
-    },
+    custom: customThemeValues,
 });
 
 const theme = responsiveFontSizes(createTheme(baseTheme));
 
 export default theme;
-
-//  paper: "#A8BBA3",

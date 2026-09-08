@@ -1,5 +1,5 @@
 import { Inter } from "next/font/google";
-import { Box, ThemeProvider } from "@mui/material";
+import { Box, ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "@/themes/theme";
 import { Footer, Header, Providers } from "@/components";
 import { headers } from "next/headers";
@@ -20,7 +20,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const viewport = {
     width: "device-width",
     initialScale: 1,
-    themeColor: "#1976d2",
+    themeColor: theme.palette.primary.main,
 };
 
 export async function generateMetadata() {
@@ -48,6 +48,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                         <UserInitializer userId={userId} />
                         <FavoritesInitialiser />
                         <ThemeProvider theme={theme}>
+                            <CssBaseline />
                             <Box sx={layoutContainerStyles}>
                                 <Header initialSummary={summary} fetchError={fetchError} />
                                 <Box component="main" sx={mainContentStyles}>

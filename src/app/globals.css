@@ -355,7 +355,6 @@ template {
 :root {
     --background: #ffffff;
     --foreground: #171717;
-    --focus-color: #1976d2;
 }
 
 @theme inline {
