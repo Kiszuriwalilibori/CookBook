@@ -24,17 +24,7 @@ export const AspectBox = styled(Box)(() => ({
     position: "relative",
     width: "100%",
     paddingTop: "61.8%", // GOLDEN RATIO
-    backgroundColor: "#f4f4f4",
 }));
-
-// export const SlideImage = styled("img")(() => ({
-//     position: "absolute",
-//     inset: 0,
-//     width: "100%",
-//     height: "100%",
-//     objectFit: "cover",
-//     display: "block",
-// }));
 
 export const Overlay = styled(CardContent)(({ theme }) => ({
     position: "absolute",

@@ -1,4 +1,4 @@
-// page.styles.ts
+// recipes.page.styles.ts
 
 import type { SxProps, Theme } from "@mui/material/styles";
 
@@ -25,11 +25,17 @@ const columnBaseSx: SxProps<Theme> = {
     alignItems: "center",
     position: "relative",
 };
-
 export const leftColumnSx: SxProps<Theme> = {
     ...columnBaseSx,
     backgroundColor: "secondary.light",
-    borderRight: { xs: "none", md: "1px solid #ccc" },
+    borderRight: {
+        xs: "none",
+        md: "1px solid",
+    },
+    borderColor: {
+        xs: "transparent",
+        md: "divider",
+    },
 };
 
 export const rightColumnSx: SxProps<Theme> = {

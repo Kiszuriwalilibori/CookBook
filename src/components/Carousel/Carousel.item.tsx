@@ -17,7 +17,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({ slide, priority = false }) 
         <SlideWrapper key={slide._id}>
             <StyledCard>
                 <SlideLink slide={slide}>
-                    <AspectBox>
+                    <AspectBox id="aspect box">
                         <SlideImage
                             loading={priority ? "eager" : "lazy"}
                             fetchPriority={priority ? "high" : "auto"}

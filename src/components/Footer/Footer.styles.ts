@@ -1,11 +1,12 @@
 // footer.styles.ts
+import { design } from "@/themes/design";
 import { SxProps, Theme } from "@mui/material";
 
 export const footerContainer: SxProps<Theme> = {
     py: 3,
     px: 2,
     mt: "auto",
-    backgroundColor: "#E0A966",
+    backgroundColor: design.footerColor,
 };
 
 export const footerContent: SxProps<Theme> = {

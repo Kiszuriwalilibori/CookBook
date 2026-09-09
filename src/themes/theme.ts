@@ -2,7 +2,7 @@
 
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { Roboto } from "next/font/google";
-import { designSystem } from "./designSystem";
+import { design } from "./design";
 
 // Extend Theme and ThemeOptions to include palette.surface and custom.menuColor
 declare module "@mui/material/styles" {
@@ -42,37 +42,59 @@ const roboto = Roboto({
     fallback: ["Helvetica", "Arial", "sans-serif"],
 });
 
-const customThemeValues = {
-    menuColor: "#000000",
-    focusColor: "#1976d2",
-};
+// const customThemeValues = {
+//     menuColor: "#000000",
+//     focusColor: "#1976d2",
+// };
+// const customThemeValues = {
+//     menuColor: design.custom.menuColor,
+//     focusColor: design.custom.focusColor,
+// };
 // #0d3a74 do rozważenia jako focusColor
 
 const baseTheme = createTheme({
+    // palette: {
+    //     primary: {
+    //         main: design.primary.main,
+    //         light: "#C97B63",
+    //         dark: "#8E3F29",
+    //         contrastText: "common.white",
+    //     },
+    //     secondary: {
+    //         main: "#677B67",
+    //         light: "#859585",
+    //         dark: "#485648",
+    //     },
+    //     background: {
+    //         default: "#f5f5f5",
+    //         paper: "#ffffff",
+    //     },
+    //     // ⬇️ Surface out of use. retained possibly for future (do not remove)
+    //     // surface: {
+    //     //     main: "#F6723D",
+    //     //     light: "#FF9F41",
+    //     //     dark: "#F44F0C",
+    //     // },
+    // },
+    // src/themes/theme.ts
+
     palette: {
         primary: {
-            main: designSystem.primary.main,
-            light: "#C97B63",
-            dark: "#8E3F29",
-            contrastText: "#fff",
+            main: design.primary.main,
+            light: design.primary.light,
+            dark: design.primary.dark,
+            contrastText: design.primary.contrastText,
         },
         secondary: {
-            main: "#677B67",
-            light: "#859585",
-            dark: "#485648",
+            main: design.secondary.main,
+            light: design.secondary.light,
+            dark: design.secondary.dark,
         },
         background: {
-            default: "#f5f5f5",
-            paper: "#ffffff",
+            default: design.background.default,
+            paper: design.background.paper,
         },
-        // ⬇️ Surface retained (do not remove)
-        // surface: {
-        //     main: "#F6723D",
-        //     light: "#FF9F41",
-        //     dark: "#F44F0C",
-        // },
     },
-
     typography: {
         fontFamily: roboto.style.fontFamily,
         h1: {
@@ -107,20 +129,21 @@ const baseTheme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: 12,
-                    boxShadow: "0 4px 20px 0 rgba(0,0,0,0.05)",
+                    boxShadow: "0 4px 20px 0 shadows[1]",
                     transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
                     "&:hover": {
                         transform: "translateY(-4px)",
-                        boxShadow: "0 8px 25px 0 rgba(0,0,0,0.1)",
+                        boxShadow: "0 8px 25px 0 shadows[4])",
                     },
                 },
             },
         },
+
         MuiCssBaseline: {
             styleOverrides: {
                 ":root": {
-                    "--menu-color": customThemeValues.menuColor,
-                    "--focus-color": customThemeValues.focusColor,
+                    "--menu-color": design.menuColor,
+                    "--focus-color": design.focusColor,
                 },
             },
         },
@@ -160,14 +183,11 @@ const baseTheme = createTheme({
                     color: "secondary.contrastText",
                     fontSize: "0.75rem",
                 },
-                arrow: {
-                    color: "#A8BBA3",
-                },
             },
         },
     },
 
-    custom: customThemeValues,
+    custom: { menuColor: design.menuColor, focusColor: design.focusColor },
 });
 
 const theme = responsiveFontSizes(createTheme(baseTheme));
