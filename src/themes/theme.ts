@@ -42,42 +42,9 @@ const roboto = Roboto({
     fallback: ["Helvetica", "Arial", "sans-serif"],
 });
 
-// const customThemeValues = {
-//     menuColor: "#000000",
-//     focusColor: "#1976d2",
-// };
-// const customThemeValues = {
-//     menuColor: design.custom.menuColor,
-//     focusColor: design.custom.focusColor,
-// };
 // #0d3a74 do rozważenia jako focusColor
 
 const baseTheme = createTheme({
-    // palette: {
-    //     primary: {
-    //         main: design.primary.main,
-    //         light: "#C97B63",
-    //         dark: "#8E3F29",
-    //         contrastText: "common.white",
-    //     },
-    //     secondary: {
-    //         main: "#677B67",
-    //         light: "#859585",
-    //         dark: "#485648",
-    //     },
-    //     background: {
-    //         default: "#f5f5f5",
-    //         paper: "#ffffff",
-    //     },
-    //     // ⬇️ Surface out of use. retained possibly for future (do not remove)
-    //     // surface: {
-    //     //     main: "#F6723D",
-    //     //     light: "#FF9F41",
-    //     //     dark: "#F44F0C",
-    //     // },
-    // },
-    // src/themes/theme.ts
-
     palette: {
         primary: {
             main: design.primary.main,

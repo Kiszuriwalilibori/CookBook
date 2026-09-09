@@ -5,7 +5,7 @@ export const design = {
         main: "#BC5A3C",
         light: "#C97B63",
         dark: "#8E3F29",
-        contrastText: "common.white",
+        contrastText: "#fff",
     },
     secondary: {
         main: "#677B67",

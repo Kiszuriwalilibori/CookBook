@@ -146,3 +146,5 @@ Nie wiem czy tak powinno być
 // strona przepisy ma Heading elements are not in a sequentially-descending order co redukuje do 98
 // w menu aktywny element po przełączeniu strony nie dostaje focusa
 // desktopmenustyles zawiera liczne color: theme => theme.custom.menuColor, chyba niepotrzebne skoro chodzi o czarny
+
+// commonwhite nie jest dobry na background, jak się dat to theme.background
