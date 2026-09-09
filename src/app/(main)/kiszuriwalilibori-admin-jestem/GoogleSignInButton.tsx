@@ -6,8 +6,6 @@ import { useIsAdminLogged } from "@/stores/useAdminStore";
 
 import { Box, Button, Paper } from "@mui/material";
 
-import { focusableSx } from "@/styles/utilityStyles";
-
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import { closeButtonSx, googleSignInPaperSx, googleSignInStatusSx, signinButtonWrapperStyles } from "./GoogleSignInButton.styles";
@@ -51,7 +49,7 @@ export default function GoogleSignInButton() {
                     </Box>
                 )}
                 {/* {loaded && ( */}
-                <Button aria-label="Kontynuuj bez logowania" fullWidth endIcon={<ArrowForwardIcon />} onClick={() => setVisible(false)} sx={{ ...closeButtonSx, ...focusableSx }}>
+                <Button aria-label="Kontynuuj bez logowania" fullWidth endIcon={<ArrowForwardIcon />} onClick={() => setVisible(false)} sx={{ ...closeButtonSx }}>
                     Kontynuuj bez logowania
                 </Button>
                 {/* Google button */}

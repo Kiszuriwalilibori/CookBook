@@ -46,6 +46,7 @@ const customThemeValues = {
     menuColor: "#000000",
     focusColor: "#1976d2",
 };
+// #0d3a74 do rozważenia jako focusColor
 
 const baseTheme = createTheme({
     palette: {

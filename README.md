@@ -144,3 +144,4 @@ Nie wiem czy tak powinno być
 
 // pozzycje w desktopmenu powinny zmieniaćwygląd na hover
 // strona przepisy ma Heading elements are not in a sequentially-descending order co redukuje do 98
+// coś jest nie tak z focusem na głównej stronie. Dziwnie zachowuje się na kartach, podświetla serduszko, potem niewiadomo co jeżeli wogóle, i następne serduszko

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { desktopItemStyles, desktopMenuContainerStyle, desktopMenuIconStyle, desktopMenuLabelStyle, desktopMenuSeparatorStyle } from "./DesktopMenu.styles";
-import { focusableSx } from "@/styles/utilityStyles";
 import type { NavItem } from "./Menu";
 
 interface DesktopMenuProps {
@@ -100,7 +99,6 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
                                 aria-current={current ? "page" : undefined}
                                 sx={{
                                     ...desktopItemStyles(current),
-                                    ...focusableSx,
                                 }}
                             >
                                 <Box component="span" sx={desktopMenuIconStyle} aria-hidden="true">
@@ -116,7 +114,6 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
                                 {...commonProps}
                                 sx={{
                                     ...desktopItemStyles(current),
-                                    ...focusableSx,
                                 }}
                                 onClick={item.onClick}
                             >

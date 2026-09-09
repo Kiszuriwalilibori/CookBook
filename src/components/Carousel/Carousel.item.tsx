@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import { Slide } from "./Carousel.types";
-import { SlideWrapper, StyledCard, AspectBox, SlideImage, Overlay, focusCardStyles } from "./Carousel.styles";
+import { SlideWrapper, StyledCard, AspectBox, SlideImage, Overlay } from "./Carousel.styles";
 import SlideLink from "./SlideLink";
 
 interface CarouselItemProps {
@@ -15,7 +15,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({ slide, priority = false }) 
     const [imageSrc, setImageSrc] = useState(slide.imageUrl || "/placeholder.jpg");
     return (
         <SlideWrapper key={slide._id}>
-            <StyledCard sx={focusCardStyles}>
+            <StyledCard>
                 <SlideLink slide={slide}>
                     <AspectBox>
                         <SlideImage

@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 
 import { drawerBoxStyle, drawerStyle, mobileMenuIconStyle, mobileMenuItemButtonStyle, mobileMenuItemStyle } from "./MobileMenu.styles";
 import { desktopMenuLabelStyle } from "./DesktopMenu.styles";
-import { focusableSx, touchableSx } from "@/styles/utilityStyles";
+import { touchableSx } from "@/styles/utilityStyles";
 import type { NavItem } from "./Menu";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -115,7 +115,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
 
         const itemSx = {
             ...touchableSx,
-            ...focusableSx,
         };
 
         if (item.href) {

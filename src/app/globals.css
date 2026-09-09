@@ -463,3 +463,9 @@ body {
         0 0 0 2px #ffffff,
         0 0 0 4px var(--focus-color) !important;
 }
+.MuiCard-root:has(a:focus-visible) {
+    outline: none;
+    box-shadow:
+        0 0 0 2px #ffffff,
+        0 0 0 4px var(--focus-color) !important;
+}
