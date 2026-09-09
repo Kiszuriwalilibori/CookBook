@@ -10,7 +10,6 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         py: 3,
     },
     recipeStepAccordion: {
-        backgroundColor: "common.white",
         boxShadow: 0,
         border: "none",
 
@@ -183,6 +182,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         textAlign: "center",
     },
     accordion: {
+        backgroundColor: "background.default",
         boxShadow: 0,
         border: "none",
         "&:before": { display: "none" },

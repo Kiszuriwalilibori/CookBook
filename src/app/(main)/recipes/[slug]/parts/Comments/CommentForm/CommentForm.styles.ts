@@ -1,7 +1,7 @@
 import { Theme } from "@mui/material/styles";
 
 export const paperSx = (theme: Theme) => ({
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.paper,
     border: `1px solid ${theme.palette.secondary.dark}`,
     borderRadius: 2,
     p: 2,
@@ -25,7 +25,7 @@ export const textFieldSx = (theme: Theme) => ({
     },
     "& .MuiOutlinedInput-root": {
         position: "relative",
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: theme.palette.background.default,
         "& fieldset": {
             borderColor: theme.palette.secondary.dark,
         },

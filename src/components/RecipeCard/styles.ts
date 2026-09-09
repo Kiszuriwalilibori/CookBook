@@ -23,7 +23,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         display: "flex",
         flexDirection: "column",
         transition: "transform 0.2s ease-in-out",
-        backgroundColor: "background.default",
+        backgroundColor: "background.paper",
 
         "&:hover": {
             transform: "translateY(-4px)",

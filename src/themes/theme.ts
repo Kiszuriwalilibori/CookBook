@@ -105,6 +105,19 @@ const baseTheme = createTheme({
                 },
             },
         },
+        MuiAccordion: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: design.background.default,
+                    boxShadow: "none",
+                    border: "none",
+
+                    "&:before": {
+                        display: "none",
+                    },
+                },
+            },
+        },
 
         MuiCssBaseline: {
             styleOverrides: {

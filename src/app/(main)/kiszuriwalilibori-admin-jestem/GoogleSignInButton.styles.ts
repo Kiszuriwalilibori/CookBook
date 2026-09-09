@@ -35,7 +35,7 @@ export const closeButtonSx: SxProps<Theme> = {
     minWidth: 190,
 
     textTransform: "none",
-    backgroundColor: "background.paper",
+    backgroundColor: "background.default",
     color: "text.primary",
 
     border: 1,
