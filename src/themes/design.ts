@@ -13,8 +13,8 @@ export const design = {
         dark: "#485648",
     },
     background: {
-        default: "#f5f5f5",
-        paper: "#ffffff",
+        paper: "#f5f5f5",
+        default: "#ffffff",
     },
     footerColor: "#E0A966",
     sliderColor: "#E0A966",

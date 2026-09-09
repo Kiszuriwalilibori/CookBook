@@ -5,9 +5,9 @@ export const layoutContainerStyles: SxProps<Theme> = {
     display: "flex",
     flexDirection: "column",
     height: "100vh",
+    // backgroundColor: "background.paper",
 };
 
 export const mainContentStyles: SxProps<Theme> = {
     flexGrow: 1,
-    
 };
