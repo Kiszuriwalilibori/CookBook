@@ -18,6 +18,7 @@ export const design = {
     },
     footerColor: "#E0A966",
     sliderColor: "#E0A966",
+    separatorColor: "#333",
     loading: {
         gradient: {
             cyan: "#00E5FF",

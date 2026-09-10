@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Card, CardContent } from "@mui/material";
 import NextLink from "next/link";
 
-import { styles } from "./styles";
 import Separator from "../Common/Separator/Separator";
 
 import type { Recipe } from "@/types";
@@ -11,6 +10,10 @@ import { RecipeCardDescription } from "./RecipeCard.Description";
 import { RecipeCardTitle } from "./RecipeCard.Title";
 import { RecipeCardImage } from "./RecipeCard.Image";
 import { RecipeCardFavoriteButton } from "./RecipeCard.FavoriteButton";
+import { imageWrapperStyles } from "./RecipeCard.ImageWrapper.styles";
+import { cardContentStyles } from "./RecipeCard.CardContent.styles";
+import { cardStyles } from "./RecipeCard.Card.styles";
+import { nextLinkStyles } from "./RecipeCard.NextLink.styles";
 
 interface RecipeCardPresentationProps {
     recipe: Recipe;
@@ -24,22 +27,23 @@ export const RecipeCardPresentation = React.memo(function RecipeCardPresentation
     const { title, description, slug } = recipe;
 
     return (
-        <Card sx={styles.card}>
+        <Card sx={cardStyles}>
             <NextLink
                 href={`/recipes/${slug?.current}`}
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    flexGrow: 1,
-                    textDecoration: "none",
-                    color: "inherit",
-                }}
+                style={nextLinkStyles}
+                // style={{
+                //     display: "flex",
+                //     flexDirection: "column",
+                //     flexGrow: 1,
+                //     textDecoration: "none",
+                //     color: "inherit",
+                // }}
             >
-                <Box sx={styles.imageWrapper}>
+                <Box sx={imageWrapperStyles}>
                     <RecipeCardImage imageUrl={imageUrl} title={title} />
                 </Box>
 
-                <CardContent sx={styles.content}>
+                <CardContent sx={cardContentStyles}>
                     <RecipeCardTitle title={title} />
 
                     <Separator />

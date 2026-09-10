@@ -2,41 +2,43 @@
 import theme from "@/themes/theme";
 import { SxProps, Theme } from "@mui/material";
 
+export const cardTextColor = "grey.800";
+
 export const styles: { [key: string]: SxProps<Theme> } = {
-    imageWrapper: {
-        position: "relative",
-        height: { xs: 180, sm: 200 },
-        overflow: "hidden",
-        "& img": {
-            transition: "transform 0.3s ease-in-out",
-        },
+    // imageWrapper: {
+    //     position: "relative",
+    //     height: { xs: 180, sm: 200 },
+    //     overflow: "hidden",
+    //     "& img": {
+    //         transition: "transform 0.3s ease-in-out",
+    //     },
 
-        "&:hover img": {
-            transform: "scale(1.05)",
-        },
-    },
-    card: {
-        position: "relative",
-        height: "100%",
-        width: "100%",
-        maxWidth: 330,
-        display: "flex",
-        flexDirection: "column",
-        transition: "transform 0.2s ease-in-out",
-        backgroundColor: "background.paper",
+    //     "&:hover img": {
+    //         transform: "scale(1.05)",
+    //     },
+    // },
+    // card: {
+    //     position: "relative",
+    //     height: "100%",
+    //     width: "100%",
+    //     maxWidth: 330,
+    //     display: "flex",
+    //     flexDirection: "column",
+    //     transition: "transform 0.2s ease-in-out",
+    //     backgroundColor: "background.paper",
 
-        "&:hover": {
-            transform: "translateY(-4px)",
-            boxShadow: 3,
-        },
+    //     "&:hover": {
+    //         transform: "translateY(-4px)",
+    //         boxShadow: 3,
+    //     },
 
-        "@media (prefers-reduced-motion: reduce)": {
-            transition: "none",
-            "&:hover": {
-                transform: "none",
-            },
-        },
-    },
+    //     "@media (prefers-reduced-motion: reduce)": {
+    //         transition: "none",
+    //         "&:hover": {
+    //             transform: "none",
+    //         },
+    //     },
+    // },
 
     media: {
         // Aspect ratio responsywny: Wyższy na mobile dla lepszego UX
@@ -52,31 +54,31 @@ export const styles: { [key: string]: SxProps<Theme> } = {
             objectFit: "cover", // Ensures image fills without distortion
         },
     },
-    content: {
-        flexGrow: 1,
-        p: { xs: 1.5, sm: 2 }, // Mniejsze padding na mobile
-        pb: { xs: 1.5, sm: 2 },
-    },
-    title: {
-        fontFamily: "Libre Baskerville, serif",
-        fontWeight: "normal",
-        color: "grey.800",
-        height: { xs: 50, sm: 60 }, // Ogranicz wysokość dla responsywności
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        textTransform: "uppercase",
-        display: "-webkit-box",
-        WebkitLineClamp: 2,
-        WebkitBoxOrient: "vertical",
-        mb: 1,
-    },
+    // content: {
+    //     flexGrow: 1,
+    //     p: { xs: 1.5, sm: 2 }, // Mniejsze padding na mobile
+    //     pb: { xs: 1.5, sm: 2 },
+    // },
+    // title: {
+    //     fontFamily: "Libre Baskerville, serif",
+    //     fontWeight: "normal",
+    //     color: "grey.800",
+    //     height: { xs: 50, sm: 60 }, // Ogranicz wysokość dla responsywności
+    //     overflow: "hidden",
+    //     textOverflow: "ellipsis",
+    //     textTransform: "uppercase",
+    //     display: "-webkit-box",
+    //     WebkitLineClamp: 2,
+    //     WebkitBoxOrient: "vertical",
+    //     mb: 1,
+    // },
 
     description: {
         fontFamily: "Playfair Display, serif",
         fontWeight: 400,
         fontSize: "16px",
         fontStyle: "italic",
-        color: "grey.800",
+        color: cardTextColor,
         display: "-webkit-box", // line-clamp
         WebkitLineClamp: 3, // ograniczenie do 3 linii
         WebkitBoxOrient: "vertical", // potrzebne do -webkit-line-clamp
@@ -102,31 +104,31 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         // Mniejsze na mobile
     },
 
-    separator: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center", // Horizontally centered
-        justifyContent: "center",
-        mb: 1, // Space after separator to description
-        mt: 2,
-        width: "100%",
-    },
-    upperLine: {
-        width: "30%", // Roughly 30% of card width (99px on 330px card)
-        height: "1px",
-        backgroundColor: "grey.800",
+    // separator: {
+    //     display: "flex",
+    //     flexDirection: "column",
+    //     alignItems: "center", // Horizontally centered
+    //     justifyContent: "center",
+    //     mb: 1, // Space after separator to description
+    //     mt: 2,
+    //     width: "100%",
+    // },
+    // upperLine: {
+    //     width: "30%", // Roughly 30% of card width (99px on 330px card)
+    //     height: "1px",
+    //     backgroundColor: "grey.800",
 
-        // Subtle line color (adjust if needed)
-        mb: 0, // No margin
-    },
-    lowerLine: {
-        width: "15%", // Half of upper (49.5px on 330px card)
-        height: "1px",
-        backgroundColor: "#333",
+    //     // Subtle line color (adjust if needed)
+    //     mb: 0, // No margin
+    // },
+    // lowerLine: {
+    //     width: "15%", // Half of upper (49.5px on 330px card)
+    //     height: "1px",
+    //     backgroundColor: "#333",
 
-        // Matching line color
-        mt: "2px", // Roughly 2px distance between lines
-    },
+    //     // Matching line color
+    //     mt: "2px", // Roughly 2px distance between lines
+    // },
 };
 export const favoriteIcon = (isFavorite: boolean): SxProps => ({
     position: "absolute",
