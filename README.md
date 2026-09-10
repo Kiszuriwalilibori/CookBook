@@ -145,6 +145,7 @@ Nie wiem czy tak powinno być
 // pozzycje w desktopmenu powinny zmieniaćwygląd na hover
 // strona przepisy ma Heading elements are not in a sequentially-descending order co redukuje do 98
 // w menu aktywny element po przełączeniu strony nie dostaje focusa
-// desktopmenustyles zawiera liczne color: theme => theme.custom.menuColor, chyba niepotrzebne skoro chodzi o czarny
+// desktopmenustyles zawiera liczne color: theme => theme.custom.menuColor, chyba niepotrzebne skoro chodzi o czarny.Ale w sumie jest to spójne i tak bym zostawił . Ewentualnie skoro dotyczy to menu dać zmienną ograniczoaną do menu ale to mniej istotne.
 
 // commonwhite nie jest dobry na background, jak się dat to theme.background
+// commentstyles do sprawdzenia i ew. poprawienia, za dużo by pisać

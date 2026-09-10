@@ -1,3 +1,4 @@
+import { design } from "@/themes/design";
 import { SxProps, Theme } from "@mui/material";
 
 export const MIN_SIZE = 100;
@@ -19,7 +20,7 @@ export const authorImageWrapperSx: SxProps<Theme> = {
         lg: `clamp(${MIN_SIZE}px, 16vw, ${MAX_SIZE}px)`,
         xl: MAX_SIZE,
     },
-    borderRadius: "50%",
+    borderRadius: design.radius.circle,
     overflow: "hidden",
     mb: 2,
 };

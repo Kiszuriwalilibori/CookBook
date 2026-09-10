@@ -1,4 +1,12 @@
 export const design = {
+    radius: {
+        xs: "2px",
+        sm: "4px",
+        md: "8px",
+        lg: "24px",
+        pill: "999px",
+        circle: "50%",
+    },
     menuColor: "#000000",
     focusColor: "#1976d2",
     primary: {
@@ -37,3 +45,5 @@ export const design = {
         text: "#111",
     },
 } as const;
+
+//Radius scale is intentionally defined as: extraSmall 2px, small 4px, medium 8px, large 24px, pill 999px, with 50% reserved for circular elements.

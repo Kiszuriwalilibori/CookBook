@@ -88,14 +88,14 @@ const baseTheme = createTheme({
             styleOverrides: {
                 root: {
                     textTransform: "none" as const,
-                    borderRadius: 8,
+                    borderRadius: design.radius.md,
                 },
             },
         },
         MuiCard: {
             styleOverrides: {
                 root: {
-                    borderRadius: 12,
+                    borderRadius: design.radius.lg,
                     boxShadow: "0 4px 20px 0 shadows[1]",
                     transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
                     "&:hover": {

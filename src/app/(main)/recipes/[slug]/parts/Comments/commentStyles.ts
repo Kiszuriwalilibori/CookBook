@@ -1,4 +1,5 @@
 // commentStyles.ts
+import { design } from "@/themes/design";
 import { alpha, Theme } from "@mui/material/styles";
 
 /* -------- Comments -------- */
@@ -14,22 +15,22 @@ export const commentWrapperSx = (depth: number) => ({
     ml: depth > 0 ? 2 : 0,
 });
 
-export const threadLineSx = (theme: Theme) => ({
-    position: "absolute",
+// export const threadLineSx = (theme: Theme) => ({
+//     position: "absolute",
 
-    left: 6,
-    top: 8,
-    bottom: 8,
+//     left: 6,
+//     top: 8,
+//     bottom: 8,
 
-    width: "2px",
+//     width: "2px",
 
-    // backgroundColor: theme.palette.divider,
+//     // backgroundColor: theme.palette.divider,
 
-    // opacity: 0.35,
-    backgroundColor: theme.palette.mode === "light" ? "rgba(60, 60, 60, 0.35)" : "rgba(220, 220, 220, 0.25)",
+//     // opacity: 0.35,
+//     backgroundColor: theme.palette.mode === "light" ? "rgba(60, 60, 60, 0.35)" : "rgba(220, 220, 220, 0.25)",
 
-    borderRadius: 999,
-});
+//     borderRadius: 999,
+// });
 
 export const commentContentWrapperSx = (depth: number) => (theme: Theme) => ({
     flex: 1,
@@ -51,7 +52,9 @@ export const commentCardSx = (depth: number, isOwnComment: boolean) => (theme: T
     transition: "all 0.25s ease",
     backgroundColor: depth === 0 ? theme.palette.action.hover : "transparent",
 
-    boxShadow: depth > 0 ? (theme.palette.mode === "light" ? "0 0 0 1px rgba(0,0,0,0.04)" : "0 0 0 1px rgba(255,255,255,0.06)") : "none",
+    boxShadow: depth > 0 ? `0 0 0 1px ${alpha(theme.palette.text.primary, theme.palette.mode === "light" ? 0.04 : 0.06)}` : "none",
+
+    // boxShadow: depth > 0 ? (theme.palette.mode === "light" ? "0 0 0 1px rgba(0,0,0,0.04)" : "0 0 0 1px rgba(255,255,255,0.06)") : "none",
 });
 
 export const commentHeaderSx = {
@@ -166,7 +169,7 @@ export const replyButtonSx = (theme: Theme) => ({
 
     padding: "4px 8px",
 
-    borderRadius: 999,
+    borderRadius: design.radius.pill,
 
     color: theme.palette.text.secondary,
 
@@ -232,7 +235,7 @@ export const mobileCommentButtonWrapperSx = {
 export const mobileCommentButtonSx = {
     minHeight: 48,
     padding: "12px 16px",
-    borderRadius: 24,
+    borderRadius: design.radius.pill,
 };
 
 export const desktopCommentButtonWrapperSx = {

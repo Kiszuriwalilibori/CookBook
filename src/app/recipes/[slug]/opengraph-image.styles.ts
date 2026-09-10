@@ -1,3 +1,5 @@
+import { design } from "@/themes/design";
+
 export const styles = {
     root: {
         width: "100%",
@@ -37,7 +39,7 @@ export const styles = {
         background: "rgba(15, 23, 42, 0.85)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
-        borderRadius: 24,
+        borderRadius: design.radius.lg,
         border: "1px solid rgba(255, 255, 255, 0.12)",
         padding: "32px 40px",
         boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.7)",
@@ -61,7 +63,7 @@ export const styles = {
     badge: {
         background: "rgba(255,255,255,0.25)",
         padding: "8px 24px",
-        borderRadius: 9999,
+        borderRadius: design.radius.pill,
         fontSize: 26,
         fontWeight: 600,
         color: "#fff",
@@ -77,7 +79,7 @@ export const styles = {
         background: "rgba(0,0,0,0.6)",
         color: "#fff",
         padding: "12px 28px",
-        borderRadius: 9999,
+        borderRadius: design.radius.pill,
         fontSize: 26,
         fontWeight: 700,
         backdropFilter: "blur(12px)",

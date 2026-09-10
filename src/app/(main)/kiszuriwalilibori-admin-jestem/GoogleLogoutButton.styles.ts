@@ -19,7 +19,7 @@ export const logoutButton: SxProps<Theme> = {
 
     "&:hover": {
         backgroundColor: "secondary.dark",
-        color: "common.white",
+        color: theme => theme.palette.primary.contrastText,
     },
 
     "&:focus-visible": {
