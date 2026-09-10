@@ -71,3 +71,12 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
         </Box>
     );
 }
+
+// {
+//     step.image?.asset?.url && (
+//         <Box sx={styles.stepImageContainer}>
+//             <Image src={step.image.asset.url} alt={step.image.alt || `Zdjęcie do kroku ${i + 1}`} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" />
+//         </Box>
+//     );
+// }
+//todo na dobrą sprawę wygląd tego nie jest sprawdzony

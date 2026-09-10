@@ -37,7 +37,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         alignItems: "center",
         px: 0,
         minHeight: "auto",
-        py: 0.25,
+        py: 0.5,
 
         "& .MuiAccordionSummary-content": {
             ml: 0,
@@ -157,13 +157,13 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     stepImageContainer: {
         position: "relative",
         height: 192,
-        mb: 0.25,
+        mb: 0.5,
         borderRadius: radius.sm,
         overflow: "hidden",
     },
     stepNotes: {
         color: "text.secondary",
-        mt: 0.25,
+        mt: 0.5,
         fontStyle: "italic",
     },
     additionalInfoGrid: {
@@ -271,7 +271,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
 
 export const portableTextSx: { [key: string]: SxProps<Theme> } = {
     block: {
-        mb: 0.125, // Reduced from 0.25 to half for tighter inter-line spacing
+        mb: 0,
         fontSize: FONT_SIZE,
         lineHeight: 1.3, // Added reduced line-height for more compact text lines (default ~1.5)
     },
@@ -282,7 +282,7 @@ export const portableTextSx: { [key: string]: SxProps<Theme> } = {
     },
     listItem: {
         px: 0,
-        py: 0.125,
+        py: 0,
     },
     strong: {
         fontWeight: "bold",
