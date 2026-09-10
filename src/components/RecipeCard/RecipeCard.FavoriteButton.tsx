@@ -1,11 +1,12 @@
 import React from "react";
 import { IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { favoriteIcon } from "./styles";
+
 import { useIsUserSet } from "@/stores/userStore";
 import { touchableSx } from "@/styles/utilityStyles";
 import LoadingIndicator from "../LoadingIndicator";
 import { useDelayedCondition } from "@/hooks/useDelayedCondition";
+import { favoriteButtonSx } from "./RecipeCard.FavoriteButton.styles";
 interface RecipeCardFavoriteButtonProps {
     isLoading: boolean;
     disabled?: boolean;
@@ -20,7 +21,7 @@ export const RecipeCardFavoriteButton = React.memo(function RecipeCardFavoriteBu
 
     if (!isUserSet) return null;
     return (
-        <IconButton id={"RecipeCard.FavoriteButton"} disabled={disabled || isLoading} onClick={onClick} sx={{ ...favoriteIcon(isFavorite), ...touchableSx }} aria-label={isLoading ? "Aktualizacja ulubionych" : `${isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}`}>
+        <IconButton id={"RecipeCard.FavoriteButton"} disabled={disabled || isLoading} onClick={onClick} sx={{ ...favoriteButtonSx(isFavorite), ...touchableSx }} aria-label={isLoading ? "Aktualizacja ulubionych" : `${isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}`}>
             <FavoriteIcon />
             {showLoading && <LoadingIndicator prompt="Trwa aktualizacja statusu..." />}
         </IconButton>

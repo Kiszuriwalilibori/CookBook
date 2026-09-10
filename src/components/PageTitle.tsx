@@ -11,11 +11,11 @@ const headingSx = {
     },
     fontWeight: "bold",
     marginBottom: {
-        xs: "8px",
-        sm: "10px",
-        md: "12px",
-        lg: "14px",
-        xl: "16px",
+        xs: 1,
+        sm: 1.25,
+        md: 1.5,
+        lg: 1.75,
+        xl: 2,
     },
     textAlign: "center",
     display: "block",
@@ -27,7 +27,7 @@ interface Props {
     title: string;
 }
 const PageTitle = (props: Props) => {
-    const {title} =props;
+    const { title } = props;
     return (
         <Typography variant="h1" sx={headingSx}>
             {title}

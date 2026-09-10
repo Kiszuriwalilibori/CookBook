@@ -226,7 +226,8 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                                         margin: "0 auto",
                                         display: "flex",
                                         gap: 2,
-                                        padding: "8px 0 8px 0",
+                                        px: 1,
+                                        py: 1,
                                     }}
                                 >
                                     <Button size="small" color="secondary" variant={sortMode === "newest" ? "contained" : "outlined"} onClick={() => setSortMode("newest")}>

@@ -3,7 +3,8 @@ import { SxProps, Theme } from "@mui/material/styles";
 export const desktopItemStyles = (isCurrentItem: boolean, hidden?: boolean): SxProps<Theme> => ({
     display: "flex",
     alignItems: "center",
-    padding: "8px 16px",
+    py: 1,
+    px: 2,
     color: theme => theme.custom.menuColor,
     cursor: "pointer",
     minWidth: "64px",

@@ -230,7 +230,8 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         color: theme => theme.palette.secondary.main,
 
         fontSize: { xs: "0.875rem", sm: "1rem" }, // Responsive font sizing for readability
-        padding: { xs: "8px 16px", sm: "12px 24px" }, // Responsive padding for touch targets (min ~44px height)
+        py: { xs: 1, sm: 1.5 },
+        px: { xs: 2, sm: 3 },
         minHeight: "44px", // WCAG touch target minimum
         borderRadius: radius.sm,
 
