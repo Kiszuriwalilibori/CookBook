@@ -1,4 +1,3 @@
-
 import {CSSProperties} from 'react'
 
 export const styles = {
@@ -36,3 +35,4 @@ export const styles = {
     background: '#f0f0f0',
   } satisfies CSSProperties,
 }
+//todo znowu kolor bezpośredni

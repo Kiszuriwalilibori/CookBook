@@ -1,5 +1,7 @@
 import { SxProps, Theme } from "@mui/material";
 import { BUTTON_HEIGHT } from "./GoogleSignInButton.styles";
+import { design } from "@/themes/design";
+const { radius } = design;
 
 export const logoutButton: SxProps<Theme> = {
     position: "fixed",
@@ -11,7 +13,7 @@ export const logoutButton: SxProps<Theme> = {
     minWidth: 120,
 
     textTransform: "none",
-    borderRadius: 1,
+    borderRadius: radius.sm,
     fontWeight: 500,
 
     backgroundColor: "secondary.main",

@@ -1,9 +1,11 @@
 import { Theme } from "@mui/material/styles";
+import { design } from "@/themes/design";
+const { radius } = design;
 
 export const paperSx = (theme: Theme) => ({
     backgroundColor: theme.palette.background.paper,
     border: `1px solid ${theme.palette.secondary.dark}`,
-    borderRadius: 2,
+    borderRadius: radius.md,
     p: 2,
 });
 

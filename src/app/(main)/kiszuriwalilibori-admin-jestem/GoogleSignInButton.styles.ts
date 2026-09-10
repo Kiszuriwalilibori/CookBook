@@ -1,4 +1,6 @@
 import { SxProps, Theme } from "@mui/material";
+import { design } from "@/themes/design";
+const { radius } = design;
 
 export const BUTTON_HEIGHT = 40;
 
@@ -40,7 +42,7 @@ export const closeButtonSx: SxProps<Theme> = {
 
     border: 1,
     borderColor: "divider",
-    borderRadius: 1,
+    borderRadius: radius.sm,
 
     px: 2,
     py: 0,

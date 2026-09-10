@@ -1,5 +1,6 @@
 import { SxProps, Theme } from "@mui/material";
-
+import { design } from "@/themes/design";
+const { radius } = design;
 export const FONT_SIZE = { xs: "16px", sm: "17px", md: "18px" };
 
 export const styles: { [key: string]: SxProps<Theme> } = {
@@ -72,7 +73,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         position: "relative",
         height: 384,
         mb: 3,
-        borderRadius: 1,
+        borderRadius: radius.sm,
         overflow: "hidden",
     },
 
@@ -157,7 +158,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         position: "relative",
         height: 192,
         mb: 0.25,
-        borderRadius: 1,
+        borderRadius: radius.sm,
         overflow: "hidden",
     },
     stepNotes: {
@@ -231,7 +232,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         fontSize: { xs: "0.875rem", sm: "1rem" }, // Responsive font sizing for readability
         padding: { xs: "8px 16px", sm: "12px 24px" }, // Responsive padding for touch targets (min ~44px height)
         minHeight: "44px", // WCAG touch target minimum
-        borderRadius: 1,
+        borderRadius: radius.sm,
 
         borderColor: theme => theme.palette.secondary.main,
         transition: "all 0.2s ease-in-out",
