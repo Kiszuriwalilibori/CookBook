@@ -8,7 +8,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         maxWidth: 1024,
         mx: "auto",
         px: { xs: 2, md: 3 },
-        py: 3,
+        py: 0,
     },
     recipeStepAccordion: {
         boxShadow: 0,
@@ -212,9 +212,10 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         borderRight: { md: 1 },
         borderColor: "divider",
     },
-    prepWrapper: {
+    preparationSectionWrapper: {
         flex: 1,
         pl: { md: 2 },
+        mt: { xs: 2, md: 0 },
     },
     // New styles for copy button
     copyButtonContainer: {
