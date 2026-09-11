@@ -16,7 +16,7 @@ export function RecipeIngredientsGeneric({ recipe, title, id, ingredients }: Rec
 
     return (
         <Box id={id} sx={styles.ingredientsContainer}>
-            <Typography variant="h2" sx={styles.ingredientsTitle}>
+            <Typography id="Ingredient Title" variant="h2" sx={styles.ingredientsTitle}>
                 {title}
             </Typography>
 

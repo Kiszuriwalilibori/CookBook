@@ -8,10 +8,8 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     separator: {
         display: "flex",
         flexDirection: "column",
-        alignItems: "center", // Horizontally centered
+        alignItems: "center",
         justifyContent: "center",
-        mb: 1, // Space after separator to description
-        mt: 2,
         width: "100%",
     },
     topLine: {

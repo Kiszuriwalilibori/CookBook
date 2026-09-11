@@ -3,6 +3,7 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Recipe } from "@/types";
+import { recipeNutritionAccordion, recipeNutritionSectionCell } from "./RecipeNutrition.styles";
 
 // === RDI / %DV ===
 const DV_MACRO_MALE = { calories: 2500, protein: 56, fat: 70, carbohydrate: 310 } as const;
@@ -130,14 +131,7 @@ export function RecipeNutrition({ nutrition }: RecipeNutritionTableProps) {
     if (macroRows.length === 0 && microRows.length === 0) return null;
 
     return (
-        <Accordion
-            defaultExpanded={false}
-            elevation={0}
-            sx={{
-                mt: 4,
-                "&:before": { display: "none" },
-            }}
-        >
+        <Accordion defaultExpanded={false} elevation={0} sx={recipeNutritionAccordion}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="h5">Wartości odżywcze (na 100 g)</Typography>
             </AccordionSummary>
@@ -158,7 +152,7 @@ export function RecipeNutrition({ nutrition }: RecipeNutritionTableProps) {
                             {macroRows.length > 0 && (
                                 <>
                                     <TableRow>
-                                        <TableCell colSpan={4} sx={{ fontWeight: "bold", bgcolor: "grey.100" }}>
+                                        <TableCell colSpan={4} sx={recipeNutritionSectionCell}>
                                             Makroskładniki
                                         </TableCell>
                                     </TableRow>
@@ -179,7 +173,7 @@ export function RecipeNutrition({ nutrition }: RecipeNutritionTableProps) {
                             {microRows.length > 0 && (
                                 <>
                                     <TableRow>
-                                        <TableCell colSpan={4} sx={{ fontWeight: "bold", bgcolor: "grey.100" }}>
+                                        <TableCell colSpan={4} sx={recipeNutritionSectionCell}>
                                             Mikroskładniki
                                         </TableCell>
                                     </TableRow>

@@ -3,7 +3,6 @@ import { Box, Typography } from "@mui/material";
 import { PortableText } from "@portabletext/react";
 import type { PortableTextComponents } from "@portabletext/react";
 import { Recipe } from "@/types";
-import { Separator } from "@/components";
 import { styles, portableTextSx } from "../styles";
 
 // Custom PortableText components (typed correctly for compatibility)
@@ -49,7 +48,6 @@ interface RecipeDescriptionProps {
 export function RecipeDescription({ recipe }: RecipeDescriptionProps) {
     return (
         <Box sx={styles.descriptionContainer} id="RecipeDescription">
-            <Separator />
             {recipe.description && (
                 <>
                     {recipe.description.title && (

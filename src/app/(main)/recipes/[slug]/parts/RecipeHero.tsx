@@ -24,7 +24,7 @@ export function RecipeHero({ recipe }: RecipeHeroProps) {
                     />
                 </Box>
             )}
-            <Typography variant="h1" sx={styles.mainTitle}>
+            <Typography id="Main Title" variant="h1" sx={styles.mainTitle}>
                 {recipe.title}
             </Typography>
         </>

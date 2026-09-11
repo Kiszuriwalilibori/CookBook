@@ -22,3 +22,4 @@ export function RecipePreparationProgressBar({ activeStep, totalSteps }: RecipeP
         </Box>
     );
 }
+// todo czy on nie powinien być wyjęty do struktury strony?

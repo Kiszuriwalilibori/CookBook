@@ -98,12 +98,12 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
             <Box id="RecipePage" sx={styles.root}>
                 <RecipeHero recipe={recipe} />
                 <RecipeMetadata metadata={metadata} />
+                <Separator />
                 <RecipeDescription recipe={recipe} />
-
                 <Separator />
                 <RecipeRatingSection recipeId={recipe._id} averageRating={recipe.ratingSummary?.average ?? null} totalRatings={recipe.ratingSummary?.count ?? 0} />
                 <Separator />
-                <Box sx={styles.ingredientsPrepWrapper}>
+                <Box component="section" id="Ingredients prep wrapper" sx={styles.ingredientsPrepWrapper}>
                     <Box sx={styles.ingredientsWrapper}>
                         <RecipeIngredientsGeneric recipe={recipe} id="RecipeIngredients" title="Składniki" ingredients={recipe.ingredients} />
                         <RecipeIngredientsGeneric recipe={recipe} id="RecipeOptionalIngredients" title="Składniki opcjonalne" ingredients={recipe.optionalIngredients} />

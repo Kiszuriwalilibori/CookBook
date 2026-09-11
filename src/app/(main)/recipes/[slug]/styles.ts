@@ -81,7 +81,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         fontSize: { xs: "2rem", md: "3rem" },
         fontFamily: "Playfair Display, Georgia, serif",
         fontWeight: 500,
-        mb: 5,
+        mb: 3,
     },
     descriptionContainer: {
         mb: 4,
@@ -91,8 +91,8 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         fontStyle: "italic",
         fontFamily: "Playfair Display, Georgia, serif",
         fontWeight: 500,
-        mb: 5,
-        mt: 5,
+        mb: 3,
+        mt: 3,
     },
     descriptionNotes: {
         color: "text.secondary",
@@ -103,12 +103,12 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         display: "grid",
         gridTemplateColumns: { xs: "1fr", md: "repeat(2, 1fr)" },
         gap: 2,
-        mb: 5,
-        mt: 5,
+        mb: 3,
+        mt: 3,
         fontSize: "0.875rem",
     },
     ingredientsContainer: {
-        mb: 4,
+        mb: 2,
     },
     ingredientsTitle: {
         fontSize: "1.25rem",
@@ -119,6 +119,8 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     ingredientsList: {
         ml: 0,
         pl: 0,
+        px: 0,
+        py: 0,
     },
     ingredientsListItem: {
         display: "flex",
@@ -145,9 +147,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         fontWeight: 500,
         mb: 2,
     },
-    stepContainer: {
-        mb: 4,
-    },
+
     stepTitle: {
         fontSize: { xs: "1rem", md: "1.125rem" },
         fontFamily: "Playfair Display, Georgia, serif",
@@ -199,12 +199,12 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     accordionDetails: {
         p: 0,
     },
-    // New styles for side-by-side layout
+
     ingredientsPrepWrapper: {
         display: { xs: "block", md: "flex" },
         alignItems: "stretch",
         mb: 4,
-        mt: 6, // Adjusted to 1.5x (from base ~4 to 6)
+        mt: 4,
     },
     ingredientsWrapper: {
         width: { md: "25%" },
@@ -266,7 +266,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         fontSize: FONT_SIZE,
         flex: 1,
         textAlign: "left",
-        paddingRight: "16px",
+        pr: 2,
     },
 };
 

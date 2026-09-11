@@ -1,4 +1,6 @@
 import { SxProps, Theme } from "@mui/material";
+import { design } from "@/themes/design";
+const { radius } = design;
 
 export const styles: { [key: string]: SxProps<Theme> } = {
     preparationProgressBar: {
@@ -12,8 +14,9 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         px: 2,
         mb: 2,
         backgroundColor: "background.paper",
-        borderBottom: "1px solid",
-        borderColor: "divider",
+        border: "1px solid",
+        // borderColor: "divider",
+        borderRadius: radius.md,
     },
 
     preparationProgressLabel: {

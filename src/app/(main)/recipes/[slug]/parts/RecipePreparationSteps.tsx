@@ -27,7 +27,7 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
     const totalSteps = preparationSteps.length;
 
     return (
-        <Box id="RecipePreparationSteps" sx={styles.preparationContainer}>
+        <Box id="Recipe Preparation Steps" sx={styles.preparationContainer}>
             <RecipePreparationProgressBar activeStep={activeStep} totalSteps={totalSteps} />
             <Typography variant="h2" sx={styles.preparationTitle}>
                 Przygotowanie
