@@ -318,3 +318,4 @@ export default function Comments({ recipeId }: { recipeId: string }) {
         </>
     );
 }
+//todo a może by je zwijać i rozwijać te komentarze

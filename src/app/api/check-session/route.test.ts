@@ -6,6 +6,13 @@ process.env.MY_EMAIL = "admin@example.com";
 process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID = "test-client-id.apps.googleusercontent.com";
 
 import { NextRequest } from "next/server";
+// ─────────────────────────────────────────────
+// Mock session
+// ─────────────────────────────────────────────
+
+jest.mock("@/utils/session", () => ({
+    createSessionToken: jest.fn().mockResolvedValue("mock-session-jwt"),
+}));
 
 // ─────────────────────────────────────────────
 // Mock googleapis
@@ -120,24 +127,50 @@ describe("POST /api/check-session", () => {
     // 3. Cookie session
     // ─────────────────────────────────────────────
 
+    // it("ustawia cookie session z właściwymi atrybutami po pomyślnym uwierzytelnieniu", async () => {
+    //     const token = "valid-session-token-xyz";
+
+    //     mockVerifyIdToken.mockResolvedValue({
+    //         getPayload: () => ({
+    //             email: "user@example.com",
+    //             email_verified: true,
+    //         }),
+    //     });
+
+    //     const res = await POST(createRequest({ idToken: token }));
+
+    //     expect(res.status).toBe(200);
+
+    //     const setCookie = res.headers.get("set-cookie");
+
+    //     expect(setCookie).toBeTruthy();
+    //     expect(setCookie).toContain(`session=${token}`);
+    //     expect(setCookie).toMatch(/HttpOnly/i);
+    //     expect(setCookie).toMatch(/Path=\//i);
+    //     expect(setCookie).toMatch(/SameSite=Lax/i);
+    //     expect(setCookie).toMatch(/Max-Age=604800/);
+    //     expect(setCookie).not.toMatch(/;\s*Secure/i);
+    // });
     it("ustawia cookie session z właściwymi atrybutami po pomyślnym uwierzytelnieniu", async () => {
-        const token = "valid-session-token-xyz";
+        const googleIdToken = "valid-google-id-token";
 
         mockVerifyIdToken.mockResolvedValue({
             getPayload: () => ({
+                sub: "google-user-123",
                 email: "user@example.com",
                 email_verified: true,
             }),
         });
 
-        const res = await POST(createRequest({ idToken: token }));
+        const res = await POST(createRequest({ idToken: googleIdToken }));
 
         expect(res.status).toBe(200);
 
         const setCookie = res.headers.get("set-cookie");
 
         expect(setCookie).toBeTruthy();
-        expect(setCookie).toContain(`session=${token}`);
+        expect(setCookie).toContain("session=mock-session-jwt");
+        expect(setCookie).not.toContain(`session=${googleIdToken}`);
         expect(setCookie).toMatch(/HttpOnly/i);
         expect(setCookie).toMatch(/Path=\//i);
         expect(setCookie).toMatch(/SameSite=Lax/i);

@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { google } from "googleapis";
 
 import { ApiError, ApiSuccessResponse, apiErrorResponse, parseBody } from "@/models/apiResponse";
+import { createSessionToken } from "@/utils/session";
 
 const ALLOWED_ADMIN_EMAILS = [process.env.MY_EMAIL] as string[];
 
@@ -37,8 +38,15 @@ export async function POST(request: NextRequest) {
         }
 
         const email = payload.email.toLowerCase();
+        const userId = payload.sub!;
+
         const isAdminLogged = ALLOWED_ADMIN_EMAILS.includes(email);
         const loginStatus = isAdminLogged ? "admin" : "user";
+
+        const sessionToken = await createSessionToken({
+            userId,
+            email,
+        });
 
         const response = NextResponse.json<ApiSuccessResponse<CheckSessionData>>({
             ok: true,
@@ -48,14 +56,13 @@ export async function POST(request: NextRequest) {
             },
         });
 
-        response.cookies.set("session", idToken, {
+        response.cookies.set("session", sessionToken, {
             httpOnly: true,
             maxAge: 60 * 60 * 24 * 7,
             path: "/",
             secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
         });
-
         return response;
     } catch (err: unknown) {
         console.error("[check-session] Failed:", err);

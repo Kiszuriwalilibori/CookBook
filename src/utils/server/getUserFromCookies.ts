@@ -1,14 +1,9 @@
-import { cookies } from "next/headers";
-import { verifyGoogle } from "../googleAuth";
+import { getSessionUser } from "../session";
 import type { User } from "@/types";
 
 export async function getUserFromCookies(): Promise<(User & { isAdmin: boolean }) | null> {
     try {
-        const cookieStore = await cookies();
-        const token = cookieStore.get("session")?.value;
-        if (!token) return null;
-
-        const user = await verifyGoogle(token);
+        const user = await getSessionUser();
         if (!user?.userId) return null;
 
         const isAdmin = process.env.MY_EMAIL ? user.email.toLowerCase() === process.env.MY_EMAIL.toLowerCase() : false;

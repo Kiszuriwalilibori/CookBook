@@ -1,8 +1,11 @@
-// src/utils/session.ts
 import { cookies } from "next/headers";
-import { jwtVerify } from "jose";
+import { SignJWT, jwtVerify } from "jose";
 
 const secret = new TextEncoder().encode(process.env.SESSION_SECRET!);
+
+export async function createSessionToken({ userId, email }: { userId: string; email: string }) {
+    return new SignJWT({ userId, email }).setProtectedHeader({ alg: "HS256", typ: "JWT" }).setIssuedAt().setExpirationTime("7d").sign(secret);
+}
 
 export async function getSessionUser() {
     const cookieStore = await cookies();
