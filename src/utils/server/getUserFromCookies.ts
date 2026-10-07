@@ -8,8 +8,8 @@ export async function getUserFromCookies(): Promise<(User & { isAdmin: boolean }
 
         const isAdmin = process.env.MY_EMAIL ? user.email.toLowerCase() === process.env.MY_EMAIL.toLowerCase() : false;
         return { ...user, isAdmin };
-    } catch (err) {
-        console.error("[getUserFromCookies] Error:", err);
+    } catch {
+        // console.error("[getUserFromCookies] Error:", err);
         return null;
     }
 }
