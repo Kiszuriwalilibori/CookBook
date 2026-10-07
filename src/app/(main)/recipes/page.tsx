@@ -53,6 +53,11 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
         kizia: kiziaValue,
         status: statusValue,
     };
+    const hasActiveFilters = Object.values(filters).some(value => {
+        if (Array.isArray(value)) return value.length > 0;
+        if (typeof value === "boolean") return value;
+        return Boolean(value);
+    });
 
     // --- SSR recipes ---
     let initialRecipes: Recipe[] = [];
@@ -76,5 +81,5 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
         console.error("Error fetching favorites:", err);
     }
 
-    return <RecipesClient initialRecipes={initialRecipes} initialFavorites={initialFavorites} />;
+    return <RecipesClient initialRecipes={initialRecipes} initialFavorites={initialFavorites} hasActiveFilters={hasActiveFilters} />;
 }
