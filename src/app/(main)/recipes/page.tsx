@@ -61,12 +61,14 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
 
     // --- SSR recipes ---
     let initialRecipes: Recipe[] = [];
+    let recipesError = false;
     try {
         const user = await getUserFromCookies();
         const isAdmin = Boolean(user?.isAdmin);
         initialRecipes = await getRecipesForCards(filters, isAdmin);
     } catch (error) {
         console.error("Error fetching recipes:", error);
+        recipesError = true;
     }
 
     // --- SSR favorites (NO CACHE, per-request) ---
@@ -81,5 +83,5 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
         console.error("Error fetching favorites:", err);
     }
 
-    return <RecipesClient initialRecipes={initialRecipes} initialFavorites={initialFavorites} hasActiveFilters={hasActiveFilters} />;
+    return <RecipesClient initialRecipes={initialRecipes} initialFavorites={initialFavorites} hasActiveFilters={hasActiveFilters} recipesError={recipesError} />;
 }

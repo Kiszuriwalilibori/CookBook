@@ -31,6 +31,7 @@ export async function getRecipesForCards(filters?: Partial<FilterState>, isAdmin
         return recipes;
     } catch (err) {
         console.error("[SSR] fetch error:", err);
-        return [];
+        // return [];
+        throw err;
     }
 }
