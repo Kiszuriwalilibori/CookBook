@@ -52,6 +52,7 @@ export const design = {
             shadow: "rgba(0,0,0,0.18)",
             textShadow: "rgba(255,255,255,0.35)",
         },
+
         text: "#111",
     },
 } as const;

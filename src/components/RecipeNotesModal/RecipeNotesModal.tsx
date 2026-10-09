@@ -147,7 +147,6 @@ export const RecipeNotesModal = ({ open, onClose, initialValue = "", recipeId }:
                 slotProps={{
                     backdrop: {
                         timeout: prefersReducedMotion ? 0 : 600,
-                        sx: recipeNotesModalStyles.backdrop,
                     },
                 }}
             >
