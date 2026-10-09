@@ -49,7 +49,3 @@ export default {
     ratingSummary,
   ],
 }
-
-// todo: add SEO fields,add jsDoc for files
-// Przeczytać dokłądnie bestPractices for recipeSchemas w GROK redefinicja recipe.js
-// w sumie fajnie by było wykorzystać polish translations

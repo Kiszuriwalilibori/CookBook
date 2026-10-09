@@ -28,7 +28,7 @@ export const chipContainerSx: SxProps<Theme> = {
 };
 export const chipSx = (theme: Theme): SxProps => ({
     backgroundColor: theme.palette.primary.light,
-    color: "white",
+    color: theme.palette.common.black,
     "& .MuiChip-deleteIcon": {
         width: 24,
         height: 24,
@@ -37,7 +37,7 @@ export const chipSx = (theme: Theme): SxProps => ({
 
 export const hiddenChipSx = (theme: Theme): SxProps => ({
     backgroundColor: theme.palette.primary.light,
-    color: "white",
+    color: theme.palette.common.black,
 });
 
 export const summaryTextSx = (theme: Theme): SxProps => ({

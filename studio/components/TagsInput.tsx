@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect, useRef, useCallback} from 'react'
 import {PatchEvent, set} from 'sanity'
 import {TextInput, Stack, Card, Flex, Text} from '@sanity/ui'
@@ -130,7 +129,14 @@ export default function TagsInput({value = [], onChange, schemaType, readOnly}: 
         tone="transparent"
         border
         style={styles.accordionHeader}
-        onClick={() => setIsExpanded((prev) => !prev)}
+        // onClick={() => setIsExpanded((prev) => !prev)}
+        onMouseDown={(event) => {
+          event.stopPropagation()
+        }}
+        onClick={(event) => {
+          event.stopPropagation()
+          setIsExpanded((prev) => !prev)
+        }}
       >
         <Flex align="center" justify="space-between">
           <Text weight="semibold">{title}</Text>

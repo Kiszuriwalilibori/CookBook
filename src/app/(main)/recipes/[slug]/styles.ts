@@ -130,13 +130,29 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         py: 0.5,
         listStyle: "none",
     },
+    // ingredientsListItemFull: {
+    //     display: "flex",
+    //     justifyContent: "space-between",
+    //     width: "100%",
+    //     padding: 0,
+    //     listStyle: "none",
+    //     py: 0.5,
+    // },
+
     ingredientsListItemFull: {
         display: "flex",
         justifyContent: "space-between",
+        alignItems: "flex-start",
         width: "100%",
         padding: 0,
+        px: 1,
+        py: 0.75,
+        borderRadius: 1,
         listStyle: "none",
-        py: 0.5,
+
+        "&:nth-of-type(even)": {
+            backgroundColor: "action.hover",
+        },
     },
     preparationContainer: {
         mb: 4,

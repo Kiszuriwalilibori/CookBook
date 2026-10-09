@@ -14,7 +14,7 @@ import LikeItButton from "./LikeItButton";
 import ReplyCollapse from "./ReplyCollapse";
 import { ReplyButton } from "./ReplyButton";
 
-import { authorAvatarSx, commentActionsSx, commentCardSx, commentContentSx, commentContentWrapperSx, commentWrapperSx, repliesContainerSx, shortCommentAuthorSx, shortCommentCardSx, shortCommentWrapperSx } from "./commentStyles";
+import { authorAvatarSx, commentActionsSx, commentCardSx, commentContentSx, commentContentWrapperSx, commentWrapperSx, repliesContainerSx, shortCommentAuthorSx, shortCommentCardSx, shortCommentWrapperSx } from "./Comment.styles";
 
 import { checkIsOwnComment, getAbsoluteCommentDate, getRelativeTime, useLikeAnimation, useLikeComment, useReplyComment, useSetInitialFocusInCommentItem, useShortComment } from "./utils";
 

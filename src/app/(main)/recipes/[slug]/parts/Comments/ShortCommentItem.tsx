@@ -2,7 +2,7 @@
 
 import { Avatar, Box, Typography } from "@mui/material";
 import { RecipeComment } from "@/types";
-import { authorAvatarSx, commentCardSx } from "./commentStyles";
+import { authorAvatarSx, commentCardSx } from "./Comment.styles";
 
 interface Props {
     comment: RecipeComment;

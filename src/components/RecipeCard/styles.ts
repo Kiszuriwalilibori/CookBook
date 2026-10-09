@@ -44,5 +44,5 @@ export const favoriteIcon = (isFavorite: boolean): SxProps => ({
     position: "absolute",
     top: 8,
     right: 8,
-    color: isFavorite ? "red" : theme.palette.grey[600],
+    color: isFavorite ? theme.palette.error.main : theme.palette.text.disabled,
 });

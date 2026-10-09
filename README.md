@@ -149,3 +149,5 @@ Nie wiem czy tak powinno być
 
 // commonwhite nie jest dobry na background, jak się dat to theme.background
 // commentstyles do sprawdzenia i ew. poprawienia, za dużo by pisać
+
+// między składnikami powinien być minimalny poziomy separator jednak

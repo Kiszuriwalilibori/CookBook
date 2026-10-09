@@ -9,7 +9,5 @@ export const recipeNutritionAccordion: SxProps<Theme> = {
 
 export const recipeNutritionSectionCell: SxProps<Theme> = {
     fontWeight: "bold",
-    bgcolor: "grey.100",
+    bgcolor: "action.hover",
 };
-
-// todo czy nie ujednolić grey z innymi

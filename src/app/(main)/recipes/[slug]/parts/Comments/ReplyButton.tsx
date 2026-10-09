@@ -1,7 +1,7 @@
 import { Button /*, IconButton, Tooltip */ } from "@mui/material";
 // import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ReplyIcon from "@mui/icons-material/Reply";
-import { replyButtonSx } from "./commentStyles";
+import { replyButtonSx } from "./Comment.styles";
 
 type ReplyButtonProps = {
     onToggle: () => void;

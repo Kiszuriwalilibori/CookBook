@@ -1,7 +1,7 @@
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { useEffect, useState } from "react";
-import { likeButtonSx, likeButtonWrapperSx, likeIconSx, likesCounterSx } from "./commentStyles";
+import { likeButtonSx, likeButtonWrapperSx, likeIconSx, likesCounterSx } from "./Comment.styles";
 import useReducedMotion from "@/hooks/useReducedMotion";
 
 type LikeItButtonProps = {

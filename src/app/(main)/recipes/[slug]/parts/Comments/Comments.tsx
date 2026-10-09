@@ -19,7 +19,7 @@ import { useBoolean, useFingerprint, useMessage, useApiResponseErrorHandler } fr
 
 import type { RecipeComment } from "@/types";
 
-import { commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./commentStyles";
+import { commentsContainerSx, commentsListSx, desktopCommentButtonWrapperSx, mobileCommentButtonSx, mobileCommentButtonWrapperSx, showMoreButtonWrapperSx } from "./Comment.styles";
 
 import { useCreateCommentTree, useCommentsVisibility } from "./utils";
 
