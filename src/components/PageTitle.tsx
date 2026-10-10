@@ -2,14 +2,14 @@ import React from "react";
 import { Typography } from "@mui/material";
 
 const headingSx = {
-    fontSize: {
-        xs: "20px",
-        sm: "24px",
-        md: "28px",
-        lg: "32px",
-        xl: "36px",
-    },
-    fontWeight: "bold",
+    // fontSize: {
+    //     xs: "20px",
+    //     sm: "24px",
+    //     md: "28px",
+    //     lg: "32px",
+    //     xl: "36px",
+    // },
+    // fontWeight: "bold",
     marginBottom: {
         xs: 1,
         sm: 1.25,

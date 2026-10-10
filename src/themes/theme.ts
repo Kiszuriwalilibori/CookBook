@@ -62,23 +62,89 @@ const baseTheme = createTheme({
             paper: design.background.paper,
         },
     },
+    // typography: {
+    //     fontFamily: roboto.style.fontFamily,
+    //     h1: {
+    //         fontSize: "2.5rem",
+    //         fontWeight: 500,
+    //     },
+    //     h2: {
+    //         fontSize: "2rem",
+    //         fontWeight: 500,
+    //     },
+    //     h3: {
+    //         fontSize: "1.75rem",
+    //         fontWeight: 500,
+    //     },
+    // },
     typography: {
         fontFamily: roboto.style.fontFamily,
         h1: {
             fontSize: "2.5rem",
-            fontWeight: 500,
+            fontWeight: 600,
+            lineHeight: 1.2,
         },
         h2: {
             fontSize: "2rem",
-            fontWeight: 500,
+            fontWeight: 600,
+            lineHeight: 1.3,
         },
         h3: {
-            fontSize: "1.75rem",
-            fontWeight: 500,
+            fontSize: "1.5rem",
+            fontWeight: 600,
+            lineHeight: 1.4,
+        },
+        h4: {
+            fontSize: "1.25rem",
+            fontWeight: 600,
+            lineHeight: 1.4,
+        },
+        h5: {
+            fontSize: "1.125rem",
+            fontWeight: 600,
+            lineHeight: 1.5,
+        },
+        h6: {
+            fontSize: "1rem",
+            fontWeight: 600,
+            lineHeight: 1.5,
+        },
+        body1: {
+            fontSize: "1rem",
+            fontWeight: 400,
+            lineHeight: 1.6,
+        },
+        body2: {
+            fontSize: "0.875rem",
+            fontWeight: 400,
+            lineHeight: 1.5,
+        },
+        caption: {
+            fontSize: "0.75rem",
+            fontWeight: 400,
+            lineHeight: 1.5,
         },
     },
-
     components: {
+        MuiTypography: {
+            styleOverrides: {
+                h1: {
+                    fontSize: "20px",
+                    "@media (min-width:600px)": {
+                        fontSize: "24px",
+                    },
+                    "@media (min-width:900px)": {
+                        fontSize: "28px",
+                    },
+                    "@media (min-width:1200px)": {
+                        fontSize: "32px",
+                    },
+                    "@media (min-width:1536px)": {
+                        fontSize: "36px",
+                    },
+                },
+            },
+        },
         MuiButtonBase: {
             defaultProps: {
                 disableRipple: true,
