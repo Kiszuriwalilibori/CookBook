@@ -57,4 +57,17 @@ export const design = {
     },
 } as const;
 
+// Aktualna skala typograficzna
+// Wartości bazowe z src/themes/theme.ts:
+// Wariant	Rozmiar	Grubość	Przeznaczenie
+// h1	40 px	600	Tytuł strony
+// h2	32 px	600	Główna sekcja
+// h3	24 px	600	Podsekcja
+// h4	20 px	600	Nagłówek niższego poziomu
+// h5	18 px	600	Nagłówek pomocniczy
+// h6	16 px	600	Mały nagłówek
+// body1	16 px	400	Tekst podstawowy
+// body2	14 px	400	Tekst pomocniczy
+// caption	12 px	400	Drobne informacje
+
 //Radius scale is intentionally defined as: extraSmall 2px, small 4px, medium 8px, large 24px, pill 999px, with 50% reserved for circular elements.

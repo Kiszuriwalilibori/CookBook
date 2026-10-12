@@ -43,7 +43,7 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
                 >
                     <Accordion id={`RecipePreparationStep-${i + 1}`} defaultExpanded sx={styles.recipeStepAccordion}>
                         <AccordionSummary expandIcon={null} sx={styles.recipeStepAccordionSummary} aria-label={`Krok ${i + 1} — szczegóły przygotowania`}>
-                            <Typography variant="h3" sx={styles.recipeStepIndex}>
+                            <Typography /*variant="h3"*/ component="span" sx={styles.recipeStepIndex}>
                                 {i + 1}
                             </Typography>
 

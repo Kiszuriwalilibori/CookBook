@@ -87,7 +87,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         mb: 4,
     },
     descriptionTitle: {
-        fontSize: "1.25rem",
+        // fontSize: "1.25rem",
         fontStyle: "italic",
         fontFamily: "Playfair Display, Georgia, serif",
         fontWeight: 500,
@@ -111,7 +111,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         mb: 2,
     },
     ingredientsTitle: {
-        fontSize: "1.25rem",
+        // fontSize: "1.25rem",
         fontFamily: "Playfair Display, Georgia, serif",
         fontWeight: 500,
         mb: 2,
@@ -158,7 +158,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         mb: 4,
     },
     preparationTitle: {
-        fontSize: "1.25rem",
+        // fontSize: "1.25rem",
         fontFamily: "Playfair Display, Georgia, serif",
         fontWeight: 500,
         mb: 2,
