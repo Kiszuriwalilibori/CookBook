@@ -30,5 +30,6 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         height: "1px",
         backgroundColor: design.separatorColor,
         mt: "2px",
+        mb: 1,
     },
 };
