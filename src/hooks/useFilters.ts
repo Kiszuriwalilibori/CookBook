@@ -43,8 +43,8 @@ type Normalizers = {
     [K in keyof FilterState]: (value: FilterState[K]) => FilterState[K];
 };
 
-export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: FilterState) => void) => {
-    const [filters, setFilters] = useState<FilterState>(initialFilters);
+export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: FilterState) => void, initialValues: FilterState = initialFilters) => {
+    const [filters, setFilters] = useState<FilterState>(initialValues);
     const [errors, setErrors] = useState<Record<keyof FilterState, string>>(EMPTY_ERRORS);
 
     const normalizers = useMemo<Normalizers>(

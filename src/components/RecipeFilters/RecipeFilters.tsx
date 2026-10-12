@@ -25,12 +25,13 @@ interface RecipeFiltersProps {
     onFiltersChange: (filters: FilterState) => void;
     onClose?: () => void;
     options: RecipeFilter;
+    initialValues?: FilterState;
 }
 
-export default function RecipeFilters({ onFiltersChange, onClose, options }: RecipeFiltersProps) {
+export default function RecipeFilters({ onFiltersChange, onClose, options, initialValues }: RecipeFiltersProps) {
     const router = useRouter();
     const [isApplying, setIsApplying] = React.useState(false);
-    const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange);
+    const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange, initialValues);
     const { setFilters } = useFiltersStore();
 
     //New smart Apply logic
