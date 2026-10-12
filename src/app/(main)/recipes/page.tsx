@@ -1,4 +1,6 @@
 import RecipesClient from "./RecipesClient";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { getRecipesForCards } from "@/utils/getRecipesForCards";
 import { Status, type Recipe } from "@/types";
 import { FilterState } from "@/models/filters";
@@ -7,6 +9,7 @@ import { FilterState } from "@/models/filters";
 import { getUserFavorites } from "@/utils/getUserFavorites";
 import { getUserFromCookies } from "@/utils/server/getUserFromCookies";
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
+import { FILTER_COOKIE_NAME } from "@/components/RecipeFilters/utils/filterPersistence";
 
 interface RecipesPageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -34,11 +37,51 @@ const SOURCE_KEYS: Array<keyof FilterState & string> = ["source.url", "source.bo
 
 export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     const awaitedSearchParams = await searchParams;
+    const hasSearchParams = Object.keys(awaitedSearchParams).length > 0;
 
+    if (!hasSearchParams) {
+        const cookieStore = await cookies();
+        const savedQuery = cookieStore.get(FILTER_COOKIE_NAME)?.value;
+
+        if (savedQuery) {
+            let queryString = "";
+
+            try {
+                queryString = decodeURIComponent(savedQuery);
+            } catch {
+                // Niepoprawne ciasteczko ignorujemy.
+            }
+
+            if (queryString) {
+                const params = new URLSearchParams(queryString);
+
+                if ([...params.keys()].length > 0) {
+                    redirect(`/recipes?${params.toString()}`);
+                }
+            }
+        }
+    }
+
+    //     const cookieStore = await cookies();
+    //     const savedQuery = cookieStore.get(FILTER_COOKIE_NAME)?.value;
+
+    //     if (savedQuery) {
+    //         try {
+    //             const queryString = decodeURIComponent(savedQuery);
+    //             const params = new URLSearchParams(queryString);
+
+    //             // Nie przekierowuj do pustego zestawu filtrów.
+    //             if ([...params.keys()].length > 0) {
+    //                 redirect(`/recipes?${params.toString()}`);
+    //             }
+    //         } catch {
+    //             // Niepoprawne ciasteczko ignorujemy.
+    //         }
+    //     }
+    // }
     // --- Source filters ---
     const sourceFilters = Object.fromEntries(SOURCE_KEYS.map(key => [key, normalizeString(awaitedSearchParams[key])]));
 
-    // --- Other filters ---
     const kiziaValue = Array.isArray(awaitedSearchParams.kizia) ? parseBoolean(awaitedSearchParams.kizia[0]) : parseBoolean(awaitedSearchParams.kizia);
 
     const statusValue = parseStatuses(awaitedSearchParams.status);

@@ -18,6 +18,7 @@ import { useFilters, useCreateRecipeFilterFields } from "@/hooks";
 import { useFiltersStore } from "@/stores";
 import { FilterState } from "@/models/filters";
 import { searchRecipeByTitle } from "@/utils/searchRecipeByTitle";
+import { saveAppliedFilters, clearSavedFilters } from "./utils/filterPersistence";
 
 export type ChipFieldKey = keyof Pick<Recipe, "products" | "tags" | "dietary" | "cuisine">;
 interface RecipeFiltersProps {
@@ -38,6 +39,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
 
         const currentFilters = { ...filters };
         setFilters(currentFilters);
+        saveAppliedFilters(currentFilters);
 
         // Detect if ONLY title is filled
         if (currentFilters.title) {
@@ -61,6 +63,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options }: Rec
     }, [apply, filters, setFilters, router, onClose]);
 
     const handleClear = useCallback(() => {
+        clearSavedFilters();
         clear();
         setFilters({} as FilterState);
     }, [clear, setFilters]);

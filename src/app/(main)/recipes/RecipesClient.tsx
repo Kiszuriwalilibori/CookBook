@@ -27,6 +27,7 @@ interface RecipesClientProps {
 export default function RecipesClient({ initialRecipes, initialFavorites, hasActiveFilters, recipesError }: RecipesClientProps) {
     const [displayRecipes, setDisplayRecipes] = useState<Recipe[]>(initialRecipes);
     const router = useRouter();
+
     useHydrateSSR(initialRecipes, setDisplayRecipes);
 
     useNonAdminRefetch(setDisplayRecipes);
