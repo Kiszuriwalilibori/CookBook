@@ -25,7 +25,6 @@ const CarouselItem: React.FC<CarouselItemProps> = ({ slide, priority = false }) 
                             src={imageSrc}
                             alt={slide.title ?? "Recipe"}
                             fill
-                            // sizes="(max-width: 900px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             sizes="(max-width: 899px) calc(100vw - 8px), (max-width: 1199px) calc(50vw - 8px), calc(33.333333vw - 8px)"
                             priority={priority}
                             onError={() => setImageSrc("/placeholder.jpg")}
