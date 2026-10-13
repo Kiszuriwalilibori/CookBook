@@ -1,4 +1,5 @@
 // next.config.ts
+import bundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -16,4 +17,9 @@ const nextConfig: NextConfig = {
     poweredByHeader: false, // Removed X-Powered-By header for security/performance
 };
 
-export default nextConfig;
+// export default nextConfig;
+const withBundleAnalyzer = bundleAnalyzer({
+    enabled: process.env.ANALYZE === "true",
+});
+
+export default withBundleAnalyzer(nextConfig);

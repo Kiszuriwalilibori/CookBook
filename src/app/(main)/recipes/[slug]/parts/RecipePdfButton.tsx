@@ -2,7 +2,6 @@
 
 import { IconButton, Tooltip } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import jsPDF from "jspdf";
 import { styles } from "../styles";
 import { Recipe } from "@/types";
 
@@ -35,117 +34,119 @@ export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
             .trim();
     };
 
-    const handlePdfExport = () => {
+    const handlePdfExport = async () => {
         try {
+            const { default: jsPDF } = await import("jspdf");
             const doc = new jsPDF();
-            let yPosition = 25; // lekko niżej od góry
+
+            let yPosition = 25;
             const pageWidth = doc.internal.pageSize.getWidth();
-            const maxLineWidth = pageWidth - 40; // margines 20mm z każdej strony
+            const maxLineWidth = pageWidth - 40;
+            const lineHeight = 6;
+            const sectionSpacing = 10;
 
-            const lineHeight = 6; // wysokość jednej linii tekstu
-            const sectionSpacing = 10; // odstęp między sekcjami
+            doc.setFont("helvetica", "normal");
 
-            const useCustomFont = false;
-            doc.setFont("helvetica");
+            const addSectionHeading = (heading: string) => {
+                doc.setFontSize(14);
+                doc.setFont("helvetica", "bold");
+                doc.text(heading, 20, yPosition);
+                yPosition += lineHeight + 2;
+            };
 
-            // --- Tytuł ---
-            doc.setFontSize(18);
-            doc.setFont(undefined, "bold");
-            const titleText = useCustomFont ? recipe.title : normalizePolishText(recipe.title);
-            const titleLines = doc.splitTextToSize(titleText, maxLineWidth);
-            titleLines.forEach((line: string) => {
-                doc.text(line, 20, yPosition);
-                yPosition += lineHeight + 1;
-            });
+            const addTextLines = (text: string, fontSize: number, fontStyle: "normal" | "bold" | "italic" = "normal") => {
+                doc.setFontSize(fontSize);
+                doc.setFont("helvetica", fontStyle);
+
+                const lines = doc.splitTextToSize(text, maxLineWidth);
+
+                lines.forEach((line: string) => {
+                    if (yPosition > 280) {
+                        doc.addPage();
+                        yPosition = 25;
+                    }
+
+                    doc.text(line, 20, yPosition);
+                    yPosition += lineHeight;
+                });
+            };
+
+            // Tytuł
+            addTextLines(normalizePolishText(recipe.title), 18, "bold");
             yPosition += sectionSpacing;
 
-            // --- Składniki ---
-            doc.setFontSize(14);
-            doc.setFont(undefined, "bold");
-            const skladnikiText = useCustomFont ? "Składniki:" : "Skladniki:";
-            doc.text(skladnikiText, 20, yPosition);
-            yPosition += lineHeight + 2;
+            // Składniki podstawowe
+            addSectionHeading("Skladniki:");
 
             if (recipe.ingredients && recipe.ingredients.length > 0) {
-                doc.setFontSize(12);
-                doc.setFont(undefined, "normal");
-                recipe.ingredients.forEach(ing => {
-                    const quantityUnit = `${ing.quantity}${ing.unit ? ` ${ing.unit}` : ""}`;
-                    const normalizedIng = useCustomFont ? `${ing.name} - ${quantityUnit}` : normalizePolishText(`${ing.name} - ${quantityUnit}`);
+                recipe.ingredients.forEach(ingredient => {
+                    const quantityUnit = `${ingredient.quantity}${ingredient.unit ? ` ${ingredient.unit}` : ""}`;
+                    const ingredientText = normalizePolishText(`${ingredient.name} - ${quantityUnit}`);
 
-                    // Próbujemy utrzymać składnik w jednym wierszu, jeśli się mieści
-                    const ingLines = doc.splitTextToSize(normalizedIng, maxLineWidth);
-                    ingLines.forEach((line: string) => {
-                        if (yPosition > 280) {
-                            doc.addPage();
-                            yPosition = 25;
-                        }
-                        doc.text(line, 20, yPosition);
-                        yPosition += lineHeight;
-                    });
+                    addTextLines(ingredientText, 12);
                 });
             }
+
+            // Składniki opcjonalne
+            if (recipe.optionalIngredients && recipe.optionalIngredients.length > 0) {
+                yPosition += 4;
+                addSectionHeading("Skladniki opcjonalne:");
+
+                recipe.optionalIngredients.forEach(ingredient => {
+                    const quantityUnit = `${ingredient.quantity}${ingredient.unit ? ` ${ingredient.unit}` : ""}`;
+                    const ingredientText = normalizePolishText(`${ingredient.name} - ${quantityUnit}`);
+
+                    addTextLines(ingredientText, 12);
+                });
+            }
+
             yPosition += sectionSpacing;
 
-            // --- Przygotowanie ---
-            doc.setFontSize(14);
-            doc.setFont(undefined, "bold");
-            doc.text("Przygotowanie:", 20, yPosition);
-            yPosition += lineHeight + 2;
+            // Przygotowanie
+            addSectionHeading("Przygotowanie:");
 
             if (recipe.preparationSteps && recipe.preparationSteps.length > 0) {
-                doc.setFontSize(12);
-                doc.setFont(undefined, "normal");
-                recipe.preparationSteps.forEach((step, i) => {
-                    let stepText = `${i + 1}. `;
+                recipe.preparationSteps.forEach((step, index) => {
+                    let stepText = `${index + 1}. `;
+
                     if (step.content) {
                         step.content.forEach(block => {
                             if (block.children) {
                                 block.children.forEach(child => {
                                     if (child.text) {
-                                        stepText += (useCustomFont ? child.text : normalizePolishText(child.text)) + " ";
+                                        stepText += `${normalizePolishText(child.text)} `;
                                     }
                                 });
                             }
                         });
                     }
+
                     if (step.notes) {
-                        stepText += `(${useCustomFont ? step.notes : normalizePolishText(step.notes)})`;
+                        stepText += `(${normalizePolishText(step.notes)})`;
                     }
 
-                    const stepLines = doc.splitTextToSize(stepText.trim(), maxLineWidth);
-                    stepLines.forEach((line: string) => {
-                        if (yPosition > 280) {
-                            doc.addPage();
-                            yPosition = 25;
-                        }
-                        doc.text(line, 20, yPosition);
-                        yPosition += lineHeight;
-                    });
+                    addTextLines(stepText.trim(), 12);
                     yPosition += 2;
                 });
             }
+
             yPosition += sectionSpacing;
 
-            // --- Źródło ---
-            doc.setFontSize(10);
-            doc.setFont(undefined, "italic");
-            doc.text(`Źródło: https://yourdomain.com/recipes/${slug}`, 20, yPosition);
+            // Źródło
+            addTextLines(`Zrodlo: https://cook-book-inky.vercel.app/recipes/${slug}`, 10, "italic");
 
             doc.save(`${slug}.pdf`);
         } catch (error) {
             console.error("PDF generation error:", error);
-            alert("Błąd podczas generowania PDF. Sprawdź konsolę.");
+            alert("Blad podczas generowania PDF. Sprobuj ponownie.");
         }
     };
 
     return (
         <Tooltip title="Eksportuj do PDF" placement="top">
-            <IconButton id="RecipePdfButton" onClick={handlePdfExport} sx={styles.recipeButton}>
+            <IconButton id="RecipePdfButton" onClick={handlePdfExport} sx={styles.recipeButton} aria-label="Eksportuj przepis do PDF">
                 <PictureAsPdfIcon sx={styles.recipeButtonIcon} />
             </IconButton>
         </Tooltip>
     );
 }
-//todo tu krzyczy o błędzie z undefined
-// todo powinno uwzględniać optionalingredients

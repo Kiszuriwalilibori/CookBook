@@ -11,7 +11,8 @@
         "test:watch": "jest --watch",
         "tw": "jest --watch",
         "studio-dev": "npx sanity dev",
-        "type-check": "tsc --noEmit"
+        "type-check": "tsc --noEmit",
+        "analyze": "cross-env ANALYZE=true npm run build"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
@@ -48,6 +49,7 @@
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3",
+        "@next/bundle-analyzer": "^16.4.0",
         "@testing-library/jest-dom": "^6.9.1",
         "@testing-library/react": "^16.3.0",
         "@testing-library/user-event": "^14.6.1",
