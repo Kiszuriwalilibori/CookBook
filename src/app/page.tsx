@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { Box } from "@mui/material";
-// import Slider from "@/components/Slider/Slider";
-import Slider from "@/components/Slider/Slider.server";
+import Slider from "@/components/Slider/Slider";
+// import Slider from "@/components/Slider/Slider.server";
 import getRandomRecipes from "@/utils/getRandomRecipes";
 import { LatestRecipesSection, LoadingIndicator, TopRatedRecipesSection } from "@/components";
 import { RecipeCardSkeleton } from "@/components/RecipeCard/RecipeCard.Skeleton";
