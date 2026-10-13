@@ -7,6 +7,7 @@ import { useIsAdminLogged } from "@/stores/useAdminStore";
 import { Box, Button, Paper } from "@mui/material";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useGoogleSignIn } from "@/hooks";
 
 import { closeButtonSx, googleSignInPaperSx, googleSignInStatusSx, signinButtonWrapperStyles } from "./GoogleSignInButton.styles";
 
@@ -14,6 +15,7 @@ export default function GoogleSignInButton() {
     const isAdminLogged = useIsAdminLogged();
     const [visible, setVisible] = useState(true);
     const [loaded, setLoaded] = useState(false);
+    useGoogleSignIn(!isAdminLogged && visible);
 
     useEffect(() => {
         const timer = setTimeout(() => {

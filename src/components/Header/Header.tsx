@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Menu } from "@/components";
 
-import { useGoogleSignIn, useNavItems } from "@/hooks";
+import { /*useGoogleSignIn,*/ useNavItems } from "@/hooks";
 import { RecipeFilter } from "@/types";
 
 // import GoogleSignInButton from "./GoogleSignInButton";
@@ -20,7 +20,7 @@ const Header = ({ initialSummary, fetchError }: HeaderProps) => {
         mobileMenuOpen: false,
     });
 
-    useGoogleSignIn();
+    // useGoogleSignIn();
 
     const openMobileMenu = () => setUI(s => ({ ...s, mobileMenuOpen: true }));
 
