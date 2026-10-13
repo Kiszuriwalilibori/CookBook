@@ -13,7 +13,8 @@ export const RecipeCardImage = React.memo(function RecipeCardImage({ imageUrl, t
             src={imageUrl}
             alt={title ? `${title} - zdjęcie przepisu` : "Zdjęcie przepisu"}
             fill
-            sizes="(max-width: 600px) 100vw, 300px"
+            sizes="(max-width: 599px) calc(100vw - 32px), (max-width: 899px) 330px, (max-width: 1223px) calc((100vw - 72px) / 2), 330px"
+            // sizes="(max-width: 600px) 100vw, 300px"
             style={{
                 objectFit: "cover",
             }}

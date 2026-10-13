@@ -9,7 +9,9 @@ type ColumnHeaderProps = {
 export default function ColumnHeader({ title }: ColumnHeaderProps) {
     return (
         <Box sx={columnHeaderSx}>
-            <Typography variant="h5">{title}</Typography>
+            <Typography variant="h5" component="h2">
+                {title}
+            </Typography>
         </Box>
     );
 }
