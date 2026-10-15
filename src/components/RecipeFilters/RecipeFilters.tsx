@@ -63,6 +63,10 @@ export default function RecipeFilters({ onFiltersChange, onClose, options, initi
         // CASE 2: Normal filtering → go to /recipes list
         const queryString = buildQueryString(currentFilters);
 
+        console.log("[filters:apply] docelowy URL", {
+            queryString,
+            destination: `/recipes${queryString ? `?${queryString}` : ""}`,
+        });
         router.push(`/recipes${queryString ? `?${queryString}` : ""}`);
         onClose?.();
     }, [apply, filters, setFilters, router, onClose]);

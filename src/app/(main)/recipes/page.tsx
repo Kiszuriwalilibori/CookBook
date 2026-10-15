@@ -42,6 +42,7 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     if (!hasSearchParams) {
         const cookieStore = await cookies();
         const savedQuery = cookieStore.get(FILTER_COOKIE_NAME)?.value;
+
         console.log("[recipes:page] brak parametrów URL", {
             searchParams: awaitedSearchParams,
             savedQuery,
