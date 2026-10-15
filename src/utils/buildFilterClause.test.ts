@@ -1,6 +1,21 @@
 import { buildFilterClause } from "./buildFilterClause";
 import { Status } from "@/types";
 
+/*
+ * Co sprawdzają testy:
+ * - Brak filtrów lub puste filtry nie generują warunków zapytania.
+ * - Tytuł, pola źródła i listy filtrów są przekazywane jako parametry GROQ,
+ *   a nie wstawiane bezpośrednio do tekstu zapytania.
+ * - Wartości filtrów są normalizowane: usuwane są zbędne spacje
+ *   i zamieniane są litery na małe.
+ * - Statusy są ograniczone do dozwolonych wartości.
+ * - Puste wartości nie tworzą zbędnych warunków.
+ * - Filtr logiczny „kizia” generuje stały warunek.
+ * - Dane przypominające wstrzyknięcie GROQ nie trafiają do tekstu zapytania.
+ * - Dane użytkownika nie mogą zmieniać nazw pól używanych w zapytaniu.
+ * - Nieprawidłowe elementy tablic filtrów są pomijane.
+ */
+
 describe("buildFilterClause", () => {
     it("returns an empty clause and no params for missing filters", () => {
         expect(buildFilterClause()).toEqual({
