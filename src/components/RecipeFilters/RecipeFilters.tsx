@@ -19,6 +19,7 @@ import { useFiltersStore } from "@/stores";
 import { FilterState } from "@/models/filters";
 import { searchRecipeByTitle } from "@/utils/searchRecipeByTitle";
 import { saveAppliedFilters, clearSavedFilters } from "./utils/filterPersistence";
+import { initialFilters } from "@/hooks/useFilters";
 
 export type ChipFieldKey = keyof Pick<Recipe, "products" | "tags" | "dietary" | "cuisine">;
 interface RecipeFiltersProps {
@@ -87,7 +88,9 @@ export default function RecipeFilters({ onFiltersChange, onClose, options, initi
             cookie: document.cookie,
         });
         clear();
-        setFilters({} as FilterState);
+        // setFilters({} as FilterState);
+        setFilters(initialFilters);
+
         console.log("[filters:clear] po wyczyszczeniu", {
             url: window.location.href,
             cookie: document.cookie,
