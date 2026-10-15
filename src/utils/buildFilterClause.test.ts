@@ -1,255 +1,128 @@
-// import { buildFilterClause } from "./buildFilterClause";
-// import { FilterState } from "@/models/filters";
-
-// // --- Example values --------------------------------------------------------
-// import { Status } from "@/types";
-
-// const exampleValues: Partial<FilterState> = {
-//     title: "  Pizza  ",
-//     cuisine: ["iTAlian"],
-//     status: [Status.Good],
-//     "source.url": "EXAMPLE.com",
-//     "source.book": "Cookbook",
-//     "source.title": "SourceTitle",
-//     "source.author": "AuthorName",
-//     "source.where": "Library",
-//     kizia: true,
-//     tags: ["Vegan", "Quick"],
-//     dietary: ["Gluten-Free"],
-//     products: ["Tomato", "Cheese"],
-// };
-
-// // --- Normalization helpers -------------------------------------------------
-// const normalizeString = (v: string) => v.trim().toLowerCase();
-// const normalizeArray = (arr?: string[]) => arr?.map(v => v.toLowerCase()) ?? [];
-
-// function normalizeField<K extends keyof FilterState>(key: K, value: FilterState[K]): FilterState[K] {
-//     if (typeof value === "string") return normalizeString(value) as FilterState[K];
-//     if (Array.isArray(value)) return normalizeArray(value) as FilterState[K];
-//     return value;
-// }
-
-// function set<K extends keyof FilterState>(t: Partial<FilterState>, key: K, v: FilterState[K] | undefined) {
-//     t[key] = v;
-// }
-
-// // --- Field groups ----------------------------------------------------------
-// const stringFields: (keyof FilterState)[] = ["title", "source.url", "source.book", "source.title", "source.author", "source.where"];
-
-// const booleanFields: (keyof FilterState)[] = ["kizia"];
-
-// const arrayFields: (keyof FilterState)[] = ["cuisine", "status", "tags", "dietary", "products"];
-// // --- Subset generator ------------------------------------------------------
-// function subsets<T>(arr: T[], size: number): T[][] {
-//     const result: T[][] = [];
-//     const helper = (start: number, curr: T[]) => {
-//         if (curr.length === size) return void result.push([...curr]);
-//         for (let i = start; i < arr.length; i++) {
-//             curr.push(arr[i]);
-//             helper(i + 1, curr);
-//             curr.pop();
-//         }
-//     };
-//     helper(0, []);
-//     return result;
-// }
-
-// // --- Test suite ------------------------------------------------------------
-// describe("buildFilterClause – combinatorial Jest test suite", () => {
-//     // Single-field tests
-//     [...stringFields, ...booleanFields, ...arrayFields].forEach(field => {
-//         test(`single field: ${field}`, () => {
-//             const f: Partial<FilterState> = {};
-//             set(f, field, normalizeField(field, exampleValues[field]!));
-//             expect(buildFilterClause(f)).toMatchSnapshot();
-//         });
-//     });
-
-//     // 2-field combos: strings
-//     subsets(stringFields, 2).forEach(combo => {
-//         test(`string combo: ${combo.join(", ")}`, () => {
-//             const f: Partial<FilterState> = {};
-//             combo.forEach(k => set(f, k, normalizeField(k, exampleValues[k]!)));
-//             expect(buildFilterClause(f)).toMatchSnapshot();
-//         });
-//     });
-
-//     // 2-field combos: arrays
-//     subsets(arrayFields, 2).forEach(combo => {
-//         test(`array combo: ${combo.join(", ")}`, () => {
-//             const f: Partial<FilterState> = {};
-//             combo.forEach(k => set(f, k, normalizeField(k, exampleValues[k]!)));
-//             expect(buildFilterClause(f)).toMatchSnapshot();
-//         });
-//     });
-
-//     // Mixed: one string + one boolean + one array
-//     stringFields.forEach(s => {
-//         booleanFields.forEach(b => {
-//             arrayFields.forEach(a => {
-//                 test(`mixed: ${s} + ${b} + ${a}`, () => {
-//                     const f: Partial<FilterState> = {};
-//                     set(f, s, normalizeField(s, exampleValues[s]!));
-//                     set(f, b, exampleValues[b]!);
-//                     set(f, a, normalizeField(a, exampleValues[a]!));
-//                     expect(buildFilterClause(f)).toMatchSnapshot();
-//                 });
-//             });
-//         });
-//     });
-
-//     // All fields
-//     test("all fields", () => {
-//         const f: Partial<FilterState> = {};
-//         [...stringFields, ...arrayFields].forEach(k => set(f, k, normalizeField(k, exampleValues[k]!)));
-//         booleanFields.forEach(k => set(f, k, exampleValues[k]!));
-//         expect(buildFilterClause(f)).toMatchSnapshot();
-//     });
-
-//     // Edge cases
-//     test("empty object → empty string", () => {
-//         expect(buildFilterClause({})).toBe("");
-//     });
-
-//     test("all undefined → empty string", () => {
-//         const f: Partial<FilterState> = {};
-//         [...stringFields, ...booleanFields, ...arrayFields].forEach(k => set(f, k, undefined));
-//         expect(buildFilterClause(f)).toBe("");
-//     });
-
-//     test("empty arrays only → empty string", () => {
-//         expect(buildFilterClause({ tags: [], dietary: [], products: [] })).toBe("");
-//     });
-// });
-
-// // ale wyższy suite też działa dobrze
 import { buildFilterClause } from "./buildFilterClause";
-import { FilterState } from "@/models/filters";
-
-// --- Example values --------------------------------------------------------
 import { Status } from "@/types";
 
-const exampleValues: Partial<FilterState> = {
-    title: "  Pizza  ",
-    cuisine: ["iTAlian"],
-    status: [Status.Good],
-    "source.url": "EXAMPLE.com",
-    "source.book": "Cookbook",
-    "source.title": "SourceTitle",
-    "source.author": "AuthorName",
-    "source.where": "Library",
-    kizia: true,
-    tags: ["Vegan", "Quick"],
-    dietary: ["Gluten-Free"],
-    products: ["Tomato", "Cheese"],
-};
-
-// --- Normalization helpers -------------------------------------------------
-const normalizeString = (v: string) => v.trim().toLowerCase();
-const normalizeArray = (arr?: string[]) => arr?.map(v => v.toLowerCase()) ?? [];
-
-function normalizeField<K extends keyof FilterState>(key: K, value: FilterState[K]): FilterState[K] {
-    if (typeof value === "string") return normalizeString(value) as FilterState[K];
-    if (Array.isArray(value)) return normalizeArray(value) as FilterState[K];
-    return value;
-}
-
-function set<K extends keyof FilterState>(t: Partial<FilterState>, key: K, v: FilterState[K] | undefined) {
-    t[key] = v;
-}
-
-// --- Field groups ----------------------------------------------------------
-// Kolejność MUSI odpowiadać kolejności w buildFilterClause!
-const statusField: (keyof FilterState)[] = ["status"];
-
-const stringFields: (keyof FilterState)[] = ["title", "source.url", "source.book", "source.title", "source.author", "source.where"];
-
-const arrayFields: (keyof FilterState)[] = ["cuisine", "tags", "dietary", "products"];
-
-const booleanFields: (keyof FilterState)[] = ["kizia"];
-
-// --- Subset generator ------------------------------------------------------
-function subsets<T>(arr: T[], size: number): T[][] {
-    const result: T[][] = [];
-    const helper = (start: number, curr: T[]) => {
-        if (curr.length === size) return void result.push([...curr]);
-        for (let i = start; i < arr.length; i++) {
-            curr.push(arr[i]);
-            helper(i + 1, curr);
-            curr.pop();
-        }
-    };
-    helper(0, []);
-    return result;
-}
-
-// --- Test suite ------------------------------------------------------------
-describe("buildFilterClause – combinatorial Jest test suite", () => {
-    // Single-field tests
-    [...statusField, ...stringFields, ...arrayFields, ...booleanFields].forEach(field => {
-        test(`single field: ${field}`, () => {
-            const f: Partial<FilterState> = {};
-            set(f, field, normalizeField(field, exampleValues[field]!));
-            expect(buildFilterClause(f)).toMatchSnapshot();
+describe("buildFilterClause", () => {
+    it("returns an empty clause and no params for missing filters", () => {
+        expect(buildFilterClause()).toEqual({
+            clause: "",
+            params: {},
         });
     });
 
-    // 2-field combos: strings
-    subsets(stringFields, 2).forEach(combo => {
-        test(`string combo: ${combo.join(", ")}`, () => {
-            const f: Partial<FilterState> = {};
-            combo.forEach(k => set(f, k, normalizeField(k, exampleValues[k]!)));
-            expect(buildFilterClause(f)).toMatchSnapshot();
+    it("returns an empty clause and no params for empty filters", () => {
+        expect(buildFilterClause({})).toEqual({
+            clause: "",
+            params: {},
         });
     });
 
-    // 2-field combos: arrays
-    subsets(arrayFields, 2).forEach(combo => {
-        test(`array combo: ${combo.join(", ")}`, () => {
-            const f: Partial<FilterState> = {};
-            combo.forEach(k => set(f, k, normalizeField(k, exampleValues[k]!)));
-            expect(buildFilterClause(f)).toMatchSnapshot();
+    it("uses a parameter for the title prefix", () => {
+        const result = buildFilterClause({ title: "  Pizza  " });
+
+        expect(result.clause).toContain("lower(title) match $filter_title");
+        expect(result.params).toEqual({ filter_title: "pizza*" });
+        expect(result.clause).not.toContain("pizza");
+    });
+
+    it("normalizes source fields and passes values as params", () => {
+        const result = buildFilterClause({
+            "source.url": " EXAMPLE.COM ",
+            "source.book": " Cookbook ",
+        });
+
+        expect(result.clause).toContain("lower(source.url) == $filter_source_url");
+        expect(result.clause).toContain("lower(source.book) == $filter_source_book");
+        expect(result.params).toEqual({
+            filter_source_url: "example.com",
+            filter_source_book: "cookbook",
+        });
+        expect(result.clause).not.toContain("example.com");
+        expect(result.clause).not.toContain("cookbook");
+    });
+
+    it("passes array values as parameters instead of interpolating them", () => {
+        const result = buildFilterClause({
+            cuisine: [" Italian ", "FRENCH"],
+            tags: ["Vegan"],
+            dietary: ["Gluten-Free"],
+            products: ["Tomato", "Cheese"],
+        });
+
+        expect(result.clause).toContain("count((cuisine[])[@ in $filter_cuisine]) > 0");
+        expect(result.clause).toContain("count((tags[])[@ in $filter_tags]) > 0");
+        expect(result.clause).toContain("count((dietary[])[@ in $filter_dietary]) > 0");
+        expect(result.clause).toContain("count((products[])[@ in $filter_products]) > 0");
+
+        expect(result.params).toEqual({
+            filter_cuisine: ["italian", "french"],
+            filter_tags: ["vegan"],
+            filter_dietary: ["gluten-free"],
+            filter_products: ["tomato", "cheese"],
         });
     });
 
-    // Mixed: jedno string + jeden boolean + jedna tablica
-    // WAŻNE: Kolejność w snapshocie to: string → array → boolean
-    stringFields.forEach(s => {
-        arrayFields.forEach(a => {
-            booleanFields.forEach(b => {
-                test(`mixed: ${s} + ${a} + ${b}`, () => {
-                    const f: Partial<FilterState> = {};
-                    set(f, s, normalizeField(s, exampleValues[s]!));
-                    set(f, a, normalizeField(a, exampleValues[a]!));
-                    set(f, b, exampleValues[b]!);
-                    expect(buildFilterClause(f)).toMatchSnapshot();
-                });
-            });
+    it("accepts only allowed status values", () => {
+        const result = buildFilterClause({
+            status: [Status.Good, Status.Acceptable, "unknown" as Status],
+        });
+
+        expect(result.clause).toContain("lower(status) in $filter_status");
+        expect(result.params.filter_status).toEqual(["good", "acceptable"]);
+        expect(result.clause).not.toContain("unknown");
+    });
+
+    it("omits empty arrays and empty strings", () => {
+        const result = buildFilterClause({
+            title: "   ",
+            cuisine: [],
+            tags: [" ", ""],
+            dietary: [],
+            products: [],
+            "source.url": "",
+        });
+
+        expect(result).toEqual({ clause: "", params: {} });
+    });
+
+    it("includes the boolean condition without a user-controlled value", () => {
+        const result = buildFilterClause({ kizia: true });
+
+        expect(result.clause).toContain("kizia == true");
+        expect(result.params).toEqual({});
+    });
+
+    it("does not interpolate GROQ injection payloads into the clause", () => {
+        const payload = 'x" || true || title match "';
+        const result = buildFilterClause({
+            title: payload,
+            "source.url": payload,
+            tags: [payload],
+            products: [payload],
+        });
+
+        expect(result.clause).not.toContain(payload);
+        expect(result.params).toEqual({
+            filter_title: `${payload.trim().toLowerCase()}*`,
+            filter_source_url: payload.trim().toLowerCase(),
+            filter_tags: [payload.trim().toLowerCase()],
+            filter_products: [payload.trim().toLowerCase()],
         });
     });
 
-    // All fields – kolejność zgodna z implementacją
-    test("all fields", () => {
-        const f: Partial<FilterState> = {};
-        set(f, "status", normalizeField("status", exampleValues["status"]!));
-        stringFields.forEach(k => set(f, k, normalizeField(k, exampleValues[k]!)));
-        arrayFields.forEach(k => set(f, k, normalizeField(k, exampleValues[k]!)));
-        booleanFields.forEach(k => set(f, k, exampleValues[k]!));
-        expect(buildFilterClause(f)).toMatchSnapshot();
+    it("does not allow user data to define field names", () => {
+        const result = buildFilterClause({
+            title: "pizza",
+            tags: ["quick"],
+        });
+
+        expect(result.clause).toBe(" && (lower(title) match $filter_title && " + "count((tags[])[@ in $filter_tags]) > 0)");
     });
 
-    // Edge cases
-    test("empty object → empty string", () => {
-        expect(buildFilterClause({})).toBe("");
-    });
+    it("ignores malformed runtime array entries", () => {
+        const result = buildFilterClause({
+            tags: ["vegan", 123, null] as unknown as string[],
+        });
 
-    test("all undefined → empty string", () => {
-        const f: Partial<FilterState> = {};
-        [...stringFields, ...booleanFields, ...arrayFields].forEach(k => set(f, k, undefined));
-        expect(buildFilterClause(f)).toBe("");
-    });
-
-    test("empty arrays only → empty string", () => {
-        expect(buildFilterClause({ tags: [], dietary: [], products: [] })).toBe("");
+        expect(result.params).toEqual({ filter_tags: ["vegan"] });
     });
 });
