@@ -27,6 +27,9 @@ export default async function SearchPage() {
 
     const cookieStore = await cookies();
     const savedValue = cookieStore.get(FILTER_COOKIE_NAME)?.value;
+    console.log("[search:page] cookie przy renderze", {
+        savedValue,
+    });
 
     let initialValues = undefined;
 

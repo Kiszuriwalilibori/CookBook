@@ -32,6 +32,7 @@ export default function RecipeFilters({ onFiltersChange, onClose, options, initi
     const router = useRouter();
     const [isApplying, setIsApplying] = React.useState(false);
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange, initialValues);
+    console.log("[filters:init] initialValues z rodzica", initialValues);
     const { setFilters } = useFiltersStore();
 
     //New smart Apply logic
