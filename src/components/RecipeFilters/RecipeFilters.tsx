@@ -63,11 +63,18 @@ export default function RecipeFilters({ onFiltersChange, onClose, options, initi
         onClose?.();
     }, [apply, filters, setFilters, router, onClose]);
 
+    // const handleClear = useCallback(() => {
+    //     clearSavedFilters();
+    //     clear();
+    //     setFilters({} as FilterState);
+    // }, [clear, setFilters]);
+
     const handleClear = useCallback(() => {
         clearSavedFilters();
         clear();
         setFilters({} as FilterState);
-    }, [clear, setFilters]);
+        router.replace("/recipes");
+    }, [clear, setFilters, router]);
 
     const getErrorProps = useCallback(
         (key: keyof FilterState) => ({
