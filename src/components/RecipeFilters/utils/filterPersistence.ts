@@ -2,7 +2,6 @@ import type { FilterState } from "@/models/filters";
 import { buildQueryString } from "./buildQueryStrings";
 
 export const FILTER_COOKIE_NAME = "cookbook_recipe_filters";
-const MAX_AGE = 60 * 60 * 24 * 30; // 30 dni
 
 export function saveAppliedFilters(filters: FilterState): void {
     if (typeof document === "undefined") return;
@@ -16,7 +15,7 @@ export function saveAppliedFilters(filters: FilterState): void {
 
     const secure = window.location.protocol === "https:" ? "; Secure" : "";
 
-    document.cookie = `${FILTER_COOKIE_NAME}=${encodeURIComponent(queryString)}` + `; Path=/; Max-Age=${MAX_AGE}; SameSite=Lax${secure}`;
+    document.cookie = `${FILTER_COOKIE_NAME}=${encodeURIComponent(queryString)}` + `; Path=/;SameSite=Lax${secure}`;
 }
 
 export function clearSavedFilters(): void {

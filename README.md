@@ -132,7 +132,7 @@ Ale na teraz — jesteś dosłownie 1 linijkę od działającego drzewa 👍
 
 test
 
-// po przełaczeniu z jakiegokolwiek wyszukiwania na potrawę miga loading indicator jakby nie był przez usedelayedcośtam To duża strona trza by przejrzeć wszystkie komponenty albo leipie przejrzeć wszystkie użycia loading indictaora w apce
+po przełaczeniu z jakiegokolwiek wyszukiwania na potrawę miga loading indicator jakby nie był przez usedelayedcośtam To duża strona trza by przejrzeć wszystkie komponenty albo leipie przejrzeć wszystkie użycia loading indictaora w apce. Najprawdopodobniej jest to ładowanie komentarzy do przepisu. Prawdopodbnie najprościej będzie zrobić tak, żeby strona naserwerze ładowała 3 pierwsze a resztę dopiero po kliknięciu w pokaż więcej.
 
 // todo dodać jakiś deskryptor do ilości porcji bo czasami niejasne
 
@@ -142,12 +142,10 @@ Nie wiem czy tak powinno być
 
 // todo czy formy nie powinny mieć obsługi głosu
 
-// pozzycje w desktopmenu powinny zmieniaćwygląd na hover
+// pozzcje w desktopmenu generują nieweilki CLS bo coś tam pojawia się z opóźnieniem
 // strona przepisy ma Heading elements are not in a sequentially-descending order co redukuje do 98
 // w menu aktywny element po przełączeniu strony nie dostaje focusa
 // desktopmenustyles zawiera liczne color: theme => theme.custom.menuColor, chyba niepotrzebne skoro chodzi o czarny.Ale w sumie jest to spójne i tak bym zostawił . Ewentualnie skoro dotyczy to menu dać zmienną ograniczoaną do menu ale to mniej istotne.
 
 // commonwhite nie jest dobry na background, jak się dat to theme.background
 // commentstyles do sprawdzenia i ew. poprawienia, za dużo by pisać
-
-// między składnikami powinien być minimalny poziomy separator jednak
