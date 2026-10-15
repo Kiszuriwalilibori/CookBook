@@ -36,6 +36,9 @@ export default function RecipeFilters({ onFiltersChange, onClose, options, initi
 
     //New smart Apply logic
     const handleApply = useCallback(async () => {
+        console.log("[filters:apply] formularz", filters);
+        console.log("[filters:apply] URL", window.location.href);
+        console.log("[filters:apply] cookie", document.cookie);
         if (!apply()) return; // validation failed → do nothing
 
         const currentFilters = { ...filters };
