@@ -1,8 +1,8 @@
-import metadata from "../../../../public/metadata/metadata";
+import pageMetadataConfig from "../../../../public/metadata/metadata";
 import GoogleLogoutButton from "./GoogleLogoutButton";
 import GoogleSignInButton from "./GoogleSignInButton";
 
-export const pageMetadata = metadata.privacy || {
+export const metadata = pageMetadataConfig.privacy || {
     title: "Polityka prywatności – Książka Kucharska Piotra",
     description: "Informacje o polityce prywatności w serwisie Książka Kucharska Piotra.",
 };

@@ -1,6 +1,6 @@
-import metadata from "../../../../public/metadata/metadata";
+import pageMetadataConfig from "../../../../public/metadata/metadata";
 
-export const pageMetadata = metadata.terms || {
+export const metadata = pageMetadataConfig.terms || {
     title: "Regulamin – Książka Kucharska Piotra",
     description: "Regulamin korzystania z serwisu Książka Kucharska Piotra.",
 };

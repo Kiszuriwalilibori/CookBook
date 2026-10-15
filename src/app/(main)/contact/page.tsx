@@ -1,6 +1,7 @@
-import metadata from "../../../../public/metadata/metadata";
+// import metadata from "../../../../public/metadata/metadata";
+import pageMetadataConfig from "../../../../public/metadata/metadata";
 
-export const pageMetadata = metadata.contact || {
+export const metadata = pageMetadataConfig.contact || {
     title: "Kontakt – Książka Kucharska Piotra",
     description: "Formularz kontaktowy i dane kontaktowe autora bloga kulinarnego.",
 };
