@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { notFound, redirect } from "next/navigation";
+import { getInitialRecipeComments } from "@/utils/getInitialRecipeComments";
 
 import { Separator } from "@/components";
 
@@ -86,8 +87,9 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
     if (canonicalSlug && canonicalSlug !== slug) {
         redirect(`/recipes/${canonicalSlug}`);
     }
-
-    // 4️⃣ schema.org
+    // 4️⃣ initial comments
+    const initialComments = await getInitialRecipeComments(recipe._id);
+    // 4️ schema.org
     const jsonLd = generateRecipeSchema(recipe);
     const metadata = mapRecipeToMetadata(recipe);
 
@@ -131,7 +133,8 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                     <RecipeCommentsButton />
                 </Box>
                 <Separator />
-                <Comments recipeId={recipe._id} />
+                <Comments recipeId={recipe._id} initialComments={initialComments.comments} totalComments={initialComments.totalComments} totalThreads={initialComments.totalThreads} />
+                {/* <Comments recipeId={recipe._id} /> */}
             </Box>
         </>
     );

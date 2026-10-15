@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 
 import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails, Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
 
@@ -28,12 +28,26 @@ import { useCommentsSorting } from "./utils/useCommentsSorting";
 
 import { ApiResponse } from "@/models/apiResponse";
 
-export default function Comments({ recipeId }: { recipeId: string }) {
-    const { comments, setAllComments, resetComments, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment, isSubmittingComment, startSubmittingComment, stopSubmittingComment } = useCommentsState();
+interface CommentsProps {
+    recipeId: string;
+    initialComments: RecipeComment[];
+    totalComments: number;
+    totalThreads: number;
+}
+
+export default function Comments({ recipeId, initialComments, totalComments: initialTotalComments, totalThreads: initialTotalThreads }: CommentsProps) {
+    const { comments, setAllComments, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment, isSubmittingComment, startSubmittingComment, stopSubmittingComment } = useCommentsState(initialComments);
 
     const [accordionOpen, setAccordionOpen] = useState(true);
 
     const [isFormOpen, openForm, closeForm] = useBoolean(false);
+
+    const [isFullListLoaded, setIsFullListLoaded] = useState(false);
+    const [isLoadingAllComments, setIsLoadingAllComments] = useState(false);
+    const [loadAllCommentsError, setLoadAllCommentsError] = useState(false);
+
+    const [totalComments, setTotalComments] = useState(initialTotalComments);
+    const [totalThreads, setTotalThreads] = useState(initialTotalThreads);
 
     const isAdminLogged = useIsAdminLogged();
 
@@ -43,14 +57,14 @@ export default function Comments({ recipeId }: { recipeId: string }) {
 
     const { sortMode, setSortMode, sortedComments } = useCommentsSorting(comments);
 
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    const fingerprint = useFingerprint();
+
     const openCommentForm = () => {
         openForm();
         setAccordionOpen(true);
     };
-
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-    const fingerprint = useFingerprint();
 
     const handleAddComment = useCallback(
         async (
@@ -129,6 +143,11 @@ export default function Comments({ recipeId }: { recipeId: string }) {
                     const newComment = data.data.comment;
 
                     replaceOptimisticWithReal(tempId, newComment);
+                    setTotalComments(prev => prev + 1);
+
+                    if (!newComment.parentId) {
+                        setTotalThreads(prev => prev + 1);
+                    }
 
                     showMessage.success("Twój komentarz został dodany");
                 }
@@ -145,61 +164,83 @@ export default function Comments({ recipeId }: { recipeId: string }) {
         [recipeId, fingerprint, isAdminLogged, addOptimisticComment, replaceOptimisticWithReal, removeOptimisticComment, startSubmittingComment, stopSubmittingComment, handleApiResponseError, showMessage]
     );
 
-    const fetchComments = useCallback(async () => {
+    const fetchComments = useCallback(async (): Promise<boolean> => {
+        if (isFullListLoaded) {
+            return true;
+        }
+
+        if (isLoadingAllComments) {
+            return false;
+        }
+
+        setIsLoadingAllComments(true);
+        setLoadAllCommentsError(false);
+
         try {
-            const res = await fetch(`/api/comments?recipeId=${recipeId}`);
+            const res = await fetch(`/api/comments?recipeId=${encodeURIComponent(recipeId)}`);
+
+            if (!res.ok) {
+                throw new Error("Nie udało się pobrać wszystkich komentarzy.");
+            }
 
             const data: ApiResponse<{
                 comments: RecipeComment[];
             }> = await res.json();
 
             if (!data.ok) {
-                const error = data.error;
-
-                switch (error.code) {
-                    case "MISSING_RECIPE_ID":
-                        showMessage.warning(error.message);
-                        break;
-
-                    case "FETCH_COMMENTS_FAILED":
-                        showMessage.error(error.message);
-                        break;
-
-                    default:
-                        showMessage.error(error.message || "Wystąpił nieznany błąd");
-                }
-
-                resetComments();
-
-                return;
+                throw new Error(data.error.message || "Nie udało się pobrać wszystkich komentarzy.");
             }
 
             const safeComments: RecipeComment[] = Array.isArray(data.data.comments) ? data.data.comments.filter(Boolean) : [];
 
             setAllComments(safeComments);
+
+            setTotalComments(safeComments.length);
+
+            setTotalThreads(safeComments.filter(comment => !comment.parentId).length);
+
+            setIsFullListLoaded(true);
+
+            return true;
         } catch (err) {
             console.error("[COMMENTS][GET]", {
                 error: err,
                 recipeId,
             });
 
-            resetComments();
+            setLoadAllCommentsError(true);
 
-            showMessage.error(err instanceof Error ? err.message : "Wystąpił nieznany błąd");
+            showMessage.error(err instanceof Error ? err.message : "Nie udało się pobrać wszystkich komentarzy.");
+
+            return false;
+        } finally {
+            setIsLoadingAllComments(false);
         }
-    }, [recipeId, resetComments, setAllComments, showMessage]);
+    }, [recipeId, isFullListLoaded, isLoadingAllComments, setAllComments, showMessage]);
 
-    useEffect(() => {
-        fetchComments();
-    }, [fetchComments]);
+    const commentsForTree = isFullListLoaded ? sortedComments : comments;
 
-    const isLoading = comments === null;
+    const { commentTree } = useCreateCommentTree(commentsForTree);
 
-    const { commentTree, commentsCount } = useCreateCommentTree(sortedComments);
+    const initialRootCount = initialComments.filter(comment => !comment.parentId).length;
 
-    const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny } = useCommentsVisibility(commentTree, 3);
+    const currentRootCount = comments.filter(comment => !comment.parentId).length;
+    const displayedTotalComments = totalComments;
+    const displayedTotalThreads = isFullListLoaded ? totalThreads : initialTotalThreads + Math.max(0, currentRootCount - initialRootCount);
 
-    if (!comments) return [];
+    const { visibleItems, viewMode, toggleCommentsVisibility, buttonLabel, hasAny } = useCommentsVisibility(commentTree, 3, displayedTotalThreads);
+
+    const handleToggleCommentsVisibility = async () => {
+        if (viewMode === "preview" && !isFullListLoaded) {
+            const loaded = await fetchComments();
+
+            if (!loaded) {
+                return;
+            }
+        }
+
+        toggleCommentsVisibility();
+    };
 
     if (!fingerprint) {
         return null;
@@ -212,52 +253,54 @@ export default function Comments({ recipeId }: { recipeId: string }) {
 
                 <Accordion expanded={accordionOpen} onChange={(_, expanded) => setAccordionOpen(expanded)} elevation={0}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography variant="h5">Komentarze ({commentsCount})</Typography>
+                        <Typography variant="h5">Komentarze ({displayedTotalComments})</Typography>
                     </AccordionSummary>
 
                     <AccordionDetails>
-                        {isLoading ? (
-                            <LoadingIndicator open={isLoading} prompt="Trwa pobieranie komentarzy" />
-                        ) : (
-                            <Box sx={commentsContainerSx}>
-                                <Box
-                                    onClick={e => e.stopPropagation()}
-                                    sx={{
-                                        margin: "0 auto",
-                                        display: "flex",
-                                        gap: 2,
-                                        px: 1,
-                                        py: 1,
-                                    }}
-                                >
-                                    <Button size="small" color="secondary" variant={sortMode === "newest" ? "contained" : "outlined"} onClick={() => setSortMode("newest")}>
-                                        Najnowsze
-                                    </Button>
+                        <Box sx={commentsContainerSx}>
+                            {isLoadingAllComments && <LoadingIndicator open={isLoadingAllComments} prompt="Trwa pobieranie wszystkich komentarzy" />}
 
-                                    <Button size="small" color="secondary" variant={sortMode === "most_liked" ? "contained" : "outlined"} onClick={() => setSortMode("most_liked")}>
-                                        Polubienia
-                                    </Button>
+                            <Box
+                                onClick={event => event.stopPropagation()}
+                                sx={{
+                                    margin: "0 auto",
+                                    display: "flex",
+                                    gap: 2,
+                                    px: 1,
+                                    py: 1,
+                                    minHeight: 56,
+                                    boxSizing: "border-box",
+                                    visibility: isFullListLoaded ? "visible" : "hidden",
+                                }}
+                                aria-hidden={!isFullListLoaded}
+                            >
+                                <Button size="small" color="secondary" variant={sortMode === "newest" ? "contained" : "outlined"} onClick={() => setSortMode("newest")} tabIndex={isFullListLoaded ? 0 : -1}>
+                                    Najnowsze
+                                </Button>
 
-                                    <Button size="small" color="secondary" variant={sortMode === "my_comments" ? "contained" : "outlined"} onClick={() => setSortMode("my_comments")}>
-                                        Moje
-                                    </Button>
-                                </Box>
+                                <Button size="small" color="secondary" variant={sortMode === "most_liked" ? "contained" : "outlined"} onClick={() => setSortMode("most_liked")} tabIndex={isFullListLoaded ? 0 : -1}>
+                                    Polubienia
+                                </Button>
 
-                                <Box key={viewMode} sx={commentsListSx}>
-                                    {visibleItems.map(comment => (
-                                        <CommentItem key={comment._id} comment={comment} recipeId={recipeId} handleAddComment={handleAddComment} />
-                                    ))}
-                                </Box>
-
-                                {hasAny && (
-                                    <Box sx={showMoreButtonWrapperSx}>
-                                        <Button variant="contained" color="secondary" onClick={toggleCommentsVisibility}>
-                                            {buttonLabel}
-                                        </Button>
-                                    </Box>
-                                )}
+                                <Button size="small" color="secondary" variant={sortMode === "my_comments" ? "contained" : "outlined"} onClick={() => setSortMode("my_comments")} tabIndex={isFullListLoaded ? 0 : -1}>
+                                    Moje
+                                </Button>
                             </Box>
-                        )}
+
+                            <Box key={viewMode} sx={commentsListSx}>
+                                {visibleItems.map(comment => (
+                                    <CommentItem key={comment._id} comment={comment} recipeId={recipeId} handleAddComment={handleAddComment} />
+                                ))}
+                            </Box>
+
+                            {hasAny && (
+                                <Box sx={showMoreButtonWrapperSx}>
+                                    <Button variant="contained" color="secondary" onClick={handleToggleCommentsVisibility} disabled={isLoadingAllComments}>
+                                        {loadAllCommentsError && !isFullListLoaded ? "Spróbuj ponownie" : buttonLabel}
+                                    </Button>
+                                </Box>
+                            )}
+                        </Box>
                     </AccordionDetails>
                 </Accordion>
             </Box>
@@ -318,4 +361,3 @@ export default function Comments({ recipeId }: { recipeId: string }) {
         </>
     );
 }
-//todo a może by je zwijać i rozwijać te komentarze

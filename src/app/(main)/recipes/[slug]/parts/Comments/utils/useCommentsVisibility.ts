@@ -2,8 +2,7 @@
 import { useMemo, useState } from "react";
 
 type ViewMode = "preview" | "expanded" | "collapsed";
-
-export function useCommentsVisibility<T>(items: T[], previewCount = 3) {
+export function useCommentsVisibility<T>(items: T[], previewCount = 3, totalItemsCount = items.length) {
     const [viewMode, setViewMode] = useState<ViewMode>("preview");
 
     const visibleItems = useMemo(() => {
@@ -12,8 +11,7 @@ export function useCommentsVisibility<T>(items: T[], previewCount = 3) {
         return [];
     }, [items, viewMode, previewCount]);
 
-    const hiddenCount = Math.max(items.length - previewCount, 0);
-
+    const hiddenCount = Math.max(totalItemsCount - previewCount, 0);
     function toggleCommentsVisibility() {
         setViewMode(prev => {
             if (prev === "preview") return "expanded";

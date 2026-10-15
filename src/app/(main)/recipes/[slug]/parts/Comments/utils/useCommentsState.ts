@@ -2,10 +2,8 @@
 import { useState, useCallback } from "react";
 import type { RecipeComment } from "@/types";
 
-// const initialComments =[]
-
-export function useCommentsState() {
-    const [comments, setComments] = useState<RecipeComment[] | null>(null);
+export function useCommentsState(initialComments: RecipeComment[] = []) {
+    const [comments, setComments] = useState<RecipeComment[]>(initialComments);
     const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
     const addOptimisticComment = useCallback((optimisticComment: RecipeComment) => {
