@@ -46,6 +46,10 @@ export function saveAppliedFilters(filters: FilterState): void {
 
 export function clearSavedFilters(): void {
     if (typeof document === "undefined") return;
+    console.log("[filterPersistence] usuwam cookie", {
+        name: FILTER_COOKIE_NAME,
+        przed: document.cookie,
+    });
 
     const secure = window.location.protocol === "https:" ? "; Secure" : "";
 

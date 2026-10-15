@@ -70,9 +70,20 @@ export default function RecipeFilters({ onFiltersChange, onClose, options, initi
     // }, [clear, setFilters]);
 
     const handleClear = useCallback(() => {
+        console.log("[filters:clear] przed czyszczeniem", {
+            url: window.location.href,
+            cookie: document.cookie,
+        });
         clearSavedFilters();
+        console.log("[filters:clear] po usunięciu cookie", {
+            cookie: document.cookie,
+        });
         clear();
         setFilters({} as FilterState);
+        console.log("[filters:clear] po wyczyszczeniu", {
+            url: window.location.href,
+            cookie: document.cookie,
+        });
     }, [clear, setFilters, router]);
 
     const getErrorProps = useCallback(

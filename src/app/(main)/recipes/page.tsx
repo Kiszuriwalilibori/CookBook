@@ -42,6 +42,10 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
     if (!hasSearchParams) {
         const cookieStore = await cookies();
         const savedQuery = cookieStore.get(FILTER_COOKIE_NAME)?.value;
+        console.log("[recipes:page] brak parametrów URL", {
+            searchParams: awaitedSearchParams,
+            savedQuery,
+        });
 
         if (savedQuery) {
             let queryString = "";
@@ -56,6 +60,9 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
                 const params = new URLSearchParams(queryString);
 
                 if ([...params.keys()].length > 0) {
+                    console.log("[recipes:page] PRZEKIEROWANIE do zapisanych filtrów", {
+                        destination: `/recipes?${params.toString()}`,
+                    });
                     redirect(`/recipes?${params.toString()}`);
                 }
             }
