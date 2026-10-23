@@ -21,9 +21,9 @@ function formatIngredient(ingredient: RecipeIngredient): string {
 
     if (!ingredient.quantity) return "";
 
-    const omitUnit = rawUnit.includes("sztuk");
-    const unit = omitUnit ? "" : ingredient.unit || "";
-
+    // const omitUnit = rawUnit.includes("sztuk");
+    // const unit = omitUnit ? "" : ingredient.unit || "";
+    const unit = ingredient.unit || "";
     return `${ingredient.quantity}${unit ? ` ${unit}` : ""}`;
 }
 
