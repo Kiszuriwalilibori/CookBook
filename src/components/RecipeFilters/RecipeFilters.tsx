@@ -15,26 +15,24 @@ import { buildQueryString } from "./utils/buildQueryStrings";
 import { RecipeFilter, Recipe } from "@/types";
 import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
 import { useFilters, useCreateRecipeFilterFields } from "@/hooks";
-import { useFiltersStore } from "@/stores";
+
 import { FilterState } from "@/models/filters";
 import { searchRecipeByTitle } from "@/utils/searchRecipeByTitle";
-import { saveAppliedFilters, clearSavedFilters } from "./utils/filterPersistence";
-import { initialFilters } from "@/hooks/useFilters";
 
 export type ChipFieldKey = keyof Pick<Recipe, "products" | "tags" | "dietary" | "cuisine">;
+const noopFiltersChange = (_filters: FilterState) => {};
 interface RecipeFiltersProps {
-    onFiltersChange: (filters: FilterState) => void;
+    onFiltersChange?: (filters: FilterState) => void;
     onClose?: () => void;
     options: RecipeFilter;
     initialValues?: FilterState;
 }
 
-export default function RecipeFilters({ onFiltersChange, onClose, options, initialValues }: RecipeFiltersProps) {
+export default function RecipeFilters({ onFiltersChange = noopFiltersChange, onClose, options, initialValues }: RecipeFiltersProps) {
     const router = useRouter();
     const [isApplying, setIsApplying] = React.useState(false);
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange, initialValues);
     console.log("[filters:init] initialValues z rodzica", initialValues);
-    const { setFilters } = useFiltersStore();
 
     //New smart Apply logic
     const handleApply = useCallback(async () => {
@@ -44,8 +42,6 @@ export default function RecipeFilters({ onFiltersChange, onClose, options, initi
         if (!apply()) return; // validation failed → do nothing
 
         const currentFilters = { ...filters };
-        setFilters(currentFilters);
-        saveAppliedFilters(currentFilters);
 
         // Detect if ONLY title is filled
         if (currentFilters.title) {
@@ -70,32 +66,11 @@ export default function RecipeFilters({ onFiltersChange, onClose, options, initi
         });
         router.push(`/recipes${queryString ? `?${queryString}` : ""}`);
         onClose?.();
-    }, [apply, filters, setFilters, router, onClose]);
-
-    // const handleClear = useCallback(() => {
-    //     clearSavedFilters();
-    //     clear();
-    //     setFilters({} as FilterState);
-    // }, [clear, setFilters]);
+    }, [apply, filters, router, onClose]);
 
     const handleClear = useCallback(() => {
-        console.log("[filters:clear] przed czyszczeniem", {
-            url: window.location.href,
-            cookie: document.cookie,
-        });
-        clearSavedFilters();
-        console.log("[filters:clear] po usunięciu cookie", {
-            cookie: document.cookie,
-        });
         clear();
-        // setFilters({} as FilterState);
-        setFilters(initialFilters);
-
-        console.log("[filters:clear] po wyczyszczeniu", {
-            url: window.location.href,
-            cookie: document.cookie,
-        });
-    }, [clear, setFilters, router]);
+    }, [clear]);
 
     const getErrorProps = useCallback(
         (key: keyof FilterState) => ({

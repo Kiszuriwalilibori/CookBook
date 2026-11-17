@@ -1,4 +1,4 @@
-import { useApiResponseErrorHandler } from "@/hooks";
+import { useApiResponseErrorHandler } from "@/hooks/useApiResponseErrorHandler";
 import { useState, useEffect } from "react";
 import { Slide } from "./Carousel.types";
 import { ApiResponse } from "@/models/apiResponse";

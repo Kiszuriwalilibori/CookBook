@@ -7,7 +7,7 @@ import { useCarouselSlides } from "./useCarouselSlides";
 
 const mockHandleApiError = jest.fn();
 
-jest.mock("@/hooks", () => ({
+jest.mock("@/hooks/useApiResponseErrorHandler", () => ({
     useApiResponseErrorHandler: () => mockHandleApiError,
 }));
 
@@ -95,11 +95,6 @@ describe("useCarouselSlides", () => {
 
         expect(result.current.items).toEqual([]);
 
-        // expect(mockHandleApiError).toHaveBeenCalledWith({
-        //     code: "INTERNAL_SERVER_ERROR",
-        //     message: "Server error",
-        // });
-
         expect(mockHandleApiError).toHaveBeenCalledWith(
             expect.objectContaining({
                 code: "INTERNAL_SERVER_ERROR",
@@ -117,6 +112,7 @@ describe("useCarouselSlides", () => {
                     resolveFetch = resolve;
                 })
         ) as jest.Mock;
+
         const { unmount } = renderHook(() =>
             useCarouselSlides({
                 count: 5,

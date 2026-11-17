@@ -4,23 +4,29 @@ import Carousel, { DELAY } from "./Carousel";
 
 const mockHandleApiError = jest.fn();
 
-const mockCarouselLib = jest.fn(({ children }) => <div data-testid="carousel-lib">{children}</div>);
-
-jest.mock("@/hooks", () => ({
+jest.mock("@/hooks/useApiResponseErrorHandler", () => ({
     useApiResponseErrorHandler: () => mockHandleApiError,
 }));
 
-jest.mock("react-multi-carousel", () => {
-    const MockCarousel = (props: { children: React.ReactNode }) => {
-        mockCarouselLib(props);
+jest.mock("@/hooks/useReducedMotion", () => ({
+    useReducedMotion: () => true,
+}));
 
-        return <div data-testid="carousel-lib">{props.children}</div>;
-    };
+jest.mock("embla-carousel-react", () => ({
+    __esModule: true,
+    default: jest.fn(() => [
+        jest.fn(),
+        {
+            scrollPrev: jest.fn(),
+            scrollNext: jest.fn(),
+        },
+    ]),
+}));
 
-    MockCarousel.displayName = "MockCarousel";
-
-    return MockCarousel;
-});
+jest.mock("embla-carousel-autoplay", () => ({
+    __esModule: true,
+    default: jest.fn(),
+}));
 
 jest.mock("./Carousel.item", () => {
     function MockCarouselItem() {
@@ -51,6 +57,10 @@ describe("Carousel", () => {
         jest.clearAllMocks();
     });
 
+    afterEach(() => {
+        jest.useRealTimers();
+    });
+
     it("renders carousel with initial slides", () => {
         const slides = [
             {
@@ -63,31 +73,30 @@ describe("Carousel", () => {
 
         render(<Carousel initialSlides={slides} />);
 
-        expect(screen.getByTestId("carousel-lib")).toBeInTheDocument();
-
         expect(screen.getByTestId("carousel-item")).toBeInTheDocument();
     });
 
-    it("shows loading indicator after delay", async () => {
+    it("shows loading indicator after delay", () => {
         jest.useFakeTimers();
 
         global.fetch = jest.fn(
             () =>
                 new Promise(() => {
-                    // fetch nigdy się nie kończy
+                    // Żądanie celowo pozostaje nierozstrzygnięte.
                 })
         );
 
         render(<Carousel />);
+
+        expect(screen.queryByTestId("loading")).not.toBeInTheDocument();
 
         act(() => {
             jest.advanceTimersByTime(DELAY);
         });
 
         expect(screen.getByTestId("loading")).toHaveTextContent("Ładowanie przepisów...");
-
-        jest.useRealTimers();
     });
+
     it("handles invalid JSON response", async () => {
         global.fetch = jest.fn().mockResolvedValue({
             json: jest.fn().mockRejectedValue(new Error("Invalid JSON")),
@@ -102,8 +111,16 @@ describe("Carousel", () => {
             });
         });
     });
+
     it("does not show loading indicator before delay", () => {
         jest.useFakeTimers();
+
+        global.fetch = jest.fn(
+            () =>
+                new Promise(() => {
+                    // Żądanie pozostaje nierozstrzygnięte.
+                })
+        );
 
         render(<Carousel />);
 
@@ -114,9 +131,8 @@ describe("Carousel", () => {
         });
 
         expect(screen.queryByTestId("loading")).not.toBeInTheDocument();
-
-        jest.useRealTimers();
     });
+
     it("shows empty state when there are no slides", () => {
         render(<Carousel initialSlides={[]} />);
 

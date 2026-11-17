@@ -10,39 +10,29 @@ import { setupServer } from "msw/node";
 
 import Carousel from "./Carousel";
 
-const mockHandleApiError = jest.fn();
-
-const server = setupServer(
-    rest.get("/api/recipes/random", (_req, res, ctx) => {
-        return res(
-            ctx.json({
-                ok: true,
-                data: [
-                    {
-                        _id: "1",
-                        title: "MSW recipe",
-                        slug: "msw-recipe",
-                        imageUrl: "image.jpg",
-                    },
-                ],
-            })
-        );
-    })
-);
-
-jest.mock("@/hooks", () => ({
-    useApiResponseErrorHandler: () => mockHandleApiError,
+jest.mock("@/hooks/useApiResponseErrorHandler", () => ({
+    useApiResponseErrorHandler: jest.fn(),
 }));
 
-jest.mock("react-multi-carousel", () => {
-    function MockCarousel({ children }: { children: React.ReactNode }) {
-        return <div data-testid="carousel-lib">{children}</div>;
-    }
+jest.mock("@/hooks/useReducedMotion", () => ({
+    useReducedMotion: () => true,
+}));
 
-    MockCarousel.displayName = "MockCarousel";
+jest.mock("embla-carousel-react", () => ({
+    __esModule: true,
+    default: jest.fn(() => [
+        jest.fn(),
+        {
+            scrollPrev: jest.fn(),
+            scrollNext: jest.fn(),
+        },
+    ]),
+}));
 
-    return MockCarousel;
-});
+jest.mock("embla-carousel-autoplay", () => ({
+    __esModule: true,
+    default: jest.fn(),
+}));
 
 jest.mock("./Carousel.item", () => {
     function MockCarouselItem() {
@@ -68,15 +58,42 @@ jest.mock("next/navigation", () => ({
     }),
 }));
 
+const mockUseApiResponseErrorHandler = jest.requireMock("@/hooks/useApiResponseErrorHandler").useApiResponseErrorHandler as jest.Mock;
+
+const mockHandleApiError = jest.fn();
+
+const server = setupServer(
+    rest.get("/api/recipes/random", (_req, res, ctx) => {
+        return res(
+            ctx.json({
+                ok: true,
+                data: [
+                    {
+                        _id: "1",
+                        title: "MSW recipe",
+                        slug: "msw-recipe",
+                        imageUrl: "image.jpg",
+                    },
+                ],
+            })
+        );
+    })
+);
+
 beforeAll(() => {
     server.listen({
         onUnhandledRequest: "error",
     });
 });
 
+beforeEach(() => {
+    mockUseApiResponseErrorHandler.mockReturnValue(mockHandleApiError);
+});
+
 afterEach(() => {
     server.resetHandlers();
     mockHandleApiError.mockClear();
+    mockUseApiResponseErrorHandler.mockClear();
 });
 
 afterAll(() => {
@@ -106,10 +123,9 @@ describe("Carousel with MSW", () => {
 
         render(<Carousel />);
 
-        await waitFor(() => {
-            expect(screen.getByTestId("empty-state")).toHaveTextContent("Nie ma polecanych przepisów");
-        });
+        expect(await screen.findByText("Nie ma polecanych przepisów")).toBeInTheDocument();
     });
+
     it("requests default amount of slides", async () => {
         let receivedCount = "";
 

@@ -10,7 +10,7 @@ jest.mock("@/utils/getRandomRecipes", () => ({
 
 const mockSlider = jest.fn();
 
-jest.mock("@/components/Slider/Slider", () => {
+jest.mock("@/components/Slider/Slider.server", () => {
     function MockSlider(props: unknown) {
         mockSlider(props);
 
@@ -68,6 +68,8 @@ describe("Home page", () => {
         });
 
         render(await Page());
+
+        expect(screen.getByTestId("slider")).toBeInTheDocument();
 
         expect(mockSlider).toHaveBeenCalledWith({
             initialSlides: [],

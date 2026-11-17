@@ -1,11 +1,3 @@
-/**
- * SearchFilters renderuje formularz filtrowania przepisów.
- *
- * SearchFilters przekazuje otrzymane opcje do RecipeFilters.
- *
- * SearchFilters przekazuje funkcję onFiltersChange do RecipeFilters.
- */
-
 import { render, screen } from "@testing-library/react";
 
 import SearchFilters from "./SearchFilters";
@@ -15,7 +7,7 @@ import type { RecipeFilter } from "@/types";
 const mockRecipeFilters = jest.fn();
 
 jest.mock("@/components", () => ({
-    RecipeFilters: (props: { onFiltersChange: () => void; options: RecipeFilter }) => {
+    RecipeFilters: (props: { options: RecipeFilter }) => {
         mockRecipeFilters(props);
 
         return <div data-testid="recipe-filters">RecipeFilters</div>;
@@ -56,13 +48,11 @@ describe("SearchFilters", () => {
         );
     });
 
-    it("passes onFiltersChange to RecipeFilters", () => {
+    it("does not pass unnecessary callback props to RecipeFilters", () => {
         render(<SearchFilters options={options} />);
 
-        expect(mockRecipeFilters).toHaveBeenCalledWith(
-            expect.objectContaining({
-                onFiltersChange: expect.any(Function),
-            })
-        );
+        const props = mockRecipeFilters.mock.calls[0][0];
+
+        expect(props).toEqual({ options });
     });
 });

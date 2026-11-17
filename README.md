@@ -149,3 +149,42 @@ Nie wiem czy tak powinno być
 
 // commonwhite nie jest dobry na background, jak się dat to theme.background
 // commentstyles do sprawdzenia i ew. poprawienia, za dużo by pisać
+
+Przydatne zapytania vision:
+
+//wyświetla wszystkie wartości cuisine
+
+array::unique(\*[_type == "recipe"].cuisine[])
+
+// wyświetla wszystkie przepisy gdzie nie jest ustawiony ani url ani book
+
+\*[
+_type == "recipe" &&
+defined(source) &&
+(!defined(source.url) || source.url == "") &&
+(!defined(source.book) || source.book == "") &&
+(
+defined(source.title) ||
+defined(source.author) ||
+defined(source.where)
+)
+] | order(title asc) {
+\_id,
+title,
+source
+}
+
+//których nie ma URL obrazu w description.image:
+
+\*[
+_type == "recipe" &&
+!defined(description.image.asset->url)
+] | order(title asc) {
+\_id,
+title,
+"slug": slug.current,
+"imageUrl": description.image.asset->url
+}
+
+Dziwnie wygląda wyszukiwanie w studio/recipes, np pieczark wyłapuje fuczki
+Skrypt nie zawsze radzi sobie z odmianą (ingredients)
