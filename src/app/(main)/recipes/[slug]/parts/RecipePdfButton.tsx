@@ -1,3 +1,156 @@
+// "use client";
+
+// import { IconButton, Tooltip } from "@mui/material";
+// import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+// import { styles } from "../styles";
+// import { Recipe } from "@/types";
+
+// interface RecipePdfButtonProps {
+//     recipe: Recipe;
+//     slug: string;
+// }
+
+// export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
+//     const normalizePolishText = (text: string): string => {
+//         return text
+//             .replace(/ą/g, "a")
+//             .replace(/Ą/g, "A")
+//             .replace(/ć/g, "c")
+//             .replace(/Ć/g, "C")
+//             .replace(/ę/g, "e")
+//             .replace(/Ę/g, "E")
+//             .replace(/ł/g, "l")
+//             .replace(/Ł/g, "L")
+//             .replace(/ń/g, "n")
+//             .replace(/Ń/g, "N")
+//             .replace(/ó/g, "o")
+//             .replace(/Ó/g, "O")
+//             .replace(/ś/g, "s")
+//             .replace(/Ś/g, "S")
+//             .replace(/ź/g, "z")
+//             .replace(/Ź/g, "Z")
+//             .replace(/ż/g, "z")
+//             .replace(/Ż/g, "Z")
+//             .trim();
+//     };
+
+//     const handlePdfExport = async () => {
+//         try {
+//             const { default: jsPDF } = await import("jspdf");
+//             const doc = new jsPDF();
+
+//             let yPosition = 25;
+//             const pageWidth = doc.internal.pageSize.getWidth();
+//             const maxLineWidth = pageWidth - 40;
+//             const lineHeight = 6;
+//             const sectionSpacing = 10;
+
+//             doc.setFont("helvetica", "normal");
+
+//             const addSectionHeading = (heading: string) => {
+//                 doc.setFontSize(14);
+//                 doc.setFont("helvetica", "bold");
+//                 doc.text(heading, 20, yPosition);
+//                 yPosition += lineHeight + 2;
+//             };
+
+//             const addTextLines = (text: string, fontSize: number, fontStyle: "normal" | "bold" | "italic" = "normal") => {
+//                 doc.setFontSize(fontSize);
+//                 doc.setFont("helvetica", fontStyle);
+
+//                 const lines = doc.splitTextToSize(text, maxLineWidth);
+
+//                 lines.forEach((line: string) => {
+//                     if (yPosition > 280) {
+//                         doc.addPage();
+//                         yPosition = 25;
+//                     }
+
+//                     doc.text(line, 20, yPosition);
+//                     yPosition += lineHeight;
+//                 });
+//             };
+
+//             // Tytuł
+//             addTextLines(normalizePolishText(recipe.title), 18, "bold");
+//             yPosition += sectionSpacing;
+
+//             // Składniki podstawowe
+//             addSectionHeading("Skladniki:");
+
+//             if (recipe.ingredients && recipe.ingredients.length > 0) {
+//                 recipe.ingredients.forEach(ingredient => {
+//                     const quantityUnit = `${ingredient.quantity}${ingredient.unit ? ` ${ingredient.unit}` : ""}`;
+//                     const ingredientText = normalizePolishText(`${ingredient.name} - ${quantityUnit}`);
+
+//                     addTextLines(ingredientText, 12);
+//                 });
+//             }
+
+//             // Składniki opcjonalne
+//             if (recipe.optionalIngredients && recipe.optionalIngredients.length > 0) {
+//                 yPosition += 4;
+//                 addSectionHeading("Skladniki opcjonalne:");
+
+//                 recipe.optionalIngredients.forEach(ingredient => {
+//                     const quantityUnit = `${ingredient.quantity}${ingredient.unit ? ` ${ingredient.unit}` : ""}`;
+//                     const ingredientText = normalizePolishText(`${ingredient.name} - ${quantityUnit}`);
+
+//                     addTextLines(ingredientText, 12);
+//                 });
+//             }
+
+//             yPosition += sectionSpacing;
+
+//             // Przygotowanie
+//             addSectionHeading("Przygotowanie:");
+
+//             if (recipe.preparationSteps && recipe.preparationSteps.length > 0) {
+//                 recipe.preparationSteps.forEach((step, index) => {
+//                     let stepText = `${index + 1}. `;
+
+//                     if (step.content) {
+//                         step.content.forEach(block => {
+//                             if (block.children) {
+//                                 block.children.forEach(child => {
+//                                     if (child.text) {
+//                                         stepText += `${normalizePolishText(child.text)} `;
+//                                     }
+//                                 });
+//                             }
+//                         });
+//                     }
+
+//                     if (step.notes) {
+//                         stepText += `(${normalizePolishText(step.notes)})`;
+//                     }
+
+//                     addTextLines(stepText.trim(), 12);
+//                     yPosition += 2;
+//                 });
+//             }
+
+//             yPosition += sectionSpacing;
+
+//             // Źródło
+//             addTextLines(`Zrodlo: https://cook-book-inky.vercel.app/recipes/${slug}`, 10, "italic");
+
+//             doc.save(`${slug}.pdf`);
+//         } catch (error) {
+//             console.error("PDF generation error:", error);
+//             alert("Blad podczas generowania PDF. Sprobuj ponownie.");
+//         }
+//     };
+
+//     return (
+//         <Tooltip title="Eksportuj do PDF" placement="top">
+//             <IconButton id="RecipePdfButton" onClick={handlePdfExport} sx={styles.recipeButton} aria-label="Eksportuj przepis do PDF">
+//                 <PictureAsPdfIcon sx={styles.recipeButtonIcon} />
+//             </IconButton>
+//         </Tooltip>
+//     );
+// }
+
 "use client";
 
 import { IconButton, Tooltip } from "@mui/material";
@@ -10,58 +163,69 @@ interface RecipePdfButtonProps {
     slug: string;
 }
 
-export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
-    const normalizePolishText = (text: string): string => {
-        return text
-            .replace(/ą/g, "a")
-            .replace(/Ą/g, "A")
-            .replace(/ć/g, "c")
-            .replace(/Ć/g, "C")
-            .replace(/ę/g, "e")
-            .replace(/Ę/g, "E")
-            .replace(/ł/g, "l")
-            .replace(/Ł/g, "L")
-            .replace(/ń/g, "n")
-            .replace(/Ń/g, "N")
-            .replace(/ó/g, "o")
-            .replace(/Ó/g, "O")
-            .replace(/ś/g, "s")
-            .replace(/Ś/g, "S")
-            .replace(/ź/g, "z")
-            .replace(/Ź/g, "Z")
-            .replace(/ż/g, "z")
-            .replace(/Ż/g, "Z")
-            .trim();
-    };
+const loadRobotoFont = async (): Promise<string> => {
+    const response = await fetch("/fonts/Roboto-Regular.ttf");
 
+    if (!response.ok) {
+        throw new Error("Nie udało się pobrać fontu Roboto.");
+    }
+
+    const fontBuffer = await response.arrayBuffer();
+    const fontBytes = new Uint8Array(fontBuffer);
+
+    // Konwersja do Base64 bez ryzyka przepełnienia stosu.
+    let binary = "";
+    const chunkSize = 0x8000;
+
+    for (let i = 0; i < fontBytes.length; i += chunkSize) {
+        const chunk = fontBytes.subarray(i, i + chunkSize);
+        binary += String.fromCharCode(...chunk);
+    }
+
+    return btoa(binary);
+};
+
+export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
     const handlePdfExport = async () => {
         try {
             const { default: jsPDF } = await import("jspdf");
+
+            const fontBase64 = await loadRobotoFont();
+
             const doc = new jsPDF();
 
+            // Rejestracja fontu obsługującego polski alfabet.
+            doc.addFileToVFS("Roboto-Regular.ttf", fontBase64);
+            doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+            doc.setFont("Roboto", "normal");
+
             let yPosition = 25;
+
             const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+
             const maxLineWidth = pageWidth - 40;
             const lineHeight = 6;
             const sectionSpacing = 10;
-
-            doc.setFont("helvetica", "normal");
+            const bottomMargin = 17;
 
             const addSectionHeading = (heading: string) => {
                 doc.setFontSize(14);
-                doc.setFont("helvetica", "bold");
+                doc.setFont("Roboto", "normal");
+
                 doc.text(heading, 20, yPosition);
+
                 yPosition += lineHeight + 2;
             };
 
-            const addTextLines = (text: string, fontSize: number, fontStyle: "normal" | "bold" | "italic" = "normal") => {
+            const addTextLines = (text: string, fontSize: number) => {
                 doc.setFontSize(fontSize);
-                doc.setFont("helvetica", fontStyle);
+                doc.setFont("Roboto", "normal");
 
                 const lines = doc.splitTextToSize(text, maxLineWidth);
 
                 lines.forEach((line: string) => {
-                    if (yPosition > 280) {
+                    if (yPosition > pageHeight - bottomMargin) {
                         doc.addPage();
                         yPosition = 25;
                     }
@@ -71,30 +235,33 @@ export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
                 });
             };
 
-            // Tytuł
-            addTextLines(normalizePolishText(recipe.title), 18, "bold");
+            // Tytuł przepisu
+            addTextLines(recipe.title, 18);
             yPosition += sectionSpacing;
 
             // Składniki podstawowe
-            addSectionHeading("Skladniki:");
+            addSectionHeading("Składniki:");
 
-            if (recipe.ingredients && recipe.ingredients.length > 0) {
+            if (recipe.ingredients?.length) {
                 recipe.ingredients.forEach(ingredient => {
                     const quantityUnit = `${ingredient.quantity}${ingredient.unit ? ` ${ingredient.unit}` : ""}`;
-                    const ingredientText = normalizePolishText(`${ingredient.name} - ${quantityUnit}`);
+
+                    const ingredientText = `${ingredient.name} - ${quantityUnit}`;
 
                     addTextLines(ingredientText, 12);
                 });
             }
 
             // Składniki opcjonalne
-            if (recipe.optionalIngredients && recipe.optionalIngredients.length > 0) {
+            if (recipe.optionalIngredients?.length) {
                 yPosition += 4;
-                addSectionHeading("Skladniki opcjonalne:");
+
+                addSectionHeading("Składniki opcjonalne:");
 
                 recipe.optionalIngredients.forEach(ingredient => {
                     const quantityUnit = `${ingredient.quantity}${ingredient.unit ? ` ${ingredient.unit}` : ""}`;
-                    const ingredientText = normalizePolishText(`${ingredient.name} - ${quantityUnit}`);
+
+                    const ingredientText = `${ingredient.name} - ${quantityUnit}`;
 
                     addTextLines(ingredientText, 12);
                 });
@@ -105,7 +272,7 @@ export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
             // Przygotowanie
             addSectionHeading("Przygotowanie:");
 
-            if (recipe.preparationSteps && recipe.preparationSteps.length > 0) {
+            if (recipe.preparationSteps?.length) {
                 recipe.preparationSteps.forEach((step, index) => {
                     let stepText = `${index + 1}. `;
 
@@ -114,7 +281,7 @@ export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
                             if (block.children) {
                                 block.children.forEach(child => {
                                     if (child.text) {
-                                        stepText += `${normalizePolishText(child.text)} `;
+                                        stepText += `${child.text} `;
                                     }
                                 });
                             }
@@ -122,7 +289,7 @@ export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
                     }
 
                     if (step.notes) {
-                        stepText += `(${normalizePolishText(step.notes)})`;
+                        stepText += `(${step.notes})`;
                     }
 
                     addTextLines(stepText.trim(), 12);
@@ -133,12 +300,14 @@ export function RecipePdfButton({ recipe, slug }: RecipePdfButtonProps) {
             yPosition += sectionSpacing;
 
             // Źródło
-            addTextLines(`Zrodlo: https://cook-book-inky.vercel.app/recipes/${slug}`, 10, "italic");
+            addTextLines(`Źródło: https://cook-book-inky.vercel.app/recipes/${slug}`, 10);
 
+            // Zapis PDF
             doc.save(`${slug}.pdf`);
         } catch (error) {
             console.error("PDF generation error:", error);
-            alert("Blad podczas generowania PDF. Sprobuj ponownie.");
+
+            alert("Wystąpił błąd podczas generowania PDF. Spróbuj ponownie.");
         }
     };
 

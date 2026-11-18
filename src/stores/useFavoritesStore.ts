@@ -34,7 +34,6 @@ export const useFavoritesStore = create<FavoritesState>(set => ({
 
     remove: favoriteId =>
         set(state => {
-            console.log("remove from state", favoriteId);
             const next = new Set(state.favorites);
             next.delete(favoriteId);
             return {

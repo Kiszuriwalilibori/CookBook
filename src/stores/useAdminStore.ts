@@ -13,7 +13,6 @@ export const useAdminStore = create<AdminStore>()(set => ({
     googleToken: null,
 
     setLoginStatus: (value, token) => {
-        console.log(`[Auth Store] loginStatus = ${value}`);
         set({
             loginStatus: value,
             googleToken: token ?? null,

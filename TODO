@@ -245,3 +245,129 @@ Nie jest low-FODMAP (w tej ilości) – duża porcja ciecierzycy + czosnek + ceb
 //todo krótki komentarz ma niewłaściwe tło
 
 //todo badżi z bakłażana nie ma składników ani komentarzy
+
+
+
+
+
+po przełaczeniu z jakiegokolwiek wyszukiwania na potrawę miga loading indicator jakby nie był przez usedelayedcośtam 
+
+
+// todo czy formy nie powinny mieć obsługi głosu
+
+// todo dodać jakiś deskryptor do ilości porcji bo czasami niejasne
+
+// todo do konsoli przeciska się błąd upstream image response timed out for https://cdn.sanity.io/images/mextu0pu/production/b28ce14fa81f8c1e218e4cff558bb49ef836c472-1280x720.jpg
+w sytuacji kiedy nie uda się wczytać obrazka dla którejś z recipecards
+Nie wiem czy tak powinno być
+
+
+
+
+
+
+
+
+
+szare pole w diecie po wyborze
+za szerokie suwaki scrolla
+okropny niebieski focus
+
+stwórz wyszukiwarkę przepisów
+uprość style sx props
+
+FILTRY:
+
+dodaj animacje do Autocomplete
+Ensure MUI Autocomplete slot props
+Apply similar styling to dietetary
+Ensure consistent chip styling
+Persist filters between sessions
+
+Apply shrink to all labels
+add search funtionality
+Make chips more rounded
+Autocomplete chip customization
+Add Accesaibility improvements
+Uprość kod filtrów
+implement filter persistance
+Add search functionality to title filter
+Implement debounced API calls
+
+Add analytics or logging hook
+
+MENU: MUI Navigation best practices
+
+USERECIPESSUMMARY:
+optimize hook with SWR Librrary
+
+getRecipeSSummay:
+
+
+
+
+Jeśli chcesz następny krok
+
+Mogę Ci pomóc zrobić:
+
+🔽
+zwijanie wątków (collapse threads)
+⚡
+optimistic replies (bez refetch)
+🧠
+sortowanie "top comments"
+🔥
+real-time comments (SSE / WebSocket)
+
+
+
+// pozzcje w desktopmenu generują nieweilki CLS bo coś tam pojawia się z opóźnieniem
+
+
+// desktopmenustyles zawiera liczne color: theme => theme.custom.menuColor, chyba niepotrzebne skoro chodzi o czarny.Ale w sumie jest to spójne i tak bym zostawił . Ewentualnie skoro dotyczy to menu dać zmienną ograniczoaną do menu ale to mniej istotne.
+
+// commonwhite nie jest dobry na background, jak się dat to theme.background
+// commentstyles do sprawdzenia i ew. poprawienia, za dużo by pisać
+
+Przydatne zapytania vision:
+
+//wyświetla wszystkie wartości cuisine
+
+array::unique(\*[_type == "recipe"].cuisine[])
+
+// wyświetla wszystkie przepisy gdzie nie jest ustawiony ani url ani book
+
+\*[
+_type == "recipe" &&
+defined(source) &&
+(!defined(source.url) || source.url == "") &&
+(!defined(source.book) || source.book == "") &&
+(
+defined(source.title) ||
+defined(source.author) ||
+defined(source.where)
+)
+] | order(title asc) {
+\_id,
+title,
+source
+}
+
+//których nie ma URL obrazu w description.image:
+
+\*[
+_type == "recipe" &&
+!defined(description.image.asset->url)
+] | order(title asc) {
+\_id,
+title,
+"slug": slug.current,
+"imageUrl": description.image.asset->url
+}
+
+Dziwnie wygląda wyszukiwanie w studio/recipes, np pieczark wyłapuje fuczki
+Skrypt nie zawsze radzi sobie z odmianą (ingredients)
+
+
+Kiedyś coś takiego zapisałem do dalszego rozważenia:Jeśli chcesz następny krok Mogę Ci pomóc zrobić:🔽
+zwijanie wątków (collapse threads)

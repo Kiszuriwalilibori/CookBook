@@ -32,13 +32,9 @@ export default function RecipeFilters({ onFiltersChange = noopFiltersChange, onC
     const router = useRouter();
     const [isApplying, setIsApplying] = React.useState(false);
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange, initialValues);
-    console.log("[filters:init] initialValues z rodzica", initialValues);
 
     //New smart Apply logic
     const handleApply = useCallback(async () => {
-        console.log("[filters:apply] formularz", filters);
-        console.log("[filters:apply] URL", window.location.href);
-        console.log("[filters:apply] cookie", document.cookie);
         if (!apply()) return; // validation failed → do nothing
 
         const currentFilters = { ...filters };
@@ -60,10 +56,6 @@ export default function RecipeFilters({ onFiltersChange = noopFiltersChange, onC
         // CASE 2: Normal filtering → go to /recipes list
         const queryString = buildQueryString(currentFilters);
 
-        console.log("[filters:apply] docelowy URL", {
-            queryString,
-            destination: `/recipes${queryString ? `?${queryString}` : ""}`,
-        });
         router.push(`/recipes${queryString ? `?${queryString}` : ""}`);
         onClose?.();
     }, [apply, filters, router, onClose]);

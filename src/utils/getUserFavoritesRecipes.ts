@@ -3,9 +3,8 @@ import type { Recipe } from "@/types";
 import { recipeCardProjection } from "@/utils/projections/recipeCardProjection";
 
 export async function getUserFavoritesRecipes(userId: string): Promise<Recipe[]> {
-    console.log("getUserFavorites", userId);
     if (!userId) return [];
-    console.log("getUserFavorites userid", userId);
+
     const favorites = await writeClient.fetch(
         `*[_type=="favorite" && userId==$userId]{
             recipe->{
