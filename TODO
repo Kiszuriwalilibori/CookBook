@@ -242,9 +242,8 @@ Nie jest ketogeniczna / low-carb – ciecierzyca dostarcza sporo węglowodanów.
 Nie jest Whole30 – cukier i strączki są wykluczone.
 Nie jest low-FODMAP (w tej ilości) – duża porcja ciecierzycy + czosnek + cebula to składniki wysokofodmapowe.
 
-//todo krótki komentarz ma niewłaściwe tło
 
-//todo badżi z bakłażana nie ma składników ani komentarzy
+
 
 
 
@@ -262,12 +261,18 @@ w sytuacji kiedy nie uda się wczytać obrazka dla którejś z recipecards
 Nie wiem czy tak powinno być
 
 
+Dziwnie wygląda wyszukiwanie w studio/recipes, np pieczark wyłapuje fuczki
+Skrypt nie zawsze radzi sobie z odmianą (ingredients)
+
+
+Kiedyś coś takiego zapisałem do dalszego rozważenia:Jeśli chcesz następny krok Mogę Ci pomóc zrobić:🔽
+zwijanie wątków (collapse threads)
 
 
 
 
 
-
+Poniższe przeniesione z jakiejś starej wersji nie wiadomo czy aktualna:
 
 szare pole w diecie po wyborze
 za szerokie suwaki scrolla
@@ -365,9 +370,3 @@ title,
 "imageUrl": description.image.asset->url
 }
 
-Dziwnie wygląda wyszukiwanie w studio/recipes, np pieczark wyłapuje fuczki
-Skrypt nie zawsze radzi sobie z odmianą (ingredients)
-
-
-Kiedyś coś takiego zapisałem do dalszego rozważenia:Jeśli chcesz następny krok Mogę Ci pomóc zrobić:🔽
-zwijanie wątków (collapse threads)

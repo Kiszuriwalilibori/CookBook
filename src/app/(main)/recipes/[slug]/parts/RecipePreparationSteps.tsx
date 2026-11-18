@@ -43,7 +43,7 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
                 >
                     <Accordion id={`RecipePreparationStep-${i + 1}`} defaultExpanded sx={styles.recipeStepAccordion}>
                         <AccordionSummary expandIcon={null} sx={styles.recipeStepAccordionSummary} aria-label={`Krok ${i + 1} — szczegóły przygotowania`}>
-                            <Typography /*variant="h3"*/ component="span" sx={styles.recipeStepIndex}>
+                            <Typography component="span" sx={styles.recipeStepIndex}>
                                 {i + 1}
                             </Typography>
 
@@ -51,13 +51,13 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
                         </AccordionSummary>
 
                         <AccordionDetails sx={styles.recipeStepAccordionDetails}>
+                            {step.content && <PortableText value={step.content} components={PortableContentComponents} />}
                             {step.image?.asset?.url && (
                                 <Box sx={styles.stepImageContainer}>
                                     <Image src={step.image.asset.url} alt={step.image.alt || `Zdjęcie do kroku ${i + 1}`} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" />
+                                    {/* <Image src={step.image.asset.url} alt={step.image.alt || `Zdjęcie do kroku ${i + 1}`} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" /> */}
                                 </Box>
                             )}
-
-                            {step.content && <PortableText value={step.content} components={PortableContentComponents} />}
 
                             {step.notes && (
                                 <Typography variant="body2" sx={styles.stepNotes}>

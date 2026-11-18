@@ -177,6 +177,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         borderRadius: radius.sm,
         overflow: "hidden",
     },
+
     stepNotes: {
         color: "text.secondary",
         mt: 0.5,
