@@ -170,14 +170,15 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         fontWeight: "700",
         mb: 1,
     },
+
     stepImageContainer: {
-        position: "relative",
-        height: 192,
+        width: "100%",
+        height: "auto",
+        mt: 1,
         mb: 0.5,
         borderRadius: radius.sm,
         overflow: "hidden",
     },
-
     stepNotes: {
         color: "text.secondary",
         mt: 0.5,

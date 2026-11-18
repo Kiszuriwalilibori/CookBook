@@ -54,8 +54,22 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
                             {step.content && <PortableText value={step.content} components={PortableContentComponents} />}
                             {step.image?.asset?.url && (
                                 <Box sx={styles.stepImageContainer}>
-                                    <Image src={step.image.asset.url} alt={step.image.alt || `Zdjęcie do kroku ${i + 1}`} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" />
-                                    {/* <Image src={step.image.asset.url} alt={step.image.alt || `Zdjęcie do kroku ${i + 1}`} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" /> */}
+                                    {step.image?.asset?.url && (
+                                        <Box sx={styles.stepImageContainer}>
+                                            <Image
+                                                src={step.image.asset.url}
+                                                alt={step.image.alt || `Zdjęcie do kroku ${i + 1}`}
+                                                width={1200}
+                                                height={800}
+                                                style={{
+                                                    display: "block",
+                                                    width: "100%",
+                                                    height: "auto",
+                                                }}
+                                                sizes="(max-width: 768px) 100vw, 50vw"
+                                            />
+                                        </Box>
+                                    )}
                                 </Box>
                             )}
 
