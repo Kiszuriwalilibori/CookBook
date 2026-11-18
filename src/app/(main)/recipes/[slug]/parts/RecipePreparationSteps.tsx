@@ -52,33 +52,13 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
 
                         <AccordionDetails sx={styles.recipeStepAccordionDetails}>
                             {step.content && <PortableText value={step.content} components={PortableContentComponents} />}
-                            {/* {step.image?.asset?.url && (
-                                <Box sx={styles.stepImageContainer}>
-                                    {step.image?.asset?.url && (
-                                        <Box sx={styles.stepImageContainer}>
-                                            <Image
-                                                src={step.image.asset.url}
-                                                alt={step.image.alt || `Zdjęcie do kroku ${i + 1}`}
-                                                width={1200}
-                                                height={800}
-                                                style={{
-                                                    display: "block",
-                                                    width: "100%",
-                                                    height: "auto",
-                                                }}
-                                                sizes="(max-width: 768px) 100vw, 50vw"
-                                            />
-                                        </Box>
-                                    )}
-                                </Box>
-                            )} */}
                             {step.image?.asset?.url && (
                                 <Box sx={styles.stepImageContainer}>
                                     <Image
                                         src={step.image.asset.url}
                                         alt={step.image.alt || `Zdjęcie do kroku ${i + 1}`}
-                                        width={1200}
-                                        height={800}
+                                        width={step.image.asset.metadata?.dimensions?.width || 1200}
+                                        height={step.image.asset.metadata?.dimensions?.height || 800}
                                         style={{
                                             display: "block",
                                             width: "100%",
@@ -101,12 +81,3 @@ export function RecipePreparationSteps({ recipe }: RecipePreparationStepsProps) 
         </Box>
     );
 }
-
-// {
-//     step.image?.asset?.url && (
-//         <Box sx={styles.stepImageContainer}>
-//             <Image src={step.image.asset.url} alt={step.image.alt || `Zdjęcie do kroku ${i + 1}`} fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" />
-//         </Box>
-//     );
-// }
-//todo na dobrą sprawę wygląd tego nie jest sprawdzony

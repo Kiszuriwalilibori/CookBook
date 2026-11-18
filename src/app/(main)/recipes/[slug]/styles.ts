@@ -111,7 +111,6 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         mb: 2,
     },
     ingredientsTitle: {
-        // fontSize: "1.25rem",
         fontFamily: "Playfair Display, Georgia, serif",
         fontWeight: 500,
         mb: 2,
@@ -130,14 +129,6 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         py: 0.5,
         listStyle: "none",
     },
-    // ingredientsListItemFull: {
-    //     display: "flex",
-    //     justifyContent: "space-between",
-    //     width: "100%",
-    //     padding: 0,
-    //     listStyle: "none",
-    //     py: 0.5,
-    // },
 
     ingredientsListItemFull: {
         display: "flex",
@@ -158,7 +149,6 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         mb: 4,
     },
     preparationTitle: {
-        // fontSize: "1.25rem",
         fontFamily: "Playfair Display, Georgia, serif",
         fontWeight: 500,
         mb: 2,
@@ -235,7 +225,7 @@ export const styles: { [key: string]: SxProps<Theme> } = {
         pl: { md: 2 },
         mt: { xs: 2, md: 0 },
     },
-    // New styles for copy button
+
     copyButtonContainer: {
         width: "100%",
         display: "flex",
@@ -248,10 +238,10 @@ export const styles: { [key: string]: SxProps<Theme> } = {
     recipeButton: {
         color: theme => theme.palette.secondary.main,
 
-        fontSize: { xs: "0.875rem", sm: "1rem" }, // Responsive font sizing for readability
+        fontSize: { xs: "0.875rem", sm: "1rem" },
         py: { xs: 1, sm: 1.5 },
         px: { xs: 2, sm: 3 },
-        minHeight: "44px", // WCAG touch target minimum
+        minHeight: "44px",
         borderRadius: radius.sm,
 
         borderColor: theme => theme.palette.secondary.main,
@@ -293,7 +283,7 @@ export const portableTextSx: { [key: string]: SxProps<Theme> } = {
     block: {
         mb: 0,
         fontSize: FONT_SIZE,
-        lineHeight: 1.3, // Added reduced line-height for more compact text lines (default ~1.5)
+        lineHeight: 1.3,
     },
     list: {
         ml: 3,

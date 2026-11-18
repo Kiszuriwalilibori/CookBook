@@ -1,3 +1,57 @@
+/*
+================================================================================
+TESTY KOMPONENTU RecipePreparationSteps
+================================================================================
+
+1. Brak kroków przygotowania
+   - Sprawdzamy, czy komponent niczego nie wyświetla, gdy przepis nie ma kroków.
+
+2. Wyświetlanie nagłówka i kroków
+   - Sprawdzamy, czy pojawia się nagłówek „Przygotowanie”.
+   - Sprawdzamy, czy wyświetlana jest treść wszystkich kroków.
+
+3. Początkowy aktywny krok
+   - Sprawdzamy, czy po załadowaniu przepisu aktywny jest pierwszy krok.
+   - Sprawdzamy, czy licznik pokazuje prawidłową wartość.
+
+4. Domyślnie rozwinięte kroki
+   - Sprawdzamy, czy wszystkie akordeony są początkowo rozwinięte.
+
+5. Obserwowanie kroków
+   - Sprawdzamy, czy IntersectionObserver obserwuje każdy krok przygotowania.
+
+6. Zmiana aktywnego kroku
+   - Sprawdzamy, czy aktywny krok zmienia się, gdy inny krok pojawia się w widocznym obszarze strony.
+
+7. Wybór najwyższego widocznego kroku
+   - Sprawdzamy, czy przy jednoczesnej widoczności kilku kroków aktywny zostaje ten o najwyższym numerze.
+
+8. Zachowanie poprzedniego aktywnego kroku
+   - Sprawdzamy, czy po zniknięciu najwyższego widocznego kroku aktywność wraca do poprzedniego widocznego kroku.
+
+9. Brak zmiany przy opuszczeniu widoku
+   - Sprawdzamy, czy aktywny krok nie zmienia się, gdy wszystkie kroki opuszczają widoczny obszar.
+
+10. Pasek postępu
+    - Sprawdzamy, czy pasek postępu pokazuje prawidłową wartość początkową.
+    - Sprawdzamy, czy aktualizuje się po zmianie aktywnego kroku.
+
+11. Notatki do kroków
+    - Sprawdzamy, czy notatki przypisane do kroków są wyświetlane.
+
+12. Czyszczenie IntersectionObserver
+    - Sprawdzamy, czy obserwator zostaje odłączony po odmontowaniu komponentu.
+
+13. Wymiary zdjęć pobierane z Sanity
+    - Sprawdzamy, czy komponent wykorzystuje rzeczywistą szerokość i wysokość zdjęcia
+      zapisane w metadata.dimensions.
+
+14. Domyślne wymiary zdjęć
+    - Sprawdzamy, czy przy braku metadanych zdjęcie otrzymuje wymiary zastępcze:
+      1200 × 800.
+
+================================================================================
+*/
 import { render, screen, cleanup } from "@testing-library/react";
 import { act } from "react";
 import { RecipePreparationSteps } from "./RecipePreparationSteps";
@@ -295,5 +349,47 @@ describe("RecipePreparationSteps", () => {
         unmount();
 
         expect(mockDisconnect).toHaveBeenCalledTimes(1);
+    });
+    it("uses image dimensions from Sanity metadata", () => {
+        const step = {
+            ...createStep(1),
+            image: {
+                asset: {
+                    _id: "image-1",
+                    url: "https://example.com/image.jpg",
+                    metadata: {
+                        dimensions: {
+                            width: 1600,
+                            height: 1067,
+                        },
+                    },
+                },
+                alt: "Zdjęcie potrawy",
+            },
+        };
+
+        render(<RecipePreparationSteps recipe={createRecipe([step])} />);
+
+        const image = screen.getByAltText("Zdjęcie potrawy");
+        expect(image).toHaveAttribute("width", "1600");
+        expect(image).toHaveAttribute("height", "1067");
+    });
+    it("uses default image dimensions when Sanity metadata is missing", () => {
+        const step = {
+            ...createStep(1),
+            image: {
+                asset: {
+                    _id: "image-1",
+                    url: "https://example.com/image.jpg",
+                },
+                alt: "Zdjęcie potrawy",
+            },
+        };
+
+        render(<RecipePreparationSteps recipe={createRecipe([step])} />);
+
+        const image = screen.getByAltText("Zdjęcie potrawy");
+        expect(image).toHaveAttribute("width", "1200");
+        expect(image).toHaveAttribute("height", "800");
     });
 });

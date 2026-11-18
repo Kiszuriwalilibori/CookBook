@@ -15,7 +15,7 @@ interface PortableTextBlock {
         _type: "link";
         href: string;
         openInNewTab?: boolean;
-    }>; // Expand for other annotations as needed
+    }>;
 }
 
 export interface RecipeIngredient {
@@ -58,9 +58,19 @@ export interface Recipe {
         _key?: string;
         content?: PortableTextBlock[];
         image?: {
-            asset?: { _id: string; url?: string };
+            asset?: {
+                _id: string;
+                url?: string;
+                metadata?: {
+                    dimensions?: {
+                        width?: number;
+                        height?: number;
+                    };
+                };
+            };
             alt?: string;
         };
+
         notes?: string;
     }>;
 

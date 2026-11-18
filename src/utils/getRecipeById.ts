@@ -38,7 +38,11 @@ export async function getRecipeById(id: string): Promise<Recipe | null> {
         },
         preparationSteps[] {
           content[],
-          image { asset->{ _id, url }, alt },
+          image {
+          asset->{ _id, url, metadata { dimensions { width, height } } },
+          alt
+},
+          // image { asset->{ _id, url }, alt },
           notes
         },
         calories,
