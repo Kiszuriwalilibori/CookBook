@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { containerStyles, textStyles } from "../../PrivateUserNotes.styles";
 import { useIsUserSet } from "@/stores/userStore";
-import { useApiResponseErrorHandler } from "@/hooks";
+import { useApiResponseErrorHandler, useDelayedCondition } from "@/hooks";
 import { useNotesState } from "./useNotesState";
 import { ApiResponse } from "@/models/apiResponse";
 import { LoadingIndicator } from "@/components";
@@ -19,6 +19,7 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
     const { notes, setNotes, clearNotes, hasNotes } = useNotesState(initialNotes);
     const [loading, setLoading] = useState(false);
     const handleApiResponseError = useApiResponseErrorHandler();
+    const showLoading = useDelayedCondition(loading, 500, 1000);
 
     useEffect(() => {
         setNotes(initialNotes || "");
@@ -66,8 +67,15 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
                 Twoje notatki
             </Typography>
 
-            {loading ? (
+            {/* {loading ? (
                 <LoadingIndicator open={loading} prompt="Trwa ładowanie notatek" />
+            ) : (
+                <Typography variant="body1" sx={textStyles}>
+                    {notes}
+                </Typography>
+            )} */}
+            {showLoading ? (
+                <LoadingIndicator open={showLoading} prompt="Trwa ładowanie notatek" />
             ) : (
                 <Typography variant="body1" sx={textStyles}>
                     {notes}
