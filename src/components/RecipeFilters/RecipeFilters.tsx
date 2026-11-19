@@ -15,12 +15,15 @@ import { buildQueryString } from "./utils/buildQueryStrings";
 import { RecipeFilter, Recipe } from "@/types";
 import { FilterField } from "@/hooks/useCreateRecipeFilterFields";
 import { useFilters, useCreateRecipeFilterFields } from "@/hooks";
+import useDelayedCondition from "@/hooks/useDelayedCondition";
+import LoadingIndicator from "@/components/LoadingIndicator";
 
 import { FilterState } from "@/models/filters";
 import { searchRecipeByTitle } from "@/utils/searchRecipeByTitle";
 
 export type ChipFieldKey = keyof Pick<Recipe, "products" | "tags" | "dietary" | "cuisine">;
 const noopFiltersChange = (_filters: FilterState) => {};
+
 interface RecipeFiltersProps {
     onFiltersChange?: (filters: FilterState) => void;
     onClose?: () => void;
@@ -31,15 +34,15 @@ interface RecipeFiltersProps {
 export default function RecipeFilters({ onFiltersChange = noopFiltersChange, onClose, options, initialValues }: RecipeFiltersProps) {
     const router = useRouter();
     const [isApplying, setIsApplying] = React.useState(false);
+    const showLoading = useDelayedCondition(isApplying, 500, 1000);
+
     const { filters, errors, handleChange, clear, apply } = useFilters(options, onFiltersChange, initialValues);
 
-    //New smart Apply logic
     const handleApply = useCallback(async () => {
-        if (!apply()) return; // validation failed → do nothing
+        if (!apply()) return;
 
         const currentFilters = { ...filters };
 
-        // Detect if ONLY title is filled
         if (currentFilters.title) {
             const title = (currentFilters.title as string).trim();
             const slug = await searchRecipeByTitle(title);
@@ -49,11 +52,8 @@ export default function RecipeFilters({ onFiltersChange = noopFiltersChange, onC
                 onClose?.();
                 return;
             }
-
-            // Optional: You can show a toast here that no exact match was found
         }
 
-        // CASE 2: Normal filtering → go to /recipes list
         const queryString = buildQueryString(currentFilters);
 
         router.push(`/recipes${queryString ? `?${queryString}` : ""}`);
@@ -74,7 +74,6 @@ export default function RecipeFilters({ onFiltersChange = noopFiltersChange, onC
 
     const filterFields = useCreateRecipeFilterFields(options);
 
-    // Simple loading state while searching for direct recipe
     const [isSearchingByTitle, setIsSearchingByTitle] = React.useState(false);
 
     const enhancedHandleApply = async () => {
@@ -99,8 +98,11 @@ export default function RecipeFilters({ onFiltersChange = noopFiltersChange, onC
             setIsApplying(false);
         }
     };
+
     return (
         <Box sx={containerSx} id="RecipeFilters">
+            {showLoading && <LoadingIndicator prompt="Wyszukiwanie przepisów..." />}
+
             <Typography variant="h6" gutterBottom align="center">
                 Filtruj Przepisy
             </Typography>
