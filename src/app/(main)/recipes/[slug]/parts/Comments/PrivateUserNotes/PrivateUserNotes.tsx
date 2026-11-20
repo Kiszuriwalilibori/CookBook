@@ -67,13 +67,6 @@ export const PrivateUserNotes = ({ recipeId, initialNotes }: PrivateUserNotesPro
                 Twoje notatki
             </Typography>
 
-            {/* {loading ? (
-                <LoadingIndicator open={loading} prompt="Trwa ładowanie notatek" />
-            ) : (
-                <Typography variant="body1" sx={textStyles}>
-                    {notes}
-                </Typography>
-            )} */}
             {showLoading ? (
                 <LoadingIndicator open={showLoading} prompt="Trwa ładowanie notatek" />
             ) : (
