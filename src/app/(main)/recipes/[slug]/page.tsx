@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import { notFound, redirect } from "next/navigation";
 import { getInitialRecipeComments } from "@/utils/getInitialRecipeComments";
+import ShowSnackbar from "@/components/ShowSnackBar";
 
 import { Separator } from "@/components";
 
@@ -24,7 +25,6 @@ import {
 } from "./parts";
 
 import Comments from "./parts/Comments";
-import PrivateUserNotes from "./parts/Comments/PrivateUserNotes";
 
 import { styles } from "./styles";
 import { mapRecipeToMetadata } from "./parts/RecipeMetadata/RecipeMetadata.utils";
@@ -33,6 +33,8 @@ import { generateRecipeMetadata, generateRecipeSchema, getRecipeById, getUserRec
 
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 import { RecipeIngredientsClearButton } from "./parts/RecipeIngredientsClearButton";
+import { ApiErrorPayload } from "@/models/apiResponse";
+import PrivateRecipeNotes from "./parts/Comments/PrivateRecipeNotes";
 
 interface Params {
     slug: string;
@@ -77,9 +79,21 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
 
     const [recipe, userId] = await Promise.all([getRecipeById(id), getUserIdFromCookies()]);
     if (!recipe) notFound();
-    let initialNotes: string | undefined = undefined;
+
+    let recipeNotes: string | undefined;
+    let recipeNotesLoadError: ApiErrorPayload | null = null;
+
     if (userId) {
-        initialNotes = await getUserRecipeNote(userId, recipe._id);
+        try {
+            recipeNotes = await getUserRecipeNote(userId, recipe._id);
+        } catch (error) {
+            console.error("Error loading private recipe notes:", error);
+
+            recipeNotesLoadError = {
+                code: "USER_NOTES_FETCH_FAILED",
+                message: "Nie udało się pobrać Twoich prywatnych notatek. Spróbuj ponownie później.",
+            };
+        }
     }
 
     // 3️⃣ SEO canonical redirect
@@ -95,6 +109,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
 
     return (
         <>
+            {recipeNotesLoadError && <ShowSnackbar error={recipeNotesLoadError} />}
             {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}
 
             <Box id="RecipePage" sx={styles.root}>
@@ -122,14 +137,14 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
                 <RecipeSource recipe={recipe} />
 
                 <Separator />
-                {userId && initialNotes?.trim() && <PrivateUserNotes initialNotes={initialNotes} />}
+                {userId && recipeNotes?.trim() && <PrivateRecipeNotes recipeNotes={recipeNotes} />}
                 <Box sx={styles.copyButtonContainer}>
                     <RecipeCopyButton recipe={recipe} />
                     <RecipePrintButton />
                     <RecipePdfButton recipe={recipe} slug={slug} />
                     <RecipeKeepAwakeButton />
                     <RecipeShareButton title={recipe.title} />
-                    <RecipeNotesButton recipeId={recipe._id} initialNotes={initialNotes} />
+                    <RecipeNotesButton recipeId={recipe._id} initialNotes={recipeNotes} />
                     <RecipeCommentsButton />
                 </Box>
                 <Separator />

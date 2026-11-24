@@ -3,19 +3,21 @@
 import { useMemo } from "react";
 import { SnackbarOrigin, useSnackbar } from "notistack";
 
+export type SnackbarVariant = "info" | "error" | "success" | "warning";
+
 interface MessageOptions {
     autoHideDuration?: number;
     anchorOrigin?: SnackbarOrigin;
     [key: string]: unknown;
 }
 
-export interface MessageMethods {
-    info: (message: string, options?: MessageOptions) => void;
-    error: (message: string, options?: MessageOptions) => void;
-    success: (message: string, options?: MessageOptions) => void;
-    warning: (message: string, options?: MessageOptions) => void;
-}
-
+// export interface MessageMethods {
+//     info: (message: string, options?: MessageOptions) => void;
+//     error: (message: string, options?: MessageOptions) => void;
+//     success: (message: string, options?: MessageOptions) => void;
+//     warning: (message: string, options?: MessageOptions) => void;
+// }
+export type MessageMethods = Record<SnackbarVariant, (message: string, options?: MessageOptions) => void>;
 export const useMessage = (): MessageMethods => {
     const { enqueueSnackbar } = useSnackbar();
 
