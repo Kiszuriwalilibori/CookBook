@@ -8,21 +8,11 @@ import { recipeCardProjection } from "@/utils/projections/recipeCardProjection";
 export async function getRecipesForCards(filters?: Partial<FilterState>, isAdmin?: boolean): Promise<Recipe[]> {
     const appliedFilters: Partial<FilterState> = { ...filters };
 
-    // if (!isAdmin) {
-    //     if (!appliedFilters.status || appliedFilters.status.length === 0) {
-    //         appliedFilters.status = [...REGULAR_USER_STATUSES];
-    //     }
-    // }
     if (!isAdmin) {
         appliedFilters.status = [...REGULAR_USER_STATUSES];
     }
     const { clause, params } = buildFilterClause(appliedFilters);
 
-    // const query = groq`
-    //     *[_type == "recipe"${clause}]{
-    //         ${recipeCardProjection}
-    //     } | order(_createdAt desc)
-    // `;
     const visibilityClause = isAdmin ? "" : " && defined(description.image.asset->url)";
 
     const query = groq`
