@@ -29,12 +29,13 @@ import Comments from "./parts/Comments";
 import { styles } from "./styles";
 import { mapRecipeToMetadata } from "./parts/RecipeMetadata/RecipeMetadata.utils";
 
-import { generateRecipeMetadata, generateRecipeSchema, getRecipeById, getUserRecipeNote, resolveRecipeIdFromSlug } from "@/utils";
+import { generateRecipeMetadata, generateRecipeSchema, getRecipeById, resolveRecipeIdFromSlug } from "@/utils";
 
 import { getUserIdFromCookies } from "@/utils/server/getUserIdFromCookies";
 import { RecipeIngredientsClearButton } from "./parts/RecipeIngredientsClearButton";
-import { ApiErrorPayload } from "@/models/apiResponse";
+
 import PrivateRecipeNotes from "./parts/Comments/PrivateRecipeNotes";
+import { getInitialRecipeNotes } from "./parts/Comments/utils/getInitialRecipeNotes";
 
 interface Params {
     slug: string;
@@ -80,22 +81,22 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
     const [recipe, userId] = await Promise.all([getRecipeById(id), getUserIdFromCookies()]);
     if (!recipe) notFound();
 
-    let recipeNotes: string | undefined;
-    let recipeNotesLoadError: ApiErrorPayload | null = null;
+    // let recipeNotes: string | undefined;
+    // let recipeNotesLoadError: ApiErrorPayload | null = null;
 
-    if (userId) {
-        try {
-            recipeNotes = await getUserRecipeNote(userId, recipe._id);
-        } catch (error) {
-            console.error("Error loading private recipe notes:", error);
+    // if (userId) {
+    //     try {
+    //         recipeNotes = await getUserRecipeNote(userId, recipe._id);
+    //     } catch (error) {
+    //         console.error("Error loading private recipe notes:", error);
 
-            recipeNotesLoadError = {
-                code: "USER_NOTES_FETCH_FAILED",
-                message: "Nie udało się pobrać Twoich prywatnych notatek. Spróbuj ponownie później.",
-            };
-        }
-    }
-
+    //         recipeNotesLoadError = {
+    //             code: "USER_NOTES_FETCH_FAILED",
+    //             message: "Nie udało się pobrać Twoich prywatnych notatek. Spróbuj ponownie później.",
+    //         };
+    //     }
+    // }
+    const { recipeNotes, recipeNotesLoadError } = await getInitialRecipeNotes(userId, recipe._id);
     // 3️⃣ SEO canonical redirect
     const canonicalSlug = recipe.slug?.current;
     if (canonicalSlug && canonicalSlug !== slug) {

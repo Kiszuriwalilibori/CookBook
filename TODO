@@ -353,4 +353,50 @@ title,
 }
 
 
-w komponentach takich jak recipepage na poczatku są pobierania, które najproawdopodobniej nie mają odpowiedniej obsługi błędów.
+w komponentach takich jak recipepage (serwerowych) na poczatku są pobierania, które najproawdopodobniej nie mają odpowiedniej obsługi błędów.
+Przejrzałem główne strony, komponenty serwerowe i funkcje pobierające dane z Sanity w repozytorium CookBook. Znalazłem kilka miejsc, w których obsługa błędów podobna do tej zastosowanej przy prywatnych notatkach byłaby przydatna.
+
+Poniżej sama lista miejsc — bez proponowania jeszcze zmian.
+Miejsca do rozważenia
+1. Strona pojedynczego przepisu
+Plik: src/app/(main)/recipes/[slug]/page.tsx
+- getRecipeById() – pobieranie właściwego przepisu.
+- resolveRecipeIdFromSlug() – ustalanie ID przepisu na podstawie sluga.
+- getInitialRecipeComments() – pobieranie początkowych komentarzy, ich liczby i odpowiedzi.
+- getUserRecipeNote() – pobieranie prywatnych notatek. To właśnie miejsce, które obecnie omawiamy.
+2. Lista przepisów
+Plik: src/app/(main)/recipes/page.tsx
+- getRecipesForCards() – pobieranie listy przepisów. Obecnie błąd jest przechwytywany i zamieniany na recipesError.
+- getUserFavorites() – pobieranie identyfikatorów ulubionych przepisów. Błąd jest obecnie tylko logowany w konsoli.
+3. Strona ulubionych
+Plik: src/app/(main)/favorites/page.tsx
+
+- getUserFavoritesRecipes() – pobieranie pełnych danych przepisów z listy ulubionych. Obecnie brak lokalnej obsługi błędu.
+4. Strona główna
+Plik: src/app/page.tsx
+- getRandomRecipes() – pobieranie losowych przepisów do karuzeli. Funkcja już zwraca ApiResponse, a błąd przekazywany jest do komponentu Slider.
+- LatestRecipesSection – pobieranie najnowszych przepisów.
+- TopRatedRecipesSection – pobieranie najwyżej ocenianych przepisów.
+Pliki komponentów:
+- src/components/LatestRecipesSection/LatestRecipesSection.tsx
+- src/components/TopRatedRecipesSection/TopRatedRecipesSection.tsx
+5. Podsumowanie i filtry
+Pliki:
+- src/app/layout.tsx
+- src/app/(main)/search/page.tsx
+- src/utils/fetchSummary.ts
+- src/utils/getOptions/getOptions.ts
+- fetchSummary() – pobieranie danych podsumowania wykorzystywanych m.in. przez nagłówek i filtry.
+- SearchPage – pobranie podsumowania dla wyszukiwarki. Obecnie w przypadku braku summary zwraca null.
+- getOptions() – pobieranie dokumentu options z Sanity. Funkcja przechwytuje błędy i zwraca wartości domyślne.
+6. Najnowsze przepisy – funkcja pobierająca
+Plik: src/utils/getLatestRecipes.ts
+
+- getLatestRecipes() – bezpośrednie pobieranie danych z Sanity, obecnie bez własnej obsługi błędów.
+
+Kolejność, w jakiej proponuję się tym zająć
+1. Strona przepisu – komentarze i prywatne notatki.
+2. Strona ulubionych – pobieranie przepisów.
+3. Lista przepisów – pobieranie przepisów i ulubionych.
+4. Strona główna – najnowsze i najwyżej oceniane przepisy.
+5. Podsumowanie i filtry – obsługa błędów pobierania opcji.
