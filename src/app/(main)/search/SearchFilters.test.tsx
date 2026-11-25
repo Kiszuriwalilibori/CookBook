@@ -1,3 +1,20 @@
+/*
+TESTY KOMPONENTU SearchFilters
+
+1. Sprawdzamy, czy komponent SearchFilters poprawnie renderuje RecipeFilters.
+
+2. Sprawdzamy, czy do RecipeFilters przekazywane są opcje filtrów
+   otrzymane przez SearchFilters.
+
+3. Sprawdzamy, czy do RecipeFilters przekazywane są wartości początkowe
+   filtrów (initialValues).
+
+4. Sprawdzamy, czy do RecipeFilters przekazywany jest callback
+   onFiltersChange odpowiedzialny za obsługę zmian filtrów i ich zapis.
+
+5. Sprawdzamy, czy komponent nie przekazuje zbędnych propsów.
+*/
+
 import { render, screen } from "@testing-library/react";
 
 import SearchFilters from "./SearchFilters";
@@ -53,6 +70,10 @@ describe("SearchFilters", () => {
 
         const props = mockRecipeFilters.mock.calls[0][0];
 
-        expect(props).toEqual({ options });
+        expect(props).toEqual({
+            options,
+            initialValues: expect.any(Object),
+            onFiltersChange: expect.any(Function),
+        });
     });
 });

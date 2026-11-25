@@ -36,6 +36,7 @@ export default function FilterAutocomplete<T = string>({ id, label, placeholder 
                 clearIndicator: { sx: clearIndicatorSx },
             }}
             value={value as T | T[] | null}
+            onInputChange={(_, inputValue, reason) => {}}
             onChange={(_, newValue) => onChange(newValue)}
             renderValue={multiple ? (renderTags ? value => renderTags([...(value as T[])]) : () => null) : undefined}
             renderOption={(props, option, { inputValue }) => {

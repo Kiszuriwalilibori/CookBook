@@ -81,21 +81,6 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
     const [recipe, userId] = await Promise.all([getRecipeById(id), getUserIdFromCookies()]);
     if (!recipe) notFound();
 
-    // let recipeNotes: string | undefined;
-    // let recipeNotesLoadError: ApiErrorPayload | null = null;
-
-    // if (userId) {
-    //     try {
-    //         recipeNotes = await getUserRecipeNote(userId, recipe._id);
-    //     } catch (error) {
-    //         console.error("Error loading private recipe notes:", error);
-
-    //         recipeNotesLoadError = {
-    //             code: "USER_NOTES_FETCH_FAILED",
-    //             message: "Nie udało się pobrać Twoich prywatnych notatek. Spróbuj ponownie później.",
-    //         };
-    //     }
-    // }
     const { recipeNotes, recipeNotesLoadError } = await getInitialRecipeNotes(userId, recipe._id);
     // 3️⃣ SEO canonical redirect
     const canonicalSlug = recipe.slug?.current;
