@@ -7,8 +7,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import InfoIcon from "@mui/icons-material/Info";
 import SearchIcon from "@mui/icons-material/Search";
 
-import { useRecipesSummary } from "@/hooks";
-import { RecipeFilter } from "@/types";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 
 export type NavItem = {
@@ -19,9 +17,7 @@ export type NavItem = {
     hidden?: boolean;
 };
 
-export const useNavItems = (initialSummary?: RecipeFilter | null, onSearchClick?: () => void): NavItem[] => {
-    const { summary: options } = useRecipesSummary(initialSummary || undefined);
-    const isFiltersLoaded = options.title.length > 0;
+export const useNavItems = (): NavItem[] => {
     const { areFavoritesEmpty } = useFavoritesStore();
     return [
         { label: "Home", href: "/", icon: <HomeIcon /> },
@@ -29,17 +25,6 @@ export const useNavItems = (initialSummary?: RecipeFilter | null, onSearchClick?
         { label: "Artykuły", href: "/blog", icon: <ArticleIcon /> },
         { label: "Ulubione", href: "/favorites", icon: <FavoriteIcon />, hidden: areFavoritesEmpty },
         { label: "O mnie", href: "/about", icon: <InfoIcon /> },
-        {
-            label: "Szukaj",
-            href: "/search",
-            icon: <SearchIcon />,
-            hidden: !isFiltersLoaded,
-        },
-        // {
-        //     label: "Szukaj",
-        //     icon: <SearchIcon />,
-        //     onClick: onSearchClick,
-        //     hidden: !isFiltersLoaded,
-        // },
+        { label: "Szukaj", href: "/search", icon: <SearchIcon /> },
     ];
 };

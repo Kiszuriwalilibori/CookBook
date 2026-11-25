@@ -7,8 +7,6 @@ import { headers } from "next/headers";
 import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { layoutContainerStyles, mainContentStyles } from "./layout.styles";
-
-import { fetchSummary } from "@/utils/fetchSummary";
 import metadata from "../../public/metadata/metadata";
 import { Pages } from "@/models/pages";
 import { BootstrapUser } from "./bootstrapUser";
@@ -37,7 +35,6 @@ export async function generateMetadata() {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-    const { summary, error: fetchError } = await fetchSummary();
     const userId = await getUserIdFromCookies();
 
     return (
@@ -51,7 +48,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                         <ThemeProvider theme={theme}>
                             <CssBaseline />
                             <Box sx={layoutContainerStyles}>
-                                <Header initialSummary={summary} fetchError={fetchError} />
+                                <Header />
                                 <Box component="main" sx={mainContentStyles}>
                                     {children}
                                 </Box>

@@ -400,3 +400,7 @@ Kolejność, w jakiej proponuję się tym zająć
 3. Lista przepisów – pobieranie przepisów i ulubionych.
 4. Strona główna – najnowsze i najwyżej oceniane przepisy.
 5. Podsumowanie i filtry – obsługa błędów pobierania opcji.
+
+
+
+Strona logowania po zalogowaniu albo wylogowaniu powinna przenosić na poprzednią stronę
