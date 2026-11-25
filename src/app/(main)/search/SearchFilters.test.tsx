@@ -65,7 +65,7 @@ describe("SearchFilters", () => {
         );
     });
 
-    it("does not pass unnecessary callback props to RecipeFilters", () => {
+    it("passes the expected props to RecipeFilters", () => {
         render(<SearchFilters options={options} />);
 
         const props = mockRecipeFilters.mock.calls[0][0];

@@ -47,7 +47,7 @@ export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: Fil
     const [errors, setErrors] = useState<Record<keyof FilterState, string>>(EMPTY_ERRORS);
 
     useEffect(() => {
-        onFiltersChange?.(filters);
+        onFiltersChange(filters);
     }, [filters, onFiltersChange]);
 
     const normalizers = useMemo<Normalizers>(
