@@ -127,7 +127,21 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
                         component={Link}
                         href={item.href}
                         aria-current={current ? "page" : undefined}
-                        onClick={() => handleItemClick()}
+                        onClick={event => {
+                            if (!item.onClick) {
+                                handleItemClick();
+                                return;
+                            }
+
+                            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+                                onClose();
+                                return;
+                            }
+
+                            event.preventDefault();
+                            handleItemClick(item.onClick);
+                        }}
+                        // onClick={() => handleItemClick()}
                         onKeyDown={event => handleKeyDown(event, index)}
                         sx={{
                             ...mobileMenuItemStyle(current),

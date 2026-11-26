@@ -11,6 +11,7 @@ import SearchOffIcon from "@mui/icons-material/SearchOff";
 import { EmptyState } from "@/components/EmptyState";
 
 import { gridSize, pageContainerStyle } from "./styles";
+import { LastRecipes } from "@/utils/LastRecipes";
 
 import type { Recipe } from "@/types";
 import { useAdminRefetch, useHydrateSSR, useNonAdminRefetch } from "./effects";
@@ -40,33 +41,10 @@ export default function RecipesClient({ initialRecipes, initialFavorites, hasAct
             setFavorites(initialFavorites);
         }
     }, [hydrated, initialFavorites, setFavorites]);
+    useEffect(() => {
+        LastRecipes.save(`${window.location.pathname}${window.location.search}`);
+    }, []);
 
-    // if (displayRecipes.length === 0) {
-    //     return (
-    //         <Box sx={pageContainerStyle}>
-    //             <PageTitle title="Przepisy" />
-    //             <Typography variant="h6" textAlign="center" mt={4}>
-    //                 Brak przepisów do wyświetlenia.
-    //             </Typography>
-    //         </Box>
-    //     );
-    // }
-
-    // if (displayRecipes.length === 0) {
-    //     return (
-    //         <Box sx={pageContainerStyle}>
-    //             <PageTitle title="Przepisy" />
-
-    //             {hasActiveFilters ? (
-    //                 <EmptyState icon={<SearchOffIcon />} title="Nie znaleziono przepisów" description="Spróbuj zmienić filtry i wyszukaj ponownie." actionLabel="Wyczyść filtry" onAction={() => router.push("/recipes")} />
-    //             ) : (
-    //                 <Typography variant="h6" textAlign="center" mt={4}>
-    //                     Brak przepisów do wyświetlenia.
-    //                 </Typography>
-    //             )}
-    //         </Box>
-    //     );
-    // }
     if (displayRecipes.length === 0) {
         return (
             <Box sx={pageContainerStyle}>

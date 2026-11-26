@@ -36,6 +36,7 @@ import { RecipeIngredientsClearButton } from "./parts/RecipeIngredientsClearButt
 
 import PrivateRecipeNotes from "./parts/Comments/PrivateRecipeNotes";
 import { getInitialRecipeNotes } from "./parts/Comments/utils/getInitialRecipeNotes";
+import LastRecipesTracker from "@/components/LastRecipesTracker";
 
 interface Params {
     slug: string;
@@ -97,7 +98,7 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
         <>
             {recipeNotesLoadError && <ShowSnackbar error={recipeNotesLoadError} />}
             {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}
-
+            <LastRecipesTracker />
             <Box id="RecipePage" sx={styles.root}>
                 <RecipeHero recipe={recipe} />
                 <RecipeMetadata metadata={metadata} />

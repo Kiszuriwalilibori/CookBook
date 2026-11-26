@@ -7,6 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import CloseIcon from "@mui/icons-material/Close";
 import { touchableSx } from "@/styles/utilityStyles";
+import { LastRecipes } from "@/utils/LastRecipes";
 
 import { FilterFieldRenderer, FilterSummary } from "./parts";
 import { containerSx, buttonGroupSx, dividerSx } from "./styles";
@@ -62,6 +63,7 @@ export default function RecipeFilters({ onFiltersChange = noopFiltersChange, onC
 
     const handleClear = useCallback(() => {
         clear();
+        LastRecipes.clear();
     }, [clear]);
 
     const getErrorProps = useCallback(

@@ -92,10 +92,29 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
                 return (
                     <React.Fragment key={item.label}>
                         {item.href ? (
+                            // <Box
+                            //     {...commonProps}
+                            //     component={Link}
+                            //     href={item.href}
+                            //     aria-current={current ? "page" : undefined}
+                            //     sx={{
+                            //         ...desktopItemStyles(current),
+                            //     }}
+                            // >
                             <Box
                                 {...commonProps}
                                 component={Link}
                                 href={item.href}
+                                onClick={event => {
+                                    if (!item.onClick) return;
+
+                                    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+                                        return;
+                                    }
+
+                                    event.preventDefault();
+                                    item.onClick();
+                                }}
                                 aria-current={current ? "page" : undefined}
                                 sx={{
                                     ...desktopItemStyles(current),

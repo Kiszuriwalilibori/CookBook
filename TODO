@@ -404,3 +404,7 @@ Kolejność, w jakiej proponuję się tym zająć
 
 
 Strona logowania po zalogowaniu albo wylogowaniu powinna przenosić na poprzednią stronę
+
+Strona Search jakoby - będąc serwerową - pobiera skutecznie dane ze store i nie bardzo wiadomo jak to wytłumaczyć
+
+Wątpliwe czy to musi bć akurat stamtąd, czy nie można do ogólnych import GoogleLogoutButton from "@/app/(main)/kiszuriwalilibori-admin-jestem/GoogleLogoutButton";
