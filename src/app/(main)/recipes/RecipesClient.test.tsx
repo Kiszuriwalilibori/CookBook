@@ -1,6 +1,16 @@
+/*
+ * Testy sprawdzają:
+ * - wyświetlanie EmptyState, gdy aktywne filtry nie zwracają przepisów,
+ * - wyświetlanie domyślnego komunikatu, gdy nie ma przepisów i aktywnych filtrów,
+ * - wyświetlanie EmptyState w przypadku błędu pobierania przepisów,
+ * - zapisywanie aktualnego URL strony przepisów wraz z parametrami query string w LastRecipes.
+ */
+import { afterEach, beforeEach } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
+
 import RecipesClient from "./RecipesClient";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
+import { LastRecipes } from "@/utils/LastRecipes";
 
 jest.mock("@/components", () => ({
     PageTitle: () => null,
@@ -26,9 +36,22 @@ jest.mock("@/components/RecipeCard/RecipeCard", () => ({
     RecipeCard: () => null,
 }));
 
-describe("RecipesClient empty states", () => {
+jest.mock("@/utils/LastRecipes", () => ({
+    LastRecipes: {
+        save: jest.fn(),
+        get: jest.fn(),
+        clear: jest.fn(),
+    },
+}));
+
+describe("RecipesClient", () => {
     beforeEach(() => {
+        jest.clearAllMocks();
         useFavoritesStore.getState().reset();
+    });
+
+    afterEach(() => {
+        window.history.replaceState({}, "", "/");
     });
 
     it("renders EmptyState when active filters return no recipes", () => {
@@ -48,5 +71,13 @@ describe("RecipesClient empty states", () => {
         render(<RecipesClient initialRecipes={[]} initialFavorites={[]} hasActiveFilters={true} recipesError={true} />);
 
         expect(screen.getByTestId("empty-state")).toBeInTheDocument();
+    });
+
+    it("saves the current recipes URL including query parameters", () => {
+        window.history.replaceState({}, "", "/recipes?tags=vegetarian&cuisine=italian");
+
+        render(<RecipesClient initialRecipes={[]} initialFavorites={[]} hasActiveFilters={true} recipesError={false} />);
+
+        expect(LastRecipes.save).toHaveBeenCalledWith("/recipes?tags=vegetarian&cuisine=italian");
     });
 });
