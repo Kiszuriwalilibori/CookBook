@@ -3,13 +3,14 @@
 import React, { useEffect, useRef } from "react";
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 
 import { drawerBoxStyle, drawerStyle, mobileMenuIconStyle, mobileMenuItemButtonStyle, mobileMenuItemStyle } from "./MobileMenu.styles";
 import { desktopMenuLabelStyle } from "./DesktopMenu.styles";
 import { touchableSx } from "@/styles/utilityStyles";
 import type { NavItem } from "./Menu";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import useIsCurrentMenuItem from "@/hooks/useIsCurrentMenuItem";
 
 interface MobileMenuProps {
     navItems: NavItem[];
@@ -18,10 +19,11 @@ interface MobileMenuProps {
 }
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
-    const currentPathname = usePathname();
+    // const currentPathname = usePathname();
     const mobileItemRefs = useRef<Array<HTMLElement | null>>([]);
     const prefersReducedMotion = useReducedMotion();
-    const isCurrentItem = (href?: string) => Boolean(href && currentPathname === href.split("?")[0]);
+    const isCurrentItem = useIsCurrentMenuItem();
+    // const isCurrentItem = (href?: string) => Boolean(href && currentPathname === href.split("?")[0]);
     const handleDrawerEntered = () => {
         const firstItem = mobileItemRefs.current.find(Boolean);
         firstItem?.focus();

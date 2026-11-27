@@ -3,20 +3,21 @@
 import React, { useRef } from "react";
 import { Box, ButtonBase, Typography } from "@mui/material";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 
 import { desktopItemStyles, desktopMenuContainerStyle, desktopMenuIconStyle, desktopMenuLabelStyle, desktopMenuSeparatorStyle } from "./DesktopMenu.styles";
 import type { NavItem } from "./Menu";
+import useIsCurrentMenuItem from "@/hooks/useIsCurrentMenuItem";
 
 interface DesktopMenuProps {
     navItems: NavItem[];
 }
 
 const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
-    const currentPathname = usePathname();
+    // const currentPathname = usePathname();
     const desktopItemRefs = useRef<Array<HTMLElement | null>>([]);
-    const isCurrentItem = (href?: string) => Boolean(href && currentPathname === href.split("?")[0]);
-
+    // const isCurrentItem = (href?: string) => Boolean(href && currentPathname === href.split("?")[0]);
+    const isCurrentItem = useIsCurrentMenuItem();
     const moveFocus = (currentIndex: number, direction: "next" | "previous" | "first" | "last") => {
         const items = desktopItemRefs.current.filter(Boolean) as HTMLElement[];
 

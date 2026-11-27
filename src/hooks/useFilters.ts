@@ -5,6 +5,7 @@ import { normalizeMultiple } from "@/components/RecipeFilters/utils/normalize";
 import { RecipeFilter, Status } from "@/types";
 import isEqual from "lodash/isEqual";
 import type { FilterState } from "@/models/filters";
+import { LastRecipes } from "@/utils/LastRecipes";
 
 const MAX_TAGS = 10;
 
@@ -114,6 +115,7 @@ export const useFilters = (options: RecipeFilter, onFiltersChange: (filters: Fil
         setFilters(initialFilters);
         setErrors(EMPTY_ERRORS);
         onFiltersChange(initialFilters);
+        LastRecipes.clear();
     }, [onFiltersChange]);
 
     return { filters, errors, handleChange, clear, apply };
