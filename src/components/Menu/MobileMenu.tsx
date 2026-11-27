@@ -21,8 +21,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
     const currentPathname = usePathname();
     const mobileItemRefs = useRef<Array<HTMLElement | null>>([]);
     const prefersReducedMotion = useReducedMotion();
-
-    const isCurrentItem = (href?: string) => Boolean(href && currentPathname === href);
+    const isCurrentItem = (href?: string) => Boolean(href && currentPathname === href.split("?")[0]);
     const handleDrawerEntered = () => {
         const firstItem = mobileItemRefs.current.find(Boolean);
         firstItem?.focus();
@@ -127,21 +126,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ navItems, open, onClose }) => {
                         component={Link}
                         href={item.href}
                         aria-current={current ? "page" : undefined}
-                        onClick={event => {
-                            if (!item.onClick) {
-                                handleItemClick();
-                                return;
-                            }
-
-                            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-                                onClose();
-                                return;
-                            }
-
-                            event.preventDefault();
-                            handleItemClick(item.onClick);
-                        }}
-                        // onClick={() => handleItemClick()}
+                        onClick={() => handleItemClick()}
                         onKeyDown={event => handleKeyDown(event, index)}
                         sx={{
                             ...mobileMenuItemStyle(current),

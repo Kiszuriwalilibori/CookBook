@@ -15,8 +15,7 @@ interface DesktopMenuProps {
 const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
     const currentPathname = usePathname();
     const desktopItemRefs = useRef<Array<HTMLElement | null>>([]);
-
-    const isCurrentItem = (href?: string) => Boolean(href && currentPathname === href);
+    const isCurrentItem = (href?: string) => Boolean(href && currentPathname === href.split("?")[0]);
 
     const moveFocus = (currentIndex: number, direction: "next" | "previous" | "first" | "last") => {
         const items = desktopItemRefs.current.filter(Boolean) as HTMLElement[];
@@ -92,29 +91,10 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ navItems }) => {
                 return (
                     <React.Fragment key={item.label}>
                         {item.href ? (
-                            // <Box
-                            //     {...commonProps}
-                            //     component={Link}
-                            //     href={item.href}
-                            //     aria-current={current ? "page" : undefined}
-                            //     sx={{
-                            //         ...desktopItemStyles(current),
-                            //     }}
-                            // >
                             <Box
                                 {...commonProps}
                                 component={Link}
                                 href={item.href}
-                                onClick={event => {
-                                    if (!item.onClick) return;
-
-                                    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-                                        return;
-                                    }
-
-                                    event.preventDefault();
-                                    item.onClick();
-                                }}
                                 aria-current={current ? "page" : undefined}
                                 sx={{
                                     ...desktopItemStyles(current),
